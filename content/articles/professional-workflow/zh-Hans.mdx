@@ -1,0 +1,18 @@
+> 核心判断：Professional workflow 的价值不是让 AI 写更多代码，而是让需求、验收、失败和决定都有清晰证据。
+
+## 从模糊要求开始
+假设有人说：“加一个 AI 功能，帮助用户起草客户回复。”先不要讨论模型。先明确输入来源、谁可以读取、输出只是 draft 还是允许发送、什么情况必须交给人工、如何判断可接受，以及错误可能带来什么后果。
+
+## 写成可检查的规格
+定义输入、输出、禁止事项和 acceptance criteria。例如：系统只读取获批的合成 ticket；输出必须标记为 draft；缺少订单信息时不得编造；发送动作不在 scope；测试数据中的敏感字段不得进入日志。
+
+## 切成可验收 tickets
+把工作拆成数据 schema、规则验证、draft generation、evaluation、audit record 和 UI review。每个 ticket 都要有明确完成条件，让 AI coding assistant 只处理当前边界，而不是一次猜完整产品。
+
+## Tests 是反馈循环
+先建立 deterministic rules 和固定 cases，再测试模型输出。除了正常场景，还要覆盖缺字段、恶意指令、timeout、重复请求和 retry。涉及付款或外部写入时还要验证 idempotency；本例明确保持 draft-only。
+
+## Debugging、review 与作品证据
+失败时保存输入类型、版本、规则结果、模型状态和人工决定，不保存不必要的个人原始数据。修复后重跑同一组 cases。Code review 同时检查权限、错误路径、日志、回滚，以及用户是否清楚输出仍待审核。
+
+作品可以展示 spec、ticket breakdown、test matrix、一次具体失败、修复前后差异和 ADR。不要笼统写“production ready”；准确标明已验证、仍使用 mock 和刻意禁止的部分。下载 workflow template，用一页先写完 problem、scope、acceptance、failure、tests 和 human approval。

@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "aidog-career-library",
+  "main": "vinext/server/app-router-entry",
+  "compatibility_date": "2026-09-21",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "WAITLIST_DB",
+      "database_name": "aidog-waitlist",
+      "database_id": "REPLACE_AFTER_OWNER_APPROVAL",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    "SITE_ORIGIN": "https://preview.invalid",
+    "NEXT_PUBLIC_TURNSTILE_SITE_KEY": "1x00000000000000000000AA"
+  }
+}

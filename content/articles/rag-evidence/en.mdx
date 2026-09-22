@@ -1,0 +1,26 @@
+> Core judgement: answering questions proves that a demo runs. A portfolio project must also expose how you defined the problem, tested outcomes, handled failure and prepared the system for handoff.
+
+## Begin with the business problem
+Do not begin with a vector database. State who needs to make what decision, where the documents come from, the cost of a wrong answer and when the system must abstain. A safe synthetic example is a product-document assistant that answers only from approved documents, exposes missing evidence, and never retrieves material the current user cannot access.
+
+## Data work does not end at indexing
+Record document selection, cleaning, chunking, metadata and update behaviour. Add a small data card explaining whether the data is synthetic, what is missing and which fields must never enter traces. Enforce authorisation before retrieval. Sending unauthorised text to a model and asking a prompt to hide it is not an access-control design.
+
+## Build an evaluation set
+Include ordinary questions, questions with no answer, plausible but incorrect passages, permission conflicts, stale content and prompt injection. Save a baseline and change one major variable at a time. Keep a failure taxonomy and representative examples alongside aggregate scores; otherwise you know that a number moved but not why the system improved or regressed.
+
+## Failure handling and deployment
+Define behaviour for timeouts, empty retrieval, model refusal, tool failure and cost limits. Capture request ID, version, latency, retrieved document IDs and outcome state without logging sensitive bodies. You do not need to imitate a large enterprise platform. A reproducible service with explicit configuration, tests and a health check is enough to demonstrate engineering judgement.
+
+## What the README must explain
+- The problem, user and decision being supported.
+- Architecture and data flow.
+- Baseline, evaluation set and result limitations.
+- Known failure modes and security boundary.
+- How to reproduce, test and deploy the project.
+- What the next version deliberately will not do.
+
+A success screenshot and a list of frameworks cannot replace those decisions. If you cannot explain a trade-off, do not label the system production-ready.
+
+## Your next move
+Use the downloadable checklist against an existing RAG project. Fix the single gap that most damages credibility—usually the absence of a fixed evaluation set or an unexplained no-answer and permission policy.

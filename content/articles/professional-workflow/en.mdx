@@ -1,0 +1,22 @@
+> Core judgement: a professional workflow is not valuable because AI writes more code. It is valuable because requirements, acceptance, failure and decisions become inspectable.
+
+## Start with the vague request
+Suppose someone asks for “an AI feature that drafts customer replies.” Do not begin with a model choice. Establish where inputs come from, who may read them, whether the output is a draft or can be sent, when a human must take over, how quality will be judged and what damage a wrong response could cause.
+
+## Turn the request into a specification
+Define inputs, outputs, prohibited actions and acceptance criteria. For example: the system reads approved synthetic tickets only; every output is visibly a draft; missing order facts may not be invented; sending is out of scope; sensitive fields in tests may not enter logs.
+
+## Cut the work into reviewable tickets
+Separate data schema, rule validation, draft generation, evaluation, audit record and UI review. Each ticket needs a completion condition. An AI coding assistant can then work inside the current boundary instead of guessing an entire product in one pass.
+
+## Use tests as the feedback loop
+Establish deterministic rules and fixed cases before judging model output. Cover the happy path, missing fields, malicious instructions, timeout, duplicate request and retry. Payment or external-write features also require idempotency; this example deliberately remains draft-only.
+
+## Debug and review the system
+For a failure, preserve input type, version, rule outcome, model state and human decision without retaining unnecessary personal content. After a fix, rerun the same case set rather than testing only the example that failed. Code review must inspect permissions, error paths, logging, rollback and whether the UI makes human-review status obvious.
+
+## Turn the workflow into portfolio evidence
+Show the specification, ticket breakdown, test matrix, one concrete failure, the before/after fix and a short architecture decision record. Do not claim “production-ready.” State exactly what is tested, what still uses a mock and which actions are deliberately prohibited.
+
+## Your next move
+Download the workflow template. Take one vague feature request and fit the problem, scope, acceptance criteria, failure cases, tests and human approval onto one page before writing code.

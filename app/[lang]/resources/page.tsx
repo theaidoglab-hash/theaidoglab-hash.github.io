@@ -1,0 +1,5 @@
+import { notFound } from 'next/navigation';
+import Search from '@/components/search';
+import { getArticles } from '@/lib/content';
+import { isLocale, ui } from '@/lib/i18n';
+export default async function Resources({params}:{params:Promise<{lang:string}>}){const {lang}=await params;if(!isLocale(lang))notFound();return <div className="shell page"><header className="page-header"><p className="eyebrow">LIBRARY</p><h1>{ui[lang].latest as string}</h1><p>{lang==='en'?'Search detailed guides by role, format or skill. Every published guide includes a practical resource.':'按職位、格式或技能搜尋深度指南；每篇已發佈文章均附實用資源。'}</p></header><Search articles={getArticles()} locale={lang}/></div>}

@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export default function LanguageSelector(){return <main className="language-page"><div className="language-mark"><span/>AI.DOG</div><p>Career evidence, professional workflows and practical resources.</p><h1>Choose your language</h1><div className="language-choices"><Link href="/zh-Hant"><strong>繁體中文</strong><span>香港繁體中文</span></Link><Link href="/zh-Hans"><strong>简体中文</strong><span>简体中文</span></Link><Link href="/en"><strong>English</strong><span>Australian English</span></Link></div></main>}

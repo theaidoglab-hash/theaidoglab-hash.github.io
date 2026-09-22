@@ -1,0 +1,18 @@
+> 核心判断：一个看起来聪明的 prompt 只是候选配置；professional evidence 来自可重复实验、权限边界和可解释的失败。
+
+## Prompt play 的价值与限制
+快速尝试 prompt 可以探索语气、格式和模型能力。问题在于只保存最好的一次输出，然后把它当成稳定方法。没有版本、固定 cases 和失败记录，其他人无法重现你的判断。
+
+## 建立实验合同
+每次记录 problem、prompt version、model/config、input class、expected behaviour、evaluation rule 和结果。一次只修改一个主要变量，并保存代表性错误，而不是只展示成功样例。
+
+## 明确工具权限
+每个 tool 都必须标明 read-only 或 write、可访问数据、外部副作用和批准者。搜索公开信息与发送邮件不是同一种风险。若 tool 可以创建、删除、付款或传输数据，prompt 不能代替程序权限和人工批准。
+
+## 失败与人工审核
+测试 ambiguous request、missing input、prompt injection、tool unavailable、partial result 和 unsafe action。为每类失败定义 abstain、fallback 或 `NEEDS_HUMAN_REVIEW`，不要让模型自行把不确定状态改成完成。
+
+## 作品证据
+展示 experiment table、baseline、修改原因、failure taxonomy、permission matrix 和最终限制。面试时可以解释为什么删除了一个看似更灵活但风险更高的 prompt，以及测试如何支持这个取舍。
+
+下载 prompt experiment log，为现有 prompt 建立五个固定 cases。若每次修改后不能重跑同一组 cases，它仍是一次性尝试，不是工程证据。

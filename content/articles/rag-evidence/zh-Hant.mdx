@@ -1,0 +1,26 @@
+> 核心判斷：能回答問題只證明 demo 跑得動；完整作品要讓人看見你如何定義問題、驗證結果、處理失敗及交接系統。
+
+## 先寫 business problem
+不要由「我要用某個 vector database」開始。先寫使用者要完成甚麼、資料從哪裡來、答錯的代價，以及何時應該拒答。例子可以是合成的產品文件助理：只回答已批准文件，找不到根據時顯示缺口，任何人都不能看見無權限文件。
+
+## 資料不是塞進 index 就完成
+記錄文件選擇、清理、chunking、metadata 和更新方法。建立小型 data card，說明資料是否合成、有哪些缺口、哪些欄位不可記入 trace。權限必須在 retrieval 前執行，不能先把未授權內容送入模型再靠 prompt 隱藏。
+
+## 建立 evaluation
+最少包含：正常問題、文件沒有答案、相似但錯誤的內容、權限衝突、過期資料及 prompt injection。先保存 baseline，再逐次更改一項設定。除了整體分數，保留錯誤分類和代表案例，否則你只知道數字變了，不知道系統為何變好或變差。
+
+## Failure handling 與 deployment
+定義 timeout、空 retrieval、模型拒絕、工具失敗和成本上限的處理。加上 request ID、版本、latency、retrieved document IDs 和結果狀態，但不要記錄敏感全文。部署毋須模仿企業平台；一個可重跑、設定清楚、有 health check 的小服務已足以展示思考。
+
+## README 應回答甚麼
+- 解決甚麼問題，為誰而做。
+- architecture 及資料流。
+- baseline、evaluation set 和結果限制。
+- 已知 failure modes 及安全邊界。
+- 如何重跑、測試和部署。
+- 下一版不會做甚麼，以及原因。
+
+一張成功截圖和一串 framework 名稱都不能代替上述證據。若你不能解釋一個取捨，先不要把它寫成 production-ready。
+
+## 下一步
+用 checklist 審核你現有的 RAG project。先補最影響可信度的一項：通常是沒有固定 evaluation，或沒有說明無答案與權限情況。

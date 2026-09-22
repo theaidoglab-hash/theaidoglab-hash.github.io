@@ -1,0 +1,215 @@
+{
+  "generatedAt": "2026-09-22T00:00:00.000Z",
+  "assets": [
+    {
+      "article": "role-route",
+      "locale": "zh-Hant",
+      "format": "pdf",
+      "size": 22232,
+      "sha256": "6bc0315dab8458879920e0951b22bfd8936efaa16313df3eb78edc217d25b68e"
+    },
+    {
+      "article": "role-route",
+      "locale": "zh-Hant",
+      "format": "md",
+      "size": 761,
+      "sha256": "efab1402d3ccca6eddbb607a130ecd21517283f45b327a1b3203be73d73b01c0"
+    },
+    {
+      "article": "role-route",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 40528,
+      "sha256": "1b74ebbe74d43504a0008f82b2d4ad4ce1d6b93f709866d55e258ccc483e4ca0"
+    },
+    {
+      "article": "role-route",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 756,
+      "sha256": "f8fd0f8c005d40f8fb576c61fb0855ba0f84c40318da7f48eb0b47d9d74b2796"
+    },
+    {
+      "article": "role-route",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12178,
+      "sha256": "c658cbb2b1fc8957d4fa436a0c75f5e7c15e7b7c337cc4b18fb32fcbc5055957"
+    },
+    {
+      "article": "role-route",
+      "locale": "en",
+      "format": "md",
+      "size": 785,
+      "sha256": "2decdff38f07bce219b29f5580d62d40d1a3c81dc50fc93b9fa27e1176cba08e"
+    },
+    {
+      "article": "rag-evidence",
+      "locale": "zh-Hant",
+      "format": "pdf",
+      "size": 19690,
+      "sha256": "f7d9c64c404edc85ded4ea97f58e4b7ece58113afaaa1df2c412d176011e2683"
+    },
+    {
+      "article": "rag-evidence",
+      "locale": "zh-Hant",
+      "format": "md",
+      "size": 809,
+      "sha256": "35cb13e3c3461e5d410c01bd8171aada34e1e06586903d7e3977fa65a3e605d4"
+    },
+    {
+      "article": "rag-evidence",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 36895,
+      "sha256": "6995298a04dfad9478a7f0d4ffea9a6e1ea08c5478ba1d05e5f7e6737de65823"
+    },
+    {
+      "article": "rag-evidence",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 797,
+      "sha256": "e57fd85a98eb3c6f5e9b44e4eda851e15d0979caba3a577af67df16338c09962"
+    },
+    {
+      "article": "rag-evidence",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12235,
+      "sha256": "c1c5c8a873d5786622a5f667e84b7362bfdf52386851857a05a4424ed566428d"
+    },
+    {
+      "article": "rag-evidence",
+      "locale": "en",
+      "format": "md",
+      "size": 831,
+      "sha256": "52d4277a64e3c316833ecdc2f8fdf84ba8173c00c35094522ea8f5fc4b0ac1d0"
+    },
+    {
+      "article": "professional-workflow",
+      "locale": "zh-Hant",
+      "format": "pdf",
+      "size": 16512,
+      "sha256": "69bdbf3a0503317e6e21068aa9b50a0c5fc708109d1178318c6ba9d5bcd31381"
+    },
+    {
+      "article": "professional-workflow",
+      "locale": "zh-Hant",
+      "format": "md",
+      "size": 798,
+      "sha256": "7c19fe3c70eccf0c230db6bebad00546ce61793687fb9b16d0cc3a18eeef77b4"
+    },
+    {
+      "article": "professional-workflow",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 29472,
+      "sha256": "350c97a7d4ec2bd4242b3d1eb1c862e826a631c4487aec3392719b6dc65cdf0a"
+    },
+    {
+      "article": "professional-workflow",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 792,
+      "sha256": "fc19629d885e016f344e56005e6548cb5ff1b4b7c4e24a142f222b614f386463"
+    },
+    {
+      "article": "professional-workflow",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12199,
+      "sha256": "4906a59c38ba1443161a9aa71e23b74766f07e5920a92dab1900f0edb0b63911"
+    },
+    {
+      "article": "professional-workflow",
+      "locale": "en",
+      "format": "md",
+      "size": 808,
+      "sha256": "1398040cca0232db9aa40adc96fd5a1112cb9c0c6b41fb03302798b563a99afd"
+    },
+    {
+      "article": "prompt-evidence",
+      "locale": "zh-Hant",
+      "format": "pdf",
+      "size": 16469,
+      "sha256": "6f26090302a25cf611559aa4c930d77c30ba7bb3d4c2abcf8c519b31f3818dfd"
+    },
+    {
+      "article": "prompt-evidence",
+      "locale": "zh-Hant",
+      "format": "md",
+      "size": 756,
+      "sha256": "fbcaf47df6194cac39e82b4e9537db902757e1e754a43ee0e9cafb70bdcb02ec"
+    },
+    {
+      "article": "prompt-evidence",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 29479,
+      "sha256": "e54b406df7d65aacb3de26d138932a925a252558e4551af870b0dca6bb6ee24b"
+    },
+    {
+      "article": "prompt-evidence",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 763,
+      "sha256": "5ec32b16eb80e0d2d22fb5ee987767d0e2fb16e503282c45dfd0f648db2065d6"
+    },
+    {
+      "article": "prompt-evidence",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12183,
+      "sha256": "502bc8b6eece6e425baf22fce100e35a53aaf451b6ea1dd0686de00b3f9d720b"
+    },
+    {
+      "article": "prompt-evidence",
+      "locale": "en",
+      "format": "md",
+      "size": 773,
+      "sha256": "792407bb55439b3ffbe3230a9bdd41563edc48b8a2b804cf314b8e79bc54e040"
+    },
+    {
+      "article": "opportunity-scorecard",
+      "locale": "zh-Hant",
+      "format": "pdf",
+      "size": 22536,
+      "sha256": "7ef52f65292269c507589b5e8f6c789da60ab3fb8df581594ddccbbe56b45c39"
+    },
+    {
+      "article": "opportunity-scorecard",
+      "locale": "zh-Hant",
+      "format": "md",
+      "size": 758,
+      "sha256": "9bcb9b547d1f3aa0861c3e698b7242f9e746b55973a1f33c3868d838bc1a80e1"
+    },
+    {
+      "article": "opportunity-scorecard",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 40017,
+      "sha256": "3cfb36b44da4ab5b14abefd0a77bc7fcc545a61893bb5239f20b943e1114d347"
+    },
+    {
+      "article": "opportunity-scorecard",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 764,
+      "sha256": "1093ccba6f3ff9bd0b6e83e7cf8aafc1e372a2103ded7ec12e38a31ba4407f67"
+    },
+    {
+      "article": "opportunity-scorecard",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12219,
+      "sha256": "ebdcfbc4df52eeefaa765c52da26a4f104d8d15dc8166a8e951502b1b5daf9da"
+    },
+    {
+      "article": "opportunity-scorecard",
+      "locale": "en",
+      "format": "md",
+      "size": 793,
+      "sha256": "680d671e590bdd7efbfb31349fabe89e35b83c59ccc13a97dfd2624b35a331bf"
+    }
+  ]
+}

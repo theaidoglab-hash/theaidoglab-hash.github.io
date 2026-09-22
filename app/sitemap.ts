@@ -1,0 +1,2 @@
+import type { MetadataRoute } from 'next';import { getArticles } from '@/lib/content';import { LOCALES } from '@/lib/types';
+export default function sitemap():MetadataRoute.Sitemap{const origin=process.env.SITE_ORIGIN||'https://preview.invalid';const base=LOCALES.flatMap(lang=>['', '/start-here','/resources','/about','/privacy'].map(p=>({url:`${origin}/${lang}${p}`,lastModified:new Date('2026-09-22')})));const articles=LOCALES.flatMap(lang=>getArticles().map(a=>({url:`${origin}/${lang}/articles/${a.slug}`,lastModified:new Date(a.updatedAt)})));return[...base,...articles]}

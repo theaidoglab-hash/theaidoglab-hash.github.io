@@ -1,0 +1,37 @@
+[
+  {
+    "id":"role-route","slug":"choose-an-australian-ai-role","type":"deep-dive","categoryId":"roles-pathways","tags":["AI Engineer","FDE","Data Science","Australia"],"status":"review","visibility":"public",
+    "learningObjectives":["Classify roles by deliverable","Separate entry requirements from desirable experience","Choose one evidence-building project"],
+    "sourceUrls":["https://www.jobsandskills.gov.au/data/employment-projections","https://www.fairwork.gov.au/starting-employment"],"downloads":[],
+    "publishedAt":"2026-09-22","updatedAt":"2026-09-22","reviewedAt":"2026-09-22","reviewBy":"2026-12-21",
+    "translations":{"zh-Hant":{"title":"如何選擇澳洲 AI 職位路線","description":"不要先追職稱；先辨認每份工作要你交付甚麼，再反推作品證據。"},"zh-Hans":{"title":"如何选择澳洲 AI 职位路线","description":"不要先追职位名称；先辨认每份工作要求你交付什么，再反推作品证据。"},"en":{"title":"How to choose an Australian AI career path","description":"Start with the deliverable behind the title, then build the evidence that role can inspect."}}
+  },
+  {
+    "id":"rag-evidence","slug":"rag-chatbot-to-portfolio-evidence","type":"portfolio-build","categoryId":"portfolio-evidence","tags":["RAG","evaluation","portfolio","README"],"status":"review","visibility":"public",
+    "learningObjectives":["Define a business problem","Design an evaluation set","Document failure boundaries"],
+    "sourceUrls":["https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/secure-multitenant-rag","https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes"],"downloads":[],
+    "publishedAt":"2026-09-22","updatedAt":"2026-09-22","reviewedAt":"2026-09-22","reviewBy":"2027-09-22",
+    "translations":{"zh-Hant":{"title":"不要再把一個 RAG chatbot 當完整 Portfolio","description":"由 business problem、資料、evaluation、failure handling 到部署，補回面試會追問的證據。"},"zh-Hans":{"title":"不要再把一个 RAG chatbot 当成完整 Portfolio","description":"从业务问题、数据、evaluation、failure handling 到部署，补上面试会追问的证据。"},"en":{"title":"A RAG chatbot is not a complete portfolio project","description":"Add the business problem, data choices, evaluation, failure handling and deployment evidence an interview can inspect."}}
+  },
+  {
+    "id":"professional-workflow","slug":"from-vague-request-to-accepted-feature","type":"tutorial","categoryId":"professional-workflows","tags":["requirements","testing","debugging","code review"],"status":"review","visibility":"public",
+    "learningObjectives":["Turn a request into acceptance criteria","Use tests as feedback","Record decisions and unresolved risk"],
+    "sourceUrls":["https://owasp.org/www-project-top-10-for-large-language-model-applications/","https://martinfowler.com/articles/practical-test-pyramid.html"],"downloads":[],
+    "publishedAt":"2026-09-22","updatedAt":"2026-09-22","reviewedAt":"2026-09-22","reviewBy":"2027-09-22",
+    "translations":{"zh-Hant":{"title":"Professional AI Workflow：由模糊需求到可驗收功能","description":"把「加個 AI 功能」拆成規格、tickets、tests、debugging 與 review。"},"zh-Hans":{"title":"Professional AI Workflow：从模糊需求到可验收功能","description":"把“加一个 AI 功能”拆成规格、tickets、tests、debugging 与 review。"},"en":{"title":"A professional AI workflow: from vague request to accepted feature","description":"Turn “add AI” into a specification, tickets, tests, debugging evidence and a reviewable decision trail."}}
+  },
+  {
+    "id":"prompt-evidence","slug":"prompt-play-to-professional-evidence","type":"tutorial","categoryId":"professional-workflows","tags":["Prompt Play","evaluation","permissions","human review"],"status":"review","visibility":"public",
+    "learningObjectives":["Version prompt experiments","Define tool permissions","Add evaluation and human approval"],
+    "sourceUrls":["https://modelcontextprotocol.io/specification/2025-06-18/server/tools","https://owasp.org/www-project-top-10-for-large-language-model-applications/"],"downloads":[],
+    "publishedAt":"2026-09-22","updatedAt":"2026-09-22","reviewedAt":"2026-09-22","reviewBy":"2027-09-22",
+    "translations":{"zh-Hant":{"title":"Prompt Play 如何變成 Professional Evidence","description":"一個好 prompt 不是終點；要補版本、測試、權限、失敗處理與人工批准。"},"zh-Hans":{"title":"Prompt Play 如何变成 Professional Evidence","description":"一个好 prompt 不是终点；还要补版本、测试、权限、失败处理与人工批准。"},"en":{"title":"Turn prompt play into professional evidence","description":"A clever prompt is only a start. Add versions, tests, permission boundaries, failure handling and human approval."}}
+  },
+  {
+    "id":"opportunity-scorecard","slug":"evaluate-ai-course-hackathon-event","type":"resource-guide","categoryId":"resources-opportunities","tags":["course","hackathon","career decision","Australia"],"status":"review","visibility":"public",
+    "learningObjectives":["Compare opportunities by role relevance","Define a tangible output","Set a stop condition"],
+    "sourceUrls":["https://www.fairwork.gov.au/starting-employment/unpaid-work/work-experience-and-internships"],"downloads":[],
+    "publishedAt":"2026-09-22","updatedAt":"2026-09-22","reviewedAt":"2026-09-22","reviewBy":"2026-12-21",
+    "translations":{"zh-Hant":{"title":"如何判斷課程、Hackathon 或 AI 活動值不值得參加","description":"不要只看名氣；用角色相關性、輸出、時間成本、資格與證據評分。"},"zh-Hans":{"title":"如何判断课程、Hackathon 或 AI 活动值不值得参加","description":"不要只看知名度；用职位相关性、产出、时间成本、资格与证据评分。"},"en":{"title":"How to judge whether an AI course, hackathon or event is worth it","description":"Score opportunities by role relevance, tangible output, time cost, eligibility and reusable evidence."}}
+  }
+]
