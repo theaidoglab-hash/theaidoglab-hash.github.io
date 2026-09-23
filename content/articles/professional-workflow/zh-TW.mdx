@@ -1,0 +1,22 @@
+> 核心判斷：Professional workflow 的價值不是讓 AI 寫更多 code，而是讓需求、驗收、失敗和決策都有清楚證據。
+
+## 從模糊要求開始
+假設有人說：「增加一個 AI 功能，協助使用者草擬客戶回覆。」先不要問要用哪個模型。要先問輸入來自哪裡、誰可以讀取、輸出只是 draft 還是可以寄出、哪些情況必須交由人工處理、如何判斷內容可接受，以及錯誤會造成什麼後果。
+
+## 把要求寫成 spec
+定義輸入、輸出、不可做的事和 acceptance criteria。例如：系統只讀取已核准的合成 ticket；輸出必須標示為 draft；缺少訂單資料時不得自行補作；任何寄送動作不在 scope；測試集中的敏感資料不得出現在 log。
+
+## 拆成可驗收 tickets
+將工作分成資料 schema、rule validation、draft generation、evaluation、audit record 和 UI review。每個 ticket 都要有明確完成條件。這樣 AI coding assistant 只處理目前的邊界，而不是一次猜完整個產品。
+
+## Tests 是 feedback loop
+先建立 deterministic rules 和固定 cases，再測試模型輸出。測試正常情況，也測 missing field、malicious instruction、timeout、duplicate request 和 retry。付款或外部寫入類工作還要考慮 idempotency；本例則明確維持 draft-only。
+
+## Debugging 與 review
+失敗時保存輸入類型、版本、rule result、模型狀態和人工決策，不保存不必要的原始個人資料。修正後重跑相同 cases，避免只測剛才失敗的一例。Code review 不只看 syntax，也要檢查權限、error path、logging、rollback，以及使用者是否知道輸出仍待審核。
+
+## Portfolio evidence
+展示 spec、ticket breakdown、test matrix、一次具體 failure、修正前後差異和 ADR。不要聲稱「production ready」；準確說明哪些環節已驗證、哪些仍使用 mock、哪些操作被刻意禁止。
+
+## 下一步
+下載 workflow template，選一個模糊的功能要求，用一頁寫完 problem、scope、acceptance、failure、tests 和 human approval，再開始 coding。

@@ -1,10 +1,10 @@
-# Prompt Experiment Log
+# Prompt 實驗紀錄
 
-每次只改一項主要變量，保留成功與失敗。
+每次只改一個主要變數，保留成功與失敗。
 
-Version: v1.0 · Updated: 2026-09-22
+Version: v1.1 · Updated: 2026-09-23
 
-Do not include employer, client or personal confidential data.
+不要加入雇主、客戶或個人機密資料。
 
 ## 01 · Problem 與 prompt version
 

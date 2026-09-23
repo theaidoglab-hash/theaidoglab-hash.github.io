@@ -2,7 +2,7 @@
 
 Fix the problem, scope, acceptance, failure and approval before coding.
 
-Version: v1.0 · Updated: 2026-09-22
+Version: v1.1 · Updated: 2026-09-23
 
 Do not include employer, client or personal confidential data.
 

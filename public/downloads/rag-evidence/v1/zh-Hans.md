@@ -2,9 +2,9 @@
 
 把可运行 demo 补成可追问的工程证据。
 
-Version: v1.0 · Updated: 2026-09-22
+Version: v1.1 · Updated: 2026-09-23
 
-Do not include employer, client or personal confidential data.
+不要加入雇主、客户或个人机密资料。
 
 ## 01 · 业务问题与用户
 

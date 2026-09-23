@@ -1,4 +1,4 @@
-export const LOCALES = ['zh-Hant', 'zh-Hans', 'en'] as const;
+export const LOCALES = ['zh-HK', 'zh-TW', 'zh-Hans', 'en'] as const;
 export type Locale = typeof LOCALES[number];
 export const CATEGORY_IDS = ['australia-ai-career', 'roles-pathways', 'portfolio-evidence', 'professional-workflows', 'resources-opportunities'] as const;
 export type CategoryId = typeof CATEGORY_IDS[number];

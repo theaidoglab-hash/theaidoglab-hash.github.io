@@ -2,9 +2,9 @@
 
 每次只修改一个主要变量，同时保留成功与失败。
 
-Version: v1.0 · Updated: 2026-09-22
+Version: v1.1 · Updated: 2026-09-23
 
-Do not include employer, client or personal confidential data.
+不要加入雇主、客户或个人机密资料。
 
 ## 01 · 问题与 prompt version
 

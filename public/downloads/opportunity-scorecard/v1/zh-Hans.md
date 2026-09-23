@@ -2,9 +2,9 @@
 
 每项 0–2 分；最多比较三个机会，然后只选一个。
 
-Version: v1.0 · Updated: 2026-09-22
+Version: v1.1 · Updated: 2026-09-23
 
-Do not include employer, client or personal confidential data.
+不要加入雇主、客户或个人机密资料。
 
 ## 01 · 与目标职位的相关性
 

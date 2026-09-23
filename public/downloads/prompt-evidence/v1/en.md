@@ -2,7 +2,7 @@
 
 Change one major variable at a time and preserve both success and failure.
 
-Version: v1.0 · Updated: 2026-09-22
+Version: v1.1 · Updated: 2026-09-23
 
 Do not include employer, client or personal confidential data.
 

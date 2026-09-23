@@ -1,6 +1,6 @@
 # AI.DOG Career Library
 
-Public, trilingual, static-first career resource site. It is intentionally isolated from the private `content-studio/` application and never reads that database at runtime.
+Public, localized, static-first career resource site with Hong Kong Traditional Chinese, Taiwan Traditional Chinese, Simplified Chinese and English editions. It is intentionally isolated from the private `content-studio/` application and never reads that database at runtime.
 
 ## Local development
 
@@ -18,6 +18,6 @@ The five cornerstone articles are deliberately marked `review`. Local builds inc
 
 ## Publication contract
 
-Every public article needs shared metadata, `zh-Hant.mdx`, `zh-Hans.mdx`, `en.mdx`, and matching PDF/Markdown downloads. `npm run validate` fails closed on missing translations, downloads, sources, expired review dates or internal markers.
+Every public article needs shared metadata, `zh-HK.mdx`, `zh-TW.mdx`, `zh-Hans.mdx`, `en.mdx`, and matching PDF/Markdown downloads. `npm run validate` fails closed on missing translations, downloads, sources, expired review dates or internal markers.
 
 The preview remains `noindex, nofollow`. Change robots and metadata only as part of an approved public-launch review. For Cloudflare Builds, use `npm run build:release`; do not point a production build directly at `npm run build`.

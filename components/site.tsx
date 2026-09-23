@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import type { ArticleMeta, Locale } from '@/lib/types';
 import { categories, ui } from '@/lib/i18n';
+import { LocaleSwitch } from './locale-switch';
 
 export function Header({locale}:{locale:Locale}){
   const t=ui[locale];
   return <header className="site-header"><div className="shell header-inner">
     <Link className="brand" href={`/${locale}`} aria-label={t.brand as string}><span className="brand-dot"/>AI.DOG</Link>
     <nav aria-label="Primary"><Link href={`/${locale}/start-here`}>{(t.nav as string[])[0]}</Link><Link href={`/${locale}/resources`}>{(t.nav as string[])[2]}</Link><Link href={`/${locale}/about`}>{(t.nav as string[])[3]}</Link></nav>
-    <div className="languages" aria-label="Language">{(['zh-Hant','zh-Hans','en'] as Locale[]).map(l=><Link key={l} className={l===locale?'active':''} href={`/${l}`}>{l==='zh-Hant'?'繁':l==='zh-Hans'?'简':'EN'}</Link>)}</div>
+    <LocaleSwitch locale={locale}/>
   </div></header>;
 }
 
@@ -26,5 +27,6 @@ export function CategoryGrid({locale}:{locale:Locale}){
 }
 
 export function LanguageSwitch({locale,slug}:{locale:Locale;slug:string}){
-  return <div className="article-languages" aria-label="Article language">{(['zh-Hant','zh-Hans','en'] as Locale[]).map(l=><Link key={l} className={l===locale?'active':''} href={`/${l}/articles/${slug}`}>{ui[l].name as string}</Link>)}</div>;
+  void slug;
+  return <LocaleSwitch locale={locale} expanded/>;
 }

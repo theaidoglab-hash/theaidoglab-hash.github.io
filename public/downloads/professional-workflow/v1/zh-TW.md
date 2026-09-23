@@ -1,10 +1,10 @@
-# Professional AI Workflow Template
+# Professional AI Workflow 範本
 
-Coding 前先固定 problem、scope、acceptance、failure 與 approval。
+Coding 前先確定 problem、scope、acceptance、failure 與 approval。
 
-Version: v1.0 · Updated: 2026-09-22
+Version: v1.1 · Updated: 2026-09-23
 
-Do not include employer, client or personal confidential data.
+不要加入雇主、客戶或個人機密資料。
 
 ## 01 · Problem 與受影響使用者
 
