@@ -1,0 +1,90 @@
+{
+  "reportVersion": "policy-pilot-starter-v1",
+  "route": "CITED_DRAFT_READY",
+  "reasonCode": "CURRENT_APPROVED_POLICY_FOUND",
+  "draftCreated": true,
+  "draft": "For this synthetic exercise, an unused demonstration keyboard can be submitted for review within 30 days of delivery. Any exception needs a human policy owner. This is a read-only draft for human confirmation; no external action has occurred.",
+  "citations": [
+    {
+      "policyId": "SYN-POL-RET-100",
+      "version": "v2",
+      "title": "Synthetic demonstration-item return rule",
+      "excerpt": "Unused demonstration keyboards may be submitted for review within 30 days of delivery. Exceptions require human policy-owner review.",
+      "sourceNote": "synthetic authoring"
+    }
+  ],
+  "actionBoundary": {
+    "status": "synthetic_fixture_only",
+    "output": "cited_policy_draft_or_human_handoff",
+    "requiresHumanReview": true,
+    "externalActionsPerformed": false,
+    "prohibitedActions": [
+      "refund",
+      "order_change",
+      "account_lookup",
+      "payment_collection",
+      "external_message",
+      "case_creation"
+    ]
+  },
+  "trace": {
+    "traceSchemaVersion": "1.0",
+    "traceId": "pp-c00ed637a457f729",
+    "starterVersion": "policy-pilot-starter-v1",
+    "corpusVersion": "policy-pilot-synthetic-corpus-v1",
+    "asOf": "2026-06-15",
+    "questionSha256": "6f9e4685cee730f35f0b596bcdffa7707c8f0e585d7f3ee3eeceed45daea5653",
+    "questionCharacterCount": 76,
+    "safety": {
+      "blocked": false
+    },
+    "retrieval": {
+      "type": "keyword_baseline",
+      "skipped": false,
+      "minimumScore": 4,
+      "eligibleCandidates": [
+        {
+          "policyId": "SYN-POL-RET-100",
+          "version": "v2",
+          "score": 16,
+          "matchedTokens": [
+            "unused",
+            "demo",
+            "keyboard",
+            "return",
+            "days",
+            "delivery"
+          ],
+          "matchedKeywords": [
+            "return",
+            "unused",
+            "demo",
+            "keyboard",
+            "delivery"
+          ]
+        }
+      ],
+      "rejectedCandidates": [
+        {
+          "policyId": "SYN-POL-RET-100",
+          "version": "v1",
+          "score": 12,
+          "reason": "status_superseded"
+        }
+      ]
+    },
+    "route": "CITED_DRAFT_READY",
+    "reasonCode": "CURRENT_APPROVED_POLICY_FOUND",
+    "citationRefs": [
+      {
+        "policyId": "SYN-POL-RET-100",
+        "version": "v2"
+      }
+    ],
+    "actionBoundary": {
+      "requiresHumanReview": true,
+      "externalActionsPerformed": false
+    }
+  },
+  "reviewerNextStep": "A human policy owner may check the cited source before deciding whether to send or act on anything."
+}

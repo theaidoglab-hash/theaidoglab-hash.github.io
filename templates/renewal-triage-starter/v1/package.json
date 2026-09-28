@@ -1,0 +1,14 @@
+{
+  "name": "renewal-triage-starter",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Fixture-only, local renewal-review queue starter",
+  "scripts": {
+    "test": "node --test tests/renewal-triage.test.mjs",
+    "demo": "node scripts/demo.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

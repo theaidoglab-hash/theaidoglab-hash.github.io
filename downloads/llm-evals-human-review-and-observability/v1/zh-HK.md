@@ -1,0 +1,43 @@
+# LLM Eval、Human Review 同 Observability：一個好聽答案唔夠 release Worksheet
+
+一個好聽答案唔夠。固定情境要逐個測、錯誤要有人覆核，每次改動留低前後比較；任何關鍵情境失敗就停。一次本地通過唔等於已可推出。
+
+Version: v1.1 · Updated: 2026-09-24
+
+不要加入僱主、客戶或個人機密資料。
+
+## 01 · 讀者要作的決定與使用者
+
+- Notes:
+- Evidence:
+- Boundary / unresolved risk:
+
+## 02 · Input、資料邊界與禁止動作
+
+- Notes:
+- Evidence:
+- Boundary / unresolved risk:
+
+## 03 · 簡單 baseline 與可接受輸出
+
+- Notes:
+- Evidence:
+- Boundary / unresolved risk:
+
+## 04 · 固定 cases、failure 與 handoff
+
+- Notes:
+- Evidence:
+- Boundary / unresolved risk:
+
+## 05 · 系統部分，可以核對乜：version、test、trace 或 result
+
+- Notes:
+- Evidence:
+- Boundary / unresolved risk:
+
+## 06 · 用喺工作上，仲要講清乜：owner、成本、風險和下一步
+
+- Notes:
+- Evidence:
+- Boundary / unresolved risk:

@@ -1,0 +1,14 @@
+{
+  "name": "approval-queue-starter",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Fixture-only, local cited-draft approval queue starter",
+  "scripts": {
+    "test": "node --test tests/approval-queue.test.mjs",
+    "demo": "node scripts/demo.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

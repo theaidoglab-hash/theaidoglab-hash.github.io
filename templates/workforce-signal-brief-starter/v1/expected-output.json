@@ -1,0 +1,11 @@
+{
+  "runId": "WSB-LOCAL-RUN-001",
+  "fixtureStatus": "synthetic_source_shaped_not_live_acquired",
+  "expectedSummary": {
+    "ready": 1,
+    "rejected": 6,
+    "externalActions": 0,
+    "modelCalls": 0,
+    "networkCalls": 0
+  }
+}

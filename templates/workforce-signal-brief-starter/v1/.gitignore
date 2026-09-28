@@ -1,0 +1,14 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+
+# Dependencies and generated test or demo artefacts
+node_modules/
+coverage/
+reports/
+report/
+results/
+output/
+outputs/
+generated/

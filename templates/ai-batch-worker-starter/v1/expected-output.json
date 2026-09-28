@@ -1,0 +1,192 @@
+{
+  "artifactType": "ai_batch_worker_starter_demo",
+  "version": "1.0.0",
+  "scope": "synthetic_local_only",
+  "actionBoundary": "human_review_only_no_external_actions",
+  "runs": [
+    {
+      "runId": "run-demo-initial",
+      "attemptsThisRun": 2,
+      "events": [
+        {
+          "route": "queued",
+          "workItemId": "SYN-BW-101",
+          "idempotencyKey": "synthetic-document:SYN-BW-101:v1",
+          "runId": "run-demo-initial",
+          "jobTraceId": "corr-06yuo7w",
+          "attemptId": "attempt-1pcaggw",
+          "attempt": 0,
+          "reasonCode": "SYNTHETIC_WORK_ITEM_ACCEPTED",
+          "nextEligibleAt": 0
+        },
+        {
+          "route": "queued",
+          "workItemId": "SYN-BW-102",
+          "idempotencyKey": "synthetic-document:SYN-BW-102:v1",
+          "runId": "run-demo-initial",
+          "jobTraceId": "corr-06yvb7f",
+          "attemptId": "attempt-1pm6ejl",
+          "attempt": 0,
+          "reasonCode": "SYNTHETIC_WORK_ITEM_ACCEPTED",
+          "nextEligibleAt": 0
+        },
+        {
+          "route": "completed",
+          "workItemId": "SYN-BW-101",
+          "idempotencyKey": "synthetic-document:SYN-BW-101:v1",
+          "runId": "run-demo-initial",
+          "jobTraceId": "corr-06yuo7w",
+          "attemptId": "attempt-1pcaggx",
+          "attempt": 1,
+          "reasonCode": "SYNTHETIC_ENRICHMENT_READY_FOR_HUMAN_REVIEW"
+        },
+        {
+          "route": "retry_scheduled",
+          "workItemId": "SYN-BW-102",
+          "idempotencyKey": "synthetic-document:SYN-BW-102:v1",
+          "runId": "run-demo-initial",
+          "jobTraceId": "corr-06yvb7f",
+          "attemptId": "attempt-1pm6ejm",
+          "attempt": 1,
+          "reasonCode": "timeout",
+          "category": "timeout",
+          "nextEligibleAt": 526
+        }
+      ],
+      "checkpoint": {
+        "version": "ai-batch-worker-starter-checkpoint-v1",
+        "pending": [
+          {
+            "workItemId": "SYN-BW-102",
+            "sourceRevision": "v1",
+            "idempotencyKey": "synthetic-document:SYN-BW-102:v1",
+            "estimatedSyntheticCostUnits": 3,
+            "reviewScope": "human_review_only",
+            "outcomePlan": [
+              "timeout",
+              "success"
+            ],
+            "attempt": 1,
+            "nextEligibleAt": 526
+          }
+        ],
+        "completed": [
+          {
+            "route": "completed",
+            "reasonCode": "SYNTHETIC_ENRICHMENT_READY_FOR_HUMAN_REVIEW",
+            "category": null,
+            "workItemId": "SYN-BW-101",
+            "sourceRevision": "v1",
+            "idempotencyKey": "synthetic-document:SYN-BW-101:v1",
+            "attempt": 1
+          }
+        ],
+        "deadLetters": [],
+        "terminalByIdempotencyKey": {
+          "synthetic-document:SYN-BW-101:v1": {
+            "route": "completed",
+            "reasonCode": "SYNTHETIC_ENRICHMENT_READY_FOR_HUMAN_REVIEW",
+            "category": null,
+            "workItemId": "SYN-BW-101",
+            "sourceRevision": "v1",
+            "idempotencyKey": "synthetic-document:SYN-BW-101:v1",
+            "attempt": 1
+          }
+        },
+        "spentSyntheticCostUnits": 5
+      },
+      "summary": {
+        "pendingCount": 1,
+        "completedCount": 1,
+        "deadLetterCount": 0,
+        "spentSyntheticCostUnits": 5,
+        "remainingSyntheticCostUnits": 5
+      }
+    },
+    {
+      "runId": "run-demo-resume",
+      "attemptsThisRun": 1,
+      "events": [
+        {
+          "route": "terminal_duplicate_suppressed",
+          "workItemId": "SYN-BW-101",
+          "idempotencyKey": "synthetic-document:SYN-BW-101:v1",
+          "runId": "run-demo-resume",
+          "jobTraceId": "corr-06yuo7w",
+          "attemptId": "attempt-16jg6br",
+          "attempt": 0,
+          "reasonCode": "TERMINAL_IDEMPOTENCY_KEY_ALREADY_SEEN",
+          "priorTerminalRoute": "completed",
+          "priorTerminalReasonCode": "SYNTHETIC_ENRICHMENT_READY_FOR_HUMAN_REVIEW"
+        },
+        {
+          "route": "completed",
+          "workItemId": "SYN-BW-102",
+          "idempotencyKey": "synthetic-document:SYN-BW-102:v1",
+          "runId": "run-demo-resume",
+          "jobTraceId": "corr-06yvb7f",
+          "attemptId": "attempt-16tc4ei",
+          "attempt": 2,
+          "reasonCode": "SYNTHETIC_ENRICHMENT_READY_FOR_HUMAN_REVIEW"
+        }
+      ],
+      "checkpoint": {
+        "version": "ai-batch-worker-starter-checkpoint-v1",
+        "pending": [],
+        "completed": [
+          {
+            "route": "completed",
+            "reasonCode": "SYNTHETIC_ENRICHMENT_READY_FOR_HUMAN_REVIEW",
+            "category": null,
+            "workItemId": "SYN-BW-101",
+            "sourceRevision": "v1",
+            "idempotencyKey": "synthetic-document:SYN-BW-101:v1",
+            "attempt": 1
+          },
+          {
+            "route": "completed",
+            "reasonCode": "SYNTHETIC_ENRICHMENT_READY_FOR_HUMAN_REVIEW",
+            "category": null,
+            "workItemId": "SYN-BW-102",
+            "sourceRevision": "v1",
+            "idempotencyKey": "synthetic-document:SYN-BW-102:v1",
+            "attempt": 2
+          }
+        ],
+        "deadLetters": [],
+        "terminalByIdempotencyKey": {
+          "synthetic-document:SYN-BW-101:v1": {
+            "route": "completed",
+            "reasonCode": "SYNTHETIC_ENRICHMENT_READY_FOR_HUMAN_REVIEW",
+            "category": null,
+            "workItemId": "SYN-BW-101",
+            "sourceRevision": "v1",
+            "idempotencyKey": "synthetic-document:SYN-BW-101:v1",
+            "attempt": 1
+          },
+          "synthetic-document:SYN-BW-102:v1": {
+            "route": "completed",
+            "reasonCode": "SYNTHETIC_ENRICHMENT_READY_FOR_HUMAN_REVIEW",
+            "category": null,
+            "workItemId": "SYN-BW-102",
+            "sourceRevision": "v1",
+            "idempotencyKey": "synthetic-document:SYN-BW-102:v1",
+            "attempt": 2
+          }
+        },
+        "spentSyntheticCostUnits": 8
+      },
+      "summary": {
+        "pendingCount": 0,
+        "completedCount": 2,
+        "deadLetterCount": 0,
+        "spentSyntheticCostUnits": 8,
+        "remainingSyntheticCostUnits": 2
+      }
+    }
+  ],
+  "nonClaims": [
+    "No real document, provider request, credential, or cost is represented.",
+    "The report shows one deterministic serial fixture walkthrough only."
+  ]
+}

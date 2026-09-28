@@ -1,0 +1,43 @@
+# 用公开漏洞数据做一个可审查的 AI Review Packet Worksheet
+
+用公开 KEV 数据练习记下来源和允许用法，再用固定情境比较改动前后；任何关键情境出错就交给人决定并可退回。不扫描、修补或声称公司受影响。
+
+Version: v1.1 · Updated: 2026-09-24
+
+不要加入雇主、客户或个人机密资料。
+
+## 01 · 读者要做的决定与使用者
+
+- Notes:
+- Evidence:
+- Boundary / unresolved risk:
+
+## 02 · Input、数据边界与禁止动作
+
+- Notes:
+- Evidence:
+- Boundary / unresolved risk:
+
+## 03 · 简单 baseline 与可接受输出
+
+- Notes:
+- Evidence:
+- Boundary / unresolved risk:
+
+## 04 · 固定 cases、failure 与 handoff
+
+- Notes:
+- Evidence:
+- Boundary / unresolved risk:
+
+## 05 · 系统部分，可以核对什么：version、test、trace 或 result
+
+- Notes:
+- Evidence:
+- Boundary / unresolved risk:
+
+## 06 · 用在工作上，还要讲清什么：owner、成本、风险与下一步
+
+- Notes:
+- Evidence:
+- Boundary / unresolved risk:

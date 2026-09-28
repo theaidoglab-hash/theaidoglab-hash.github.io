@@ -1,0 +1,62 @@
+{
+  "reportVersion": "1.0.0",
+  "route": "EVIDENCE_PACKET_READY",
+  "reasonCode": "SYNTHETIC_SOURCE_ACCEPTED",
+  "packetCreated": true,
+  "packet": {
+    "packetVersion": "1.0",
+    "purpose": "Local synthetic evidence packet for human review only.",
+    "record": {
+      "catalogId": "SYN-KEV-2026-0001",
+      "cveId": "SYN-CVE-2026-0001",
+      "vendorProject": "Example Harbor Systems",
+      "product": "Demo Gateway",
+      "vulnerabilityName": "Synthetic input-validation teaching record",
+      "dateAdded": "2026-01-12",
+      "shortDescription": "Invented record used only to practise source checks and human review.",
+      "requiredAction": "Ask the named reviewer whether a separate authorised assessment is needed.",
+      "dueDate": "2026-02-15",
+      "knownRansomwareCampaignUse": "Unknown",
+      "notes": "SYNTHETIC_FIXTURE_ONLY; not a real vulnerability, feed item, or security finding."
+    },
+    "sourceReceipt": {
+      "receiptId": "SRC-SYN-KEV-001",
+      "provenance": "synthetic_teaching_fixture",
+      "acquisitionStatus": "not_acquired",
+      "sourceOwner": "fictional-security-assurance-owner",
+      "fixtureVersion": "1.0.0"
+    },
+    "reviewerChecklist": [
+      "Confirm the record remains synthetic and local.",
+      "Confirm no asset, exposure, or remediation conclusion was added.",
+      "Decide whether any separate authorised assessment is needed."
+    ]
+  },
+  "actionBoundary": {
+    "requiresHumanReview": true,
+    "externalActionsPerformed": false,
+    "permittedActions": [],
+    "prohibitedActions": [
+      "scan_network",
+      "match_asset",
+      "assess_exposure",
+      "prioritise_remediation",
+      "patch_system",
+      "create_ticket",
+      "send_message"
+    ]
+  },
+  "trace": {
+    "traceSchemaVersion": "1.0",
+    "traceId": "kev-local-e1159f127a213303",
+    "starterVersion": "1.0.0",
+    "asOf": "2026-01-12",
+    "recordSha256": "467d5377d71fee7d9616629f67ef264ab3670423489dacda890b92160b121aff",
+    "sourceReceiptSha256": "3296a6933b409b5b4125449d672dda06e9b6ae928493452106d7365b09ca47a7",
+    "actionBoundary": {
+      "requiresHumanReview": true,
+      "externalActionsPerformed": false
+    }
+  },
+  "reviewerNextStep": "A named human reviewer decides whether a separate authorised assessment is needed. This package cannot take that next step."
+}
