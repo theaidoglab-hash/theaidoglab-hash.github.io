@@ -1,0 +1,15 @@
+{
+  "name": "kev-review-packet-starter",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local, synthetic, reviewer-first KEV-shaped evidence packet starter",
+  "scripts": {
+    "test": "node --test tests/kev-review-packet.test.mjs",
+    "fixture:validate": "node scripts/validate-fixture.mjs",
+    "demo": "node scripts/demo.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

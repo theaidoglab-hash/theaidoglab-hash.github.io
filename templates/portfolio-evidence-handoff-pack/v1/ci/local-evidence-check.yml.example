@@ -1,0 +1,25 @@
+# Inactive example: this file is deliberately outside .github/workflows.
+# Do not move or rename it into an active workflow directory until an
+# authorised owner has reviewed the repository candidate and its data boundary.
+name: Local evidence record check candidate
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-record:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the reviewed candidate only
+        uses: actions/checkout@v4
+      - name: Show the Node runtime
+        run: node --version
+      - name: Check the handoff structure
+        run: node handoff/scripts/validate-portfolio-evidence.mjs
+
+# This candidate does not install packages, use secrets, call a model, upload
+# artifacts, create a release, change repository settings, or deploy anything.
+# The handoff directory name and all commands need owner review before use.

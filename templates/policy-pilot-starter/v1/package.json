@@ -1,0 +1,14 @@
+{
+  "name": "policy-pilot-starter",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Fixture-only, local policy-answer drafting starter",
+  "scripts": {
+    "test": "node --test tests/policy-pilot.test.mjs",
+    "demo": "node scripts/demo.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

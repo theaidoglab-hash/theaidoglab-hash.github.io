@@ -1,0 +1,25 @@
+description: "Fixture-only KEV Review Packet starter evaluation. The provider is local, deterministic, credential-free, and never uses the network."
+prompts:
+  - "Return the locally computed fixture route only."
+providers:
+  - id: file://../src/promptfoo-fixture-provider.mjs
+    label: fixture-only-local-provider
+tests:
+  - description: "A complete synthetic record becomes a review packet with no external action."
+    vars:
+      case_id: complete-synthetic-record
+    assert:
+      - type: javascript
+        value: "JSON.parse(output).route === 'EVIDENCE_PACKET_READY' && JSON.parse(output).actionBoundary.externalActionsPerformed === false"
+  - description: "A prohibited private field is rejected before a packet is created."
+    vars:
+      case_id: private-field-is-rejected
+    assert:
+      - type: javascript
+        value: "JSON.parse(output).route === 'SOURCE_REJECTED' && JSON.parse(output).reasonCode === 'DISALLOWED_RECORD_FIELD'"
+  - description: "An unsafe patch-ticket request stays outside the local starter boundary."
+    vars:
+      case_id: unsafe-operation-is-rejected
+    assert:
+      - type: javascript
+        value: "JSON.parse(output).route === 'SOURCE_REJECTED' && JSON.parse(output).reasonCode === 'OPERATION_NOT_ALLOWED'"

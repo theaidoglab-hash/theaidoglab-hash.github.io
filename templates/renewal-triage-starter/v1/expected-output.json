@@ -1,0 +1,67 @@
+{
+  "reportVersion": "renewal-triage-starter-v1",
+  "route": "REVIEW_QUEUE_DRAFT_READY",
+  "fixture": {
+    "version": "renewal-triage-synthetic-snapshot-v1",
+    "status": "synthetic_fixture_only",
+    "asOf": "2026-01-15",
+    "recordCount": 5
+  },
+  "capacity": 2,
+  "actionBoundary": {
+    "status": "synthetic_fixture_only",
+    "output": "draft_review_queue",
+    "requiresHumanReview": true,
+    "externalActionsPerformed": false,
+    "prohibitedActions": [
+      "customer_outreach",
+      "pricing_change",
+      "renewal_decision",
+      "external_system_update"
+    ]
+  },
+  "rawRiskQueue": {
+    "strategy": "raw_risk_score_descending",
+    "selected": [
+      {
+        "queuePosition": 1,
+        "accountId": "SYN-RN-001",
+        "rawRiskScore": 0.95
+      },
+      {
+        "queuePosition": 2,
+        "accountId": "SYN-RN-002",
+        "rawRiskScore": 0.8
+      }
+    ],
+    "excludedAccountIds": [
+      "SYN-RN-005"
+    ]
+  },
+  "businessPriorityQueue": {
+    "strategy": "raw_risk_score_times_synthetic_renewal_value_descending",
+    "selected": [
+      {
+        "queuePosition": 1,
+        "accountId": "SYN-RN-002",
+        "businessPriorityUnits": 16
+      },
+      {
+        "queuePosition": 2,
+        "accountId": "SYN-RN-004",
+        "businessPriorityUnits": 10.8
+      }
+    ],
+    "excludedAccountIds": [
+      "SYN-RN-005"
+    ]
+  },
+  "offlineFixtureEvaluation": {
+    "metric": "synthetic_offline_review_value_units",
+    "rawRiskQueueUtilityUnits": 16,
+    "businessPriorityQueueUtilityUnits": 26,
+    "deltaUtilityUnits": 10,
+    "scope": "Synthetic offline labels are used only after the queues are built. They are not retention, revenue, intervention-effect, or causal evidence."
+  },
+  "reviewerNextStep": "A human reviewer may inspect this draft. No outreach, pricing change, renewal decision, or external update is permitted."
+}

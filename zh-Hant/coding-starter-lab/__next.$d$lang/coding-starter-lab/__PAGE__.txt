@@ -1,0 +1,331 @@
+1:"$Sreact.fragment"
+2:I[9543,["16","static/chunks/16-bf4cb3bcb45561c2.js","974","static/chunks/app/%5Blang%5D/coding-starter-lab/page-db6e15f1b92c3958.js"],"default"]
+3:T5ee,# Coder Starter Lab
+
+Status: local learning fixture only.
+
+This is a fictional, disposable pure-function change. It has no keys, network calls, accounts, real data, package setup, or deployment path. The page that supplied it does not run the code or claim that any test has passed.
+
+## What this pack contains
+
+- `CHANGE_BRIEF.md`: one bounded change and its non-goals.
+- `src/review-route.ts`: an intentionally incomplete pure-function skeleton.
+- `tests/review-route.cases.ts`: fixed inputs without the answer key.
+- `AGENT_PROMPT.md`: a plan/diff/tests-only request with external actions forbidden.
+- `REVIEWER_ROLLBACK_RECORD.md`: a manual baseline, review decision, and discard path.
+
+`tests/review-route.reference.ts` is deliberately excluded from this learner pack. After recording all six expected routes in the reviewer record, return to the lab page, confirm the manual-baseline gate, and reveal the reference as a separate file.
+
+## Manual first
+
+Read the brief and fixed cases before asking an agent for anything. Write the expected route for each case, then compare a proposed plan, diff, and tests against the brief. Record PASS, REVISE, or STOP. A passing local exercise is not a production, security, reliability, or business-result claim.
+
+## Scope boundary
+
+Use only these supplied fictional strings. Do not add a real repository, customer data, credentials, API key, network request, package, connector, browser session, command, commit, pull request, deployment, message, or other external action.4:T4a0,# Change Brief: block non-local requests before review
+
+## Fictional context
+
+A disposable local helper decides whether a synthetic evidence request may move to a human reviewer. It never approves an external action.
+
+## Change requested
+
+Extend `decideReviewRoute` so it returns `BLOCKED` before any other route when either `dataScope` is not `synthetic-only` or `externalActionRequested` is true.
+
+## Fixed contract
+
+1. `dataScope !== "synthetic-only"` returns `BLOCKED`.
+2. `externalActionRequested === true` returns `BLOCKED`.
+3. A missing named reviewer returns `NEEDS_REVISION` when the request is otherwise within scope.
+4. Missing fixed acceptance cases returns `NEEDS_REVISION` when the request is otherwise within scope.
+5. Only a synthetic-only, no-action request with a named reviewer and fixed cases returns `READY_FOR_REVIEW`.
+
+## Non-goals
+
+- Do not read files, call a service, send a message, write a record, change an account, or make a business decision.
+- Do not introduce a framework, package, persistence layer, environment variable, configuration file, or network dependency.
+- Do not claim the function is production-ready or that a route authorises any action.5:T500,import type { ReviewRequest } from '../src/review-route';
+
+type FixedCase = {
+  id: string;
+  request: ReviewRequest;
+};
+
+export const fixedCases: FixedCase[] = [
+  { id: 'TC-01-ready-synthetic-review', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-02-missing-reviewer', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: false, hasFixedAcceptanceCases: true } },
+  { id: 'TC-03-missing-cases', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: false } },
+  { id: 'TC-04-unapproved-scope-is-blocked', request: { dataScope: 'unapproved', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-05-external-action-is-blocked', request: { dataScope: 'synthetic-only', externalActionRequested: true, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-06-blocking-wins-over-missing-reviewer', request: { dataScope: 'unapproved', externalActionRequested: true, hasNamedReviewer: false, hasFixedAcceptanceCases: false } },
+];
+
+// Write your expected route for every input before opening review-route.reference.ts.6:T676,# Reviewer and Rollback Record
+
+Fixture status: fictional, disposable, local-only.
+
+## Manual baseline before an agent
+
+| Fixed case | Expected route before reading a diff | Actual proposed route | PASS / REVISE / STOP | Note |
+| --- | --- | --- | --- | --- |
+| TC-01 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-02 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-03 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-04 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-05 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-06 | ____________________ | ____________________ | ____________________ | ____________________ |
+
+## Review checks
+
+- Diff changes only `src/review-route.ts`.
+- `BLOCKED` is evaluated before reviewer or acceptance-case completeness.
+- No dependency, network, file, account, tool, command, package, or external action is introduced.
+- Every proposed test maps to a supplied fixed case.
+- The output makes no production, security, reliability, or business-impact claim.
+
+Final local decision: PASS / REVISE / STOP
+Reviewer name or alias: ____________________
+Reason or unresolved risk: ____________________
+
+## Rollback or discard
+
+If the diff exceeds the brief, a fixed case fails, or an external action is suggested, record STOP and discard the proposed change. Return to the supplied starter skeleton; do not attempt a repair in a real repository or claim a rollback was tested.7:Tf84,--- AGENT_PROMPT.md ---
+# Plan, diff, and tests only
+
+You are helping with a fictional local learning exercise. Use only the supplied change brief, source skeleton, and fixed test cases.
+
+Do not access the internet, files outside the supplied text, accounts, browser sessions, terminals, tools, APIs, connectors, package registries, or version-control services. Do not run commands, install packages, create, modify, delete, upload, commit, publish, deploy, send a message, or take any external action.
+
+Return only:
+1. a short plan that names the decision order and the non-goals;
+2. one minimal unified diff for `src/review-route.ts` only;
+3. proposed checks for every fixed case, including why `BLOCKED` wins over `NEEDS_REVISION`.
+
+Do not claim the diff was applied, the code ran, tests passed, or a system is safe for real use. Stop after the plan, diff, and tests.
+
+--- CHANGE_BRIEF.md ---
+# Change Brief: block non-local requests before review
+
+## Fictional context
+
+A disposable local helper decides whether a synthetic evidence request may move to a human reviewer. It never approves an external action.
+
+## Change requested
+
+Extend `decideReviewRoute` so it returns `BLOCKED` before any other route when either `dataScope` is not `synthetic-only` or `externalActionRequested` is true.
+
+## Fixed contract
+
+1. `dataScope !== "synthetic-only"` returns `BLOCKED`.
+2. `externalActionRequested === true` returns `BLOCKED`.
+3. A missing named reviewer returns `NEEDS_REVISION` when the request is otherwise within scope.
+4. Missing fixed acceptance cases returns `NEEDS_REVISION` when the request is otherwise within scope.
+5. Only a synthetic-only, no-action request with a named reviewer and fixed cases returns `READY_FOR_REVIEW`.
+
+## Non-goals
+
+- Do not read files, call a service, send a message, write a record, change an account, or make a business decision.
+- Do not introduce a framework, package, persistence layer, environment variable, configuration file, or network dependency.
+- Do not claim the function is production-ready or that a route authorises any action.
+
+--- src/review-route.ts ---
+export type ReviewRequest = {
+  dataScope: 'synthetic-only' | 'unapproved';
+  externalActionRequested: boolean;
+  hasNamedReviewer: boolean;
+  hasFixedAcceptanceCases: boolean;
+};
+
+export type ReviewRoute = 'READY_FOR_REVIEW' | 'NEEDS_REVISION' | 'BLOCKED';
+
+export function decideReviewRoute(request: ReviewRequest): ReviewRoute {
+  // Starter skeleton: the requested BLOCKED boundary has not been added yet.
+  if (!request.hasNamedReviewer || !request.hasFixedAcceptanceCases) {
+    return 'NEEDS_REVISION';
+  }
+  return 'READY_FOR_REVIEW';
+}
+
+--- tests/review-route.cases.ts ---
+import type { ReviewRequest } from '../src/review-route';
+
+type FixedCase = {
+  id: string;
+  request: ReviewRequest;
+};
+
+export const fixedCases: FixedCase[] = [
+  { id: 'TC-01-ready-synthetic-review', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-02-missing-reviewer', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: false, hasFixedAcceptanceCases: true } },
+  { id: 'TC-03-missing-cases', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: false } },
+  { id: 'TC-04-unapproved-scope-is-blocked', request: { dataScope: 'unapproved', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-05-external-action-is-blocked', request: { dataScope: 'synthetic-only', externalActionRequested: true, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-06-blocking-wins-over-missing-reviewer', request: { dataScope: 'unapproved', externalActionRequested: true, hasNamedReviewer: false, hasFixedAcceptanceCases: false } },
+];
+
+// Write your expected route for every input before opening review-route.reference.ts.8:T1c22,--- README.md ---
+# Coder Starter Lab
+
+Status: local learning fixture only.
+
+This is a fictional, disposable pure-function change. It has no keys, network calls, accounts, real data, package setup, or deployment path. The page that supplied it does not run the code or claim that any test has passed.
+
+## What this pack contains
+
+- `CHANGE_BRIEF.md`: one bounded change and its non-goals.
+- `src/review-route.ts`: an intentionally incomplete pure-function skeleton.
+- `tests/review-route.cases.ts`: fixed inputs without the answer key.
+- `AGENT_PROMPT.md`: a plan/diff/tests-only request with external actions forbidden.
+- `REVIEWER_ROLLBACK_RECORD.md`: a manual baseline, review decision, and discard path.
+
+`tests/review-route.reference.ts` is deliberately excluded from this learner pack. After recording all six expected routes in the reviewer record, return to the lab page, confirm the manual-baseline gate, and reveal the reference as a separate file.
+
+## Manual first
+
+Read the brief and fixed cases before asking an agent for anything. Write the expected route for each case, then compare a proposed plan, diff, and tests against the brief. Record PASS, REVISE, or STOP. A passing local exercise is not a production, security, reliability, or business-result claim.
+
+## Scope boundary
+
+Use only these supplied fictional strings. Do not add a real repository, customer data, credentials, API key, network request, package, connector, browser session, command, commit, pull request, deployment, message, or other external action.
+
+--- CHANGE_BRIEF.md ---
+# Change Brief: block non-local requests before review
+
+## Fictional context
+
+A disposable local helper decides whether a synthetic evidence request may move to a human reviewer. It never approves an external action.
+
+## Change requested
+
+Extend `decideReviewRoute` so it returns `BLOCKED` before any other route when either `dataScope` is not `synthetic-only` or `externalActionRequested` is true.
+
+## Fixed contract
+
+1. `dataScope !== "synthetic-only"` returns `BLOCKED`.
+2. `externalActionRequested === true` returns `BLOCKED`.
+3. A missing named reviewer returns `NEEDS_REVISION` when the request is otherwise within scope.
+4. Missing fixed acceptance cases returns `NEEDS_REVISION` when the request is otherwise within scope.
+5. Only a synthetic-only, no-action request with a named reviewer and fixed cases returns `READY_FOR_REVIEW`.
+
+## Non-goals
+
+- Do not read files, call a service, send a message, write a record, change an account, or make a business decision.
+- Do not introduce a framework, package, persistence layer, environment variable, configuration file, or network dependency.
+- Do not claim the function is production-ready or that a route authorises any action.
+
+--- src/review-route.ts ---
+export type ReviewRequest = {
+  dataScope: 'synthetic-only' | 'unapproved';
+  externalActionRequested: boolean;
+  hasNamedReviewer: boolean;
+  hasFixedAcceptanceCases: boolean;
+};
+
+export type ReviewRoute = 'READY_FOR_REVIEW' | 'NEEDS_REVISION' | 'BLOCKED';
+
+export function decideReviewRoute(request: ReviewRequest): ReviewRoute {
+  // Starter skeleton: the requested BLOCKED boundary has not been added yet.
+  if (!request.hasNamedReviewer || !request.hasFixedAcceptanceCases) {
+    return 'NEEDS_REVISION';
+  }
+  return 'READY_FOR_REVIEW';
+}
+
+--- tests/review-route.cases.ts ---
+import type { ReviewRequest } from '../src/review-route';
+
+type FixedCase = {
+  id: string;
+  request: ReviewRequest;
+};
+
+export const fixedCases: FixedCase[] = [
+  { id: 'TC-01-ready-synthetic-review', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-02-missing-reviewer', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: false, hasFixedAcceptanceCases: true } },
+  { id: 'TC-03-missing-cases', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: false } },
+  { id: 'TC-04-unapproved-scope-is-blocked', request: { dataScope: 'unapproved', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-05-external-action-is-blocked', request: { dataScope: 'synthetic-only', externalActionRequested: true, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-06-blocking-wins-over-missing-reviewer', request: { dataScope: 'unapproved', externalActionRequested: true, hasNamedReviewer: false, hasFixedAcceptanceCases: false } },
+];
+
+// Write your expected route for every input before opening review-route.reference.ts.
+
+--- AGENT_PROMPT.md ---
+# Plan, diff, and tests only
+
+You are helping with a fictional local learning exercise. Use only the supplied change brief, source skeleton, and fixed test cases.
+
+Do not access the internet, files outside the supplied text, accounts, browser sessions, terminals, tools, APIs, connectors, package registries, or version-control services. Do not run commands, install packages, create, modify, delete, upload, commit, publish, deploy, send a message, or take any external action.
+
+Return only:
+1. a short plan that names the decision order and the non-goals;
+2. one minimal unified diff for `src/review-route.ts` only;
+3. proposed checks for every fixed case, including why `BLOCKED` wins over `NEEDS_REVISION`.
+
+Do not claim the diff was applied, the code ran, tests passed, or a system is safe for real use. Stop after the plan, diff, and tests.
+
+--- REVIEWER_ROLLBACK_RECORD.md ---
+# Reviewer and Rollback Record
+
+Fixture status: fictional, disposable, local-only.
+
+## Manual baseline before an agent
+
+| Fixed case | Expected route before reading a diff | Actual proposed route | PASS / REVISE / STOP | Note |
+| --- | --- | --- | --- | --- |
+| TC-01 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-02 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-03 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-04 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-05 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-06 | ____________________ | ____________________ | ____________________ | ____________________ |
+
+## Review checks
+
+- Diff changes only `src/review-route.ts`.
+- `BLOCKED` is evaluated before reviewer or acceptance-case completeness.
+- No dependency, network, file, account, tool, command, package, or external action is introduced.
+- Every proposed test maps to a supplied fixed case.
+- The output makes no production, security, reliability, or business-impact claim.
+
+Final local decision: PASS / REVISE / STOP
+Reviewer name or alias: ____________________
+Reason or unresolved risk: ____________________
+
+## Rollback or discard
+
+If the diff exceeds the brief, a fixed case fails, or an external action is suggested, record STOP and discard the proposed change. Return to the supplied starter skeleton; do not attempt a repair in a real repository or claim a rollback was tested.c:X
+11:X
+11:C
+0:{"buildId":"F9gbkczNWaonvaThFlVtW","data":[{"rsc":["$","$1","c",{"children":[["$","div",null,{"className":"shell page coding-lab-page","children":[["$","$L2",null,{"copy":{"eyebrow":"寫程式入門練習","sectionEyebrows":{"setup":"先做手動判斷","assets":"英文來源檔","manual":"手動基準與覆核","reference":"寫下基準答案後","prompt":"選用 AI 助手比對","output":"完成後留下","handoff":"下一個本機參考"},"title":"第一個寫程式練習：覆核一個小型函式改動","intro":"不必從大型專案或開發框架開始。這個練習只改一個「純函式」（pure function）：它只依輸入回傳結果，不讀取檔案、不連網，也不寫入資料。你會先自行判斷六個案例，再比較 AI 助手提出的計畫、程式差異與測試，最後由人決定。","boundary":"所有來源檔均為英文、虛構且可丟棄，只供本機學習。內容沒有應用程式介面金鑰（API key）、真實資料、網路連線、套件設定或部署步驟。不要把它貼入公司的程式碼儲存庫（repository），也不要讓 AI 助手使用工具、執行指令、修改檔案、提交版本（commit）、傳送內容或部署。","quickStart":{"eyebrow":"15 分鐘起步","title":"先判斷兩個相反的固定案例","intro":"這次不用下載、寫程式或開啟 AI 助手。只在紙上或筆記寫下兩個 route；這是完整練習的起步，不是完成全部六個案例。","steps":["TC-01：資料只限合成資料、沒有外部動作，並有指定覆核人與固定案例。寫下它應走哪一個 route。","TC-06：資料未獲核准且要求外部動作，也沒有指定覆核人與固定案例。寫下它應走哪一個 route。","用一句理由解釋：為何 BLOCKED 要先於 NEEDS_REVISION。"],"referenceTitle":"寫完才核對答案","reference":"TC-01 是 READY_FOR_REVIEW；TC-06 是 BLOCKED。BLOCKED 要先處理，因為資料範圍或要求的動作已跨越這個本機練習的界線。","boundary":"15 分鐘完成這兩個判斷，不代表你已寫程式差異、跑測試或完成 Coder Starter Lab。","fullLabAction":"有 45–60 分鐘時，完成整個 Coder Starter Lab"},"practiceMap":{"eyebrow":"你會練到的兩件事","title":"這個小改動，練怎麼寫清楚要改什麼、怎麼驗收、何時要丟棄提議","workflowTitle":"程式與驗證","workflow":["先讀改動說明（change brief），找出為何「停止處理」（BLOCKED）要先於資料是否齊全的檢查。","用六個固定案例（fixed cases）把改動限於一個純函式和一份最小程式差異（diff），並為每個案例列出檢查方法。"],"decisionTitle":"交付與判斷","decision":["AI 助手的輸出只是一份待覆核提案；不要貼入程式碼儲存庫、執行或當作已完成。","在覆核與復原記錄中寫下通過（PASS）、修改（REVISE）或停止（STOP），並記錄丟棄提案的原因。"]},"setupTitle":"先自行判斷，再請 AI 助手提出程式差異","setup":[{"title":"只使用本頁的學習檔案","text":"先有六份學習來源檔（learner source assets），全部描述同一個虛構純函式。第七份是獨立參考答案，只有你寫下人工基準後才會顯示。英文檔名方便在本機編輯器開啟，但不代表程式可供真實系統使用。"},{"title":"先寫下人工基準答案","text":"閱讀改動說明與六個固定案例。在看任何程式差異前，先決定每個案例應是準備覆核（READY_FOR_REVIEW）、需要修改（NEEDS_REVISION）或停止處理（BLOCKED）。"},{"title":"AI 助手只交計畫、程式差異與測試","text":"若選擇在現有工具練習，只貼上本頁提供的檔案，並關閉工具、終端機、瀏覽器、連接器（connector）與寫入權限（write permission）。"},{"title":"由人決定保留或丟棄","text":"用覆核與復原記錄核對範圍、判斷順序與案例。結果只有通過、修改或停止，不會自動合併任何程式碼。"}],"assetsTitle":"六份英文來源檔，另有一份延後顯示的參考答案","assetsIntro":"這些本機來源檔可逐份複製、下載與打開核對。內容用英文，讓 code、diff 與 test name 保持一致；頁面導讀仍按你選擇的語言顯示。","assetsNotice":"所有下載都是純文字，沒有 credential、network call 或可執行 setup。網站本身不會執行這些內容或保存你的結果。","assetLabels":{"readme":{"title":"README","description":"Pack 的範圍、手動流程與不可聲稱事項。"},"brief":{"title":"改動說明（change brief）","description":"一項小改動、固定判斷順序與不會處理的事項。"},"sourceSkeleton":{"title":"程式骨架（source skeleton）","description":"刻意未完成的純函式；不讀取檔案、不連網、不寫入資料。"},"testCases":{"title":"固定案例輸入（fixed cases）","description":"六個沒有附答案的輸入；先自行寫下預期結果。"},"referenceAnswers":{"title":"參考答案（reference answers）","description":"寫下人工基準答案後，才顯示六個預期結果。"},"agentPrompt":{"title":"AI 助手提示詞（agent prompt）","description":"只要求計畫、最小程式差異與測試檢查，明確禁止外部動作。"},"reviewerRollbackRecord":{"title":"覆核與復原記錄","description":"記錄人工基準、範圍檢查、通過／修改／停止與丟棄方法。"}},"copyAction":"複製","downloadAction":"下載檔案","bundleCopy":"複製學習來源檔包（不含答案）","bundleDownload":"下載學習來源檔包（不含答案）","manualTitle":"手動基準與覆核流程","manualIntro":"核心練習不需要帳號、模型或 AI 助手。只靠改動說明、程式骨架與測試案例，就能完成一次可覆核的判斷；AI 助手只是之後可選的比對。","manualSteps":["先在覆核記錄寫下 TC-01 到 TC-06 的預期結果；暫時不要看 AI 助手的輸出。","閱讀改動說明，標出兩個停止處理條件，以及它們為何必須先於資料是否齊全的檢查。","若有一份程式差異提案，只檢查它是否改動唯一允許的來源檔、依指定順序判斷，並涵蓋全部固定案例。","填寫通過、修改或停止；若提案超出範圍、要求外部動作或仍有未解決案例，便選擇停止並丟棄程式差異。"],"referenceGateTitle":"寫下六個預期 route，再揭示參考答案","referenceGateIntro":"來源檔包與 agent prompt pack 都刻意不包含答案。先在 reviewer record 寫下 TC-01 到 TC-06 的 route；以下確認只是你的本機記錄，網站不會儲存或驗證。","referenceGateConfirmation":"我已為 TC-01 到 TC-06 全部寫下預期 route，準備好比較參考答案。","referenceGateAction":"揭示獨立參考答案","referenceGateRevealed":"參考答案已揭示。請逐一比較每個 case 的理由；這份答案不代表程式已執行、測試已通過或系統可供真實使用。","promptTitle":"選用：只請 AI 助手提交計畫、程式差異與測試","promptIntro":"這段提示詞不會連接任何模型。只可在能確認已關閉工具與寫入權限的現有對話或編輯器中使用，並只貼上本頁的虛構檔案。若無法確認，就停在人工基準。","promptPackNotice":"這個 agent prompt pack 包含 AGENT_PROMPT.md、CHANGE_BRIEF.md、src/review-route.ts 與 case inputs；刻意不包含 reference answers，避免 agent 直接照抄答案。","promptCopy":"複製完整 agent prompt pack","promptDownload":"下載完整 agent prompt pack","copySuccess":"已複製到剪貼簿。","copyError":"無法自動複製；可以直接選取文字再複製。","outputTitle":"做完後，可以給人看什麼","outputItems":["一份列明不處理事項的改動說明","一份未受 AI 助手影響的人工基準答案","一份只改純函式、可供覆核的程式差異提案","六個案例的覆核記錄，以及通過、修改或停止的理由"],"handoffTitle":"下一步：繼續練習，或整理這次證據","handoffText":"想延伸這次小改動，可以閱讀「用 AI 協作寫程式」，查看 feature、non-goal、acceptance、diff、test 與 reviewer decision 如何放進工程工作流。想先整理作品，就用 planner 留下這次的 brief、baseline、diff、tests 與 discard 原因。兩個方向都只用本機、合成與人工決定的材料。","handoffAction":"閱讀 AI 協作寫程式流程","portfolioAction":"整理成作品證據"},"codingStarterLabAssets":[{"id":"readme","fileName":"README.md","content":"$3","title":"README","description":"Pack 的範圍、手動流程與不可聲稱事項。"},{"id":"brief","fileName":"CHANGE_BRIEF.md","content":"$4","title":"改動說明（change brief）","description":"一項小改動、固定判斷順序與不會處理的事項。"},{"id":"sourceSkeleton","fileName":"src/review-route.ts","content":"export type ReviewRequest = {\n  dataScope: 'synthetic-only' | 'unapproved';\n  externalActionRequested: boolean;\n  hasNamedReviewer: boolean;\n  hasFixedAcceptanceCases: boolean;\n};\n\nexport type ReviewRoute = 'READY_FOR_REVIEW' | 'NEEDS_REVISION' | 'BLOCKED';\n\nexport function decideReviewRoute(request: ReviewRequest): ReviewRoute {\n  // Starter skeleton: the requested BLOCKED boundary has not been added yet.\n  if (!request.hasNamedReviewer || !request.hasFixedAcceptanceCases) {\n    return 'NEEDS_REVISION';\n  }\n  return 'READY_FOR_REVIEW';\n}","title":"程式骨架（source skeleton）","description":"刻意未完成的純函式；不讀取檔案、不連網、不寫入資料。"},{"id":"testCases","fileName":"tests/review-route.cases.ts","content":"$5","title":"固定案例輸入（fixed cases）","description":"六個沒有附答案的輸入；先自行寫下預期結果。"},{"id":"agentPrompt","fileName":"AGENT_PROMPT.md","content":"# Plan, diff, and tests only\n\nYou are helping with a fictional local learning exercise. Use only the supplied change brief, source skeleton, and fixed test cases.\n\nDo not access the internet, files outside the supplied text, accounts, browser sessions, terminals, tools, APIs, connectors, package registries, or version-control services. Do not run commands, install packages, create, modify, delete, upload, commit, publish, deploy, send a message, or take any external action.\n\nReturn only:\n1. a short plan that names the decision order and the non-goals;\n2. one minimal unified diff for `src/review-route.ts` only;\n3. proposed checks for every fixed case, including why `BLOCKED` wins over `NEEDS_REVISION`.\n\nDo not claim the diff was applied, the code ran, tests passed, or a system is safe for real use. Stop after the plan, diff, and tests.","title":"AI 助手提示詞（agent prompt）","description":"只要求計畫、最小程式差異與測試檢查，明確禁止外部動作。"},{"id":"reviewerRollbackRecord","fileName":"REVIEWER_ROLLBACK_RECORD.md","content":"$6","title":"覆核與復原記錄","description":"記錄人工基準、範圍檢查、通過／修改／停止與丟棄方法。"}],"codingStarterLabReferenceAsset":{"id":"referenceAnswers","fileName":"tests/review-route.reference.ts","content":"import type { ReviewRoute } from '../src/review-route';\n\n// Reveal only after recording your own baseline for TC-01 to TC-06.\nexport const referenceRoutes: Record<string, ReviewRoute> = {\n  'TC-01-ready-synthetic-review': 'READY_FOR_REVIEW',\n  'TC-02-missing-reviewer': 'NEEDS_REVISION',\n  'TC-03-missing-cases': 'NEEDS_REVISION',\n  'TC-04-unapproved-scope-is-blocked': 'BLOCKED',\n  'TC-05-external-action-is-blocked': 'BLOCKED',\n  'TC-06-blocking-wins-over-missing-reviewer': 'BLOCKED',\n};\n\n// These are reference expectations, not evidence that code ran or tests passed.","title":"參考答案（reference answers）","description":"寫下人工基準答案後，才顯示六個預期結果。"},"codingStarterLabAgentPromptPack":"$7","codingStarterLabSourcePack":"$8","handoffArticleHref":"/zh-Hant/articles/use-ai-as-a-coding-partner-with-proof","portfolioHref":"/zh-Hant/portfolio-evidence-planner?starter=coding-starter#portfolio-capstone"}],"$L9"]}],null,"$La"]}],"isPartial":"$@b","staleTime":"$c","varyParams":null},{"rsc":"$Ld","isPartial":"$@e","staleTime":"$c","varyParams":null},{"rsc":"$Lf","isPartial":"$@10","staleTime":"$c","varyParams":"$11"},{"rsc":"$L12","isPartial":"$@13","staleTime":"$c","varyParams":null},{"rsc":"$L14","isPartial":"$@15","staleTime":"$c","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@16","rootVaryParams":null,"needsRuntimeRequest":"$@17"}
+18:I[16,["16","static/chunks/16-bf4cb3bcb45561c2.js","974","static/chunks/app/%5Blang%5D/coding-starter-lab/page-db6e15f1b92c3958.js"],""]
+19:I[4019,[],"OutletBoundary"]
+1a:"$Sreact.suspense"
+1c:I[4019,[],"ViewportBoundary"]
+1d:I[4019,[],"MetadataBoundary"]
+1e:I[1401,[],"IconMark"]
+1f:I[6237,[],""]
+20:I[6505,[],""]
+21:I[1508,["16","static/chunks/16-bf4cb3bcb45561c2.js","508","static/chunks/508-d021a5825fc312b4.js","160","static/chunks/app/%5Blang%5D/layout-5fbe4198f72a6850.js"],"NavigationLink"]
+22:I[1508,["16","static/chunks/16-bf4cb3bcb45561c2.js","508","static/chunks/508-d021a5825fc312b4.js","160","static/chunks/app/%5Blang%5D/layout-5fbe4198f72a6850.js"],"DesktopNavigationMore"]
+23:I[1508,["16","static/chunks/16-bf4cb3bcb45561c2.js","508","static/chunks/508-d021a5825fc312b4.js","160","static/chunks/app/%5Blang%5D/layout-5fbe4198f72a6850.js"],"MobileNavigation"]
+24:I[1508,["16","static/chunks/16-bf4cb3bcb45561c2.js","508","static/chunks/508-d021a5825fc312b4.js","160","static/chunks/app/%5Blang%5D/layout-5fbe4198f72a6850.js"],"LocaleSwitch"]
+25:I[3399,["16","static/chunks/16-bf4cb3bcb45561c2.js","226","static/chunks/app/%5Blang%5D/not-found-54a06e3a193e04e0.js"],"default"]
+:HL["/ai-dog-mark.webp","image"]
+:HL["/_next/static/css/d8873a290af07348.css","style"]
+9:["$","aside",null,{"className":"support-nudge","aria-labelledby":"support-nudge-title","children":[["$","p",null,{"className":"eyebrow","children":"可選支持"}],["$","h2",null,{"id":"support-nudge-title","children":"如果這份資源讓你少走了一點彎路"}],["$","p",null,{"children":"免費資源會繼續公開。可選 US$5／月支持只用於維護，不會交換個人建議、優先回覆或任何結果承諾。"}],["$","$L18",null,{"className":"text-link","href":"/zh-Hant/support","children":["了解可選支持"," ",["$","span",null,{"aria-hidden":true,"children":"→"}]]}]]}]
+a:["$","$L19",null,{"children":["$","$1a",null,{"name":"Next.MetadataOutlet","children":"$@1b"}]}]
+d:["$","$1","h",{"children":[null,["$","$L1c",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L1d",null,{"children":["$","$1a",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"第一個寫程式練習：覆核一個小型函式改動 · AI.DOG"}],["$","meta","1",{"name":"description","content":"不必從大型專案或開發框架開始。這個練習只改一個「純函式」（pure function）：它只依輸入回傳結果，不讀取檔案、不連網，也不寫入資料。你會先自行判斷六個案例，再比較 AI 助手提出的計畫、程式差異與測試，最後由人決定。"}],["$","meta","2",{"name":"robots","content":"noindex, nofollow"}],["$","link","3",{"rel":"canonical","href":"https://theaidoglab-hash.github.io/zh-Hant/coding-starter-lab/"}],["$","link","4",{"rel":"alternate","hrefLang":"zh-Hant","href":"https://theaidoglab-hash.github.io/zh-Hant/coding-starter-lab/"}],["$","link","5",{"rel":"alternate","hrefLang":"zh-Hans","href":"https://theaidoglab-hash.github.io/zh-Hans/coding-starter-lab/"}],["$","link","6",{"rel":"alternate","hrefLang":"en","href":"https://theaidoglab-hash.github.io/en/coding-starter-lab/"}],["$","link","7",{"rel":"alternate","hrefLang":"x-default","href":"https://theaidoglab-hash.github.io/zh-Hant/coding-starter-lab/"}],["$","meta","8",{"property":"og:title","content":"第一個寫程式練習：覆核一個小型函式改動"}],["$","meta","9",{"property":"og:description","content":"不必從大型專案或開發框架開始。這個練習只改一個「純函式」（pure function）：它只依輸入回傳結果，不讀取檔案、不連網，也不寫入資料。你會先自行判斷六個案例，再比較 AI 助手提出的計畫、程式差異與測試，最後由人決定。"}],["$","meta","10",{"property":"og:url","content":"https://theaidoglab-hash.github.io/zh-Hant/coding-starter-lab/"}],["$","meta","11",{"property":"og:site_name","content":"AI.DOG Learning & Portfolio Library"}],["$","meta","12",{"property":"og:image","content":"https://theaidoglab-hash.github.io/ai-dog.png"}],["$","meta","13",{"property":"og:image:width","content":"1254"}],["$","meta","14",{"property":"og:image:height","content":"1254"}],["$","meta","15",{"property":"og:image:alt","content":"AI.DOG mascot"}],["$","meta","16",{"property":"og:type","content":"website"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"第一個寫程式練習：覆核一個小型函式改動"}],["$","meta","19",{"name":"twitter:description","content":"不必從大型專案或開發框架開始。這個練習只改一個「純函式」（pure function）：它只依輸入回傳結果，不讀取檔案、不連網，也不寫入資料。你會先自行判斷六個案例，再比較 AI 助手提出的計畫、程式差異與測試，最後由人決定。"}],["$","meta","20",{"name":"twitter:image","content":"https://theaidoglab-hash.github.io/ai-dog.png"}],["$","link","21",{"rel":"icon","href":"/icon.png?693ffeb984445f99","type":"image/png","sizes":"512x512"}],["$","$L1e","22",{}]]}]}]}],null]}]
+f:["$","$1","c",{"children":[null,["$","$L1f",null,{"parallelRouterKey":"children","template":["$","$L20",null,{}]}]]}]
+12:["$","$1","c",{"children":[null,[["$","header",null,{"className":"site-header","lang":"zh-Hant","children":[["$","a",null,{"className":"skip-link","href":"#main-content","children":"直接前往主要內容"}],["$","div",null,{"className":"shell header-inner","children":[["$","$L18",null,{"className":"brand","href":"/zh-Hant","aria-label":"AI.DOG 學習與作品集資源庫","children":[["$","img",null,{"className":"brand-mark","src":"/ai-dog-mark.webp","alt":"","width":32,"height":32,"decoding":"async","aria-hidden":"true"}],"AI.DOG"]}],["$","nav",null,{"className":"site-nav","aria-label":"主要導覽","children":[[["$","$L21","/zh-Hant#learner-start",{"href":"/zh-Hant#learner-start","label":"選擇起點"}],["$","$L21","/zh-Hant/series/ai-engineer-roadmap",{"href":"/zh-Hant/series/ai-engineer-roadmap","label":"AI Engineer 學習地圖"}],["$","$L21","/zh-Hant/series/ai-use-routes",{"href":"/zh-Hant/series/ai-use-routes","label":"開始實作"}],["$","$L21","/zh-Hant/interview-lab",{"href":"/zh-Hant/interview-lab","label":"面試練習"}]],["$","$L22",null,{"summary":"更多","navigationLabel":"更多內容","groups":[{"label":"實作與作品","links":[{"href":"/zh-Hant/portfolio-evidence-planner","label":"整理作品集","surface":"portfolio-evidence-planner"},{"href":"/zh-Hant/labs","label":"建置實驗室","surface":"labs"}]},{"label":"工具與資源","links":[{"href":"/zh-Hant/learning-evidence-planner","label":"學習規劃器","surface":"learning-evidence-planner"},{"href":"/zh-Hant/resources","label":"資源","surface":"resources"}]},{"label":"關於 AI.DOG","links":[{"href":"/zh-Hant/support","label":"支持 AI.DOG","surface":"support"},{"href":"/zh-Hant/about","label":"關於","surface":"about"}]}]}]]}],["$","$L23",null,{"summary":"選單","navigationLabel":"選單","moreLabel":"更多內容","primaryLinks":[{"href":"/zh-Hant#learner-start","label":"選擇起點","surface":"home"},{"href":"/zh-Hant/series/ai-engineer-roadmap","surface":"series","label":"AI Engineer 學習地圖"},{"href":"/zh-Hant/series/ai-use-routes","label":"開始實作","surface":"series"},{"href":"/zh-Hant/interview-lab","label":"面試練習","surface":"interview-lab"}],"moreGroups":"$12:props:children:1:0:props:children:1:props:children:1:props:children:1:props:groups"}],["$","$L24",null,{"locale":"zh-Hant"}]]}]]}],["$","main",null,{"id":"main-content","lang":"zh-Hant","tabIndex":-1,"children":["$","$L1f",null,{"parallelRouterKey":"children","template":["$","$L20",null,{}],"notFound":[["$","$L25",null,{}],[]]}]}],["$","footer",null,{"className":"footer","lang":"zh-Hant","children":["$","div",null,{"className":"shell footer-grid","children":[["$","div",null,{"children":[["$","strong",null,{"className":"footer-brand","children":[["$","img",null,{"className":"brand-mark","src":"/ai-dog-mark.webp","alt":"","width":32,"height":32,"decoding":"async","aria-hidden":"true"}],"AI.DOG"]}],["$","p",null,{"children":"給想學 AI、建立說得清楚的作品集的人的實作筆記。"}]]}],["$","nav",null,{"className":"footer-links","aria-label":"頁尾導覽","children":[["$","$L18","/zh-Hant/support",{"href":"/zh-Hant/support","children":"支持 AI.DOG"}],["$","$L18","/zh-Hant/about",{"href":"/zh-Hant/about","children":"關於 AI.DOG"}],["$","$L18","/zh-Hant/privacy",{"href":"/zh-Hant/privacy","children":"隱私"}]]}]]}]}]]]}]
+14:["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/d8873a290af07348.css","precedence":"next"}]],["$","html",null,{"lang":"en","children":["$","body",null,{"children":["$","$L1f",null,{"parallelRouterKey":"children","template":["$","$L20",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}]}]]}]
+1b:null
+17:true
+c:300
+c:C
+16:0
+e:"$undefined"
+10:"$undefined"
+13:"$undefined"
+15:"$undefined"
+b:"$undefined"

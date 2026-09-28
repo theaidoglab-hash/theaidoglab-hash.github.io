@@ -1,0 +1,14 @@
+{
+  "name": "workforce-signal-brief-starter",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Fixture-only local starter for a source-bound context brief",
+  "scripts": {
+    "test": "node --test tests/workforce-signal-brief.test.mjs",
+    "demo": "node scripts/demo.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

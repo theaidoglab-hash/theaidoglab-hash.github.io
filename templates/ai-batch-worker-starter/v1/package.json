@@ -1,0 +1,14 @@
+{
+  "name": "ai-batch-worker-starter",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Fixture-only local starter for a resumable AI batch worker",
+  "scripts": {
+    "test": "node --test tests/ai-batch-worker.test.mjs",
+    "demo": "node scripts/demo.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

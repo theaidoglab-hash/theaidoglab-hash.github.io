@@ -1,0 +1,321 @@
+1:"$Sreact.fragment"
+2:I[6237,[],""]
+3:I[6505,[],""]
+6:I[4019,[],"OutletBoundary"]
+7:"$Sreact.suspense"
+a:I[4019,[],"ViewportBoundary"]
+c:I[4019,[],"MetadataBoundary"]
+e:I[2031,[],"default",1]
+:HL["/_next/static/css/d8873a290af07348.css","style"]
+9:X
+0:{"P":null,"c":["","en","coding-starter-lab",""],"q":"","i":false,"f":[[["",{"children":[["lang","en","d",["_not-found","_global-error","icon.png","robots.txt","rss.xml","sitemap.xml"]],{"children":["coding-starter-lab",{"children":["__PAGE__",{},"$undefined","$undefined",4608]},"$undefined","$undefined",4608]},"$undefined","$undefined",4608]},"$undefined","$undefined",4624],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/d8873a290af07348.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","children":["$","body",null,{"children":["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]}]]}],{"children":[["$","$1","c",{"children":[null,"$L4"]}],{"children":[["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["$","$1","c",{"children":["$L5",null,["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],{},null,false,null]},null,false,"$9"]},null,false,null]},null,false,null],["$","$1","h",{"children":[null,["$","$La",null,{"children":"$Lb"}],["$","div",null,{"hidden":true,"children":["$","$Lc",null,{"children":["$","$7",null,{"name":"Next.Metadata","children":"$Ld"}]}]}],null]}],false]],"m":"$undefined","G":["$e",[]],"S":true,"h":null,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"F9gbkczNWaonvaThFlVtW"}
+f:I[16,["16","static/chunks/16-bf4cb3bcb45561c2.js","974","static/chunks/app/%5Blang%5D/coding-starter-lab/page-db6e15f1b92c3958.js"],""]
+10:I[1508,["16","static/chunks/16-bf4cb3bcb45561c2.js","508","static/chunks/508-d021a5825fc312b4.js","160","static/chunks/app/%5Blang%5D/layout-5fbe4198f72a6850.js"],"NavigationLink"]
+11:I[1508,["16","static/chunks/16-bf4cb3bcb45561c2.js","508","static/chunks/508-d021a5825fc312b4.js","160","static/chunks/app/%5Blang%5D/layout-5fbe4198f72a6850.js"],"DesktopNavigationMore"]
+12:I[1508,["16","static/chunks/16-bf4cb3bcb45561c2.js","508","static/chunks/508-d021a5825fc312b4.js","160","static/chunks/app/%5Blang%5D/layout-5fbe4198f72a6850.js"],"MobileNavigation"]
+13:I[1508,["16","static/chunks/16-bf4cb3bcb45561c2.js","508","static/chunks/508-d021a5825fc312b4.js","160","static/chunks/app/%5Blang%5D/layout-5fbe4198f72a6850.js"],"LocaleSwitch"]
+14:I[3399,["16","static/chunks/16-bf4cb3bcb45561c2.js","226","static/chunks/app/%5Blang%5D/not-found-54a06e3a193e04e0.js"],"default"]
+15:I[9543,["16","static/chunks/16-bf4cb3bcb45561c2.js","974","static/chunks/app/%5Blang%5D/coding-starter-lab/page-db6e15f1b92c3958.js"],"default"]
+:HL["/ai-dog-mark.webp","image"]
+9:C
+4:[["$","header",null,{"className":"site-header","lang":"en","children":[["$","a",null,{"className":"skip-link","href":"#main-content","children":"Skip to main content"}],["$","div",null,{"className":"shell header-inner","children":[["$","$Lf",null,{"className":"brand","href":"/en","aria-label":"AI.DOG Learning & Portfolio Library","children":[["$","img",null,{"className":"brand-mark","src":"/ai-dog-mark.webp","alt":"","width":32,"height":32,"decoding":"async","aria-hidden":"true"}],"AI.DOG"]}],["$","nav",null,{"className":"site-nav","aria-label":"Primary navigation","children":[[["$","$L10","/en#learner-start",{"href":"/en#learner-start","label":"Choose a starting point"}],["$","$L10","/en/series/ai-engineer-roadmap",{"href":"/en/series/ai-engineer-roadmap","label":"AI Engineer learning map"}],["$","$L10","/en/series/ai-use-routes",{"href":"/en/series/ai-use-routes","label":"Start building"}],["$","$L10","/en/interview-lab",{"href":"/en/interview-lab","label":"Interview practice"}]],["$","$L11",null,{"summary":"More","navigationLabel":"More content","groups":[{"label":"Build and portfolio","links":[{"href":"/en/portfolio-evidence-planner","label":"Package a portfolio","surface":"portfolio-evidence-planner"},{"href":"/en/labs","label":"Build lab","surface":"labs"}]},{"label":"Tools and resources","links":[{"href":"/en/learning-evidence-planner","label":"Learning planner","surface":"learning-evidence-planner"},{"href":"/en/resources","label":"Resources","surface":"resources"}]},{"label":"About AI.DOG","links":[{"href":"/en/support","label":"Support AI.DOG","surface":"support"},{"href":"/en/about","label":"About","surface":"about"}]}]}]]}],["$","$L12",null,{"summary":"Menu","navigationLabel":"Menu","moreLabel":"More content","primaryLinks":[{"href":"/en#learner-start","label":"Choose a starting point","surface":"home"},{"href":"/en/series/ai-engineer-roadmap","surface":"series","label":"AI Engineer learning map"},{"href":"/en/series/ai-use-routes","label":"Start building","surface":"series"},{"href":"/en/interview-lab","label":"Interview practice","surface":"interview-lab"}],"moreGroups":"$4:0:props:children:1:props:children:1:props:children:1:props:groups"}],["$","$L13",null,{"locale":"en"}]]}]]}],["$","main",null,{"id":"main-content","lang":"en","tabIndex":-1,"children":["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","$L14",null,{}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","footer",null,{"className":"footer","lang":"en","children":["$","div",null,{"className":"shell footer-grid","children":[["$","div",null,{"children":[["$","strong",null,{"className":"footer-brand","children":[["$","img",null,{"className":"brand-mark","src":"/ai-dog-mark.webp","alt":"","width":32,"height":32,"decoding":"async","aria-hidden":"true"}],"AI.DOG"]}],["$","p",null,{"children":"Practical notes for learning AI and building work you can explain."}]]}],["$","nav",null,{"className":"footer-links","aria-label":"Footer navigation","children":[["$","$Lf","/en/support",{"href":"/en/support","children":"Support AI.DOG"}],["$","$Lf","/en/about",{"href":"/en/about","children":"About AI.DOG"}],["$","$Lf","/en/privacy",{"href":"/en/privacy","children":"Privacy"}]]}]]}]}]]
+16:T5ee,# Coder Starter Lab
+
+Status: local learning fixture only.
+
+This is a fictional, disposable pure-function change. It has no keys, network calls, accounts, real data, package setup, or deployment path. The page that supplied it does not run the code or claim that any test has passed.
+
+## What this pack contains
+
+- `CHANGE_BRIEF.md`: one bounded change and its non-goals.
+- `src/review-route.ts`: an intentionally incomplete pure-function skeleton.
+- `tests/review-route.cases.ts`: fixed inputs without the answer key.
+- `AGENT_PROMPT.md`: a plan/diff/tests-only request with external actions forbidden.
+- `REVIEWER_ROLLBACK_RECORD.md`: a manual baseline, review decision, and discard path.
+
+`tests/review-route.reference.ts` is deliberately excluded from this learner pack. After recording all six expected routes in the reviewer record, return to the lab page, confirm the manual-baseline gate, and reveal the reference as a separate file.
+
+## Manual first
+
+Read the brief and fixed cases before asking an agent for anything. Write the expected route for each case, then compare a proposed plan, diff, and tests against the brief. Record PASS, REVISE, or STOP. A passing local exercise is not a production, security, reliability, or business-result claim.
+
+## Scope boundary
+
+Use only these supplied fictional strings. Do not add a real repository, customer data, credentials, API key, network request, package, connector, browser session, command, commit, pull request, deployment, message, or other external action.17:T4a0,# Change Brief: block non-local requests before review
+
+## Fictional context
+
+A disposable local helper decides whether a synthetic evidence request may move to a human reviewer. It never approves an external action.
+
+## Change requested
+
+Extend `decideReviewRoute` so it returns `BLOCKED` before any other route when either `dataScope` is not `synthetic-only` or `externalActionRequested` is true.
+
+## Fixed contract
+
+1. `dataScope !== "synthetic-only"` returns `BLOCKED`.
+2. `externalActionRequested === true` returns `BLOCKED`.
+3. A missing named reviewer returns `NEEDS_REVISION` when the request is otherwise within scope.
+4. Missing fixed acceptance cases returns `NEEDS_REVISION` when the request is otherwise within scope.
+5. Only a synthetic-only, no-action request with a named reviewer and fixed cases returns `READY_FOR_REVIEW`.
+
+## Non-goals
+
+- Do not read files, call a service, send a message, write a record, change an account, or make a business decision.
+- Do not introduce a framework, package, persistence layer, environment variable, configuration file, or network dependency.
+- Do not claim the function is production-ready or that a route authorises any action.18:T500,import type { ReviewRequest } from '../src/review-route';
+
+type FixedCase = {
+  id: string;
+  request: ReviewRequest;
+};
+
+export const fixedCases: FixedCase[] = [
+  { id: 'TC-01-ready-synthetic-review', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-02-missing-reviewer', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: false, hasFixedAcceptanceCases: true } },
+  { id: 'TC-03-missing-cases', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: false } },
+  { id: 'TC-04-unapproved-scope-is-blocked', request: { dataScope: 'unapproved', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-05-external-action-is-blocked', request: { dataScope: 'synthetic-only', externalActionRequested: true, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-06-blocking-wins-over-missing-reviewer', request: { dataScope: 'unapproved', externalActionRequested: true, hasNamedReviewer: false, hasFixedAcceptanceCases: false } },
+];
+
+// Write your expected route for every input before opening review-route.reference.ts.19:T676,# Reviewer and Rollback Record
+
+Fixture status: fictional, disposable, local-only.
+
+## Manual baseline before an agent
+
+| Fixed case | Expected route before reading a diff | Actual proposed route | PASS / REVISE / STOP | Note |
+| --- | --- | --- | --- | --- |
+| TC-01 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-02 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-03 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-04 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-05 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-06 | ____________________ | ____________________ | ____________________ | ____________________ |
+
+## Review checks
+
+- Diff changes only `src/review-route.ts`.
+- `BLOCKED` is evaluated before reviewer or acceptance-case completeness.
+- No dependency, network, file, account, tool, command, package, or external action is introduced.
+- Every proposed test maps to a supplied fixed case.
+- The output makes no production, security, reliability, or business-impact claim.
+
+Final local decision: PASS / REVISE / STOP
+Reviewer name or alias: ____________________
+Reason or unresolved risk: ____________________
+
+## Rollback or discard
+
+If the diff exceeds the brief, a fixed case fails, or an external action is suggested, record STOP and discard the proposed change. Return to the supplied starter skeleton; do not attempt a repair in a real repository or claim a rollback was tested.1a:Tf84,--- AGENT_PROMPT.md ---
+# Plan, diff, and tests only
+
+You are helping with a fictional local learning exercise. Use only the supplied change brief, source skeleton, and fixed test cases.
+
+Do not access the internet, files outside the supplied text, accounts, browser sessions, terminals, tools, APIs, connectors, package registries, or version-control services. Do not run commands, install packages, create, modify, delete, upload, commit, publish, deploy, send a message, or take any external action.
+
+Return only:
+1. a short plan that names the decision order and the non-goals;
+2. one minimal unified diff for `src/review-route.ts` only;
+3. proposed checks for every fixed case, including why `BLOCKED` wins over `NEEDS_REVISION`.
+
+Do not claim the diff was applied, the code ran, tests passed, or a system is safe for real use. Stop after the plan, diff, and tests.
+
+--- CHANGE_BRIEF.md ---
+# Change Brief: block non-local requests before review
+
+## Fictional context
+
+A disposable local helper decides whether a synthetic evidence request may move to a human reviewer. It never approves an external action.
+
+## Change requested
+
+Extend `decideReviewRoute` so it returns `BLOCKED` before any other route when either `dataScope` is not `synthetic-only` or `externalActionRequested` is true.
+
+## Fixed contract
+
+1. `dataScope !== "synthetic-only"` returns `BLOCKED`.
+2. `externalActionRequested === true` returns `BLOCKED`.
+3. A missing named reviewer returns `NEEDS_REVISION` when the request is otherwise within scope.
+4. Missing fixed acceptance cases returns `NEEDS_REVISION` when the request is otherwise within scope.
+5. Only a synthetic-only, no-action request with a named reviewer and fixed cases returns `READY_FOR_REVIEW`.
+
+## Non-goals
+
+- Do not read files, call a service, send a message, write a record, change an account, or make a business decision.
+- Do not introduce a framework, package, persistence layer, environment variable, configuration file, or network dependency.
+- Do not claim the function is production-ready or that a route authorises any action.
+
+--- src/review-route.ts ---
+export type ReviewRequest = {
+  dataScope: 'synthetic-only' | 'unapproved';
+  externalActionRequested: boolean;
+  hasNamedReviewer: boolean;
+  hasFixedAcceptanceCases: boolean;
+};
+
+export type ReviewRoute = 'READY_FOR_REVIEW' | 'NEEDS_REVISION' | 'BLOCKED';
+
+export function decideReviewRoute(request: ReviewRequest): ReviewRoute {
+  // Starter skeleton: the requested BLOCKED boundary has not been added yet.
+  if (!request.hasNamedReviewer || !request.hasFixedAcceptanceCases) {
+    return 'NEEDS_REVISION';
+  }
+  return 'READY_FOR_REVIEW';
+}
+
+--- tests/review-route.cases.ts ---
+import type { ReviewRequest } from '../src/review-route';
+
+type FixedCase = {
+  id: string;
+  request: ReviewRequest;
+};
+
+export const fixedCases: FixedCase[] = [
+  { id: 'TC-01-ready-synthetic-review', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-02-missing-reviewer', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: false, hasFixedAcceptanceCases: true } },
+  { id: 'TC-03-missing-cases', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: false } },
+  { id: 'TC-04-unapproved-scope-is-blocked', request: { dataScope: 'unapproved', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-05-external-action-is-blocked', request: { dataScope: 'synthetic-only', externalActionRequested: true, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-06-blocking-wins-over-missing-reviewer', request: { dataScope: 'unapproved', externalActionRequested: true, hasNamedReviewer: false, hasFixedAcceptanceCases: false } },
+];
+
+// Write your expected route for every input before opening review-route.reference.ts.1b:T1c22,--- README.md ---
+# Coder Starter Lab
+
+Status: local learning fixture only.
+
+This is a fictional, disposable pure-function change. It has no keys, network calls, accounts, real data, package setup, or deployment path. The page that supplied it does not run the code or claim that any test has passed.
+
+## What this pack contains
+
+- `CHANGE_BRIEF.md`: one bounded change and its non-goals.
+- `src/review-route.ts`: an intentionally incomplete pure-function skeleton.
+- `tests/review-route.cases.ts`: fixed inputs without the answer key.
+- `AGENT_PROMPT.md`: a plan/diff/tests-only request with external actions forbidden.
+- `REVIEWER_ROLLBACK_RECORD.md`: a manual baseline, review decision, and discard path.
+
+`tests/review-route.reference.ts` is deliberately excluded from this learner pack. After recording all six expected routes in the reviewer record, return to the lab page, confirm the manual-baseline gate, and reveal the reference as a separate file.
+
+## Manual first
+
+Read the brief and fixed cases before asking an agent for anything. Write the expected route for each case, then compare a proposed plan, diff, and tests against the brief. Record PASS, REVISE, or STOP. A passing local exercise is not a production, security, reliability, or business-result claim.
+
+## Scope boundary
+
+Use only these supplied fictional strings. Do not add a real repository, customer data, credentials, API key, network request, package, connector, browser session, command, commit, pull request, deployment, message, or other external action.
+
+--- CHANGE_BRIEF.md ---
+# Change Brief: block non-local requests before review
+
+## Fictional context
+
+A disposable local helper decides whether a synthetic evidence request may move to a human reviewer. It never approves an external action.
+
+## Change requested
+
+Extend `decideReviewRoute` so it returns `BLOCKED` before any other route when either `dataScope` is not `synthetic-only` or `externalActionRequested` is true.
+
+## Fixed contract
+
+1. `dataScope !== "synthetic-only"` returns `BLOCKED`.
+2. `externalActionRequested === true` returns `BLOCKED`.
+3. A missing named reviewer returns `NEEDS_REVISION` when the request is otherwise within scope.
+4. Missing fixed acceptance cases returns `NEEDS_REVISION` when the request is otherwise within scope.
+5. Only a synthetic-only, no-action request with a named reviewer and fixed cases returns `READY_FOR_REVIEW`.
+
+## Non-goals
+
+- Do not read files, call a service, send a message, write a record, change an account, or make a business decision.
+- Do not introduce a framework, package, persistence layer, environment variable, configuration file, or network dependency.
+- Do not claim the function is production-ready or that a route authorises any action.
+
+--- src/review-route.ts ---
+export type ReviewRequest = {
+  dataScope: 'synthetic-only' | 'unapproved';
+  externalActionRequested: boolean;
+  hasNamedReviewer: boolean;
+  hasFixedAcceptanceCases: boolean;
+};
+
+export type ReviewRoute = 'READY_FOR_REVIEW' | 'NEEDS_REVISION' | 'BLOCKED';
+
+export function decideReviewRoute(request: ReviewRequest): ReviewRoute {
+  // Starter skeleton: the requested BLOCKED boundary has not been added yet.
+  if (!request.hasNamedReviewer || !request.hasFixedAcceptanceCases) {
+    return 'NEEDS_REVISION';
+  }
+  return 'READY_FOR_REVIEW';
+}
+
+--- tests/review-route.cases.ts ---
+import type { ReviewRequest } from '../src/review-route';
+
+type FixedCase = {
+  id: string;
+  request: ReviewRequest;
+};
+
+export const fixedCases: FixedCase[] = [
+  { id: 'TC-01-ready-synthetic-review', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-02-missing-reviewer', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: false, hasFixedAcceptanceCases: true } },
+  { id: 'TC-03-missing-cases', request: { dataScope: 'synthetic-only', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: false } },
+  { id: 'TC-04-unapproved-scope-is-blocked', request: { dataScope: 'unapproved', externalActionRequested: false, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-05-external-action-is-blocked', request: { dataScope: 'synthetic-only', externalActionRequested: true, hasNamedReviewer: true, hasFixedAcceptanceCases: true } },
+  { id: 'TC-06-blocking-wins-over-missing-reviewer', request: { dataScope: 'unapproved', externalActionRequested: true, hasNamedReviewer: false, hasFixedAcceptanceCases: false } },
+];
+
+// Write your expected route for every input before opening review-route.reference.ts.
+
+--- AGENT_PROMPT.md ---
+# Plan, diff, and tests only
+
+You are helping with a fictional local learning exercise. Use only the supplied change brief, source skeleton, and fixed test cases.
+
+Do not access the internet, files outside the supplied text, accounts, browser sessions, terminals, tools, APIs, connectors, package registries, or version-control services. Do not run commands, install packages, create, modify, delete, upload, commit, publish, deploy, send a message, or take any external action.
+
+Return only:
+1. a short plan that names the decision order and the non-goals;
+2. one minimal unified diff for `src/review-route.ts` only;
+3. proposed checks for every fixed case, including why `BLOCKED` wins over `NEEDS_REVISION`.
+
+Do not claim the diff was applied, the code ran, tests passed, or a system is safe for real use. Stop after the plan, diff, and tests.
+
+--- REVIEWER_ROLLBACK_RECORD.md ---
+# Reviewer and Rollback Record
+
+Fixture status: fictional, disposable, local-only.
+
+## Manual baseline before an agent
+
+| Fixed case | Expected route before reading a diff | Actual proposed route | PASS / REVISE / STOP | Note |
+| --- | --- | --- | --- | --- |
+| TC-01 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-02 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-03 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-04 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-05 | ____________________ | ____________________ | ____________________ | ____________________ |
+| TC-06 | ____________________ | ____________________ | ____________________ | ____________________ |
+
+## Review checks
+
+- Diff changes only `src/review-route.ts`.
+- `BLOCKED` is evaluated before reviewer or acceptance-case completeness.
+- No dependency, network, file, account, tool, command, package, or external action is introduced.
+- Every proposed test maps to a supplied fixed case.
+- The output makes no production, security, reliability, or business-impact claim.
+
+Final local decision: PASS / REVISE / STOP
+Reviewer name or alias: ____________________
+Reason or unresolved risk: ____________________
+
+## Rollback or discard
+
+If the diff exceeds the brief, a fixed case fails, or an external action is suggested, record STOP and discard the proposed change. Return to the supplied starter skeleton; do not attempt a repair in a real repository or claim a rollback was tested.5:["$","div",null,{"className":"shell page coding-lab-page","children":[["$","$L15",null,{"copy":{"eyebrow":"CODER STARTER LAB","sectionEyebrows":{"setup":"MANUAL FIRST","assets":"SOURCE PACK","manual":"BASELINE AND REVIEW","reference":"AFTER THE BASELINE","prompt":"OPTIONAL AGENT CHECK","output":"WHAT TO RETAIN","handoff":"NEXT LOCAL REFERENCE"},"title":"Your first Coder Starter Lab: review a pure-function change","intro":"Do not start with a large project or framework. This exercise changes one pure function: it returns a result from its input without reading files, using a network, or writing data. First decide six cases yourself; then compare an optional agent proposal and make the final human decision.","boundary":"Every source asset is English, fictional, and disposable for local learning only. There are no API keys, real data, network calls, package setup, or deployment. Do not paste it into a company repository or let an agent use tools, run commands, edit files, commit, send, or deploy.","quickStart":{"eyebrow":"15-MINUTE START","title":"Judge two contrasting fixed cases first","intro":"Do not download, write code, or open an AI assistant this time. Write the route for two cases on paper or in a note; this begins the full exercise but does not complete all six cases.","steps":["TC-01: the request uses synthetic-only data, asks for no external action, and has a named reviewer and fixed cases. Write its route.","TC-06: the data is unapproved and an external action is requested; it also lacks a named reviewer and fixed cases. Write its route.","In one sentence, explain why BLOCKED must take priority over NEEDS_REVISION."],"referenceTitle":"Check only after you have answered","reference":"TC-01 is READY_FOR_REVIEW; TC-06 is BLOCKED. BLOCKED wins because the data scope or requested action has already crossed this local exercise boundary.","boundary":"Finishing these two judgments in 15 minutes does not mean you wrote a diff, ran tests, or completed the Coder Starter Lab.","fullLabAction":"When you have 45–60 minutes, complete the full Coder Starter Lab"},"practiceMap":{"eyebrow":"TWO THINGS YOU PRACTISE","title":"This small change practises what to change, how to check it, and when to discard a proposal","workflowTitle":"Code and verification","workflow":["Use the change brief to identify why BLOCKED must precede completeness checks.","Use six fixed cases to constrain the change to one pure function, a minimal diff, and proposed checks for every case."],"decisionTitle":"Delivery and judgment","decision":["Treat an agent output only as a review proposal: do not paste it into a repository, run it, or call it completed.","Use the reviewer/rollback record to decide PASS, REVISE, or STOP and record why a proposal must be discarded."]},"setupTitle":"Judge the change before asking an agent for a diff","setup":[{"title":"Use only the learner files supplied here","text":"The six learner source assets describe one fictional pure function. A seventh file—the separate reference answers—appears only after you confirm the manual baseline. English file names and content make them portable to a local editor; they are not production-ready code."},{"title":"Write the manual baseline first","text":"Read the brief and six fixed cases. Before seeing a diff, decide whether each should be READY_FOR_REVIEW, NEEDS_REVISION, or BLOCKED."},{"title":"Ask an agent for plan, diff, and tests only","text":"If you choose to practise in an existing tool, paste only the supplied assets and turn off every tool, terminal, browser, connector, and write permission."},{"title":"Let a reviewer keep or discard the proposal","text":"Use the reviewer/rollback record to check scope, decision order, and cases. The only outcomes are PASS, REVISE, or STOP; nothing is automatically merged."}],"assetsTitle":"Six English source assets, plus a gated reference answer","assetsIntro":"These local source assets can be copied, downloaded, and opened one at a time for inspection. Their content stays in English so code, diff, and test names remain consistent; the learning guide remains localized.","assetsNotice":"Every download is plain text with no credential, network call, or runnable setup. This website does not execute the material or retain your result.","assetLabels":{"readme":{"title":"README","description":"The pack boundary, manual workflow, and claims it cannot make."},"brief":{"title":"Change brief","description":"One small change, a fixed decision order, and non-goals."},"sourceSkeleton":{"title":"Source skeleton","description":"An intentionally incomplete pure function; it reads, calls, and writes nothing."},"testCases":{"title":"Fixed case inputs","description":"Six inputs without expected routes. Record your baseline first."},"referenceAnswers":{"title":"Reference answers","description":"Reveal the six expected routes only after recording the manual baseline."},"agentPrompt":{"title":"Agent prompt","description":"Requests only a plan, minimal diff, and test checks; external actions are forbidden."},"reviewerRollbackRecord":{"title":"Reviewer/rollback record","description":"Manual baseline, scope checks, PASS/REVISE/STOP, and a discard path."}},"copyAction":"Copy","downloadAction":"Download file","bundleCopy":"Copy learner source pack (no answers)","bundleDownload":"Download learner source pack (no answers)","manualTitle":"Manual baseline and review workflow","manualIntro":"The core exercise needs no account, model, or agent. You can complete a reviewable decision from the brief, skeleton, and cases alone; an agent is only an optional later comparison.","manualSteps":["Write the expected route for TC-01 through TC-06 in the reviewer record before reading any agent output.","Read the change brief and mark the two BLOCKED conditions and why they must precede completeness checks.","If you have a proposed diff, check only whether it changes the sole permitted source file, implements the required order, and covers every fixed case.","Record PASS, REVISE, or STOP. If scope expands, an external action is proposed, or a case remains unresolved, STOP and discard the diff."],"referenceGateTitle":"Record all six routes before revealing the reference","referenceGateIntro":"The learner source pack and agent prompt pack deliberately omit the answers. First record routes for TC-01 through TC-06 in the reviewer record. This confirmation is only your local self-check; the site does not store or verify it.","referenceGateConfirmation":"I recorded an expected route for every case from TC-01 through TC-06 and am ready to compare the reference.","referenceGateAction":"Reveal the separate reference answers","referenceGateRevealed":"Reference answers revealed. Compare the reasoning case by case; this key is not evidence that code ran, tests passed, or a system is ready for real use.","promptTitle":"Optional: ask an agent for a plan, diff, and tests only","promptIntro":"This prompt does not connect to a model. Use it only in an existing chat or editor where you can verify there is no tool or write permission, and paste only the fictional assets supplied here. If you cannot verify that, stay with the manual baseline.","promptPackNotice":"This agent prompt pack contains AGENT_PROMPT.md, CHANGE_BRIEF.md, src/review-route.ts, and the case inputs. It deliberately excludes the reference answers so an agent cannot simply reproduce the key.","promptCopy":"Copy complete agent prompt pack","promptDownload":"Download complete agent prompt pack","copySuccess":"Copied to your clipboard.","copyError":"Automatic copy did not work. Select the text and copy it directly.","outputTitle":"What you can show someone when you finish","outputItems":["A change brief with explicit non-goals","A manual baseline not influenced by an agent","A reviewable proposed diff limited to one pure function","A six-case reviewer record with PASS, REVISE, or STOP and a discard reason"],"handoffTitle":"Next: continue practising, or package this evidence","handoffText":"To extend this tiny change, read Use AI as a coding partner and see how the feature, non-goals, acceptance, diff, tests, and reviewer decision fit into an engineering workflow. To package this work first, use the planner to retain the brief, baseline, diff, tests, and discard reason. Both routes stay local, synthetic, and human-decided.","handoffAction":"Read the coding-partner workflow","portfolioAction":"Package portfolio evidence"},"codingStarterLabAssets":[{"id":"readme","fileName":"README.md","content":"$16","title":"README","description":"The pack boundary, manual workflow, and claims it cannot make."},{"id":"brief","fileName":"CHANGE_BRIEF.md","content":"$17","title":"Change brief","description":"One small change, a fixed decision order, and non-goals."},{"id":"sourceSkeleton","fileName":"src/review-route.ts","content":"export type ReviewRequest = {\n  dataScope: 'synthetic-only' | 'unapproved';\n  externalActionRequested: boolean;\n  hasNamedReviewer: boolean;\n  hasFixedAcceptanceCases: boolean;\n};\n\nexport type ReviewRoute = 'READY_FOR_REVIEW' | 'NEEDS_REVISION' | 'BLOCKED';\n\nexport function decideReviewRoute(request: ReviewRequest): ReviewRoute {\n  // Starter skeleton: the requested BLOCKED boundary has not been added yet.\n  if (!request.hasNamedReviewer || !request.hasFixedAcceptanceCases) {\n    return 'NEEDS_REVISION';\n  }\n  return 'READY_FOR_REVIEW';\n}","title":"Source skeleton","description":"An intentionally incomplete pure function; it reads, calls, and writes nothing."},{"id":"testCases","fileName":"tests/review-route.cases.ts","content":"$18","title":"Fixed case inputs","description":"Six inputs without expected routes. Record your baseline first."},{"id":"agentPrompt","fileName":"AGENT_PROMPT.md","content":"# Plan, diff, and tests only\n\nYou are helping with a fictional local learning exercise. Use only the supplied change brief, source skeleton, and fixed test cases.\n\nDo not access the internet, files outside the supplied text, accounts, browser sessions, terminals, tools, APIs, connectors, package registries, or version-control services. Do not run commands, install packages, create, modify, delete, upload, commit, publish, deploy, send a message, or take any external action.\n\nReturn only:\n1. a short plan that names the decision order and the non-goals;\n2. one minimal unified diff for `src/review-route.ts` only;\n3. proposed checks for every fixed case, including why `BLOCKED` wins over `NEEDS_REVISION`.\n\nDo not claim the diff was applied, the code ran, tests passed, or a system is safe for real use. Stop after the plan, diff, and tests.","title":"Agent prompt","description":"Requests only a plan, minimal diff, and test checks; external actions are forbidden."},{"id":"reviewerRollbackRecord","fileName":"REVIEWER_ROLLBACK_RECORD.md","content":"$19","title":"Reviewer/rollback record","description":"Manual baseline, scope checks, PASS/REVISE/STOP, and a discard path."}],"codingStarterLabReferenceAsset":{"id":"referenceAnswers","fileName":"tests/review-route.reference.ts","content":"import type { ReviewRoute } from '../src/review-route';\n\n// Reveal only after recording your own baseline for TC-01 to TC-06.\nexport const referenceRoutes: Record<string, ReviewRoute> = {\n  'TC-01-ready-synthetic-review': 'READY_FOR_REVIEW',\n  'TC-02-missing-reviewer': 'NEEDS_REVISION',\n  'TC-03-missing-cases': 'NEEDS_REVISION',\n  'TC-04-unapproved-scope-is-blocked': 'BLOCKED',\n  'TC-05-external-action-is-blocked': 'BLOCKED',\n  'TC-06-blocking-wins-over-missing-reviewer': 'BLOCKED',\n};\n\n// These are reference expectations, not evidence that code ran or tests passed.","title":"Reference answers","description":"Reveal the six expected routes only after recording the manual baseline."},"codingStarterLabAgentPromptPack":"$1a","codingStarterLabSourcePack":"$1b","handoffArticleHref":"/en/articles/use-ai-as-a-coding-partner-with-proof","portfolioHref":"/en/portfolio-evidence-planner?starter=coding-starter#portfolio-capstone"}],"$L1c"]}]
+1d:I[1401,[],"IconMark"]
+1c:["$","aside",null,{"className":"support-nudge","aria-labelledby":"support-nudge-title","children":[["$","p",null,{"className":"eyebrow","children":"OPTIONAL SUPPORT"}],["$","h2",null,{"id":"support-nudge-title","children":"If this resource saved you a little unnecessary work"}],["$","p",null,{"children":"Free material remains public. Optional US$5/month support maintains it; it does not buy individual advice, priority replies, or an outcome promise."}],["$","$Lf",null,{"className":"text-link","href":"/en/support","children":["Learn about optional support"," ",["$","span",null,{"aria-hidden":true,"children":"→"}]]}]]}]
+b:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+8:null
+d:[["$","title","0",{"children":"Your first Coder Starter Lab: review a pure-function change · AI.DOG"}],["$","meta","1",{"name":"description","content":"Do not start with a large project or framework. This exercise changes one pure function: it returns a result from its input without reading files, using a network, or writing data. First decide six cases yourself; then compare an optional agent proposal and make the final human decision."}],["$","meta","2",{"name":"robots","content":"noindex, nofollow"}],["$","link","3",{"rel":"canonical","href":"https://theaidoglab-hash.github.io/en/coding-starter-lab/"}],["$","link","4",{"rel":"alternate","hrefLang":"zh-Hant","href":"https://theaidoglab-hash.github.io/zh-Hant/coding-starter-lab/"}],["$","link","5",{"rel":"alternate","hrefLang":"zh-Hans","href":"https://theaidoglab-hash.github.io/zh-Hans/coding-starter-lab/"}],["$","link","6",{"rel":"alternate","hrefLang":"en","href":"https://theaidoglab-hash.github.io/en/coding-starter-lab/"}],["$","link","7",{"rel":"alternate","hrefLang":"x-default","href":"https://theaidoglab-hash.github.io/zh-Hant/coding-starter-lab/"}],["$","meta","8",{"property":"og:title","content":"Your first Coder Starter Lab: review a pure-function change"}],["$","meta","9",{"property":"og:description","content":"Do not start with a large project or framework. This exercise changes one pure function: it returns a result from its input without reading files, using a network, or writing data. First decide six cases yourself; then compare an optional agent proposal and make the final human decision."}],["$","meta","10",{"property":"og:url","content":"https://theaidoglab-hash.github.io/en/coding-starter-lab/"}],["$","meta","11",{"property":"og:site_name","content":"AI.DOG Learning & Portfolio Library"}],["$","meta","12",{"property":"og:image","content":"https://theaidoglab-hash.github.io/ai-dog.png"}],["$","meta","13",{"property":"og:image:width","content":"1254"}],["$","meta","14",{"property":"og:image:height","content":"1254"}],["$","meta","15",{"property":"og:image:alt","content":"AI.DOG mascot"}],["$","meta","16",{"property":"og:type","content":"website"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"Your first Coder Starter Lab: review a pure-function change"}],["$","meta","19",{"name":"twitter:description","content":"Do not start with a large project or framework. This exercise changes one pure function: it returns a result from its input without reading files, using a network, or writing data. First decide six cases yourself; then compare an optional agent proposal and make the final human decision."}],["$","meta","20",{"name":"twitter:image","content":"https://theaidoglab-hash.github.io/ai-dog.png"}],["$","link","21",{"rel":"icon","href":"/icon.png?693ffeb984445f99","type":"image/png","sizes":"512x512"}],["$","$L1d","22",{}]]
