@@ -1,0 +1,48 @@
+A RAG answer is not trustworthy because it includes citations. The citations must be current, applicable, and sufficient for the decision. When sources disagree, a confident synthesis can be the most dangerous output.
+
+## A conflict that should not be “resolved” by eloquence
+
+Imagine a fictional internal knowledge desk for a delivery team. It creates draft checklists from approved project guidance. A coordinator asks whether a release needs a security review. The search returns a newer general release guide saying “review only for external integrations” and an older but still active service-specific guide saying “review before every release.” Neither text alone tells the system which rule controls this project.
+
+The right response is not to average the two passages into a polished sentence. The system needs a source policy: which document types are authoritative, which versions are active, what scope a document covers, how conflicts are detected, and who decides when authority remains unclear.
+
+## Freshness is a field, not a vague feeling
+
+Every retrievable record should carry enough lifecycle metadata to support a decision: publication and effective date, review or expiry date, status, owner, jurisdiction or product scope, audience, and replacement relation. “Newest” is not always “applicable”; “active” is not always “highest authority.”
+
+At answer time, filter or weight candidates by these fields before generation. Require the draft to carry source identifiers and state its scope. If a source is expired, only a clearly defined archival task may use it. If a question crosses scopes, do not let a broad document silently override a narrow obligation.
+
+Build fixed cases around time rather than testing only tidy current documents:
+
+- an old source replaced by a current one;
+- two active sources with different scopes;
+- a source with no effective date;
+- a query that is too broad to classify;
+- evidence that is relevant but insufficient;
+- a cache entry created before a replacement.
+
+For each case, specify the allowed cited sources, the required route, and any forbidden synthesis. A correct **HANDOFF** is often the passing outcome.
+
+## Advanced patterns are conditional tools
+
+Several patterns can help, but none eliminates the governance problem.
+
+- **Hybrid retrieval** combines lexical and semantic signals. It can recover exact codes and paraphrases, but needs its own ranking tests.
+- **Query rewriting** can turn a vague request into search variants. Keep the original query and inspect rewrites, because a rewrite can narrow or distort the user’s meaning.
+- **Parent-child retrieval** returns a focused chunk with enough parent context for its exception. It increases traceability but expands context and version bookkeeping.
+- **Multi-step retrieval** asks a sequence of bounded questions. It can expose missing evidence, but each step needs a stop rule and trace.
+- **Graph or relationship-aware retrieval** can model document links, owners, or replacements. It is useful only when the relationship data is maintained and tested.
+
+Start with metadata filtering and a small direct-search baseline. Add one pattern in response to a documented miss. Compare the same freshness and conflict cases before and after. A more elaborate architecture that still chooses an expired source has not solved the task.
+
+## A reviewable release gate
+
+For a public-safe project, create a source register and a release gate. The gate should block a candidate change when it lowers correct-source selection, suppresses a required handoff, uses an expired record, or removes a source identifier. Keep a compact change packet: query and source fixture versions, retrieval configuration, output samples, automated results, human review notes, and a decision to release, hold, or roll back.
+
+A reviewer can inspect retrieval design, evaluation, traces, and regression control. Before it is used, the repository must name who owns the decision, how long data remain valid, the impact of an error, the escalation path, and limits on automation. That is more credible than claiming your RAG “always has the latest information.”
+
+Next, read [index, chunk, rerank, and cache choices](/en/articles/retrieval-index-chunk-rerank-and-cache), [how to evaluate an agent workflow](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer), and [how to move from offline evaluation to an authorised pilot](/en/articles/from-offline-evaluation-to-an-authorised-pilot).
+
+## Boundary
+
+The delivery desk, records, conflict examples, and release gate are fictional. This lesson is not legal, security, or governance advice and does not establish a source-of-truth hierarchy for any organisation. A tested synthetic set does not prove that a real RAG system is current, complete, or fit to make consequential decisions.

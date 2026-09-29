@@ -1,0 +1,35 @@
+面试官不必要求你背公式，也能看出你是否理解一个简单 model。他可以问更实用的一题：“当时有什么信息？model 输出什么数字？人因此做了什么不同的事？”Linear 和 logistic model 正好把这条链摊开。
+
+## 两种输出，对应两类决定
+
+用一个虚构的支持运营情境。团队想预测明天需要多少人工复核量，也想知道哪些新 case 应优先查看。
+
+**Linear regression** 预测连续数字，例如明天预计有多少个 case 需要人工复核。它把星期几、当前 backlog、request mix 等 feature 组合成一个估计。某个 feature 的 coefficient 说明它在这个特定 model 里，对结果的方向与大小；它不会自动证明因果。feature 彼此相关或数据定义改变时，coefficient 也会改变。
+
+**Logistic regression** 常用于 target 是类别时，例如 `review` 或 `standard route`。它把加权后的 feature 转成介于零和一的值。这个值应理解为训练设置下的 modelled likelihood，不是对一个人或案件的事实判决。Workflow 仍然需要 threshold、人力上限和明确责任人。
+
+例如 0.72 可以代表“把这笔案件排在复核队列前面”，不能悄悄变成“拒绝这个申请”或“它一定有风险”。决定 rule 是 product choice，不是 logistic regression 必然造成的结果。
+
+## Feature 是对“当时能知道什么”的主张
+
+每一个 feature 都是刻意提供给 model 的数值。为它写一行 data dictionary：含义、来源、更新时间、允许值、owner，以及是否在决定前已存在。`09:00 未完成案件数` 可能可用；`最终复核结果` 就不可用。这个检查能抓到常见 leakage：用未来信息让过去看似很容易。
+
+类别数据也要谨慎。request channel 编为 3，不表示它天生比编为 1 的 channel“更大”。选择合适 representation 后记录下来。缺失值、新 category 和上游系统字段变更时，都要有明确行为，而不是让 default 悄悄决定。
+
+## 一个值得展示的小测试
+
+做一张比较表：一个按日估计的 baseline、一个 linear forecast，和一个 logistic queue model。Forecast 用 planner 真正在意的单位呈现误差，例如 case 数。Queue 则记录前五十笔中实际值得复核的案件、多少普通案件被送入复核，以及每个已命名 request group 的影响。若团队要做面向未来的决定，使用较晚时间区间通常比随机 holdout 更接近现实。
+
+把三项 artefact 放在 code 旁边：
+
+- feature dictionary 和 observation cutoff；
+- 不同 threshold 对应人工复核量的表；
+- 五个已复核例子，包括预测令人意外、错误或被人刻意推翻的情况。
+
+这些 artefact 让 reviewer 看见非技术考虑：人力容量、后果、谁负责，以及系统禁止决定什么。
+
+## 简单 model 同样会失败
+
+可解释不等于免疫。Linear relationship 可能太粗糙，label 可能承接历史偏差，看似稳定的 coefficient 可能遮住一个坏掉的上游字段。提高 logistic threshold 可能让 precision 漂亮，却漏掉太多重要案件。更复杂的 model 不是自动答案；有时 rule、分组比例 baseline 或更可靠的数据，才是下一个合理实验。
+
+专业能力在于把分数连到可逆、可复核的行动。延伸阅读：[loss、regularisation 和 generalisation](/zh-Hans/articles/regularisation-loss-and-generalisation) 和 [把 model score 变成 workflow decision](/zh-Hans/articles/model-score-to-workflow-decision)。

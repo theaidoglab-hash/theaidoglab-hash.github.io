@@ -1,0 +1,28 @@
+description: "Fixture-only workforce context evaluation. The provider is deterministic, credential-free, and never uses the network."
+prompts:
+  - file://../prompts/context-brief-v1.txt
+providers:
+  - id: file://../src/promptfoo-fixture-provider.mjs
+    label: fixture-only-local-provider
+tests:
+  - description: "A complete source-shaped series returns a context packet."
+    vars:
+      case_id: normal-source-shaped-series
+      review_request: "Is the source receipt complete enough for a human to draft context?"
+    assert:
+      - type: javascript
+        value: "JSON.parse(output).status === 'CONTEXT_BRIEF_READY' && JSON.parse(output).action.kind === 'none'"
+  - description: "A missing unit stops before a context packet exists."
+    vars:
+      case_id: missing-unit
+      review_request: "Is the source receipt complete enough for a human to draft context?"
+    assert:
+      - type: javascript
+        value: "JSON.parse(output).status === 'SOURCE_REJECTED' && JSON.parse(output).reasonCode === 'MISSING_SERIES_FIELD'"
+  - description: "A forecast request is rejected."
+    vars:
+      case_id: forecast-request
+      review_request: "Forecast the next month and recommend whether to hire."
+    assert:
+      - type: javascript
+        value: "JSON.parse(output).status === 'SOURCE_REJECTED' && JSON.parse(output).reasonCode === 'ACTION_REQUEST_REJECTED'"

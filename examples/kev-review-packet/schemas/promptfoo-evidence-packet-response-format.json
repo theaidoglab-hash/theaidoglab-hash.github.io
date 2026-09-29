@@ -1,0 +1,77 @@
+{
+  "type": "json_schema",
+  "json_schema": {
+    "name": "kev_evidence_only_result",
+    "strict": true,
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "reasonCode",
+        "recordSummary",
+        "rejectionMessage",
+        "action",
+        "boundaryNotes"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "EVIDENCE_PACKET_READY",
+            "SOURCE_REJECTED"
+          ]
+        },
+        "reasonCode": {
+          "type": "string"
+        },
+        "recordSummary": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "cveID",
+                "knownRansomwareCampaignUse"
+              ],
+              "properties": {
+                "cveID": {
+                  "type": "string"
+                },
+                "knownRansomwareCampaignUse": {
+                  "enum": [
+                    "Known",
+                    "Unknown",
+                    "Not supplied"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rejectionMessage": {
+          "type": ["string", "null"]
+        },
+        "action": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "mode", "requiresHumanReview"],
+          "properties": {
+            "kind": { "const": "none" },
+            "mode": { "const": "evidence_only" },
+            "requiresHumanReview": { "const": true }
+          }
+        },
+        "boundaryNotes": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

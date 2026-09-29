@@ -1,0 +1,149 @@
+For a non-coder, one useful AI portfolio reference is a small local approval queue: permitted work, the failure path and the final human decision are visible, rather than hidden behind a bot that can send things.
+
+## Inspect the Approval Queue reference before adapting it
+
+The Approval Queue is a fully local, read-only reference implementation. It accepts a synthetic FAQ question, decides whether the request can receive a cited **draft for human review**, and never performs an external action. It has no live model call, API key, network connection, customer account, payment system, email service or ticketing system.
+
+That limitation is intentional. A fluent demo can hide the most important questions: Who owns the decision? What source supports the answer? What happens when the request is unsafe? Could the tool accidentally send, refund, create, delete or change something? This reference makes those questions part of the work instead of leaving them as reassuring text in a prompt.
+
+It is useful for a low-code learner because you can inspect the design and judge a coding agent's first version without pretending to understand every line of code. Your job is to check the contract, the routes, the fixed cases and the evidence—not to blindly approve an attractive screen.
+
+## A fully fictional business case
+
+Imagine a fictional operations desk for a fictional learning-kit service. Team members receive repeated questions such as whether unopened practice materials can be returned. They want help preparing a reply, but a human must decide whether any reply is appropriate and whether a real-world action should ever happen.
+
+The reference uses invented FAQ entries, invented request IDs and a local-only trace. It does not read a real policy, account, order or customer message. It does not claim that a team reduced workload, improved quality, saved money or achieved any business result.
+
+The narrow decision is this: **can the system prepare a cited draft from a current, approved synthetic FAQ entry, or must a human take over?** It never decides whether to issue a refund, contact somebody or update a record.
+
+## What this reference explicitly demonstrates
+
+### What you can inspect in the build
+
+- A read-only **action contract**: `allowedActions` is an empty list, human review is required, and actions such as sending a message, issuing a refund, reading an account or changing an order are prohibited.
+- Input validation and safety routing before retrieval. An explicit action request is blocked; an instruction-override or prompt-injection attempt is handed off.
+- Current-source control: retrieval considers only fictional FAQ entries marked `approved` and current on the supplied date. It uses transparent keyword overlap and stable tie-breaking, not semantic search or hidden ranking.
+- A deterministic local draft generator. The same supported synthetic input produces a cited draft from a local mock; the result records `network: "disabled"` and `apiCallMade: false`.
+- Fixed synthetic regression checks for the happy path, unsupported questions, prompt injection, a simulated mock failure and a forbidden external action.
+- A privacy-minimised trace: it keeps a truncated SHA-256 question fingerprint, not the raw question text, alongside the route, source selection and reason code.
+
+### What has to work around the build
+
+- A human reviewer owns the final decision on every route; the tool only prepares a draft or stops.
+- A supported answer needs a visible FAQ ID and version, so a reviewer can inspect the supplied synthetic source instead of trusting a polished paragraph.
+- Unsupported, unsafe or failed cases do not get an invented answer. They return `handoff` or `blocked` with a reason.
+- The local package can be checked repeatedly with `npm test` and `npm run demo` on Node.js 20, without dependencies, environment variables or external side effects.
+- Its README, demonstration map, tests and deliberate limitations give a reviewer evidence to inspect. They do not turn the reference into a deployed service.
+
+Think of the helper as a junior researcher with a very narrow brief: it may find the right page in a fictional rule book and prepare a note for a reviewer. If the page is missing, someone asks it to break a rule, or its local step fails, it raises a hand. It never posts the note, opens a wallet, or changes the rule book.
+
+## Make the business case and stop rules inspectable
+
+Do not turn a local pass into a fake claim that a team saves time or receives better answers. Instead, write the outcome that a separately authorised pilot would need to measure: for example, the rate of reviewer-approved, source-supported drafts inside an agreed review window, compared with a manual baseline defined before observation begins.
+
+Then name the conditions that would veto a candidate even if its text sounds good: an external action becomes possible, a cited source is expired or unapproved, a reviewer can be bypassed, raw questions enter a trace, or a key, network call, or private material enters the fixture. The companion reference returns a small `decisionReceipt` on every route so a reviewer can inspect the contract version, synthetic source receipt, citation references, no-action check, human next step, and the explicit status `not_measured_in_this_fixture`.
+
+This is not a dashboard or an impact result. It is a way to keep business value, technical guardrails, data evidence, release decisions, and rollback in the same conversation. Use the [portfolio evidence planner](/en/portfolio-evidence-planner) to draft your own first-week receipt, then compare it with the [portfolio evidence rubric](/en/articles/score-an-ai-portfolio-by-evidence-not-fluency) before adding more tools.
+
+## Read the action contract before you look at the happy path
+
+The most important file is the contract, not the draft text. It says the reference is `read_only`, its `allowedActions` list is permanently empty, and a reviewer is required. The prohibited list includes creating a ticket, deleting a record, issuing a refund, reading a customer account, sending an external message and updating an order.
+
+An action contract is a written, testable boundary around what a workflow may do. It is stronger than saying “please do not send anything” inside an instruction. A prompt can be ignored or misunderstood; a code-level contract can be exercised by a test. It still does not grant legal, organisational or technical permission in a real system.
+
+For a non-coder reviewing a coding agent, ask four simple questions before accepting any feature:
+
+- Which input is allowed, and is it synthetic or authorised?
+- Which outside action is technically impossible in this version?
+- Who must review the result before a real decision?
+- Which route is expected when the system lacks support or someone asks for too much?
+
+If the answer requires a real account, secret, connector, customer record or write permission, this reference has crossed its learning boundary. Stop and narrow the request instead of adding more prompts.
+
+## Follow the end-to-end path, including its stops
+
+The reference has one deliberately short path:
+
+1. It validates a synthetic request with a non-empty question.
+2. It classifies safety risk before looking up an FAQ.
+3. A requested or embedded external action becomes `blocked`; no retrieval or action is attempted.
+4. An instruction override or prompt-injection attempt becomes `handoff` before retrieval.
+5. For a normal question, it retrieves only a current, approved synthetic FAQ with sufficient keyword support.
+6. A supported result becomes `draft_for_human_approval`, with a source citation and `action.kind: "none"`.
+7. Missing source support or a simulated local mock failure becomes `handoff`, with no draft offered as an answer.
+8. Every route leaves the final judgement with a human reviewer.
+
+The three route names are useful portfolio language. `draft_for_human_approval` means a narrow condition was met inside this synthetic exercise. `handoff` means the reference refuses to guess or cannot complete its local step. `blocked` means the requested behaviour belongs outside the contract. None of them means a real customer has been served.
+
+## Understand the deterministic baseline before discussing an LLM
+
+The retrieval method is intentionally simple. It looks for overlapping keywords in a tiny fictional FAQ set, accepts only entries that are both approved and current, and uses a stable tie-breaker. That makes the result easier to reproduce and inspect than an opaque “best answer” claim.
+
+The draft is produced by `src/mock-response.mjs`, a deterministic local mock. It does not understand language, and it is not a substitute for a model. Its value is that the same test can be rerun without a key, cost, network variation or hidden provider behaviour.
+
+The baseline is a recipe card, not a chef. When it sees the right fictional ingredients, it writes the same local note. If the ingredients are missing, it must not invent a result.
+
+This baseline creates a fair question for a later, separately approved experiment: would a candidate model improve a defined failure mode while preserving citations, safe routing and human review? The reference does not answer that question. It contains no production metric and no live comparison.
+
+## The `gpt-5-mini` fixture is a label, not a connection
+
+The package includes `data/responses-api-gpt-5-mini.fixture.json`. It shows the shape of an illustrative Responses API request that names `gpt-5-mini`, asks for a cited draft and says to hand off missing support or external actions. It is deliberately a **non-executing fixture**:
+
+- it includes no credential or secret;
+- its `network` field is `disabled`;
+- the local runtime never reads, imports or sends it; its regression test reads it only to enforce that boundary; and
+- the runtime always uses the deterministic local mock instead.
+
+Do not call this a model integration. It does not prove API compatibility, permission to use a model, model quality, cost, safety performance or approval for a future connection. It is only a discussion artefact: it lets a reviewer see what a future request might need to specify after separate technical, privacy, security and release reviews.
+
+## Test the failure cases before accepting the pleasant answer
+
+The package has nine deterministic, synthetic regression checks. A non-coder does not need to edit them to inspect what they require:
+
+| Check | Expected result | Why a reviewer cares |
+| --- | --- | --- |
+| Read-only contract | No allowed actions; a refund is prohibited. | The boundary is tested, not merely described. |
+| Supported FAQ | Cited draft, no API call, pending human approval. | The happy path still leaves a human gate. |
+| Unsupported question | `handoff`, no draft, no citation. | It does not fill a gap with confident prose. |
+| Prompt injection | `handoff` before retrieval. | Unsafe instruction override does not reach the source lookup. |
+| Mock failure | `handoff`, no draft, no action. | The workflow fails closed when its local draft step is unavailable. |
+| Forbidden action | `blocked` before retrieval or execution. | A refund-like request cannot become automation by accident. |
+| Expired source | `handoff`, no draft, no citation. | A formerly supported source cannot become a current answer after its effective date. |
+| Decision receipt | Synthetic data receipt, release-blocking guardrails and `not_measured_in_this_fixture`. | Business measurement and delivery boundaries remain visible without inventing a result. |
+| Responses fixture boundary | The `gpt-5-mini` request fixture is key-free, offline, and unread by the runtime. | It separates a reviewable request shape from a model integration. |
+
+An evaluation case is simply a question with an answer key written first. It is like putting an expected-move card beside each turn before a board game begins, rather than changing the rules whenever the result disappoints you.
+
+Run the tests and demo before you change the implementation. The output is evidence of local behaviour on tiny fictional cases, not a production scorecard. If a coding agent proposes a change, ask it to name which fixed case could regress and to show the result after the change.
+
+## The trace, reviewer gate and rollback are three different things
+
+The trace helps a reviewer reconstruct the local route without storing the raw question. It records a request ID, a truncated question fingerprint, the effective date, source-selection details where retrieval happened, and the eventual reason code. This is data minimisation in one local example, not a complete privacy programme.
+
+The reviewer gate is the human decision point. A successful local route has reviewer status `pending_human_approval`; a stopped route has `handoff_required`. The code makes no external action available in either state. Reviewers can see a draft, citation and reason, but they cannot press a hidden “send” button.
+
+Rollback in this reference does **not** mean a live production rollback system exists. There is no deployment, monitoring, incident process or release approval configuration. Here, a sensible rollback is a local delivery rule: if a proposed change fails a fixed test or weakens a boundary, reject that change and keep the last known passing revision. Record why in the decision log, then test the next small change against the same cases.
+
+## What a portfolio README should make inspectable
+
+Use this reference as a shape for your own project, not as a source of inflated claims. A reviewer should be able to find:
+
+- the fictional user, narrow decision, non-goal and action contract;
+- the synthetic data boundary and why no real content was used;
+- the deterministic baseline and exactly what an optional model fixture is not;
+- the fixed cases, expected routes, test command and observed local results;
+- the trace fields, human reviewer decision and how a failed candidate is rejected locally;
+- files changed by a coding agent, assumptions it made and what it did not test; and
+- explicit nonclaims about production, business outcomes, security, privacy compliance and model quality.
+
+Keep source code, test names and commands in English so another reviewer can inspect or rerun them. A multilingual README can make the learning purpose accessible. Do not include a real workplace FAQ, customer screenshot, account data, secret, private repository material or invented impact number.
+
+## What this proves—and what it deliberately does not
+
+This reference demonstrates that you can reason about a bounded AI workflow: source support, safe routes, deterministic checks, trace minimisation, human approval and honest delivery documentation. It gives you a concrete way to review an AI-generated build even when you are not the developer who wrote every line.
+
+It does not prove that a real answer is correct, that an LLM is safe, that retrieval is good, that a team will save time, that a customer will be helped, or that the system is ready for deployment. It does not establish permission to use real data or `gpt-5-mini`. Those are separate questions that need authorised evaluation, governance and operational review.
+
+That distinction is the portfolio lesson. A credible learner can show the boundary, the failure and the next evidence needed—not just the best-looking output.
+
+Further reading: [build a low-code AI workflow from an action contract](/en/articles/build-a-low-code-ai-automation), [review a coding-agent build without becoming a developer](/en/articles/review-a-coding-agent-build-without-being-a-developer), [take the non-coder route first](/en/articles/use-ai-without-writing-code), [take the coder route with proof](/en/articles/use-ai-as-a-coding-partner-with-proof), [study a bounded enterprise AI reference in PolicyPilot](/en/articles/enterprise-ai-portfolio-policy-pilot), [score portfolio evidence rather than demo fluency](/en/articles/score-an-ai-portfolio-by-evidence-not-fluency), and [turn a course into an eight-week evidence sprint](/en/articles/turn-an-ai-course-into-an-eight-week-evidence-sprint).

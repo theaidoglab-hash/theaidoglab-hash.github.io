@@ -1,0 +1,45 @@
+Prompt 不是愈長愈靈的咒語。它其實是一個 versioned instruction interface，把 user need、已提供 evidence 和有界 output 接起來。用這個角度做 prompt work，才會在 portfolio 留下可看的證據。
+
+## 一個雙語 intake 問題
+
+想像一個完全虛構的 project-intake desk。coordinator 用英文、廣東話，或兩者混合交來一段短 request。desk 要產生 structured draft：goal、欠甚麼欄位、可做的下一步，以及 evidence note 或 **HANDOFF**。它不可承諾 delivery date、不可開外部 system，也不可把模糊 request 當已批准 scope。
+
+第一版 prompt 在整齊英文例子很順，但遇到廣東話句子夾英文 product name、很長的 thread，或 user 說「跟上次一樣」而舊 request 有一條重要限制時就失手。這個 failure 落在 context assembly 和 evaluation，而不是籠統的 prompting。
+
+## 把 prompt 拆成可審閱的部分
+
+把不同速度改變的資料分開：
+
+- **Task contract**：必需欄位、可接受 output、refusal condition 和 decision owner；
+- **Evidence block**：有 identifier 和 version 的 approved source excerpt；
+- **Examples**：教格式或困難分別的一小組例子；
+- **User input**：本次 request，與 instruction 清楚分隔；
+- **Output check**：schema validator，以及 citation、uncertainty、handoff 規則。
+
+這比把整段聊天塞進同一個 message 更可控。example 不是 evidence；retrieved note 是 data，不是新 instruction；schema 不能保證 draft 有用，但可阻止流暢段落掩蓋了缺 route 或無根據的 claim。
+
+## Context compaction 要保留決定，不只是縮短
+
+**Context compaction** 是把很長的舊 interaction 變成下一輪可用的較小 representation。安全的 compact record 應保留 stable fact、open question、source ID 和 version、既有決定、被拒選項和 expiry rule；同時說明哪些內容已丟棄。
+
+這個 intake desk 的 capsule 可寫：「request 只可 draft；budget owner 未批 scope；需要 product code RQ-17；上次 exception 於 2026-09-01 到期；source P-4 與 P-9 衝突。」它不應把不確定的事改寫成 fact，也不應因為方便就保留私人 raw text。
+
+用 paired case 測試壓縮：一個 system 讀完整 history，另一個只讀 capsule；對必須保留的事實，兩者要走到同一個 allowed route。再加一個危險 case，唯一重要限制藏在很早的對話。若 capsule 漏掉，正確做法是修 compaction contract，不是再把 final prompt 寫得更花巧。
+
+## Multilingual quality 不能由一條翻譯推斷
+
+evaluation set 要由等價 intent 組成，不是機械翻句子。包括廣東話加英文 product term、需要時的繁簡變體、縮寫、含糊日期，以及本應 handoff 的 request。每個 case 寫明 expected field、source use、output language 和 forbidden assumption。
+
+把 output validity 和 route correctness 與自然不自然分開評。文字可以很地道，卻改錯 product code、漏掉限制，或猜錯日期格式。請 bilingual reviewer 看一小段最難 cases；不可變的 field 用 deterministic check。不要把 model 自己很有自信的翻譯當成唯一 multilingual judge。
+
+## 應保留的 evidence packet
+
+保留 prompt contract、prompt version、context-capsule schema、fixed evaluation case、output validator、prompt diff 和短 error review。非技術部分也要講清：誰擁有 scope decision、哪些資料要到期、語言不確定時誰接手，還有為何 desk 不能外發 action。
+
+這比「我找到完美 prompt」更有說服力。它展示一個工程 loop：定義行為、每次只改一個 component、比較已命名 cases、檢查 regression，保留較小而安全的 baseline。
+
+延伸閱讀：[把 prompt 變成 professional evidence](/zh-HK/articles/prompt-play-to-professional-evidence)、[把 AI request 變成可接受改動](/zh-HK/articles/turn-an-ai-request-into-an-accepted-change)，以及[為何 workflow evaluation 不只看 final answer](/zh-HK/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)。
+
+## 邊界
+
+intake desk 和所有 examples 都是虛構。本文不聲稱有通用 multilingual benchmark、production-quality summariser，或個人和商業資料的已批准處理路徑。真實使用前要驗證語言、retention 和法律要求。

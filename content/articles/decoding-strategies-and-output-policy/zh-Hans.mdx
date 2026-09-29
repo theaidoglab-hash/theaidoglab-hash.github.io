@@ -1,0 +1,64 @@
+同一段 approved policy excerpt，跑两次可能有不同结果：一次是短而可 review 的 draft；另一次多写一句听起来合理、其实没有 source 支持的话。问题不是模型有“创作性格”。Generation 时，它每一步都从一个概率分布选下一个 token。Product 必须有 output policy，决定哪些变化可接受，也决定何时不应让任何生成文字离开 workflow。
+
+## 这一课要做到的判断
+
+你应该能把 decoding setting 配对到 task，然后写出包住它的 acceptance rule。证据不是“temperature 等于 0”，而是一组 fixed tests 证明：在已知 failure conditions 下，system 会交回 valid、grounded result，或清楚 handoff。
+
+## 从 scores 到一段生成文字
+
+每一步 language model 都会产生 **logits**，也就是下一个 token 的相对 scores。经过转换后成为 probabilities，再由 decoding strategy 选一个 token。新 token 会成为下一步 input 的一部分，所以早期一个小改变可以把整段回应带到另一条路。
+
+常见选择有不同作用：
+
+| 选择 | 倾向做什么 | 可先用在哪里 | 不能保证什么 |
+| --- | --- | --- | --- |
+| greedy selection | 每步选最高分 token | 短、近乎 deterministic 的 labels | 真实、citation 或 business safety |
+| low temperature | 把概率集中在较高分 token | 受限制的 drafting 或 extraction experiment | 每次一定正确或完全一样 |
+| top-p sampling | 在累积概率集合中抽样 | internal ideation 的受控变化 | 偶发 bad completion 消失 |
+| output limit / stop rule | 限制长度或在已知边界停止 | structured sections、latency control | 停止前内容一定有效 |
+
+Temperature 与 top-p 用来调整多样性，不会补回缺资料、不安全 instruction、错 retrieval 或模糊 task。Low temperature 的模型也能很稳定地答错。
+
+## 在模型外加上 output policy
+
+为虚构 return desk，先订好只接受四种 terminal product：
+
+```text
+SUPPORTED_DRAFT — 引用 approved policy ID，并符合 required schema
+HANDOFF — evidence 缺失、相互矛盾，或 case 不在 declared category
+DECLINE — input 无效，或要求一个不可用 action
+BLOCKED — validator、budget 或 safety rule 失败
+```
+
+Model 可以建议文字；validator 检查 JSON 或 section schema、必要 citations、允许 route、禁止 claims、长度，以及 supplied evidence 是否真的支持 draft。Terminal state 由 runtime 指派，不是由 model 自己宣告。`HANDOFF` 与任何可能影响人的 draft，都要有 reviewer 负责。
+
+这就是 generation parameter 与 product policy 的差异：policy 说明 output 要满足什么才能继续；parameter 只影响候选 sequence 如何被选出。
+
+## 做一份可重跑的 decoding evaluation
+
+建立 `decoding-evals/`，放入 10 到 20 个 fixed synthetic cases：正常短 request、长 request、没有 policy evidence、相互矛盾的 evidence、未知 item code、要求模型忽略 task 的 instruction，以及要求不可用 external action 的 request。每个 case 记录：
+
+- model / prompt version、decoding settings、maximum output 与 context version；
+- expected terminal state、required source IDs、forbidden wording 或 route；
+- 安全时才保留 raw candidate output、validator 结果与 reviewer 结果；
+- input tokens、output tokens、first result 时间、总时间与 retry count。
+
+同一套 cases 用于 baseline 与一个 proposed change。例如比较 low-temperature 的短 structured response，和只供内部 ideation 的较多变 configuration。不要让一个“quality”分数盖掉全部；应分开计算 schema failures、unsupported citations、正确 handoffs、reviewer edits、latency 与 cost proxy。
+
+## 有用的 failure modes
+
+Greedy decoding 可以非常一致地重复坏模式；很低的 temperature 可以让错 retrieval 看起来很可靠；很高的 output limit 会把两句 evidence gap 写成一大段编造的解释；JSON 外表正确，citation 仍可能是假的。Streaming 可以早些显示文字，但必要 validation 还未完成前，system 不应露出最终 recommendation。
+
+更简单的 baseline 可能是用 structured fields 填 template，或把不确定 case 交给人。只有 generative draft 真正减少 review work，又不把 decision boundary 推出 review 之外时，才需要使用它。
+
+## 放进 portfolio repository 的材料
+
+保留 `output-policy.md`、fixed cases、validator rules、results table，以及一个被拒绝的 output 与简短诊断。也用非技术语言写明：reviewer 不可把流畅文字当作已核实 evidence。再补上技术机制：model 产生 token candidates，schema checks、source checks 与 terminal states 决定 workflow 接受什么。
+
+这展示的不只是 prompt craft，而是你能把 probabilistic generation 变成有边界、可检查的流程。
+
+延伸阅读：[workflow-level agent evaluation](/zh-Hans/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)、[可停止 agent 与 serving budget](/zh-Hans/articles/build-stoppable-ai-agents-with-serving-budgets)，以及[需要 acceptance test 的 prompt contract](/zh-Hans/interview-lab/prompt-contracts-need-an-acceptance-test)。
+
+## 边界
+
+这是 AI.DOG 教学，使用 synthetic、只产生 draft 的 scenario。它不是 universal settings 建议，也不代表有 validator 系统就安全。Settings、output policy、evaluation cases、data controls 与 human authority 都必须按实际 task 决定。

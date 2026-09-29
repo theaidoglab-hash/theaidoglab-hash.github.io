@@ -1,0 +1,46 @@
+“The model is wrong, so I would fine-tune it” is only half an answer. Before changing weights, decide whether the failure comes from missing context, an unclear task, unstable labels, or a behaviour that truly repeats across lawful examples.
+
+## The fictional warranty desk
+
+Consider a draft-only warranty desk. A reviewer pastes a de-identified claim summary. The system must return either a structured evidence request or **HANDOFF**. It must not approve a claim, look up a real account, or invent a policy.
+
+Three failures arrive in the same week. One draft cites an out-of-date policy. One cannot distinguish a missing photo from a denied claim. One gives a long explanation in the wrong language. These look like “model quality” failures, but their remedies differ.
+
+- A current policy belongs in versioned retrieval, not training data.
+- A missing-photo decision may need a clearer output schema and fixed examples.
+- A consistent writing style may be a prompting or controlled-template problem.
+- A repeated, stable transformation with enough reviewed examples may justify adaptation.
+
+## Adaptation is a data decision
+
+**Supervised fine-tuning** teaches a model from input-output examples. **Parameter-efficient fine-tuning**, such as adapter-style methods, changes a smaller set of trainable parameters. **Preference optimisation** uses comparisons such as “draft A was preferred to draft B” to steer a defined behaviour. These names do not remove the need for a task definition, a lawful data route, and a held-out evaluation set.
+
+“Alignment” should not be used as shorthand for “safe now.” At a practical level, it means specifying and measuring desired behaviour: when to produce a draft, when to decline, how to use a supplied language, and what evidence must be present. Permissions, data minimisation, external action controls, and human approval remain system responsibilities outside the model weights.
+
+## Build the data gate before the training job
+
+Create a small adaptation decision packet:
+
+1. **Task card:** input, expected output, non-goals, risk owner, and a no-model baseline.
+2. **Data card:** source, consent or licence basis, de-identification process, label guide, date range, and known gaps.
+3. **Split record:** separate train, validation, and held-out test cases by source or time where leakage is plausible.
+4. **Evaluation matrix:** ordinary cases, missing evidence, conflicting policy, multilingual inputs, refusal cases, and output-schema failures.
+5. **Change record:** baseline result, candidate result, regression list, cost/latency trade-off, and a stop or rollback condition.
+
+Do not let resolved reviewer outcomes silently become labels. They may contain information unavailable when a new claim arrives. Do not mix today’s policy into an old training split and call a better score generalisation. A held-out case is only useful if its answer was not already encoded by a duplicate, near-duplicate, or future-only field.
+
+## Choose the smaller fix first
+
+If a versioned policy passage fixes the stale-policy case, retrieval is the better change. If a strict JSON validator catches the missing-photo mistake, keep the model unchanged. If human reviewers cannot agree on the label, more training examples will amplify ambiguity rather than solve it.
+
+Fine-tuning can be appropriate when the task is stable, labels are reviewed, enough cases cover real variation, and the before-and-after comparison includes correct handoffs and harmful regressions. Even then, retain the prompt, data version, model version, evaluation slice, and release decision. A model that learns a concise tone does not thereby earn authority to decide a warranty claim.
+
+## Evidence that travels to an interview
+
+Keep the data card, split logic, baseline, evaluation harness, and reproducible change report in the repository. Also record the purpose limitation, who owns the labels, the policy-freshness boundary, the reviewer route, and when weak evidence means not training. That is a stronger portfolio story than “I fine-tuned a model on a dataset.”
+
+Continue with [how models and retrieval play different roles](/en/articles/choose-transformer-generation-and-adaptation-tradeoffs), [how to evaluate a workflow beyond a final answer](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer), and [how to score a portfolio by evidence](/en/articles/score-an-ai-portfolio-by-evidence-not-fluency).
+
+## Boundary
+
+The warranty desk, labels, policies, and results in this lesson are fictional. This article does not prescribe training data, legal authority, provider settings, or a production release. A prototype evaluation is evidence about named cases, not proof of fairness, safety, adoption, or business impact.

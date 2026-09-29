@@ -1,0 +1,31 @@
+A loss curve that looks calm once is not evidence that a model is dependable. A training run is affected by data order, random initial weights, batch composition and preprocessing. Stability work makes those influences visible, then reduces the ones that are creating a brittle result.
+
+## Name the instability before choosing a remedy
+
+Imagine a fictional document-routing model that predicts whether an incoming form needs a specialist review. One run gives a promising validation result; the next gives a much worse result with the same code. Before adding a technique, compare seeds, data revisions, train/validation splits and preprocessing. A different result may come from an uncontrolled input rather than a deep learning mystery.
+
+The **learning rate** controls the size of parameter updates. Too large and the optimiser can jump past a useful direction or produce non-finite values; too small and it may appear stuck. **Batch size** changes how much evidence each update uses. It affects memory, runtime and the noisiness of the gradient. Neither setting has a universally correct value; they need a bounded experiment and a recorded comparison.
+
+## What dropout and normalisation actually change
+
+**Dropout** randomly masks part of a network during training. It discourages the network from leaning too heavily on a narrow combination of internal signals. During evaluation and serving, dropout is normally disabled so the prediction is deterministic for the same input and model version. Accidentally leaving it on during evaluation makes results noisy and hard to compare.
+
+**Normalisation** transforms values into a consistent scale or stabilises internal activations, depending on the method. It can make optimisation easier, but it does not make the source data “normal,” unbiased or safe. Fit input scaling using training data only, then apply those saved parameters to validation, test and later inputs. Calculating them across every row lets future information leak into the experiment.
+
+## Turn training stability into reviewable evidence
+
+Run a small seed sweep rather than reporting the best lucky run. For each configuration, preserve the data and code revision, seed, preprocessing parameters, train/evaluation mode, learning curves and operational metric. Show the spread across runs, not just its average. Keep a simple baseline in the table.
+
+Add three focused checks to the repository:
+
+- a test that preprocessing has the same schema at training and inference;
+- a test or log confirming dropout-sensitive layers switch correctly between train and evaluation modes; and
+- an evaluation slice with a named failure family, such as new form types or missing fields.
+
+Those checks show an employer that you can distinguish model behaviour from accidental runtime state. They are more useful than a screenshot of one unusually good epoch.
+
+## Stability is not an excuse to ignore the product
+
+Dropout cannot fix a target that means different things to different reviewers. Normalisation cannot compensate for a field that appears only after the decision. A stable metric can still hide unequal error rates or a threshold that overwhelms the review team. If a simple rule is more stable, explainable and adequate for the bounded action, it may be the right choice.
+
+Treat the result as a candidate for human review, not a self-approving release. Continue with [sequence models and framework boundaries](/en/articles/sequence-models-and-framework-boundaries) and [how to make a model change inspectable](/en/articles/turn-an-ai-request-into-an-accepted-change).

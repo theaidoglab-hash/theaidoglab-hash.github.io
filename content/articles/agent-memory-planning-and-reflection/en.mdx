@@ -1,0 +1,45 @@
+An agent that “remembers everything” is not automatically useful. Memory can preserve a vital constraint, but it can also repeat an old mistake, leak irrelevant context, and make a run impossible to audit. Planning and reflection need the same boundaries as tools and retrieval.
+
+## The fictional remediation planner
+
+Imagine a draft-only remediation planner for a platform team. It receives a synthetic incident summary, approved runbook snippets, and a request for a reviewer-facing plan. It may propose a sequence of checks, but it cannot execute a command, change an environment, or message anyone.
+
+On the first run, the model plans to inspect logs before checking whether the incident is in scope. On the second run, it remembers that a previous incident used a database rollback, then proposes the same route even though this case has a different service. A fluent “reflection” that says “my plan is sound” does not correct either problem.
+
+## Separate kinds of memory
+
+**Working memory** is the bounded state needed during one run: current goal, validated inputs, selected evidence, plan step, tool observations, budget, and terminal reason. It should expire with the run.
+
+**Durable memory** is information permitted to survive: an approved preference, a versioned decision record, a recurring constraint, or an explicitly reviewed summary. It needs an owner, source, scope, expiry, and update path. It is not a dumping ground for raw chats or hidden reasoning.
+
+The planner should retrieve durable memory as evidence, not quietly inject it as authority. A previous choice can inform the new plan only if its service scope, date, and approval status still apply. When memory conflicts with current runbook evidence, the route should be **HANDOFF**, not an invented reconciliation.
+
+## Planning is a bounded state transition
+
+Represent a plan as a small list of permitted, observable steps:
+
+1. Validate the incident category and exclusions.
+2. Select the approved runbook version.
+3. State the proposed check and expected observation.
+4. Stop, hand off, or request missing evidence when a precondition fails.
+5. Produce a draft plan with source references for a reviewer.
+
+For every step, record its precondition, allowed input, expected observation, budget cost, and next state. Do not ask the model for unlimited “think harder” loops. A plan that cannot name what would change its next action is not yet a testable plan.
+
+## Reflection is a check, not a personality trait
+
+Useful reflection compares an observed result against a named rule: Did the plan use an in-scope runbook? Did it omit a prerequisite? Did it contradict a selected source? Did it exceed the step budget? A deterministic validator can check some of these; a constrained reviewer or judge can examine a bounded draft criterion. Both must return a reason that a human can inspect.
+
+Create evaluation cases for stale durable memory, conflicting memory and runbook, missing preconditions, repeated failed steps, a request outside scope, and a plan that should stop. Keep the expected state and forbidden action. The system passes when it refuses to reuse a stale rollback pattern, not when it writes the longest retrospective.
+
+## Evidence to keep and limits to state
+
+Keep a memory schema, retention and expiry rules, plan-state diagram, prompt contract, synthetic traces, fixed cases, reflection checks, and a change log. State who may approve durable facts, which data is excluded, when a reviewer owns the decision, and why no action leaves the prototype.
+
+This makes a credible portfolio story: memory is a governed data product; planning is a bounded workflow; reflection is a test against observable evidence. It does not make the agent autonomous, trustworthy in every situation, or ready to touch a production environment.
+
+Continue with [stoppable agents and serving budgets](/en/articles/build-stoppable-ai-agents-with-serving-budgets), [workflow-level agent evaluation](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer), and [how to review an agent before granting permission](/en/articles/review-an-ai-agent-before-clicking-allow).
+
+## Boundary
+
+The remediation planner, incident summaries, runbooks, states, and evaluation results are fictional. This article is not incident-response guidance and does not endorse storing chain-of-thought, customer data, credentials, or operational secrets. Real systems require their own security, privacy, retention, and human-authority review.

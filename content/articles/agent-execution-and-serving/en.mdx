@@ -1,0 +1,174 @@
+> A fast-looking agent is not necessarily a dependable one. If it cannot stop, explain the tool it used, recover without repeating an effect, and leave room for a person to decide, lower latency only helps it make the wrong move sooner.
+
+## The 4:47 pm request that exposes two different systems
+
+Imagine a fictional **Returns Evidence Desk**. A support reviewer pastes an already-sanitised order summary and asks for a draft that names the policy evidence, suggests the next internal route, and never contacts the customer. The first demo is pleasant: the agent searches a tiny approved policy set, writes a draft, and returns it in a few seconds.
+
+At 4:47 pm, three things change at once. The queue grows, one retrieval call times out after it may already have recorded a review task, and a long pasted history delays the first visible word. The question is no longer “can the model write?” It is:
+
+> “How would you design this agent so that it can stop safely while its serving layer still meets a user-facing P99 latency budget?”
+
+That question joins two disciplines which are often discussed separately. **Agent execution** decides what may happen next. **Model serving** decides how work reaches the model and how long it takes. A reliable design connects them through a shared budget, stable state, and named human authority.
+
+## The answer that fixes only half the problem
+
+> “I would add retries, more replicas, and streaming.”
+
+Those can be useful tools. They are not a recovery plan.
+
+More replicas do not tell an agent when a request should stop. Streaming makes the first text visible sooner, but does not make an unsafe tool call reversible. Retrying a write whose result is unknown can create the same review task twice. A faster model still gives a bad user experience if queueing consumes the whole P99 budget before the model starts.
+
+Start by defining the bounded job, then make every transition inspectable.
+
+## One run is a state machine, not a loop around a model
+
+The Returns Evidence Desk has no permission to send a message, modify a return, or access an account. Its only possible product is a draft for a reviewer. A small state machine is enough to make that boundary visible:
+
+```text
+received
+  -> validated
+  -> planned
+  -> tool_requested
+  -> observed
+  -> draft_ready
+  -> handoff
+  -> blocked
+  -> retry_scheduled
+  -> budget_stopped
+```
+
+Only some arrows are legal. A missing policy source goes from `observed` to `handoff`, not to invented prose. An expired time budget goes to `budget_stopped`, not back to `planned`. A tool timeout is not proof that nothing happened; it goes to a state where the system can check a stable action identity before deciding whether a retry is safe.
+
+This is what “stoppable” means in practice. The agent has explicit terminal states, a reason code, and an owner for the next decision. It does not keep generating plans because it feels uncertain.
+
+### A tool contract turns model suggestions into bounded actions
+
+A model may propose a tool call. The runtime decides whether that proposal is admissible. A useful **tool contract** says:
+
+- the tool name and purpose;
+- the input schema and allowed values;
+- whether the effect is read-only, draft-only, or consequential;
+- the caller identity and permission boundary;
+- a timeout, retry class, idempotency requirement, and expected output schema;
+- which state transition can follow success, failure, or ambiguity.
+
+For example, `find_policy_evidence` can accept a case category and approved document version, return citations, and be read-only. `create_review_task` would require a stable `action_id`, reject duplicate creation, and return either a confirmed task reference or an explicit unknown state. A prompt is not the permission system; the contract is.
+
+Picture a helpful intern holding a request form. They can suggest which drawer to open, but a labelled key cabinet and the supervisor decide which drawers can actually be opened.
+
+### A trace is an operational receipt, not a secret transcript
+
+Keep enough information to answer, later, “why did this case take this route?” A minimal trace might include:
+
+```text
+run_id, case_version, policy_version, state transitions,
+tool name, safe input summary, action_id, tool result class,
+latency slices, token/cost proxy, terminal reason, reviewer outcome
+```
+
+Do not default to saving full customer text, raw secrets, or every model thought. The point is to reconstruct decisions and find regressions while respecting data minimisation. A trace that says `tool_requested → unknown_after_timeout → handoff` is more useful than a long chat transcript that hides the uncertain external effect.
+
+## P99 exposes the slow requests that can miss a wait-time target
+
+P50 describes a typical latency. P99 tells you about the slow tail: the requests that may make a reviewer wait long enough to abandon a workflow or click refresh. The target should come from the user decision, not from a model leaderboard.
+
+For this fictional desk, agree a synthetic user-facing budget before tuning anything:
+
+| Budget slice | What it covers | Evidence to collect |
+| --- | --- | --- |
+| Admission | validation, policy check, queue wait | queue timestamp and rejection reason |
+| Context | retrieval and prompt assembly | retrieved count, context size, cache decision |
+| First visible result | model prefill plus first decode step | time to first token or first structured event |
+| Completion | remaining decoding and output validation | total latency, output size, schema result |
+| Recovery | retry lookup, route, or handoff creation | reason, attempts, terminal state |
+
+The budget is a design constraint, not an excuse to silently cut safety checks. If a case cannot get a supported draft in time, a clear `HANDOFF` can be better than an uncited fast answer. Measure handoff rate beside latency so that “faster” does not merely mean “we gave up more often.”
+
+## Why prefill and decode create different bottlenecks
+
+An autoregressive language model first processes the existing prompt. That **prefill** work is usually dominated by the input context: a large pasted history, long retrieved passages, or an unnecessarily repeated policy instruction can delay the first output. During **decode**, the model produces new tokens step by step. A long draft can therefore have acceptable time to first token but poor total completion time.
+
+This distinction changes the diagnosis:
+
+- When first response is slow, inspect queueing, context length, retrieval fan-out, prompt reuse, and prefill capacity.
+- When the first response is prompt but completion is slow, inspect expected output length, structured-output repair loops, decoding capacity, and streaming behaviour.
+- When both are slow only under load, inspect admission control and batch scheduling before claiming the model itself is the cause.
+
+Streaming is useful when a user can safely see progress before the final validated draft. It is not a licence to stream unverified policy advice or an incomplete write action. The product must decide which event is safe to reveal.
+
+## Serving levers have different costs
+
+The same four words—batching, caching, quantisation, scaling—often get repeated as if each automatically improves latency. They solve different constraints.
+
+| Lever | What it can improve | What can get worse | A check before keeping it |
+| --- | --- | --- | --- |
+| Dynamic batching | throughput and hardware utilisation | queue wait and P99 for a lonely urgent request | compare P50, P95, P99 and queue delay by traffic class |
+| Prefix or prompt cache | repeated stable instructions and repeated context prefixes | hit rate falls when prefixes vary; stale policy can be reused | version the policy prefix and record cache hit/miss |
+| Response cache | repeated, safe, deterministic questions | wrong reuse, privacy leakage, stale answer | cache only a bounded key and include source/version validity |
+| KV cache | avoids recomputing prior token states during decode | memory pressure limits batch size and context | record cache memory, output length, and eviction behaviour |
+| Quantisation | memory footprint and sometimes throughput | task quality, numerical compatibility, or rare-case behaviour | run the same fixed quality and safety cases before/after |
+
+None of these replaces a simpler baseline: shorten the approved context, return a compact structured draft, or route low-confidence cases to a reviewer. Optimisation is a product decision with an error budget, not a collection of clever switches.
+
+## Retries need identity before speed
+
+Treat failures according to what is known.
+
+- A rejected input schema is usually permanent until the input is corrected.
+- A rate-limit response may be retryable with a capped delay.
+- A timeout after a read-only search may be retried if the contract permits it.
+- A timeout after a consequential action is an **unknown outcome**, not an automatic retry.
+
+For a consequential tool, generate a stable idempotency key before the call. On ambiguity, ask the tool or durable state store whether that key has already produced the effect. If the state cannot be determined safely, hand off. This is slower than an optimistic retry, but it avoids duplicate tickets, messages, or refunds.
+
+An execution budget should include more than tokens: maximum state transitions, tool attempts, wall-clock time, and cost proxy. When a budget expires, emit a reason that a reviewer can act on. Do not hide a loop behind a progress spinner.
+
+## Where the human sits in the architecture
+
+Write the human handoff into the system contract. This fictional desk hands off when:
+
+- policy sources conflict or do not support a proposed answer;
+- a tool’s state is unknown after a possible effect;
+- the case is outside the declared category;
+- the latency, cost, or retry budget is spent;
+- the action would change an external record or message.
+
+The handoff packet needs the draft if one exists, supporting evidence, terminal reason, safe trace reference, and a named owner. “Escalated to a human” without a destination is only another terminal error.
+
+## Build evidence before claiming you improved serving
+
+Use synthetic cases and deterministic tool fixtures first. A useful small evaluation table includes normal short context, normal long context, cache hit, cache miss, retrieval timeout, rate limit, duplicate action ID, unknown write result, policy conflict, and budget exhaustion.
+
+For every case, record:
+
+- expected terminal state and forbidden state transition;
+- allowed tool path and action identity;
+- time to first event, total latency, queue delay, and output size;
+- cache and batching condition;
+- draft quality rule, citation rule, and reviewer route;
+- what the test does **not** show.
+
+Put the state diagram, contract schemas, trace fields, load fixture, and latency report in one review pack, alongside the user decision, data boundary, error cost, handoff owner, and stop condition. A reviewer can then check how the system runs and where it must stop.
+
+## A concise answer that invites a useful follow-up
+
+> “I would begin with a bounded state machine and tool contracts, not an open-ended loop. Each tool has an input/output schema, permission level, timeout, retry class, and idempotency rule. I would trace state transitions, safe tool evidence, latency slices, and terminal reasons, while minimising sensitive data. For serving, I would set a user-facing P99 budget split across queueing, context/prefill, decode, validation, and recovery. I would test batching, caching, KV-cache memory, and quantisation against the same fixed quality and safety cases, not latency alone. If a consequential tool times out, I would check a stable action identity and hand off when the effect is unknown. The first release stays draft-only, with a named reviewer for conflicts, budget stops, and irreversible actions.”
+
+That answer shows how model behaviour, runtime control, operations, and a real owner fit together.
+
+## Keep these artefacts in the repository
+
+- `brief.md` — fictional decision, user, data boundary, non-goals, and reviewer owner.
+- `state-machine.md` — legal states, transitions, terminal reasons, and what must never happen.
+- `tool-contracts/` — schemas, permissions, timeouts, retry classes, action IDs, and output validators.
+- `trace-schema.md` — retained fields, deliberately excluded fields, and retention rationale.
+- `latency-budget.md` — P99 slices, traffic assumptions, queue policy, and the decision if the budget is missed.
+- `synthetic-evals/` — fixed fixtures for normal, slow, ambiguous, duplicate, and blocked cases.
+- `results.md` — quality, handoff, route, latency, cache, and cost-proxy results, including one failure.
+- `decision-log.md` — why a cache, batch rule, or handoff threshold was chosen and what remains unproven.
+
+For related practice, start with [workflow-level agent evaluation](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer), then build a narrower [resumable batch worker](/en/articles/build-a-resumable-ai-batch-worker). Pair either one with [permission review before an agent gets access](/en/articles/review-an-ai-agent-before-clicking-allow) and [the Transformer and serving trade-offs behind generation](/en/articles/choose-transformer-generation-and-adaptation-tradeoffs).
+
+## Boundary and source note
+
+This is AI.DOG teaching material built from a synthetic, draft-only scenario. It is not a production architecture, benchmark result, provider-capacity claim, or a promise of a particular latency, reliability, business outcome, or interview result. Tool names, data, budgets, state labels, and artefacts here are illustrative. A real system needs its own security review, privacy assessment, provider documentation, workload measurement, incident process, and authorised owner before it can affect a customer or external record.

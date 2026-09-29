@@ -1,0 +1,11 @@
+# Node.js dependency directories and generated reports.
+node_modules/
+coverage/
+promptfoo-results/
+.promptfoo/
+*.log
+
+# Never commit local credentials, even though this reference does not use them.
+.env
+.env.*
+!.env.example

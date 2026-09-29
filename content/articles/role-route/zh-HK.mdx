@@ -1,25 +1,52 @@
-> 核心判斷：不要先問「哪個 AI 職稱最有前途」，先問這份工作每星期要交付甚麼，以及招聘方會用甚麼證據判斷你做得到。
+> 同一個作品集想投四種完全不同的工作，問題通常唔係你做得太少；而係對方睇唔出你替邊個人處理過邊個決定。
 
-## 同一個職稱，可以是四份不同的工作
-澳洲招聘廣告中的 AI Engineer 並沒有統一意思。有人主要建立模型與實驗，有人把模型接入產品，有人管理 deployment、permissions 和 monitoring，也有人直接與客戶界定問題並交付 solution。只按職稱搜尋，很容易學了很多工具，卻沒有補到目標工作的證據。
+## 先讀交付物，先唔好讀職稱
+讀 AI／data 職位描述時，`AI Engineer`、`ML Engineer`、`Applied AI` 甚至 `Forward Deployed Engineer` 都只係搜尋入口，唔係一份工作規格。同一個職稱可以是一個 model experiment、一條內部工具 workflow、一個可靠平台能力，或者一次與用家共同界定問題再交付的工作。
 
-先把 JD 的動詞圈出來。`train、experiment、benchmark` 通常偏 Data／ML；`build、integrate、ship` 偏 AI Application；`deploy、operate、secure、monitor` 偏 Platform／Ops；`discover、scope、implement、adopt` 則較接近 FDE。這不是把市場硬分成四格，而是幫你找出主要交付。
+你第一步唔係列出下一個 framework；係將一份 JD 讀成「每星期要交俾邊個人睇、用嚟做咩決定」。圈出責任句中的動詞，再問：交付物可唔可以被其他人重跑、review 或否決？
 
-## 用輸出而不是工具分類
-- Data／ML：資料、baseline、experiment design、metric 與 error analysis。
-- AI Application：API、product flow、retrieval、testing、latency 和 failure handling。
-- Platform／Ops：CI/CD、permissions、observability、cost、reliability 和 incident response。
-- FDE：problem discovery、technical scope、prototype、production handoff 和 adoption。
+| JD 常見動詞 | 較可能的主交付 | 作品集中最少要睇到 |
+|---|---|---|
+| `train`、`experiment`、`benchmark` | 一個可比較的模型／資料決定 | baseline、切分方法、metric、error analysis |
+| `build`、`integrate`、`ship` | 一條用家會接觸的 application flow | input contract、測試、失敗處理、handoff |
+| `deploy`、`operate`、`secure`、`monitor` | 一個可維持的服務能力 | release gate、權限、trace、rollback plan |
+| `discover`、`scope`、`implement`、`adopt` | 一個被界定和交接的客戶／內部問題 | problem brief、trade-off、acceptance、owner |
 
-一份工作可能同時包含兩類。你要找的是主輸出及最可能在面試被追問的風險。例如 JD 同時寫 RAG 和 Kubernetes，不代表你要先學齊兩套工具；如果責任集中在把功能交付給內部團隊，application evidence 可能比重新訓練模型更重要。
+呢四格係閱讀工具，唔係市場分類。一份工可以橫跨兩格；你要揀出它最常被追問的一項交付和一個失敗風險。
 
-## 由 JD 反推一件作品
-選三份你真正合資格申請的職位，把責任放入 worksheet。每項責任只問三件事：我做過甚麼；有甚麼可展示；若未做過，最小可驗證 project 是甚麼。最後只揀一個重複出現的缺口。
+## 由三份 JD 砌一張 evidence map
+揀三份你有意、亦符合基本資格的職位。唔需要把公司名、招聘人資料或整份 JD 放入公開筆記；只保留責任句和你自己的判斷。每一項責任填四欄：
 
-假設三份職位都要求 evaluation 和 deployment，你可以把現有 chatbot 改成有固定 test set、失敗分類、權限邊界和可重跑部署的服務。這比再做第四個不同框架的 chatbot 更接近職位證據。
+1. **對方要作甚麼決定？** 例如「support lead 要決定哪些 case 先由人手看」。
+2. **我現時有甚麼證據？** 例如「有一個 fixed test set 和失敗分類」，不只寫「識 Python」。
+3. **最大缺口是甚麼？** 例如只展示了回答，未展示 permission boundary 或 queue capacity。
+4. **十日內可以留下甚麼？** 一份 brief、一個 baseline、一組固定 case、一次 reviewer decision，或一條停止理由。
 
-## 邊界與風險
-職位廣告不是完整工作真相，seniority、工作權、地點和團隊成熟度仍要分開核對。作品亦不會消除簽證或經驗限制。它的用途是令對方有具體材料判斷你的能力，不是保證錄取。
+當三份 JD 都出現 evaluation 和 deployment，不要再開第四個 chatbot。將現有 demo 補成一條可檢查的證據鏈：固定 test set、失敗分類、data／action boundary、重跑步驟，以及 release 或 rollback 決定。這比一個更流行的 UI 更接近真正被追問的工作。
 
-## 下一步
-下載職位比較 worksheet，填三份真實 JD。若仍有五個以上「最重要缺口」，代表你尚未選定路線；不要立即開始 project，先縮窄目標工作。
+## 作品的方向，應跟工作上的風險走
+假設職位描述反覆提到「讓內部 team 安全使用 RAG」。作品的中心就需要展示這種工作，而不只是漂亮回答畫面。可以改成一個完全合成的 policy-support workflow，清楚寫出：
+
+- 哪些文件可被讀取，哪些資料不能進入流程；
+- 快速 keyword baseline 為何仍然存在；
+- 哪些答案必須停在 `DRAFT`，交由有名字的 reviewer；
+- 哪些固定 cases 會令 release 被拒絕；
+- 失敗後誰擁有 rollback 或下一步。
+
+這不會假裝你已經營運一個 production 系統；它會讓面試官有材料追問你的工程和非工程判斷。想用六個完全合成的 reference case 對照，可以由[作品集證據規劃器](/zh-HK/portfolio-evidence-planner)開始。
+
+## 用一個十日合約取代一個無限 project
+將下一個 project 寫成一張短合約，而不是「做個 AI app」：
+
+- **第 1 日：** 寫出 owner、決定、non-goal 和私隱邊界。
+- **第 2–4 日：** 先做一個可解釋 baseline，固定小量 synthetic cases。
+- **第 5–7 日：** 加一個你要證明的技術選擇，例如 retrieval、queue routing 或 evaluation gate。
+- **第 8–9 日：** 留下失敗紀錄、trace 或 reviewer decision，而不是只錄一段 demo。
+- **第 10 日：** 寫 README：如何重跑、不能聲稱甚麼、下一個需由人作的決定。
+
+十日後仍未能寫出「pass／revise／stop」其中一個決定，就收窄 scope。作品集的價值來自別人能否理解你如何作取捨，並不在功能數量。
+
+## 有些問題，作品不能代你解答
+JD 並不是完整的工作真相。seniority、地點、聘用資格、團隊成熟度和職責實際比例仍要逐項核對；作品亦不會消除經驗或資格要求。它的作用是讓人有具體材料判斷你，不是保證面試或錄取。
+
+下一步，先用[按證據缺口比較學習來源](/zh-HK/learning-evidence-planner)揀一個補法，再用[GitHub Portfolio Proof Pack](/zh-HK/articles/build-a-github-portfolio-proof-pack)整理可公開的證據。若你要將這條路變成面試練習，從[一條獨立面試題](/zh-HK/interview-lab)開始，練習解釋同一個 trade-off。

@@ -1,0 +1,106 @@
+當 coding agent 說「完成」，先定清楚要憑甚麼收貨：計劃、test output、diff 和仍未解的風險。少了其中一樣，或改動超出 brief，就先停手；這個 demo 只在本地用合成資料，輸出亦只限草稿。
+
+## 呢個練習要畀人睇到乜
+
+### 實作會留低嘅嘢
+
+- 一個可讀本地 FAQ、產生帶引用草稿、拒絕越權 action 的細小 workflow；每個 route 都有 fixed acceptance cases。
+- plan、diff、test command、sandbox／permission check 和 trace 把 coding agent 的改動變成可重看的工程 evidence。
+
+### 交畀人覆核時要講清楚嘅事
+
+- non-developer 可以展示怎樣審核一個可逆的 draft-only delivery；agent 不會取代人手判斷。
+- reviewer 的 PASS、REVISE 或 STOP 決定、合成資料邊界和不會進行 external action，先留喺本地 evidence folder；只有負責人覆核並批准公開版本後，先會放一份可公開嘅版本去 GitHub。
+
+## 一段很長的 prompt，仍未構成一個可驗收 project
+
+「幫我整一個 AI app」通常會得到很多畫面、元件和看似合理的文字。你很難從中知道它碰過甚麼資料、加了哪個 connector，或者一個失敗輸出會落到哪裡。這也是很多 AI slop portfolio 的起點：demo 有了，決定和失敗路徑卻沒有留下。
+
+無論你用 Codex、Grok 或其他 coding agent，介面、權限和預設行為都會不同。把它當成一位可以提議和實作的人會較安全：你仍要負責範圍、可接受結果和最後決定。
+
+這篇沿用 Build Lab 裡的 Approval Queue。它只會用合成 FAQ 產生有引用的回覆草稿；不會發訊息、讀帳戶、改資料或接觸真實客戶。案例刻意很小，因為目標是練習一條能重跑的證據鏈，不是扮成已上線產品。
+
+## 六個要停一停的位
+
+### 1．先寫一個可逆結果
+
+把「自動化客服」收窄為「把一段合成問題分類，引用一條合成 FAQ，輸出供 reviewer 閱讀的草稿」。同時寫下不做的事：不登入、不連網、不保存個人資料、不外發、不寫入任何系統。
+
+這張 brief 是你之後判斷 agent 是否越界的尺。若你不能說清楚第一個輸出是甚麼，也還未能判斷它錯在哪裡。
+
+### 2．要求它先交計劃，不要立即寫功能
+
+第一次回覆應只包括：
+
+- 它理解的使用者、input、output 和 non-goal；
+- 預計建立或修改哪些檔案；
+- 每個檔案的責任；
+- 會怎樣跑測試；
+- 仍未清楚、必須由你回答的假設；
+- 它保證不會觸碰的資料、網絡或寫入動作。
+
+這一步叫 plan review。想像：先看小朋友打算砌甚麼、會拿哪幾件積木，才讓他開始。它不要求你看懂每一行 code，卻能讓你發現「為何一個本地草稿工具突然要 API key 或資料庫」。
+
+## 把驗收例子寫在 feature 前面
+
+寫三至五個能判定 pass 或 fail 的 case。每個 case 都要有 input、預期 route、預期引用和禁止動作。
+
+- 正常 FAQ：輸出草稿，引用正確 FAQ ID，標成需要人手確認；
+- 沒有支持資料：不補作答案，轉 handoff；
+- 指示衝突：不把未批准內容當來源；
+- prompt injection：停止並交回 reviewer；
+- 叫它寄信或退款：明確 blocked，沒有外部動作。
+
+OpenAI 的 agent evaluation 指引把「選錯 tool、違反規則、流程退步」都當成可評估的行為；固定 case 的目的就是讓你每次改動後比較同一批結果，而非只看一次流暢輸出。[官方 evaluation 指引](https://developers.openai.com/api/docs/guides/agent-evals) 講的是 OpenAI 的工作流工具，這裡只借用可重複比較的做法，並不表示任何 coding agent 已經自動替你建立 eval。
+
+## 你要看懂的六個詞
+
+**Plan** 是改動前的工作清單。它讓你知道 agent 打算去哪裡動手。
+
+**Acceptance test** 是預先寫好的答題卡。它把「睇落可以」換成有明確預期的輸入和結果。
+
+**Diff** 是 code 改了甚麼的對照。你未必逐行判斷邏輯，但應問：這些新檔案有沒有超出 brief？有沒有突然加登入、付款、網絡或資料庫？
+
+**Sandbox** 是限制工具能碰到範圍的環境。它能減少意外，但不能替你定義資料權利或商業責任。Codex 的官方安全說明亦把 sandbox 和 approval 視為受設定影響的兩層控制；名稱本身不是跨產品保證。[Codex sandbox 與 approvals 說明](https://learn.chatgpt.com/docs/agent-approvals-security)
+
+**Permission** 是實際可讀、可寫、可外發的能力。專案規則或 prompt 不是權限控制。若工具要求工作區外檔案、真實帳戶、API key 或 connector，停在這裡。
+
+**Reviewer decision** 是你留下的 PASS、REVISE 或 STOP。它把「我覺得可以」變成可重看、可解釋的決定。
+
+## 第一次 build 後，要求一份短交接
+
+Agent 跑完第一個薄切片後，要求它交回：
+
+- 實際新增或修改的檔案清單；
+- 用過的合成 input；
+- 每個 acceptance case 的 expected 和 actual result；
+- test command 是否通過；
+- 沒有跑過的項目；
+- 已知 failure、資料限制和不能聲稱的結果；
+- 它沒有執行的外部動作。
+
+只說「tests passed」不夠。你要能打開結果，看到正常 case、拒答 case 和越權 case 分別怎樣走。OpenAI 對 guardrail 與 human review 的區分也很直接：自動檢查可以擋輸入、輸出或工具行為；敏感副作用要停下來等人批准。[官方 guardrail 與 human review 指引](https://developers.openai.com/api/docs/guides/agents/guardrails-approvals) 是 SDK 設計，不是所有工具的預設，所以本案例仍維持 draft-only。
+
+## PASS、REVISE、STOP 不是考試分數
+
+給第一版 PASS，代表它只在寫明的合成資料和本地範圍內通過目前 cases，仍然不能接真實流程。
+
+選 REVISE，代表你找到一個具體缺口，例如引用 ID 不穩、handoff 理由含糊，或 test 沒覆蓋某個輸入。只修一個缺口，再跑同一批 case。
+
+選 STOP，代表範圍本身不安全或不清楚：要真實資料、要寫入、沒有 owner、沒有辦法定義錯誤，或者 agent 的計劃已超出原來的可逆練習。停下來是好決定，不是 project 失敗。
+
+## 幾時適合放去公開 GitHub repo
+
+未有批准公開版本前，唔好虛構 repository link。仍在覆核嘅時候，先將以下證據留喺本地；負責人確認可以公開後，一個強嘅 portfolio repo 不靠 model 名稱或 UI 截圖，最少保留以下可讀 artefact：
+
+- README：商業問題、使用者、可衡量的成功條件和 non-goal；
+- brief 和 plan：你叫 agent 做甚麼、甚麼不可做；
+- 合成資料和資料邊界；
+- acceptance cases、test command 和實際 result；
+- change review：本次改了甚麼，為何接受或拒絕；
+- failure 和下一個未做的風險；
+- 一句誠實聲明：這是本地、合成、human-reviewed 參考，不是 production 成效。
+
+這些東西能讓面試官追問你的需求拆解、evaluation、權限和協作判斷。它不會保證你得到 AI Engineer 工作，也不代表 agent 產出的每一行 code 都是你的原創。
+
+延伸閱讀：[先建立 action contract 和 sandbox](/zh-HK/articles/build-a-low-code-ai-automation)、[由模糊要求走到可驗收功能](/zh-HK/articles/from-vague-request-to-accepted-feature)、[Build Lab 的 Approval Queue](/zh-HK/labs)、[面試中如何講 agent 與 tool boundary](/zh-HK/interview-lab/agent-draft-without-consequential-actions)、[把實驗紀錄變成 professional evidence](/zh-HK/articles/prompt-play-to-professional-evidence)。

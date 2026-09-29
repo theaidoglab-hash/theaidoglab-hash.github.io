@@ -1,0 +1,45 @@
+一個「記得晒所有事」的 agent，不會自動有用。memory 可以保住重要限制，也可以重複舊錯、帶入無關 context，令一個 run 無法 audit。planning 和 reflection 要跟 tools、retrieval 一樣有界。
+
+## 一個虛構 remediation planner
+
+想像一個 draft-only remediation planner，給 platform team 使用。它收到 synthetic incident summary、approved runbook snippet 和一個要求 reviewer 看 plan 的 request。它可以建議 check 的次序，但不可執行 command、改 environment 或 message 任何人。
+
+第一次 run，model 未先 check incident 是否 in scope，就 plan 去看 log。第二次 run，它「記得」上一次 incident 用過 database rollback，於是這次 service 不同也建議同一路。它再寫一句流暢的 reflection 說「plan 很可靠」，兩個問題都沒有被修正。
+
+## 分開不同 memory
+
+**Working memory** 是一個 run 內有限的 state：目前 goal、已驗證 input、selected evidence、plan step、tool observation、budget 和 terminal reason。run 完便應過期。
+
+**Durable memory** 是獲准保留的資料：approved preference、versioned decision record、重複 constraint 或經明確 review 的 summary。它要有 owner、source、scope、expiry 和 update path，不是 raw chat 或隱藏 reasoning 的垃圾桶。
+
+planner 應把 durable memory 當 evidence retrieval，而不是靜靜注入成 authority。之前的 choice 只有在 service scope、date 和 approval status 仍適用時，才可影響新 plan。memory 與 current runbook evidence 衝突時，應走 **HANDOFF**，不是自行編一個和解。
+
+## Planning 是有界 state transition
+
+把 plan 表示成一小串可允許、可觀察的 step：
+
+1. 驗證 incident category 和 exclusion；
+2. 選定 approved runbook version；
+3. 寫出 proposed check 和 expected observation；
+4. precondition 不成立時停止、handoff 或要求缺少 evidence；
+5. 為 reviewer 產生帶 source reference 的 draft plan。
+
+每一步記錄 precondition、allowed input、expected observation、budget cost 和 next state。不要叫 model 無限「再想深一點」。一個 plan 若說不出甚麼 observation 會改變它下一步，就還未可測。
+
+## Reflection 是 check，不是性格
+
+有用的 reflection 是把 observed result 對照有名字的 rule：plan 是否用 in-scope runbook？有沒有漏 prerequisite？有沒有同 selected source 矛盾？有沒有超 step budget？部分可用 deterministic validator 檢查；有界 draft criterion 可交 constrained reviewer 或 judge 看。兩者都要回傳一個人能 inspect 的 reason。
+
+建立 stale durable memory、memory 與 runbook conflict、欠 precondition、重複 failed step、out-of-scope request 和本應 stop 的 plan 等 evaluation case。寫明 expected state 和 forbidden action。system 在拒絕重用 stale rollback pattern 時 pass，不是在它寫出最長檢討時 pass。
+
+## 要留下的 evidence 和 limits
+
+保留 memory schema、retention 和 expiry rule、plan-state diagram、prompt contract、synthetic trace、fixed case、reflection check 和 change log。非技術選擇也要解釋：誰可批 durable fact、哪些 data 排除、何時 reviewer 擁有決定，以及為何 prototype 沒有任何外部 action。
+
+這會成為可信的 portfolio story：memory 是受管理的 data product；planning 是有界 workflow；reflection 是針對可觀察 evidence 的 test。它不代表 agent 已 autonomous、在所有情況可信，或可觸碰 production environment。
+
+延伸閱讀：[可停止的 agent 與 serving budget](/zh-HK/articles/build-stoppable-ai-agents-with-serving-budgets)、[workflow-level agent evaluation](/zh-HK/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)，以及[授予 permission 前怎樣 review agent](/zh-HK/articles/review-an-ai-agent-before-clicking-allow)。
+
+## 邊界
+
+remediation planner、incident summary、runbook、state 和 evaluation result 全屬虛構。本文不是 incident-response guidance，亦不主張儲存 chain-of-thought、customer data、credential 或 operational secret。真實 system 要有自己的 security、privacy、retention 和 human-authority review。

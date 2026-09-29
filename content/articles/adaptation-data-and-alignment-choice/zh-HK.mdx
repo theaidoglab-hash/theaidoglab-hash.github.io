@@ -1,0 +1,46 @@
+「model 錯了，所以我會 fine-tune」只答了一半。改 weights 前，要先分清 failure 是欠 context、task 不清、label 不穩，還是真的有一種行為在合法例子中反覆出現。
+
+## 一個虛構的 warranty desk
+
+想像一個 draft-only warranty desk。reviewer 貼入已去識別的 claim summary，系統只能輸出 structured evidence request 或 **HANDOFF**；它不可批核 claim、查真實帳戶，也不可編造 policy。
+
+同一星期有三個 failure：一份 draft 引用舊 policy；一份分不清「欠相片」和「claim 被拒」；另一份用錯語言寫了很長解釋。看起來都是 model quality 問題，實際修法不同：
+
+- 最新 policy 應放在 versioned retrieval，不應塞進 training data；
+- 欠相片的 decision 可能需要更清楚 output schema 和 fixed examples；
+- 穩定文風可能只是 prompt 或 controlled template 的問題；
+- 只有一個穩定轉換任務，加上足夠已審閱 examples，才值得考慮 adaptation。
+
+## Adaptation 是 data decision
+
+**Supervised fine-tuning** 用 input-output examples 教 model。**Parameter-efficient fine-tuning**，例如 adapter-style 方法，只改較小一部分可訓練 parameter。**Preference optimisation** 利用「draft A 比 draft B 好」這類比較，調整一種已界定行為。這些名字不會取代 task definition、合法 data route 和 held-out evaluation set。
+
+「Alignment」不應被當成「現在安全」的代名詞。實際上，它是把期望行為寫清和量度：何時產 draft、何時拒絕、怎樣使用指定語言、必須有甚麼 evidence。permission、data minimisation、外部 action control 和 human approval，仍然是 model weights 以外的 system responsibility。
+
+## Training job 前先起 data gate
+
+準備一個小型 adaptation decision packet：
+
+1. **Task card**：input、expected output、non-goal、risk owner 和 no-model baseline。
+2. **Data card**：source、consent 或 licence basis、去識別過程、label guide、日期範圍和已知缺口。
+3. **Split record**：若有 leakage 可能，按 source 或 time 分開 train、validation 和 held-out test。
+4. **Evaluation matrix**：normal、欠 evidence、policy conflict、multilingual input、refusal、output-schema failure。
+5. **Change record**：baseline、candidate、regression、cost/latency trade-off，以及 stop 或 rollback condition。
+
+不要把 reviewer 後來怎樣處理，靜靜地當成 label。它可能包含新 claim 當下不會有的資料。也不要把今天的 policy 混進舊 training split，然後把高分說成 generalisation。只有答案沒有被 duplicate、near-duplicate 或 future-only field 偷渡過去的 held-out case，才真的有用。
+
+## 先選較小的修正
+
+若 versioned policy passage 已修好舊 policy case，retrieval 是較好改動。若嚴格 JSON validator 已攔住欠相片的 mistake，model 可以不變。若人手 reviewer 連 label 都不能一致，更多 training data 只會放大模糊。
+
+Fine-tuning 可以在 task 穩定、labels 已審閱、examples 覆蓋足夠變化，而前後 comparison 包括正確 handoff 和有害 regression 時考慮。即使如此，也要保留 prompt、data version、model version、evaluation slice 和 release decision。model 學會簡潔語氣，不等於它有權批核 warranty claim。
+
+## 面試可帶走的證據
+
+技術證據是 data card、split logic、baseline、evaluation harness 和可重做的 change report。非技術證據是 purpose limitation、label owner、policy freshness boundary、reviewer route，以及證據不足時不訓練的決定。這比「我用 dataset fine-tune model」更有說服力。
+
+延伸閱讀：[model 與 retrieval 各自的角色](/zh-HK/articles/choose-transformer-generation-and-adaptation-tradeoffs)、[不要只評 final answer 的 workflow evaluation](/zh-HK/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)，以及[以 evidence 而非流暢度評 portfolio](/zh-HK/articles/score-an-ai-portfolio-by-evidence-not-fluency)。
+
+## 邊界
+
+本文的 warranty desk、label、policy 和結果皆為虛構。它不指定 training data、法律 authority、provider setting 或 production release。本地 prototype evaluation 只描述已命名 cases，不能證明公平、安全、採用率或 business impact。

@@ -1,0 +1,87 @@
+> These 16 cards are a quick start, not the full question bank. Pick one card, answer before you read, then connect the answer to something another person can inspect.
+
+## One question has one job
+
+An interview answer becomes thin when it tries to show every tool at once. This quick start points to one practice question per card. Each question page starts with an interviewer-style situation and a plausible answer that is only partly right. It then asks you to name the missing mechanism, the trade-off, the condition in which the approach should stop, and an artefact that could survive follow-up questions.
+
+Choose a card from the verbs in a role description, not from the title alone. `build`, `integrate`, and `ship` usually point to product and system decisions. `operate`, `secure`, and `scale` usually point to reliability, permissions, cost, and incidents. `experiment` and `measure` usually point to baselines, data boundaries, and evaluation. Choose the route that matches the most repeated verbs. You do not need to finish all 16 cards in one sitting.
+
+## Four quick-start routes
+
+These 16 cards are one way in, not a reduced copy of the whole Lab. The [Interview Lab](/en/interview-lab) currently holds all 59 one-question practices across ten capability routes, so use it when your target role needs a different starting point.
+
+### 01–02, 05, 08, 14 — model behaviour, serving, and interaction
+
+Can you turn “the model can do it” into a decision about context, latency, cost, stable output, or an interaction budget?
+
+- [01 — Long context is not a free upgrade](/en/interview-lab/long-context-is-not-a-free-upgrade)
+- [02 — Trace p99 latency before adding GPUs](/en/interview-lab/trace-p99-latency-before-adding-gpus)
+- [05 — Fine-tune, or fix the system first?](/en/interview-lab/fine-tune-or-fix-the-system)
+- [08 — Voice latency is a system budget](/en/interview-lab/voice-latency-is-a-system-budget)
+- [14 — A prompt contract needs an acceptance test](/en/interview-lab/prompt-contracts-need-an-acceptance-test)
+
+### 03–04, 07, 15 — retrieval, agents, and safety boundaries
+
+Can you find where a system failed and limit what it is allowed to do? “Use RAG” or “add a guardrail” is not yet a diagnosis.
+
+- [03 — Is the failure retrieval, generation, or permission?](/en/interview-lab/rag-retrieval-generation-or-permission)
+- [04 — Let an agent draft without consequential actions](/en/interview-lab/agent-draft-without-consequential-actions)
+- [07 — Treat untrusted documents as data](/en/interview-lab/treat-untrusted-documents-as-data)
+- [15 — High similarity is not relevance](/en/interview-lab/high-similarity-is-not-relevance)
+
+### 06, 10, 13, 16 — evaluation, data, and dependable workflows
+
+Can a score, retry, or apparently successful job be trusted in the human workflow around it? Start with a baseline and describe a recovery path.
+
+- [06 — Release or roll back with evidence](/en/interview-lab/release-or-rollback-with-evidence)
+- [10 — Coding and data structures under partial failure](/en/interview-lab/coding-and-data-structures)
+- [13 — The offline score improved. Why did the workflow not?](/en/interview-lab/offline-score-and-human-workflow)
+- [16 — A retry is not a recovery plan](/en/interview-lab/a-retry-is-not-a-recovery-plan)
+
+### 09, 11, 12 — system design, delivery, and judgement
+
+Start here when the question begins with an ambiguous request, a complaint, or a project story. A useful answer narrows scope before it grows architecture.
+
+- [09 — Design an internal policy assistant](/en/interview-lab/design-an-internal-policy-assistant)
+- [11 — Turn an applied AI complaint into a reversible pilot](/en/interview-lab/applied-ai-delivery)
+- [12 — Explain a project decision that evidence changed](/en/interview-lab/project-deep-dive-and-role-fit)
+
+## A 90-second rehearsal
+
+Use a timer. The first pass must be your own language, not a memorised script.
+
+1. **First 20 seconds — frame the decision.** Say who needs to decide what, what success would look like, and one non-goal. If the question begins with a technical symptom, turn it into an observable failure before naming a tool.
+2. **Next 40 seconds — explain the path.** Give the simplest credible baseline, the mechanism or component you would inspect first, and the trade-off that would change your choice. The sequence matters: observe, make a small reversible change, then escalate only if evidence warrants it.
+3. **Final 30 seconds — show that the work is safe to follow.** Name one test, trace, decision record, or demo artefact. End with a boundary: human review, rollback, a data limit, or the case in which the simpler option is better.
+
+Only then read the individual page. Do not replace your answer wholesale; add the missing causal link. Keep a four-line note: **claim, evidence, boundary, next test**. Repeat the same question tomorrow. If the answer becomes shorter and more precise, you are learning the decision rather than reciting vocabulary.
+
+## The evidence check before you say “I built this”
+
+An interviewer can ask both how a system works and why it deserved to exist. Your evidence should answer both.
+
+### Show how the system behaves
+
+- A small baseline and the situation in which the more complex design beats it.
+- A data or input boundary: what is allowed, excluded, synthetic, stale, or unknown.
+- Fixed evaluation cases, expected behaviour, and at least one retained failure case.
+- A trace, state diagram, or version record that shows how you would investigate a regression.
+- Run instructions and a README that separate observed output from a performance claim.
+
+### Also say what must be clear before it is used
+
+- The user decision, the owner of the last consequential step, and a non-goal.
+- A practical measure such as reviewer capacity, handling time, error exposure, or handoff rate—not invented revenue.
+- The operational or cost trade-off you accepted and the simpler option you rejected.
+- A stop rule: when to ask a person, roll back, limit a feature, or decline an unsupported action.
+- An honest demo boundary and a note about what was not tested in a real organisation.
+
+If no artefact exists yet, do not add more model names to the answer. Build the smallest missing item: one fixture, one evaluation row, one decision record, or one recovery test. That is usually more useful than another hour of reading.
+
+## Continue from a question into real learning work
+
+Read the [AI Engineer learning map](/en/articles/ai-engineer-interview-learning-map) when you need to decide what to learn next, not merely what to rehearse. Use [from a vague request to an accepted feature](/en/articles/from-vague-request-to-accepted-feature) to turn one answer into a delivery sequence. Before publishing a portfolio example, compare it with [portfolio evidence for an enterprise AI system](/en/articles/enterprise-ai-portfolio-policy-pilot) or [RAG chatbot evidence](/en/articles/rag-chatbot-to-portfolio-evidence). The target is a small, inspectable claim—not a demo that implies a customer, a production release, or a business result.
+
+## Scope of this practice series
+
+The questions, fictional situations, explanations, and suggested artefacts here are draft learning material. They are not a record of any company’s current process, a company-by-company question bank, or a prediction of any interview loop. Practise with public, fictional, synthetic, or properly de-identified material only. Do not turn an invented scenario into a client story, use confidential work as proof, or claim a production deployment or business outcome that you cannot substantiate. The point is to make sound engineering judgement inspectable.

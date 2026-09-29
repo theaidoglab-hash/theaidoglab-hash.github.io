@@ -1,0 +1,56 @@
+An internal reviewer asks a draft assistant to distinguish “the repair is overdue” from “the repair is not overdue.” The same words appear in both notes, yet the route changes. Saying “attention finds the important words” is only half an explanation. The model also needs a way to represent order, decide which positions can be consulted, and prevent a generator from seeing text that comes later.
+
+## The outcome to practise
+
+You should be able to explain query, key, value, masking, and position using one input-output test. More importantly, you should know what evidence to collect when an order-sensitive instruction breaks. A colourful attention map alone is not a quality report.
+
+## One position asks, other positions offer, values carry content
+
+Inside a self-attention layer, each token representation is projected into three learned forms:
+
+- a **query** expresses what the current position is looking for;
+- a **key** expresses what each available position offers for matching;
+- a **value** is the information that can be blended into the current position after matching.
+
+The layer compares a query with available keys, converts the scores into weights, then makes a weighted combination of the corresponding values. Each position gets a context-dependent representation. The word `overdue` can therefore be interpreted differently when a nearby token signals a negation, a date, or a case category.
+
+The terms are roles in a calculation, not labelled drawers containing “questions,” “keywords,” and “answers.” Multiple heads and layers can learn different relationships. No individual head is automatically a reliable explanation for a business decision.
+
+## Position and masks make the calculation usable
+
+If the model saw only a bag of token vectors, `approve after review` and `review after approval` would look too similar. **Positional information** gives a representation of where a token sits in the sequence. It lets the rest of the network distinguish order and distance.
+
+An **attention mask** controls which positions are available in a particular calculation. A decoder's **causal mask** hides future tokens while predicting the next one. Without it, training could leak the answer from the future part of the sequence. A padding mask can prevent empty padding positions from affecting a shorter record. In an application, a mask is not a permission control and it does not replace retrieval filtering; it is a mathematical constraint inside the model input.
+
+## Test the claim with contrast cases
+
+Build a tiny, synthetic case set for the fictional repair desk. Keep the policy version and output schema fixed. Change only one property at a time:
+
+| Case | Input change | Expected outcome | Forbidden outcome |
+| --- | --- | --- | --- |
+| negation | `not overdue` instead of `overdue` | review route | approval draft |
+| order | `review before approval` | review-first plan | approval-first plan |
+| distance | put the risk qualifier near or far from the action | same safe route | risk qualifier ignored |
+| padding | add empty fields to a short record | unchanged result | a new category invented |
+
+Record the exact input, retrieved evidence IDs, output, validator result, and reviewer judgment. If a contrast pair fails, inspect the full pipeline before naming attention as the cause: tokenisation may have changed, the context assembler may have removed a sentence, the prompt contract may be vague, or the output validator may accept an unsafe answer.
+
+This artefact teaches a valuable discipline. You are testing the externally observable behaviour that matters, not reading internal weights as a story after the fact.
+
+## What attention does not solve
+
+Attention can combine information present in the model context. It cannot fetch a policy that was never provided, check whether a source is current, prove a citation, or authorise an action. Adding more text can also add competing signals. A causal mask protects a next-token objective; it does not prevent an application from placing confidential data into a prompt.
+
+For a routing decision, a simple rule or structured classifier may still be a better baseline. For a draft that must quote an approved policy, retrieval plus source checks may matter more than a clever description of Q, K, and V. Choose the mechanism because it meets the task contract, not because it is a memorable interview term.
+
+## Evidence to carry into a review
+
+Keep a one-page `order-sensitivity.md`: the task contract, four contrast cases, expected and forbidden routes, the test results, one failure, and the change you did or did not make. Include the data boundary: all examples are synthetic or lawfully sanitised, and the system is draft-only until a person accepts it.
+
+The contrast cases make word-order effects visible. If the change can affect a workflow result, use a controlled test, a safe fallback, and a named reviewer.
+
+Continue with [Transformer generation and model-choice trade-offs](/en/articles/choose-transformer-generation-and-adaptation-tradeoffs), [building stoppable agents with serving budgets](/en/articles/build-stoppable-ai-agents-with-serving-budgets), and [a prompt contract that needs an acceptance test](/en/interview-lab/prompt-contracts-need-an-acceptance-test).
+
+## Boundary
+
+This is AI.DOG teaching material. It is a conceptual explanation and a synthetic test design, not a claim that attention visualisation proves causality, quality, safety, or production readiness. Validate the complete application behaviour on its own approved data and review process.

@@ -1,0 +1,31 @@
+一条 loss curve 某一次看起来平稳，不等于 model 可靠。Training run 受到数据顺序、随机 initial weights、batch 组成与 preprocessing 影响。Stability work 是先看见这些影响，再减少真正让结果脆弱的部分。
+
+## 先说清楚是哪种不稳定
+
+想象一个虚构的 document-routing model，要预测新 form 是否需要 specialist review。同一份 code，一次 validation result 很吸引，下一次却明显较差。增加技术前，先比对 seed、data revision、train／validation split 与 preprocessing。结果不同可能只是 input 没被控制好，不必然是深度学习的神秘问题。
+
+**Learning rate** 控制每次 parameter update 的步幅。太大时，optimiser 可能跳过有用方向或产生非有限值；太小时，它看起来像停住。**Batch size** 改变每次 update 使用多少 evidence，也影响 memory、runtime 与 gradient 的 noisy 程度。两者都没有 universally correct value，只能通过有范围的实验与记录过的比较来选。
+
+## Dropout 与 normalisation 实际改变什么
+
+**Dropout** 会在 training 时随机遮住 network 中的一部分信号，让 network 不容易过度依赖狭窄组合。Evaluation 与 serving 时通常要关闭 dropout，使相同 input 与相同 model version 产生稳定 prediction。若 evaluation 时不小心开着它，结果会有噪声而难以比较。
+
+**Normalisation** 会把数值转成一致 scale，或稳定内部 activation，取决于方法。它可能让 optimisation 更容易，但不会让 source data 自动“正常”、没有偏差或安全。Input scaling 只能用 training data fit，再将保存的参数用于 validation、test 与后续 input。拿所有 row 一起算，就把未来信息漏进实验。
+
+## 把稳定性变成可复核证据
+
+不要只报最幸运的一次 run，而是跑小型 seed sweep。对每个 configuration 保存 data 与 code revision、seed、preprocessing parameter、train/evaluation mode、learning curve 与运营 metric。显示不同 run 的 spread，不只平均数。表中也保留简单 baseline。
+
+在 repository 加入三个集中检查：
+
+- 一个 test，确保 training 与 inference 的 preprocessing schema 相同；
+- 一个 test 或 log，确认对 dropout 敏感的 layer 在 train 与 evaluation mode 正确切换；
+- 一段带命名 failure family 的 evaluation slice，例如新 form type 或缺失字段。
+
+这些检查证明你可以将 model behaviour 与偶发 runtime state 分开。它比一张刚好表现很好的 epoch 截图有用得多。
+
+## Stability 不能取代 product 判断
+
+Dropout 无法修复不同 reviewer 对 target 的不同理解；normalisation 也补不了一个只在决定后才出现的字段。Stable metric 仍可能遮住不平等 error rate，或让 review team 爆量的 threshold。如果一条简单 rule 更稳定、更容易解释，且足以支持有限行动，它可能才是正确选择。
+
+把结果看成交给人复核的 candidate，而不是自动批准 release。延伸阅读：[sequence model 与 framework boundary](/zh-Hans/articles/sequence-models-and-framework-boundaries) 和 [如何让 model 改动可被检查](/zh-Hans/articles/turn-an-ai-request-into-an-accepted-change)。

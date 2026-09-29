@@ -1,4 +1,4 @@
-> 核心判斷：Professional workflow 的價值不是令 AI 寫更多 code，而是令需求、驗收、失敗和決定都有清楚證據。
+> 一個 workflow 值唔值得信，睇 reviewer 跟唔跟到需求、測試、失敗同決定；唔係睇 AI 寫咗幾多 code。
 
 ## 由模糊要求開始
 假設有人說：「加個 AI 功能，幫使用者草擬客戶回覆。」先不要問用哪個模型。要先問輸入來自哪裡、誰可以讀、輸出只是 draft 還是可以發送、哪些情況必須交人、怎樣判斷內容可接受，以及錯誤會造成甚麼後果。
@@ -15,7 +15,30 @@
 ## Debugging 與 review
 失敗時保存輸入類型、版本、rule result、模型狀態和人工決定，不保存不必要的原始個人資料。修正後重跑相同 cases，避免只測剛才失敗的一例。Code review 不只看 syntax，也檢查權限、error path、logging、rollback 和使用者是否知道輸出仍待審閱。
 
-## Portfolio evidence
+## 將 acceptance contract 寫成一頁
+
+用前面嗰個完全虛構嘅 reply-drafting feature 做例子，以下張表已經足夠，唔使讓 coding task 漂成一句「整個 AI assistant」。
+
+| 工作部分 | 寫 code 前要定嘅決定 | 別人可以跑嘅檢查 | 刻意唔做乜 |
+| --- | --- | --- | --- |
+| Input | 只讀提供嘅 synthetic ticket。 | 空 ticket 或未知 category 要 reject。 | 唔掂真實 inbox、CRM 或 attachment。 |
+| Draft | 提議一段清楚標記 `DRAFT` 嘅回覆。 | 必填欄位要齊；冇根據就 `HANDOFF`。 | 冇 send button，亦冇背景發送。 |
+| Record | 留 case ID、version、route 同 reviewer result。 | 用 fixture ID 可以重跑一個失敗 case。 | 唔存 ticket body 或個人資料。 |
+| Release | 有名字嘅 reviewer 接受一個本地 demo。 | Hard-gate case 全過，普通 case 又冇 regression。 | 唔聲稱 production 或客戶成果。 |
+
+喺叫 coding agent 起 build 前，先寫 acceptance test。一個好 request 會係：「加 schema validator 同列明嘅五個 case；唔好加 login、network call、database 或 external-send path。」咁 reviewer 先有一個有限嘅 diff 可以睇，亦有實際理由拒絕 scope expansion。
+
+## 第一次 review 可以正確咁停喺 STOP
+
+假設 agent 提議一個「方便」功能：send 失敗就靜靜 retry，同時儲存完整 ticket 方便重建 draft。兩樣都越咗原本界線。正確 review result 係 `STOP`，唔係「merge 咗先，遲啲再修」。保留被拒嘅 diff 或短 decision note；佢證明你識得喺需求變咗之前認得出。
+
+成功 demo 都一樣。如果得一段 happy-path screen recording，就標記 `REVISE`，要求補 fixed case、failure route 同 permission review。團隊唔需要每張 ticket 第一次就 pass；需要嘅係清楚講到邊啲工作唔應該繼續。
+
+## 將 artefact 排成 reviewer 要睇嘅次序
+
+由 `problem-brief.md` 開始，跟住係細小 spec 同 test matrix。再放 implementation diff、一個失敗 case 嘅 trace 或 error record，同一段 decision note。Reviewer 應該唔使讀晒每個 source file，都跟到個決定。呢個次序亦令你面試解釋 portfolio 時清楚好多。
+
+## 可放進作品集的證據
 展示 spec、ticket breakdown、test matrix、一次具體 failure、修正前後差異和 ADR。不要聲稱「production ready」；準確說明哪些環節已驗證、哪些仍用 mock、哪些操作被刻意禁止。
 
 ## 下一步

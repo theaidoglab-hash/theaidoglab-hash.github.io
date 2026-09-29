@@ -1,0 +1,67 @@
+> 用呢頁搵第一條要練嘅問題。揀一條路線，答一次，然後連去一份別人睇得明、亦核對到嘅實際成果。
+
+## 由目標角色想你處理嘅事開始
+
+AI Engineer 呢個職銜太闊，唔會直接話你知面試會問到幾深。揀三個你真係想申請嘅職位描述，圈出反覆出現嘅動詞。寫 `build`、`integrate`、`ship` 嘅，通常要你講產品同系統；寫 `operate`、`secure`、`scale` 嘅，通常會追問權限、反應時間、成本同出事後點復原；寫 `experiment`、`improve` 嘅，則要準備人手對照、資料邊界同評估方法。
+
+Interview Lab 而家有 **59 條獨立練習，分成十條能力路線**。一次只練一條就夠。圈出職位入面重複嘅動詞，揀最接近嘅路線，再由第一條問題開始。呢個次序只係幫你搵到該補嘅弱點，唔等於任何僱主嘅面試次序。
+
+## 十條入場路線
+
+### 1. 模型基礎、serving 與互動
+
+職位寫 model choice、latency、cost、streaming、voice 或長文件，就由呢條開始。答嘅時候，唔好停喺「用大啲 context window」；講清楚工作負載、邊度會變慢或變貴，同埋用戶層面點樣知道呢個選擇值得。由 [long context 唔係免費升級](/zh-HK/interview-lab/long-context-is-not-a-free-upgrade) 開始。
+
+### 2. Retrieval、agent 與安全邊界
+
+知識助手、tool use、內部資料同有權限嘅 workflow，都適合呢條。練習分開 retrieval failure、generation failure 同 permission failure；再講清楚系統可以讀、草擬、建議到邊一步，邊啲行動永遠唔可以自己做。由 [搵唔到條款，到底係 retrieval、generation 定 permission 問題？](/zh-HK/interview-lab/rag-retrieval-generation-or-permission) 開始。
+
+### 3. Evaluation、資料與可靠 workflow
+
+如果答案要經得起唔止一個靚 demo，行呢條。將固定 case set 同 trace 接返 release decision，再講 retries、重複工作、partial failure、reviewer capacity 同幾時應該停。由 [幾時應該 release，幾時應該 rollback？](/zh-HK/interview-lab/release-or-rollback-with-evidence) 開始。
+
+### 4. System design 與工程溝通
+
+遇到一條模糊要求，要變成可控 pilot，就行呢條。先講清楚誰要作甚麼決定、現時有甚麼對照做法、不會做甚麼、系統做到哪裏便要停，以及誰拍板。一張架構圖只有在能說明出錯後誰接手、會有甚麼後果時才有用。由 [設計一個內部 policy assistant](/zh-HK/interview-lab/design-an-internal-policy-assistant) 開始。
+
+### 5. Input、contract 與 model 邊界
+
+團隊依賴 schema、prompt version、model routing 或 public data 時，行呢條。有固定格式嘅回覆，唔等於內容有根據；提示詞有版本，亦唔等於日後查得到邊個改過乜。練習將假設變成測試情境、來源記錄、後備做法同人手對照。由 [token budget 唔等於識處理多語內容](/zh-HK/interview-lab/token-budget-is-not-a-language-test) 開始。
+
+### 6. Training、label 與 model 失敗邊界
+
+職位牽涉 prediction、fine-tuning、model training 或 offline metric，就揀呢條。講清楚決定用嘅 label、時間邊界、split 同失敗模式；換大 model 只在這些條件說得通後才考慮。分數變好，有時只係任務定義變咗，唔係系統真係學識咗業務需要。由 [label 定義會改變你做緊嘅 model](/zh-HK/interview-lab/a-label-definition-can-change-the-model) 開始。
+
+### 7. Retrieval 同 agent controls
+
+有 state 嘅 agent workflow，行呢條。來源衝突時要講 owner，tool 有行動時要講 permission，loop 卡住要講 terminal state，memory 過期先唔會變成舊政策。由 [reranker 救唔返遺失咗嘅 permission](/zh-HK/interview-lab/a-reranker-cannot-restore-a-missing-permission) 開始。
+
+### 8. Embeddings、ANN 同 index lifecycle
+
+呢條係畀你處理「search 睇落合理但點解未必可信」嘅問題。唔只睇 similarity；要講清 embedding model 點樣同 index 成對換、ANN 漏咗乜、metadata 點樣回填，同埋 source 被撤回時 query 點樣停低或轉 route。由 [換 embedding model 要當成 index migration](/zh-HK/interview-lab/an-embedding-change-needs-an-index-migration) 開始。
+
+### 9. Serving、evaluation 同 release decision
+
+當系統要俾真實用戶用，呢條好重要。將 queue、P99 latency、真人 calibration、business measure、monitoring、rollback 同安全 baseline 串成一個決定。唔好畀平均值變快掩蓋 P99 變差，或者 reviewer queue 爆滿。由 [queue 要有 dead-letter path](/zh-HK/interview-lab/a-queue-needs-a-dead-letter-path) 開始。
+
+### 10. Multimodal input 同 portfolio evidence
+
+項目有 OCR、image、audio，或者你要講 project 成效，就行呢條。文字抽取出嚟都當 untrusted input；visual field 要指返 evidence region；比較 image transform 或 model change 時，唔可以淨係睇靚平均數，要按 modality slice 睇。好 portfolio 會畀 reviewer 睇到一個 failure 點樣查，唔只係一段靚 output。由 [visual claim 要有 region 同 abstention](/zh-HK/interview-lab/a-visual-claim-needs-a-region-and-an-abstention) 開始。
+
+## 一條問題，做三次 pass
+
+同一條題，用 90 秒唔望稿答一次。回頭問自己：資料點入、系統點解會慢或出錯、邊個有批准權、邊個 metric 會改變決定？最後拎 portfolio 入面一份 artefact 支持答案；README 裏嘅 decision、evaluation case、source receipt、trace 或 handoff rule 都可以。未有就做一個小改動補返，唔好為咗塞內容再加 framework。
+
+## 練對話，唔好背稿
+
+每條 [Interview Lab](/zh-HK/interview-lab) 題目都有可複製 prompt，放進你慣用嘅 LLM 語音或即時對話模式。佢會逐題問，等你答完先畀意見，並把回饋分成 reasoning、evidence 同風險。只放公開、虛構或已去識別資料；回饋只用作練習，技術主張仍要返自己項目嘅證據核對。
+
+## 練完一題，下一步點揀
+
+一個答案可以揭露兩種唔同缺口。你若連機制都解釋唔到，返去 [AI Engineer roadmap](/zh-HK/series/ai-engineer-roadmap#roadmap-stage-00)，由最早缺咗嗰一站補起，唔好再儲題目。你若講得出機制，卻指唔出自己 project 入面嘅 baseline、fixed case 或 named owner，就用 [Portfolio Evidence Planner](/zh-HK/portfolio-evidence-planner) 將個缺口變成一個有界嘅 project 改動。
+
+若你只需要一個更細嘅第一個練習，想定義同 review 決定、未打算實作 system，就行 [不寫 Code 的草稿 workflow 路線](/zh-HK/articles/use-ai-without-writing-code)。準備好睇一個窄改動、佢嘅 diff 同 test，才行 [coding partner 路線](/zh-HK/articles/use-ai-as-a-coding-partner-with-proof)。兩條路最後都會返到同一條面試問題：你作了甚麼決定、用甚麼 evidence 核對，以及邊個人仍然有 authority？
+
+## 呢份地圖嘅範圍
+
+呢啲係 AI.DOG 練習材料，按公開職位同技術討論入面反覆出現嘅能力整理。每條題目只用嚟練習機制、取捨、失敗邊界同可展示證據；唔代表任何公司嘅真題、逐間公司嘅題庫，亦唔會預測現時 interview process。Team、level 同地區會問唔同嘢；呢張地圖幫你揀下一步可以守得住嘅練習。

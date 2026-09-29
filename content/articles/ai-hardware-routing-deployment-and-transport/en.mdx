@@ -1,0 +1,56 @@
+An AI portfolio can look sophisticated because it mentions GPUs, containers, queues, and several models. The harder question is whether a reader can see why one request took one path while another was stopped. Imagine a fictional public-information review desk: short text notices, image-heavy forms, and long evidence packets arrive together. The desk must prepare a draft for a reviewer, never make a real-world decision, and show what happened to every request.
+
+## Start with the request, not the hardware catalogue
+
+The first design decision is a small request contract. Before choosing an accelerator or hosting pattern, record the input modality, approximate size, allowed handling route, deadline class, policy version, and required human handoff. A route is not simply “fast model” versus “slow model.” It is a statement such as: a short, structured text item can use a bounded text-drafting route; an image-heavy item needs an extraction route with an evidence check; an item that lacks its required fields must stop before any model draft.
+
+This makes routing testable. A deterministic rule should handle rules that are truly deterministic: file type, missing required fields, known policy exclusions, output size caps, and expired deadlines. A model can help with an ambiguous classification only after the contract says that classification is permitted. Every terminal route needs a visible state: `draft-ready`, `needs-review`, `rejected-input`, or `budget-stopped`.
+
+## What the hardware changes—and what it does not
+
+Hardware is one part of a serving system, not a quality guarantee. A CPU is often a sensible place for parsing, schema checks, hashing, queue coordination, and small deterministic transforms. An accelerator can be useful for the tensor-heavy parts of model inference, but its value depends on the model, batch shape, memory available, input length, output length, runtime, and the work arriving at the same time. Memory holds active data and model state; durable storage keeps approved artefacts; the network moves data and requests between services. Each boundary adds waiting time, failure modes, and security decisions.
+
+For an autoregressive model, the input-processing phase and token-generation phase can stress different resources. Long context may consume more memory before the first output. Long completions may hold token state for longer. Batching may improve useful work per accelerator call while making an urgent item wait. These are hypotheses to measure with fixed synthetic cases, not facts to announce from a dashboard screenshot.
+
+## Separate routing, deployment, and transport
+
+It helps to keep three questions apart:
+
+- **Routing** decides which permitted workflow receives a request and when it must hand off.
+- **Deployment** decides where a workflow runs: a local development process, a bounded batch worker, or an online service with a stated availability expectation.
+- **Transport** decides what crosses a boundary, in what format, with which identity, integrity check, retry rule, and retention rule.
+
+For the fictional desk, keep a small request envelope separate from the content itself. The envelope might contain a random request ID, route class, content manifest, policy version, allowed deadline, and a checksum. The data payload should travel only to the component that genuinely needs it. A trace can record a content version or fingerprint rather than copying raw sensitive text. A retry must carry an idempotency key so that a delayed worker does not create two reviewer packets for one request.
+
+## Build a draft-only routing receipt
+
+Make the portfolio artefact small enough to inspect. Create `synthetic-cases.jsonl` with perhaps twelve invented requests: valid short text, an image-heavy request, a missing-field request, an over-budget request, a route conflict, and a deliberately ambiguous case. Pair it with `route-contract.md` and `routing-receipt.jsonl`.
+
+For each case, record:
+
+- the route expected before execution;
+- the observed terminal state;
+- whether a model was allowed at all;
+- the input and output size bands, not private payloads;
+- queue, processing, and total elapsed-time fields if you measured them locally;
+- the evidence check and reviewer handoff result.
+
+Then run the same cases after one controlled change, such as a lower output cap or a different batch window. Write a short change note that explains the expected benefit, the regression cases, and the rollback condition. A result such as “four cases stopped before inference” can be valuable evidence if the cases and stopping rule are inspectable. It is more credible than an unqualified claim that a system is efficient.
+
+## What a reviewer can inspect in the system
+
+Show a versioned request schema, deterministic routing rules, a synthetic workload manifest, trace-field definitions, idempotency behaviour, and a repeatable local test command. Include a diagram that distinguishes control information from data payloads. If you demonstrate an accelerator-backed path, state the local environment and leave the measurement as an observation from that environment rather than a general hardware comparison.
+
+## What must be decided before use
+
+Show the decision owner, the reason a request may not use a model, the reviewer’s entry point, the time or cost budget, and the condition for stopping work. A good reader should be able to answer: who is protected when a route is wrong, what information is deliberately excluded from traces, and who can approve a route change? That is evidence of operational judgement, not decoration around the code.
+
+## The simpler alternative and the failure boundary
+
+For a small, low-volume workflow, a single queue and one bounded text route may be safer than multimodal routing or specialised hardware. Add complexity only when a named workload failure requires it. A route classifier can misclassify; a queue can duplicate work; a network boundary can time out; an accelerator can be idle while requests wait on parsing or review. Do not hide these paths behind a generic “retry.” Make the failed state, alert owner, and rollback route visible.
+
+Continue with [serving trade-offs for attention and experts](/en/articles/modern-attention-moe-and-serving-tradeoffs), [inference scheduling and serving engines](/en/articles/inference-memory-scheduling-and-serving-engines), and [workflow evaluation with human review](/en/articles/llm-evals-human-review-and-observability).
+
+## Boundary
+
+This is AI.DOG teaching material. The desk, requests, timings, and artefacts are synthetic and draft-only. It does not deploy a service, process real records, benchmark named hardware, or establish a production latency, cost, security, or quality outcome. A real deployment needs approved data handling, security review, capacity tests, incident ownership, and an accountable release decision.

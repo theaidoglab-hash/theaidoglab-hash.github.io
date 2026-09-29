@@ -1,0 +1,24 @@
+{
+  "name": "approval-queue-reference",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Synthetic, read-only FAQ approval queue reference implementation",
+  "license": "MIT",
+  "keywords": [
+    "ai-safety",
+    "approval-workflow",
+    "deterministic",
+    "human-in-the-loop",
+    "portfolio",
+    "read-only",
+    "synthetic-data"
+  ],
+  "scripts": {
+    "demo": "node demo.mjs",
+    "test": "node --test test/approval-queue.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

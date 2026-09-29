@@ -1,0 +1,98 @@
+> The portfolio question is not “can an LLM summarise a vulnerability?” It is “can you make a public-source change reviewable without pretending it knows a company’s assets, risk, or patch plan?”
+
+## The problem is a review packet, not an automatic patcher
+
+Imagine a fictional security assurance reviewer who receives a new entry from the public [CISA Known Exploited Vulnerabilities catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog). The reviewer needs to decide one thing: **does this public record warrant a human security review?**
+
+That is deliberately narrower than deciding whether an organisation is exposed or what to patch. A portfolio system may prepare a source-grounded packet, but it must never scan an environment, inspect a host, open a ticket, set a local deadline, patch software, or contact anyone. A public record cannot establish any of those facts.
+
+This makes a stronger project than a fluent security chatbot. It has a named owner, one decision, a cost of error, a stopping point, and evidence a reviewer can inspect.
+
+## Begin with a data receipt
+
+The KEV catalog is useful as a public-data route because its official repository publishes a [schema](https://github.com/cisagov/kev-data/blob/develop/known_exploited_vulnerabilities_schema.json) and [CC0 licence](https://github.com/cisagov/kev-data/blob/develop/LICENSE). That does not mean “download it once and call the data problem solved.” A source receipt should state:
+
+- canonical source URL, checked date, source commit or release marker, snapshot timestamp and SHA-256;
+- schema and parser version, observed catalog count, and the transform that produced the small learning fixture;
+- allowed fields: CVE ID, vendor/project, product, vulnerability name, date added, short description, required action, due date, and the known-ransomware value;
+- excluded material: notes, third-party URLs, asset inventory, hostnames, IP addresses, scan output, credentials, incident tickets, customers, and names.
+
+Do not invent the count or a downloaded snapshot. If you have not acquired data, record that honestly. A fixed fixture can prove parser and evaluation wiring; it cannot prove that a live source is current or that a real organisation has an affected asset.
+
+The [ACSC patching guidance](https://www.cyber.gov.au/sites/default/files/2025-03/Patching%20applications%20and%20operating%20systems%20(November%202023).pdf) is a useful public reference for why clear ownership and a repeatable patching process matter. It is guidance from an Australian agency; it is not evidence that a CISA due date is an Australian SLA, and it does not make a US/global feed an Australian asset inventory.
+
+## Put the deterministic boundary before the model
+
+The smallest credible baseline has no LLM:
+
+```text
+public source receipt
+  -> snapshot / schema / required-field validation
+  -> allowlist projection
+  -> SOURCE_REJECTED or HUMAN_SECURITY_REVIEW
+  -> structured evidence packet for a reviewer
+```
+
+Malformed CVE IDs, missing required fields, stale snapshots, private fields, a prompt-injection wrapper, or a request to take an outside action should stop before generation. A value of `Unknown` for known ransomware use remains `Unknown`; it must not become “no ransomware risk.” Asset scope stays unknown unless a human verifies it through an authorised internal process that is outside this learning project.
+
+The output contract can be small: source facts, a source citation key, unknowns, reviewer questions, one route, and a list of prohibited actions. There should be no `patch`, `ticket`, `scan`, `notify`, or write tool in the contract. This is both a technical control and a plain explanation of who retains decision rights.
+
+## Where an optional model fits
+
+After the rule baseline works, a model may help phrase a short, source-grounded explanation and reviewer questions. Keep it replaceable:
+
+- version the prompt and require strict JSON matching the packet schema;
+- give it only the allowlisted public fields, never raw operational context;
+- reject any answer that changes a source field, claims an asset is affected, or proposes an external action;
+- keep a static `gpt-5-mini` Responses API request-shape fixture separate from the deterministic baseline.
+
+The fixture is intentionally not an integration. It contains no key, imports no SDK, sends no request, and produces no model output. It lets a reviewer see the future seam without confusing a code sample with a live test. The GPT-5 mini model page documents Responses API support and structured outputs, but a model page is not evidence that your use case is safe or effective. See [official OpenAI documentation](https://developers.openai.com/api/docs/models/gpt-5-mini).
+
+## Use Promptfoo to test a change, not to decorate a demo
+
+Promptfoo configurations can run a prompt across fixed inputs with assertions and export per-case results. The [official configuration guide](https://www.promptfoo.dev/docs/configuration/guide/) and [OpenAI provider guide](https://www.promptfoo.dev/docs/providers/openai/) document that shape. For this project, keep two separate modes:
+
+1. **Fixture-only:** a deterministic local provider or provider output validates that cases, assertions, JSON parsing, and release wiring work. It needs no key. A pass proves only the wiring.
+2. **Optional Responses evaluation:** a separately authorised local run uses `openai:responses:gpt-5-mini`, `store: false`, and a local key that never enters the repository. It is not CI by default and it is not a published score.
+
+The fixed cases should cover a normal record, preserved `Unknown`, malformed CVE, missing field, stale snapshot, prohibited private field, injected instructions, external-action requests, and ambiguous asset scope. Assertions should test schema validity, source-field fidelity, route correctness, prohibited-action absence, and correct rejection—not merely semantic similarity or a model-graded “helpfulness” score.
+
+## Evidence Delta: a reviewable diff for each change
+
+Changing a prompt because it “sounds better” is not an engineering decision. Use a small Evidence Delta packet instead:
+
+1. Change exactly one variable: prompt, parser, schema, or model.
+2. Freeze the source fixture and the `eval-v1` case manifest.
+3. Run baseline and candidate, then compare JSON exports case by case.
+4. Label every case as fixed, new failure, or unchanged.
+5. Require a human reviewer to choose `KEEP`, `HOLD`, or `REVERT`, with the earlier version as the rollback target.
+
+Hard gates dominate averages. A higher overall pass rate never offsets one invalid JSON response, source mismatch, wrong route, unsupported asset claim, or external-action claim. Promptfoo can export JSON suitable for this comparison; its [output documentation](https://www.promptfoo.dev/docs/configuration/outputs/) explains the available reports. Your own diff script should retain only safe identifiers, versions, and aggregate results—not raw operational inputs.
+
+## What a serious portfolio repository would contain
+
+Your repository should make the story inspectable without showing a private system:
+
+```text
+data/source-receipt.md          public-source terms, snapshot rule, exclusions
+data/manifest.json              fixed fixture identity and parser version
+schemas/review-packet.json      output contract
+src/validate-source.mjs         deterministic rejection boundary
+src/baseline-packet.mjs         no-model route and packet builder
+prompts/review-packet-v1.txt    versioned optional prompt
+promptfooconfig.fixture.yaml    credential-free evaluation wiring
+promptfooconfig.responses.yaml  optional, never-default API configuration
+scripts/eval-diff.mjs           per-case Evidence Delta
+CHANGE-001.md                   hypothesis, results, reviewer decision, rollback
+README.md                       run commands, evidence map, limits and nonclaims
+```
+
+The listed files let another person inspect validation, schemas, tests, versioning, controlled generation, evaluation, and rollback. Before a similar workflow is used at work, record the decision owner, data-minimisation approach, applicable licence terms, release decision, and any outcome that has not been measured.
+
+## The business measures come later—and may stay unknown
+
+In an authorised pilot, a team could measure reviewer-ready packet completion time, reviewer correction rate, and the share of entries with complete source receipts. Those are hypotheses, not facts about this reference. Keep them separate from offline measures such as hard-gate pass rate, JSON validity, source-field fidelity, latency, and cost.
+
+This project does **not** prove an organisation has a vulnerability, complies with patching requirements, saves time, reduces risk, or can safely run an autonomous security workflow. It does show a valuable AI-engineering habit: narrow a high-risk language task until the data boundary, decision owner, tests, and rollback are real enough to be challenged.
+
+Related reading: [how to evaluate an AI agent workflow instead of its final answer](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer), [how to turn a course project into portfolio evidence](/en/articles/turn-an-ai-course-project-into-portfolio-evidence), and [how to make a portfolio project pass an evidence review](/en/articles/score-an-ai-portfolio-by-evidence-not-fluency).

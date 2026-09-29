@@ -1,0 +1,36 @@
+选 model 之前，先回答一个更基本的问题：人在需要做决定的那一刻，手上到底有什么证据？如果有可信的过去结果，可能是 supervised learning；如果只有一批观察、想先理解是否存在结构，可能是 exploratory work。把两种工作混在一起，很容易做出一个整齐却说不清要改善哪个决定的 notebook。
+
+## 从决定开始，不是从算法名称开始
+
+想象一个虚构的运营团队，每天早上只能人工复核五十个服务案件。值得问的不是“能不能把案件分群”，而是“根据复核前已经存在的信息，哪五十个应该优先交给人看？”
+
+**Supervised learning** 适用于有明确 target 的情形，例如经过培训的同事后来是否按照相对稳定的准则，把案件升级处理。决定前的数据成为 feature；过去的处理结果成为 label。Model 可以估计新案件和过去升级案件有多相似，但不代表它找到了全部高风险案件，也不代表旧政策本身公平。
+
+**Unsupervised learning** 做的是另一件事：它可以把模式相近的案件放在一起，或标出很不寻常的记录。这可能帮助分析师探索一批新数据，但一个 cluster 编号不是紧急程度。仍需要由人判断这个分组代表什么，以及采取行动是否有用。
+
+介于两者之间的情况也很常见：label 可能来自规则、真正结果几个月后才出现，或只有少量案件有人标注。把不确定性写清楚。比起因为某种方法听起来更高级而采用它，作品集更能证明判断力的是：learning mode 是否真正对应你拥有的证据。
+
+## Baseline 是第一个诚实的对手
+
+Training 前，先写下团队不用 model 时能怎么做。这个复核队列可能采用：
+
+- 对明确紧急案件使用已公布的 rule；
+- 每种 request type 的历史升级率；
+- 前一段时间的简单估计；或
+- 按到达顺序让同事看下一批五十个。
+
+Baseline 不是例行仪式。它让你判断 model 带来的复杂度是否真正改善决定。如果 request type 的历史比例几乎同样准确，它可能更容易解释、监控和修正。如果 model 只在随机切分胜出、在较晚的时间区间失败，就还不足以改变 workflow。
+
+## 让边界可以被复核
+
+做一页 **learning-mode decision record**：写下谁拥有这个决定、系统只能建议什么行动、observation cutoff 在哪里、target 如何定义，以及这个 target 为什么可不可以信。列出一个 non-model baseline，和开始小型试行前必须看到的结果。再加一条 refusal：prototype 不会自动结案、扣分或联系任何人。
+
+保留一小段带日期的 evaluation slice，用同一批 case 比较 baseline 和 candidate。除了单一平均分数，也要按 request type 检查 false positive 和 false negative。所有用于比较的 input，都应能追溯到当初做决定时已经存在的数据。
+
+## 值得如实报告的失败
+
+历史 label 经常记录的是旧流程，不是 ground truth。用过去的升级结果训练，可能同时学进人手不足、复核标准不一致或已改掉的规则。Unsupervised cluster 也可能看起来漂亮，却没有改变任何可负责的行动。无论哪一种，“我们发现了一个 pattern”都不如“我们让有限的建议和清晰 baseline 比过”。
+
+对 AI／data 职位来说，真正的证据是你的判断：为真实决定选对 learning mode、保留更简单的替代方案、交代 label 的限制，并留下让人不同意 model 的位置。
+
+延伸阅读：[用 linear 与 logistic model 连接分数和决定](/zh-Hans/articles/linear-logistic-and-feature-decisions) 和 [model 分数提高后，workflow 为何未必更好](/zh-Hans/articles/model-score-to-workflow-decision)。

@@ -1,0 +1,27 @@
+{
+  "fixtureKind": "non_executing_responses_api_request",
+  "purpose": "Illustrative request shape only; no source file sends this request.",
+  "network": "disabled",
+  "credentials": "not included",
+  "method": "POST",
+  "path": "/v1/responses",
+  "model": "gpt-5-mini",
+  "store": false,
+  "instructions": "Draft a concise FAQ reply using only the supplied approved source. Include its FAQ ID and version. If support is missing or an external action is requested, return HANDOFF. This is an illustrative fixture, not a live request.",
+  "input": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "Synthetic example: Can I return unopened course materials 14 days after delivery?"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "dataset": "synthetic-local-only",
+    "approvalRequired": "true",
+    "externalActionsAllowed": "false"
+  }
+}

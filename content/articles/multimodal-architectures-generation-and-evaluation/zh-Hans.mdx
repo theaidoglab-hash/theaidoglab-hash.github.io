@@ -1,0 +1,48 @@
+> Model 能描述图片，不等于它已能可靠处理文档工作。它可能读错字段、编造 visual detail、听从藏在图片里的文字，或把不确定信号写成肯定 action。
+
+## 给 multimodal work 一个窄任务
+
+设想虚构的“无障碍审阅台”。审阅者提供 synthetic event poster 和一份 approved text transcription。它可标记海报可见的 date、venue line、contact instruction 是否与 transcription 一致，再创建 review packet。它不能 publish event、联系任何人、推断个人身份，也不能将图片视为符合 accessibility 的证据。
+
+这是值得做的 portfolio 问题，因为有可信 baseline：人将 supplied transcription 与 structured form 比较。Multimodal model 是选配，可能帮助在复杂 layout 中定位一行文字或说明 ambiguity；仍需和 OCR-plus-review route 在同一个评估集比较。
+
+## 用最小 architecture map 看清边界
+
+Multimodal system 结合 text、image、audio、video、structured data 等多种 input。常见结构可简化为：
+
+```text
+image or audio -> modality encoder -> shared representation / fusion
+                -> language or task decoder -> structured output
+```
+
+Image encoder 将 pixel 转为 representation，audio encoder 对声音做同类工作。Projector 或 fusion layer 将 representation 映射到 language model 或 task head 可用的空间，decoder 再输出 caption、answer、classification、structured field。有些 system 端到端训练，有些组合 OCR、speech recognition、retrieval、language component。
+
+流畅 answer 来自 representation 的生成，不是从现实直接复制。细小文字、layout 顺序、特殊光线、微弱 visual cue 都可能造成遗漏、误读、过度自信。
+
+## 将理解和生成分开评估
+
+无障碍审阅台有两类工作。**Understanding** 判断 supplied input 是否支持某个可见 fact；**Generation** 将 fact 与不确定性整理为可读 review packet。两者不能压成一个分数。
+
+理解层可定义 `event_date`、`venue_line`、`contact_instruction`、`confidence`、`evidence_region` 等精确 field。生成层应输出 schema-valid explanation、引用 field、在 reviewer 需要看原图时说明。不要让 generation layer 用漂亮 prose 填补根本没有观察到的 visual fact。
+
+固定 OCR extraction 加 human field comparison 是最小 baseline。只有当 model 改善明确问题，例如 OCR 在某类 layout 丢失 reading order，才值得加入；cost、latency、privacy exposure、evaluation burden 可能比收益更大。
+
+## Eval set 要包含故意的 mismatch
+
+使用 synthetic 或 licensed public-safe pair。每个案例记 source fixture、permitted field、expected structured result、难点。包括相符海报、互换的 date/venue line、细小或低对比文字、cropped image 缺字段、多语文本且已声明 language route、图片内 prompt injection、requested claim 根本无法观察的图片、provenance 是 unknown 的 generated/edited image。
+
+只有定义了 ground truth，才计算 field-level precision/recall。还要记录 abstention 与 handoff rate。回答“无法确认 venue line”有时比猜一个答案安全。所有比较都在同一 fixed set 上进行，并与 OCR-plus-review baseline 并列。
+
+## Visual evidence 需要 provenance 和 human review
+
+Image/audio 可能包含 personal data、copyright material、hidden instruction、model 无法负责解释的 context。资料旁应有 fixture provenance、licence/permission、processing purpose、excluded field、retention rule。不要从上传照片推断身份、地点、健康、情绪、protected characteristic。
+
+Reviewer packet 应有 fixture ID、declared modality、如有使用时的 model/prompt version、structured field、可提供时的 evidence region/timestamp、uncertainty、terminal route。单张 screenshot 很难重现输入、system version、acceptance rule，因此是弱 evidence。
+
+保留 `fixtures/manifest.json`、`schemas/review-packet.json`、`baseline/ocr-compare.mjs`、`evals/multimodal-v1.json`、`rubric.md`、`traces/schema.md`、`CHANGE-003.md`、`README.md`。技术证据包括 modality boundary、structured output、baseline、fixture design、field-level evaluation、traceability；非技术证据包括 data stewardship、human review 的理由、decision owner、provenance awareness、避免将 uncertain media 直接变成 automated action。
+
+延伸阅读：[让 multimodal demo 可审查](/zh-Hans/articles/make-a-multimodal-demo-reviewable)、[评估整条 agent workflow](/zh-Hans/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)、[safety、governance、privacy 与 incident response](/zh-Hans/articles/safety-governance-privacy-and-incident-response)。
+
+## 边界
+
+本文是本地草稿教学材料。Desk、image、transcript、field、model behaviour、evaluation plan 都是示意；不声明 visual accuracy、accessibility expertise、安全 biometric inference、copyright clearance、已部署 workflow 或真实 outcome。真实 multimodal system 需要授权资料、domain review、representative testing、release approval。

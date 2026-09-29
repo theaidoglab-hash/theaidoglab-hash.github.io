@@ -1,0 +1,96 @@
+> 這個作品集問題不是「LLM 能不能 summarise 一筆漏洞」，而是「能不能把公開來源變成可供人 review 的資料包，卻不假裝它知道公司的資產、風險或 patch 計畫？」
+
+## 問題是 review packet，不是自動 patcher
+
+想像一位虛構的 security assurance reviewer 收到一筆公開 [CISA Known Exploited Vulnerabilities catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) 記錄。他只需要決定一件事：**這筆公開記錄是否值得開一個人工 security review？**
+
+這個範圍刻意小於「公司是否受影響」或「該 patch 什麼」。作品集系統只能整理有來源的 evidence packet，不能 scan 環境、查看 host、開 ticket、設定本地 deadline、patch 軟體，也不能聯絡任何人。一筆公開記錄無法證明這些事。
+
+這反而比流暢的 security chatbot 更有力：它有指定 owner、一個決定、錯誤成本、停止點，以及可以讓人檢查的證據。
+
+## 從 data receipt 開始
+
+KEV catalog 可作公開資料路線，因為官方 repository 有 [schema](https://github.com/cisagov/kev-data/blob/develop/known_exploited_vulnerabilities_schema.json) 與 [CC0 licence](https://github.com/cisagov/kev-data/blob/develop/LICENSE)。但不代表「download 一次就解決資料問題」。一份 source receipt 要記下：
+
+- canonical URL、查核日期、source commit 或 release marker、snapshot 時間與 SHA-256；
+- schema／parser version、observed catalog count，以及如何轉成小型 learning fixture；
+- 可用欄位：CVE ID、vendor/project、product、vulnerability name、date added、short description、required action、due date 與 known-ransomware value；
+- 必須排除的資料：notes、第三方 URL、asset inventory、hostname、IP、scan output、credential、incident ticket、客戶與人名。
+
+不要虛構 count 或說已 download snapshot。尚未取得資料就如實寫「未取得」。固定 fixture 能證明 parser 與 evaluation wiring，不能證明 live source 仍新，也不能證明真實公司有受影響的 asset。
+
+[ACSC patching guidance](https://www.cyber.gov.au/sites/default/files/2025-03/Patching%20applications%20and%20operating%20systems%20(November%202023).pdf) 可用來理解為何需要明確 owner 與可重複的 patching 流程。它是澳洲機構的公開指引；不等於 CISA due date 是澳洲 SLA，也不會把一個美國／全球 feed 變成澳洲 asset inventory。
+
+## Model 前面先要有 deterministic 邊界
+
+最小但可信的 baseline 可完全沒有 LLM：
+
+```text
+public source receipt
+  -> snapshot / schema / required-field validation
+  -> allowlist projection
+  -> SOURCE_REJECTED 或 HUMAN_SECURITY_REVIEW
+  -> 給 reviewer 的 structured evidence packet
+```
+
+錯誤 CVE ID、缺必要欄位、stale snapshot、private field、prompt-injection wrapper，或要求外部 action，都要在 generation 前停止。known ransomware use 是 `Unknown`，就保留 `Unknown`；不能變成「沒有 ransomware 風險」。asset scope 永遠是 unknown，直到獲授權的內部流程由人確認；那個流程不屬於這個 learning project。
+
+output contract 可以很小：source facts、source citation key、unknowns、reviewer questions、一個 route，以及 prohibited actions。contract 裡沒有 `patch`、`ticket`、`scan`、`notify` 或 write tool。這既是技術控制，也是清楚說明誰保留 decision rights。
+
+## Optional model 放在哪裡
+
+rule baseline 跑通後，才考慮 model 協助寫短的 source-grounded explanation 與 reviewer questions。把它保留為可替換的一層：
+
+- version prompt，要求 strict JSON 符合 packet schema；
+- 只給 allowlisted public fields，不給 raw operational context；
+- 改了 source field、聲稱 asset 受影響，或提出 external action 就 reject；
+- 把 static `gpt-5-mini` Responses API request-shape fixture 與 deterministic baseline 分開。
+
+fixture 不是 integration：沒有 key、沒有 SDK import、沒有 request、沒有 model output。它只讓 reviewer 看到日後的 seam，不要把 code sample 當作 live test。GPT-5 mini model page 記錄了 Responses API 與 structured output 支援，但 model page 不會證明 use case 安全或有效；請看 [official OpenAI documentation](https://developers.openai.com/api/docs/models/gpt-5-mini)。
+
+## 用 Promptfoo 測改動，不是裝飾 demo
+
+Promptfoo 能把 prompt 跑過固定 inputs、做 assertions，再輸出逐 case 結果。官方有 [configuration guide](https://www.promptfoo.dev/docs/configuration/guide/) 與 [OpenAI provider guide](https://www.promptfoo.dev/docs/providers/openai/)。這個項目應分為兩種 mode：
+
+1. **Fixture-only：** deterministic local provider 或 provider output 驗證 cases、assertions、JSON parsing 與 release wiring；完全不需要 key。pass 只證明 wiring。
+2. **Optional Responses evaluation：** 另行授權後，在自己的裝置用 `openai:responses:gpt-5-mini`、`store: false` 與 local key 執行。它不是 CI default，也不是對外成績。
+
+fixed cases 至少包括正常 record、保留 `Unknown`、錯 CVE、缺欄位、stale snapshot、禁止 private field、injected instructions、external-action request 與 ambiguous asset scope。assertions 要檢查 schema、source-field fidelity、route、沒有 prohibited action 與正確 rejection；不要只看 semantic similarity 或 model-graded「有多 helpful」。
+
+## Evidence Delta：每次改動都留下可檢查的 diff
+
+因為「聽起來比較順」而改 prompt，不是 engineering decision。改用一張小型 Evidence Delta：
+
+1. 一次只改一個變數：prompt、parser、schema 或 model。
+2. freeze source fixture 與 `eval-v1` case manifest。
+3. 跑 baseline 與 candidate，再逐 case compare JSON export。
+4. 每個 case 標記 fixed、new failure 或 unchanged。
+5. human reviewer 選 `KEEP`、`HOLD` 或 `REVERT`，並用舊版本做 rollback target。
+
+hard gate 高於平均分。overall pass rate 變高，仍不能抵銷一個 invalid JSON、source mismatch、錯 route、unsupported asset claim 或 external-action claim。Promptfoo 能輸出合適 JSON；參考其 [output documentation](https://www.promptfoo.dev/docs/configuration/outputs/)。自己的 diff script 只保留 safe ID、version 與 aggregate results，不要存 raw operational inputs。
+
+## 一個認真的作品集 repo 應該有什麼
+
+```text
+data/source-receipt.md          公開來源條款、snapshot rule、排除資料
+data/manifest.json              fixed fixture identity 與 parser version
+schemas/review-packet.json      output contract
+src/validate-source.mjs         deterministic rejection boundary
+src/baseline-packet.mjs         沒有 model 的 route 與 packet builder
+prompts/review-packet-v1.txt    versioned optional prompt
+promptfooconfig.fixture.yaml    credential-free evaluation wiring
+promptfooconfig.responses.yaml  optional、非 default 的 API config
+scripts/eval-diff.mjs           per-case Evidence Delta
+CHANGE-001.md                   hypothesis、結果、reviewer decision、rollback
+README.md                       run command、evidence map、limit 與 nonclaim
+```
+
+上面的檔案讓人可以檢查 validation、schema、test、versioning、controlled generation、evaluation 與 rollback。相似 workflow 用在工作前，要寫清楚誰擁有 decision、如何做 data minimisation、適用 licence terms、release decision，以及哪些 outcome 尚未量測。
+
+## Business measure 是後話，也可以保持 unknown
+
+日後有授權 pilot，團隊才可以量 reviewer-ready packet completion time、reviewer correction rate，以及多少記錄有完整 source receipt。這些都是假設，不是這個 reference 的成果。要和 offline measures 分開：hard-gate pass rate、JSON validity、source-field fidelity、latency 與 cost。
+
+這個項目 **不會** 證明任何公司有漏洞、受攻擊、符合 patching 要求、節省時間、降低風險，也不會證明 gpt-5-mini 的表現、安全、成本或可用性。它只展示 AI engineer 應有的習慣：把高風險 language task 收窄，直到 data boundary、decision owner、test 與 rollback 真能讓人追問。
+
+延伸閱讀：[不要只評 AI agent 最後答案](/zh-TW/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)、[把課程項目變成作品集證據](/zh-TW/articles/turn-an-ai-course-project-into-portfolio-evidence)、[作品集項目如何通過 evidence review](/zh-TW/articles/score-an-ai-portfolio-by-evidence-not-fluency)。

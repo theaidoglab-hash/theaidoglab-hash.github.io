@@ -1,16 +1,46 @@
-> 核心判斷：能回答問題只證明 demo 跑得動；完整作品要讓人看見你如何定義問題、驗證結果、處理失敗及交接系統。
+> 一段 RAG 答案寫得似樣，唔等於可以用。讀者應該睇到邊份 source 入咗去、邊份被排除，同埋不確定時個 workflow 交返畀邊個。
 
 ## 先寫 business problem
 不要由「我要用某個 vector database」開始。先寫使用者要完成甚麼、資料從哪裡來、答錯的代價，以及何時應該拒答。例子可以是合成的產品文件助理：只回答已批准文件，找不到根據時顯示缺口，任何人都不能看見無權限文件。
 
 ## 資料不是塞進 index 就完成
-記錄文件選擇、清理、chunking、metadata 和更新方法。建立小型 data card，說明資料是否合成、有哪些缺口、哪些欄位不可記入 trace。權限必須在 retrieval 前執行，不能先把未授權內容送入模型再靠 prompt 隱藏。
+記錄文件選擇、清理、chunking、metadata 和更新方法。建立小型 data card，說明資料是否合成、有哪些缺口、哪些欄位不可記入 trace。權限必須在 retrieval 前執行；未授權內容不應進入模型，也不能靠 prompt 隱藏。
 
 ## 建立 evaluation
-最少包含：正常問題、文件沒有答案、相似但錯誤的內容、權限衝突、過期資料及 prompt injection。先保存 baseline，再逐次更改一項設定。除了整體分數，保留錯誤分類和代表案例，否則你只知道數字變了，不知道系統為何變好或變差。
+最少包含：正常問題、文件沒有答案、相似但錯誤的內容、權限衝突、過期資料及 prompt injection。保存 baseline，並逐次更改一項設定。除了整體分數，保留錯誤分類和代表案例，否則你只知道數字變了，不知道系統為何變好或變差。
 
 ## Failure handling 與 deployment
 定義 timeout、空 retrieval、模型拒絕、工具失敗和成本上限的處理。加上 request ID、版本、latency、retrieved document IDs 和結果狀態，但不要記錄敏感全文。部署毋須模仿企業平台；一個可重跑、設定清楚、有 health check 的小服務已足以展示思考。
+
+## 跟一條 request 行完整個決定
+
+想像一個完全虛構嘅產品文件 desk，入面得四份已批准合成文件：退貨政策、寄貨例外、一份舊退貨政策，同埋一份讀者冇權睇嘅 note。有人問「45 日後可唔可以退貨？」；要留低嘅唔止最後一段答案。
+
+| 步驟 | 系統要檢查乜 | 要保留嘅證據 | 失敗時安全點走 |
+| --- | --- | --- | --- |
+| Admission | 呢個 requester 可唔可以用呢組文件？ | Role、document scope、policy version。 | `HANDOFF` 或 `BLOCKED`。 |
+| Retrieval | Candidate chunk 係咪來自現時、合資格文件？ | Document ID、effective date、chunk ID、ranking input。 | `HANDOFF`；唔好放寬 access。 |
+| Grounding | 揀咗嘅 passage 真係支持到擬寫答案嗎？ | Citation ID 同 support check。 | 顯示證據缺口，唔好作規則。 |
+| Output | Draft 有冇守 schema，同埋有冇交代不確定？ | Output version、validation result、terminal state。 | `HANDOFF` 或有界限嘅 error。 |
+
+刻意放入舊政策好有用：佢證明 retrieval 要有 freshness rule，唔係 similarity 高就得。冇權睇嘅 note 就證明 permission filter 必須喺 model 見到文字之前做。就算答案寫得順，一引用咗其中一份，就已經係錯路。
+
+## 同一個 baseline 公平比較
+
+先用一個透明 baseline，例如只喺已批准、未過期文件做 exact keyword matching，再加 no-answer route。之後先用同一批 fixed case 比較一項 retrieval 改動。
+
+| Case 類型 | Baseline 會點做 | Candidate 要回答嘅問題 | 可以作咩決定 |
+| --- | --- | --- | --- |
+| 準確而現時嘅政策 | 搵到正確條款。 | Candidate 有冇保留同一個 citation？ | 有就保留較簡單條路。 |
+| 相似但錯嘅政策 | 冇答案或者安全 handoff。 | Candidate 會唔會揀咗好吸引但錯嘅條款？ | 會自信答就拒絕。 |
+| 舊文件 | 因日期被排除。 | Chunking 或 reranking 會唔會偷放返入嚟？ | 先修 admission，唔好急住調 relevance。 |
+| 未授權文件 | 永遠唔會入 candidate set。 | Prompt 或 tool path 有冇繞過 filter？ | Block 呢條路，唔好叫 model 自己隱藏。 |
+
+呢個比較畀面試官一樣實在嘅嘢追問：點解保留 baseline、邊個失敗令你加多一層元件、同埋乜嘢 regression 會令你退返去。
+
+## Trace 唔好變成另一個資料洩漏位
+
+做公開 portfolio 時，留合成 document ID、version identifier、route、latency、error class 同短 reason code 就夠。唔好留 raw user text、完整文件、secret、account identifier 或未批准 source。可以重組失敗經過、但唔重現讀者私人 request 嘅 trace，比一大段 log 更有用。
 
 ## README 應回答甚麼
 - 解決甚麼問題，為誰而做。

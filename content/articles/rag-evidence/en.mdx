@@ -1,4 +1,4 @@
-> Core judgement: answering questions proves that a demo runs. A portfolio project must also expose how you defined the problem, tested outcomes, handled failure and prepared the system for handoff.
+> A RAG answer that looks convincing still needs to earn the right to be used. The reader should be able to see which source entered, which source was excluded, and where the workflow hands uncertainty back.
 
 ## Begin with the business problem
 Do not begin with a vector database. State who needs to make what decision, where the documents come from, the cost of a wrong answer and when the system must abstain. A safe synthetic example is a product-document assistant that answers only from approved documents, exposes missing evidence, and never retrieves material the current user cannot access.
@@ -11,6 +11,36 @@ Include ordinary questions, questions with no answer, plausible but incorrect pa
 
 ## Failure handling and deployment
 Define behaviour for timeouts, empty retrieval, model refusal, tool failure and cost limits. Capture request ID, version, latency, retrieved document IDs and outcome state without logging sensitive bodies. You do not need to imitate a large enterprise platform. A reproducible service with explicit configuration, tests and a health check is enough to demonstrate engineering judgement.
+
+## Walk one request through the decision
+
+Take a fictional product-document desk with four approved synthetic documents: a returns policy, a shipping exception, an older returns policy, and a note that the reader is not allowed to see. A request asks whether an item may be returned after 45 days. The useful record is more than the final paragraph.
+
+| Step | What the system checks | Evidence to retain | Safe route when it fails |
+| --- | --- | --- | --- |
+| Admission | Is the requester allowed to use this document set? | Role, document scope, policy version. | `HANDOFF` or `BLOCKED`. |
+| Retrieval | Did the candidate chunks come from current, eligible documents? | Document ID, effective date, chunk ID, ranking inputs. | `HANDOFF`; do not widen access. |
+| Grounding | Do the selected passages actually support the proposed answer? | Citation IDs and a support check. | Return a gap, not a fabricated rule. |
+| Output | Does the draft respect the schema and state its uncertainty? | Output version, validation result, terminal state. | `HANDOFF` or a bounded error. |
+
+The older policy is deliberately useful: it proves that retrieval needs a freshness rule, not merely a high similarity score. The restricted note proves that permission filtering belongs before a model receives text. A fluent answer that cites either one is a failed route, even if the wording sounds plausible.
+
+## Compare retrieval with a baseline that can lose honestly
+
+Begin with a transparent baseline such as exact keyword matching over the approved, current documents plus a no-answer route. Then compare one retrieval change on the same fixed cases.
+
+| Case family | Baseline result | Candidate question | Decision you can make |
+| --- | --- | --- | --- |
+| Exact current policy | Finds the correct clause. | Does the candidate preserve the same citation? | Keep the simpler route if it does. |
+| Similar but wrong policy | Returns no answer or a safe handoff. | Does the candidate stop instead of selecting the attractive wrong clause? | Reject a candidate that makes this route confident. |
+| Stale document | Excluded by date. | Does chunking or reranking accidentally restore it? | Fix admission before tuning relevance. |
+| Unauthorised document | Never enters the candidate set. | Can a prompt or tool path bypass the filter? | Block the route; do not ask the model to hide it. |
+
+This comparison gives an interviewer something concrete to probe: why a simple baseline stayed, which failure justified a more complex component, and what regression would make you return to it.
+
+## Do not let a trace become another data leak
+
+For a public portfolio, keep synthetic document IDs, version identifiers, route, latency, error class, and a short reason code. Exclude raw user text, full documents, secrets, account identifiers, and unapproved source content. A trace that can reconstruct a failure without recreating the reader's private request is more useful than a verbose log.
 
 ## What the README must explain
 - The problem, user and decision being supported.

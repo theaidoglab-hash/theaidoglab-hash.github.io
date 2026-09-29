@@ -1,0 +1,60 @@
+A team asks for one AI system to do two things: classify whether a request belongs in a standard queue, and draft a cited explanation for the reviewer. “Use a Transformer” is not yet a design. The first task needs a stable label. The second needs controlled language grounded in supplied evidence. Knowing the blocks inside a Transformer helps you explain the difference, but the workflow contract decides which architecture is useful.
+
+## Start with the decision, not the model family
+
+Write the smallest task statement first:
+
+> Given an approved, sanitised request and policy version, route it to `standard`, `review`, or `out-of-scope`; optionally prepare a draft that cites supplied policy text. The system never contacts a customer or changes a record.
+
+This statement gives you output types, a boundary, and a baseline. A deterministic rule may be enough for a known category. A representation model may help when a labelled routing task has enough versioned examples. A generative model may help create a reviewer-facing draft after the route and evidence have already been checked. The architecture should earn its place against that baseline.
+
+## The block diagram behind a Transformer
+
+At a high level, a Transformer takes token representations, adds a representation of position, repeatedly mixes information across positions, and transforms each position before producing an output. A typical block contains:
+
+1. **Self-attention**, which lets each token combine information from allowed context positions.
+2. A **feed-forward network** or MLP, which transforms the result at each position.
+3. **Residual connections**, which preserve an earlier signal by adding it back around a sublayer.
+4. **Normalisation**, which keeps numerical scales manageable during repeated computation.
+
+These blocks are stacked. At the end, an output head maps the final representations to something useful: next-token scores, class scores, a token label, or another learned target. The exact implementation varies, but the engineering question remains: what output do we need, and how will we check it?
+
+## Three architecture shapes answer different questions
+
+An **encoder-style** model can read the whole allowed input in both directions and produce a representation suitable for classification, search, or ranking. It is often a credible option when the output is a fixed set of routes and a labelled dataset exists.
+
+A **decoder-only** model generates from left to right under a causal mask. It is flexible for drafting, dialogue, and structured text generation. It can also produce a confident but unsupported sentence, so a task needs an output contract, evidence checks, and a safe handoff route.
+
+An **encoder-decoder** design reads a source sequence into one representation and generates a target sequence from it. It is useful to understand as a sequence-to-sequence pattern, especially when the source and output are materially different forms. It is not automatically the best choice for a small routing task.
+
+Do not turn this into a memorisation table. A model that can generate an attractive draft is not necessarily the right system for a routing decision. A classifier that produces stable labels is not necessarily enough to explain a policy exception to a person.
+
+## A small architecture-choice experiment
+
+For the fictional desk, create three candidate paths and evaluate them on the same fixed, synthetic cases:
+
+| Candidate | Product role | What to test | What would rule it out |
+| --- | --- | --- | --- |
+| rule baseline | known category routing | correct route, clear reason, maintenance burden | categories change too often or rules conflict |
+| representation classifier | choose a fixed route | held-out route accuracy, safe `out-of-scope` behaviour | insufficient labels or high-risk false approval |
+| decoder draft layer | cite supplied evidence for a reviewer | schema, source grounding, correct handoff, readability | invented source, unsafe route, or unacceptable review burden |
+
+Keep the input schema, source version, expected route, forbidden route, and reviewer rule identical. Do not compare a polished generative demo with an unmeasured baseline. The useful conclusion may be that the rule remains the live routing layer while a draft model is confined to a clearly labelled, reviewable downstream task.
+
+## The trade-offs a design note should admit
+
+More layers and parameters do not supply a missing policy. A longer prompt does not substitute for labelled routing criteria. A decoder can reduce blank-page effort for a reviewer, but it introduces generation cost, output variability, prompt injection exposure, and source-verification work. A classifier can be faster and easier to evaluate for a closed label set, yet fail abruptly when a new category appears.
+
+Retrieval is also separate from architecture. If the system must use an up-to-date policy, retrieve an approved version by metadata and show the evidence that reached the draft. Do not promise that internal attention stores current policy or that fine-tuning makes a source authoritative.
+
+## Portfolio evidence that survives follow-up questions
+
+Keep `architecture-decision.md` with the user decision, alternatives, fixed case set, evaluation measures, costs, failure examples, and a no-go condition. Add a diagram with only the components the task actually needs: input validation, route baseline, evidence lookup, draft layer, output validator, and reviewer handoff. Mark which components are simulated and which actions are deliberately unavailable.
+
+This gives an interviewer or reviewer a clear story: you can describe Transformer blocks accurately, but you also know that a system architecture is a set of justified operational choices.
+
+Continue with [Transformer generation and model-choice trade-offs](/en/articles/choose-transformer-generation-and-adaptation-tradeoffs), [how an input becomes evidence for a workflow decision](/en/articles/model-score-to-workflow-decision), and [a prompt contract that needs an acceptance test](/en/interview-lab/prompt-contracts-need-an-acceptance-test).
+
+## Boundary
+
+This is AI.DOG teaching material using a fictional, draft-only workflow. It does not prescribe a production architecture or claim that any model class will meet a particular quality, cost, latency, or business target. Validate the actual data, task, and human-review process before use.

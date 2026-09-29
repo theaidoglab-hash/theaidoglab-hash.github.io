@@ -1,0 +1,56 @@
+Internal reviewer 要求一個 draft assistant 分清楚「維修已經 overdue」與「維修尚未到期」。兩段 note 使用的字很接近，但 route 必須不同。只說「attention 會找重要字」只解釋了一半：模型還必須表示順序、決定哪些位置可看，並避免 generator 偷看後面才出現的文字。
+
+## 這一課要練的判斷
+
+你應該能用一個 input-output test 說明 query、key、value、mask 與 position。更重要的是，當一個與語序有關的 instruction 出錯時，知道要留下什麼證據。漂亮的 attention map 本身不是 quality report。
+
+## 一個位置在找，其他位置提供線索，value 帶走內容
+
+在一層 self-attention 裡，每個 token 的 representation 會投影成三種 learned form：
+
+- **query** 表示目前位置要尋找什麼；
+- **key** 表示每個可用位置可提供什麼配對線索；
+- **value** 是配對後可以混入目前位置的內容。
+
+Layer 比較 query 和可用的 keys，把分數轉成 weights，再把對應的 values 做 weighted combination。於是每個位置都得到與 context 有關的 representation。`overdue` 附近若出現否定字、日期或 case category，含義就可能不同。
+
+這些名稱是計算中的角色，不是三個寫著「問題」「關鍵字」「答案」的抽屜。不同 heads 和 layers 可以學習不同關係；任何一個 head 都不會自動成為商業決定的可靠解釋。
+
+## Position 和 mask 讓計算能使用
+
+如果模型只看見一袋 token vectors，`approve after review` 和 `review after approval` 會過於相近。**Positional information** 讓 representation 知道 token 位在 sequence 的哪裡，其他 layers 才能區分順序與距離。
+
+**Attention mask** 則控制某一次計算中哪些位置可用。Decoder 的 **causal mask** 會遮住未來 token，避免模型預測下一個 token 時偷看答案。Padding mask 可以阻止空白 padding 影響較短的 record。請注意：application 的 mask 不是 permission control，也不能取代 retrieval filtering；它只是 model input 裡的一個數學限制。
+
+## 用 contrast cases 測試，而不是看圖說故事
+
+為虛構的 repair desk 做一組很小的 synthetic cases。固定 policy version 與 output schema，每次只改一個條件：
+
+| Case | Input 改動 | 應有結果 | 禁止結果 |
+| --- | --- | --- | --- |
+| negation | 將 `overdue` 改成 `not overdue` | review route | approval draft |
+| order | `review before approval` | 先 review 的 plan | 先 approval |
+| distance | 將 risk qualifier 放近或放遠 action | 同一安全 route | 忽略 qualifier |
+| padding | 為短 record 加入空欄位 | 結果不變 | 自創 category |
+
+記錄 exact input、retrieved evidence IDs、output、validator 結果與 reviewer judgment。若 contrast pair 失敗，應先檢查整條 pipeline，而不是立刻怪 attention：可能 tokenisation 改變了、context assembler 漏了一句、prompt contract 不清楚，或 output validator 放過了不安全答案。
+
+這份 artefact 展示一個重要習慣：測試真正可觀察的外部 behaviour，不是事後把內部 weights 解讀成故事。
+
+## Attention 不能解決的事
+
+Attention 只能重組已在 context 裡的資訊。它不會找回未提供的 policy、不會確認 source 是否最新、不會證明 citation，也不會授權 action。加入更多文字也可能帶來互相競爭的訊號。Causal mask 保護的是 next-token objective，不會阻止 application 把機密資料放入 prompt。
+
+對 routing decision，一條 rule 或 structured classifier 仍可能是更好的 baseline；對必須引用 approved policy 的 draft，retrieval 與 source check 可能比背 Q、K、V 更重要。選擇機制要依 task contract，不是因為它是好記的 interview 名詞。
+
+## 帶進 review 的證據
+
+保留一份 `order-sensitivity.md`：task contract、四個 contrast cases、預期與禁止 route、測試結果、一個 failure，以及你是否改動的原因。也要寫清 data boundary：例子是 synthetic 或合法去識別，系統只產生 draft，最後仍由人接受。
+
+Contrast cases 讓語序造成的效果看得見。如果這種變化會影響 workflow 的結果，就用 controlled test、安全 fallback 與一位有名字的 reviewer 處理。
+
+延伸閱讀：[Transformer generation 與 model choice](/zh-TW/articles/choose-transformer-generation-and-adaptation-tradeoffs)、[可停止 agent 與 serving budget](/zh-TW/articles/build-stoppable-ai-agents-with-serving-budgets)，以及[需要 acceptance test 的 prompt contract](/zh-TW/interview-lab/prompt-contracts-need-an-acceptance-test)。
+
+## 邊界
+
+這是 AI.DOG 教學，包含概念解釋與 synthetic test design。它不代表 attention visualisation 能證明因果、quality、安全或 production readiness。真實 application 必須以自己的 approved data 與 review process 驗證完整 behaviour。

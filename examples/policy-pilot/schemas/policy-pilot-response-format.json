@@ -1,0 +1,75 @@
+{
+  "type": "json_schema",
+  "json_schema": {
+    "name": "policy_pilot_read_only_result",
+    "strict": true,
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "route",
+        "reasonCode",
+        "draftResponse",
+        "citations",
+        "action",
+        "boundaryNotes"
+      ],
+      "properties": {
+        "route": {
+          "enum": [
+            "answer_with_citation",
+            "handoff"
+          ]
+        },
+        "reasonCode": {
+          "type": "string"
+        },
+        "draftResponse": {
+          "type": "string"
+        },
+        "citations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "policyId",
+              "version"
+            ],
+            "properties": {
+              "policyId": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "action": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "requiresHumanReview"
+          ],
+          "properties": {
+            "kind": {
+              "const": "none"
+            },
+            "requiresHumanReview": {
+              "const": true
+            }
+          }
+        },
+        "boundaryNotes": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

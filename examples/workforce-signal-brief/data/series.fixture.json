@@ -1,0 +1,13 @@
+{
+  "seriesId": "SYNTHETIC-WORKFORCE-CONTEXT-INDEX",
+  "seriesTitle": "Synthetic monthly workforce-context index",
+  "geography": "Fictional region",
+  "frequency": "monthly",
+  "adjustment": "synthetic teaching series; not an official adjustment method",
+  "unit": "index points",
+  "observations": [
+    { "referencePeriod": "2026-06", "value": 101.2, "status": "synthetic" },
+    { "referencePeriod": "2026-07", "value": 101.9, "status": "synthetic" },
+    { "referencePeriod": "2026-08", "value": 101.4, "status": "synthetic" }
+  ]
+}

@@ -1,0 +1,106 @@
+当 coding agent 说“完成”，先决定要凭什么验收：计划、test output、diff 和尚未解决的风险。少了其中一项，或改动超出 brief，就先暂停；这个 demo 只在本地使用合成数据，输出也只限草稿。
+
+## 这个 Approval Queue demo 明确展示什么
+
+### Code 里看得到的东西
+
+- 一个可读取本地 FAQ、产生带引用草稿、拒绝越权 action 的小型 workflow；每个 route 都有 fixed acceptance cases。
+- plan、diff、test command、sandbox／permission check 与 trace 把 coding agent 的变更变成可重看的工程 evidence。
+
+### Code 以外要交代的事
+
+- 真正要展示的不是“agent 取代了人”，而是 non-developer 能怎样审核一个可逆的 draft-only delivery。
+- reviewer 的 PASS、REVISE 或 STOP 决定、合成数据边界和不会进行 external action，先留在本地 evidence folder；只有负责人审核并批准公开版本后，才会放一份可公开的版本到 GitHub。
+
+## 很长的 prompt，仍不等于可验收的 project
+
+“帮我做一个 AI app”通常会换来很多画面、组件和流畅文字。你很难从中知道它读过什么数据、加入了哪个 connector，或者失败输出会流到哪里。很多 AI slop portfolio 就从这里开始：demo 做出来了，决策与失败路径却没有留下。
+
+无论你用 Codex、Grok 或其他 coding agent，界面、权限和默认行为都不同。把它当作能提出方案和实施的协作者会更稳妥；范围、可接受结果和最终决定仍由你负责。
+
+这篇沿用 Build Lab 的 Approval Queue。它只会用合成 FAQ 产生带引用的回复草稿，不会发送消息、读取账户、修改数据或接触真实客户。案例刻意很小，目标是练习一条可重跑的证据链，不是假装产品已经上线。
+
+## 六个应该停一下的地方
+
+### 1．先写一个可逆结果
+
+把“自动化客服”缩小为“将一段合成问题分类，引用一条合成 FAQ，输出给 reviewer 阅读的草稿”。同时写下不做的事：不登录、不联网、不保存个人资料、不外发、不写入任何系统。
+
+这张 brief 是之后判断 agent 有没有越界的标尺。你若说不清第一个输出是什么，也还无法判断它错在哪里。
+
+### 2．先审计划，再让它写功能
+
+第一次回复只需要包括：
+
+- 它理解的用户、input、output 和 non-goal；
+- 预计新增或修改的文件；
+- 每个文件的责任；
+- 预计的 test command；
+- 仍不清楚、必须由你回答的假设；
+- 不会接触的数据、网络或写入动作。
+
+这叫 plan review。想象：先看小朋友打算拼什么、要拿哪几块积木，才让他开始。你不用逐行看 code，也能问出“为什么一个本地草稿工具突然需要 API key 或数据库”。
+
+## feature 前面放 acceptance cases
+
+写三到五个能明确判定 pass 或 fail 的 case。每一个都要有 input、预期 route、预期引用和禁止动作。
+
+- 正常 FAQ：输出草稿，引用正确 FAQ ID，标记需要人工确认；
+- 没有支持资料：不编造答案，转 handoff；
+- 指令冲突：不把未批准内容当来源；
+- prompt injection：停止并交给 reviewer；
+- 要求发信或退款：明确 blocked，没有外部动作。
+
+OpenAI 的 agent evaluation 指引把选错 tool、违反规则和流程退步都视为可评估行为。固定 cases 的用途是让你每次改动后比较同一批结果，而不是只看一次流畅输出。[官方 evaluation 指引](https://developers.openai.com/api/docs/guides/agent-evals) 讲的是 OpenAI 工作流工具；这里借用的是可重复比较的做法，并不表示每个 coding agent 都会自动建立 eval。
+
+## 你应该看懂的六个词
+
+**Plan** 是改动前的工作清单，让你知道 agent 打算在哪里动手。
+
+**Acceptance test** 是预先写好的答题卡，把“看起来可以”换成有明确预期的输入和结果。
+
+**Diff** 是 code 改动的对照。你未必逐行判断逻辑，但应该问：新文件有没有超出 brief？是否突然加入登录、付款、网络或数据库？
+
+**Sandbox** 是限制工具可触及范围的环境。它能减少意外，却不能替你决定数据权利或商业责任。Codex 的官方安全说明把 sandbox 与 approval 视为受设置影响的两层控制；名称本身不是跨产品保证。[Codex sandbox 与 approvals 说明](https://learn.chatgpt.com/docs/agent-approvals-security)
+
+**Permission** 是实际可读、可写、可外发的能力。项目规则或 prompt 不是权限控制。工具若要求工作区外文件、真实账户、API key 或 connector，先停下来。
+
+**Reviewer decision** 是留下 PASS、REVISE 或 STOP 的理由。它把“我觉得可以”改成可回看、可解释的决定。
+
+## 第一次 build 后，要一份短交接
+
+Agent 跑完第一个薄切片后，要求它交回：
+
+- 实际新增或修改的文件清单；
+- 使用过的合成 input；
+- 每个 acceptance case 的 expected 与 actual result；
+- test command 是否通过；
+- 没有跑过的项目；
+- 已知 failure、数据限制与不能声称的结果；
+- 它没有执行的外部动作。
+
+只说“tests passed”还不够。你应该能打开结果，看见正常 case、拒答 case 和越权 case 分别怎样走。OpenAI 对 guardrail 与 human review 的区分很清楚：自动检查能处理 input、output 或工具行为；敏感副作用必须暂停，等待人批准。[官方 guardrail 与 human review 指引](https://developers.openai.com/api/docs/guides/agents/guardrails-approvals) 是 SDK 的设计，不是所有工具的默认行为，所以本案例维持 draft-only。
+
+## PASS、REVISE、STOP 不是考试分数
+
+PASS 只代表这一版在写明的合成数据和本地范围内通过当前 cases，还不能接入真实流程。
+
+REVISE 代表你找到具体缺口，例如引用 ID 不稳、handoff 理由模糊，或 tests 没覆盖一种 input。每次只修一个缺口，然后重跑同一批 cases。
+
+STOP 代表范围本身不安全或不清楚：需要真实数据、需要写入、没有 owner、无法定义错误，或 agent 的计划已经超出原本可逆的练习。停下是正确决定，不是 project 失败。
+
+## 什么时候适合放到公开 GitHub repo
+
+还没有批准公开版本前，不要虚构 repository link。仍在审核时，先把以下证据留在本地；负责人确认可以公开后，强的 portfolio repo 不靠 model 名称或 UI 截图，至少保留以下 artefact：
+
+- README：业务问题、用户、可衡量的成功条件和 non-goal；
+- brief 与 plan：你要求 agent 做什么，哪些不能做；
+- 合成数据与数据边界；
+- acceptance cases、test command 与实际 result；
+- change review：这次改了什么，为什么接受或拒绝；
+- failure 与下一个还未处理的风险；
+- 一句诚实声明：这是本地、合成、human-reviewed 参考，不是 production 成效。
+
+这些能让面试官追问需求拆解、evaluation、权限与协作判断。它不保证得到 AI Engineer 工作，也不代表 agent 产出的每一行 code 都是你的原创。
+
+延伸阅读：[先建立 action contract 和 sandbox](/zh-Hans/articles/build-a-low-code-ai-automation)、[从模糊要求走到可验收功能](/zh-Hans/articles/from-vague-request-to-accepted-feature)、[Build Lab 的 Approval Queue](/zh-Hans/labs)、[面试中如何说明 agent 与 tool boundary](/zh-Hans/interview-lab/agent-draft-without-consequential-actions)、[把实验记录变成 professional evidence](/zh-Hans/articles/prompt-play-to-professional-evidence)。

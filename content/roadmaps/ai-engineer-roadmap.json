@@ -1,0 +1,802 @@
+{
+  "id": "ai-engineer-roadmap",
+  "status": "review",
+  "visibility": "public",
+  "updatedAt": "2026-09-26",
+  "reviewBy": "2026-12-24",
+  "phases": [
+    {
+      "id": "foundations",
+      "range": "00–07",
+      "title": {
+        "zh-HK": "先理解模型同選擇",
+        "zh-TW": "先理解模型與選擇",
+        "zh-Hans": "先理解模型与选择",
+        "en": "Understand models and choices"
+      },
+      "description": {
+        "zh-HK": "由共同語言、學習機制到模型取捨，寫清一個低風險決定同點樣選工具。",
+        "zh-TW": "從共同語言、學習機制到模型取捨，先有判斷，再選工具。",
+        "zh-Hans": "从共同语言、学习机制到模型取舍，先有判断，再选工具。",
+        "en": "Build judgment from shared language through learning mechanics and model trade-offs before choosing tools."
+      },
+      "checkpoint": {
+        "zh-HK": "完成 00–07 後，留一頁選型紀錄：低風險決定、資料界線、基準做法，同埋拒絕咗邊個選項。呢份紀錄只交代點揀，未證明業務成效。",
+        "zh-TW": "完成 00–07 後：用一頁選型紀錄說清一個低風險決策、資料邊界、一個 baseline，以及你拒絕了哪個選項。",
+        "zh-Hans": "完成 00–07 后：用一页选型记录说明一个低风险决策、数据边界、一个 baseline，以及你拒绝了哪个选项。",
+        "en": "After 00–07: use a one-page selection record to name one low-risk decision, its data boundary, a baseline, and the option you rejected."
+      }
+    },
+    {
+      "id": "applications",
+      "range": "08–11",
+      "title": {
+        "zh-HK": "將模型接入真實工作",
+        "zh-TW": "把模型接進真實工作",
+        "zh-Hans": "把模型接入真实工作",
+        "en": "Connect models to real work"
+      },
+      "description": {
+        "zh-HK": "每加一個元件都要對準一個已知失敗：由提示詞、資料脈絡、檢索到代理流程，逐樣寫出點樣核對。",
+        "zh-TW": "從 prompt、context、retrieval 到 agent workflow，逐步加元件，只為解決一個已知失敗。",
+        "zh-Hans": "从 prompt、context、retrieval 到 agent workflow，逐步加组件，只为解决一个已知失败。",
+        "en": "Add prompt, context, retrieval and agent components only when each resolves a known failure."
+      },
+      "checkpoint": {
+        "zh-HK": "完成 08–11 後，交一個只出草稿嘅流程：輸入／輸出規格、5 個固定驗收個案，同埋一個人手覆核位。呢個流程唔會自行採取外部行動。",
+        "zh-TW": "完成 08–11 後：交出一個 draft-only workflow，附 input／output contract、5 個固定驗收 case，以及一個人工 review 點。",
+        "zh-Hans": "完成 08–11 后：交出一个 draft-only workflow，附 input／output contract、5 个固定验收 case，以及一个人工 review 点。",
+        "en": "After 08–11: deliver a draft-only workflow with an input/output contract, five fixed acceptance cases, and a human review point."
+      }
+    },
+    {
+      "id": "production",
+      "range": "12–16",
+      "title": {
+        "zh-HK": "做成可靠、可交代嘅系統",
+        "zh-TW": "做成可靠、可交代的系統",
+        "zh-Hans": "做成可靠、可交代的系统",
+        "en": "Make the system dependable"
+      },
+      "description": {
+        "zh-HK": "速度、成本、測試、安全、多模態同系統設計要放入同一個交付判斷；一個靚 demo 唔夠。",
+        "zh-TW": "速度、成本、evaluation、安全、multimodal 與 system design 要一起談，不能只靠一個漂亮 demo。",
+        "zh-Hans": "速度、成本、evaluation、安全、multimodal 与 system design 要一起讲，不能只靠一个漂亮 demo。",
+        "en": "Discuss speed, cost, evaluation, safety, multimodal work and system design together—not through one polished demo."
+      },
+      "checkpoint": {
+        "zh-HK": "完成 12–16 後，留一份交付簡報：測試證據、權限同負責人、失敗時要停喺邊度，同埋回退／交接做法。本機測試只係本機測試，唔係正式上線成績。",
+        "zh-TW": "完成 12–16 後：留下 release brief，說清 eval evidence、權限與 owner、失敗時在哪裡停止，以及 rollback／handoff 做法；不要把本機測試當作 production 成績。",
+        "zh-Hans": "完成 12–16 后：留下 release brief，说明 eval evidence、权限与 owner、失败时在哪里停止，以及 rollback／handoff 做法；不要把本机测试当作 production 成绩。",
+        "en": "After 12–16: retain a release brief covering evaluation evidence, permission and owner, the stop point for failure, and rollback or handoff; do not present a local test as a production result."
+      }
+    },
+    {
+      "id": "career-evidence",
+      "range": "17–18",
+      "title": {
+        "zh-HK": "將判斷變成作品證據",
+        "zh-TW": "把判斷變成作品證據",
+        "zh-Hans": "把判断变成作品证据",
+        "en": "Turn judgment into portfolio evidence"
+      },
+      "description": {
+        "zh-HK": "篩選新概念，再把已做嘅工作整理成可追問嘅紀錄；講解作品唔靠背一堆名詞。",
+        "zh-TW": "追新概念要有篩選；說明作品要有 artefact，而不是背一堆名詞。",
+        "zh-Hans": "追新概念要有筛选；说明作品要有 artefact，而不是背一堆名词。",
+        "en": "Filter frontier ideas deliberately, then explain a project with artefacts rather than a pile of terms."
+      },
+      "checkpoint": {
+        "zh-HK": "完成 17–18 後，將一個項目收成 README、證據地圖同 90 秒講解。未驗證嘅成效要明確標示，唔好補成故事。",
+        "zh-TW": "完成 17–18 後：把一個 project 收成 README、evidence map 與 90 秒講解；未驗證的成效要明確標示，不要補故事。",
+        "zh-Hans": "完成 17–18 后：把一个 project 收成 README、evidence map 与 90 秒讲解；未验证的成效要明确标示，不要补故事。",
+        "en": "After 17–18: package one project as a README, evidence map and 90-second walkthrough; label unverified outcomes plainly rather than filling in a story."
+      }
+    }
+  ],
+  "stages": [
+    {
+      "id": "shared-language",
+      "number": "00",
+      "phase": "foundations",
+      "status": "available",
+      "title": {
+        "zh-HK": "先用同一套語言講清問題",
+        "zh-TW": "先用同一套語言說清問題",
+        "zh-Hans": "先用同一套语言说清问题",
+        "en": "Name the problem with shared language first"
+      },
+      "summary": {
+        "zh-HK": "將常見名詞放返入一個系統：邊個負責產生答案、搵資料、調用工具、循環執行或調整模型。",
+        "zh-TW": "分清 model、retrieval、tool、agent、adaptation 與 inference，才知道哪個是系統選擇，哪個只是名詞。",
+        "zh-Hans": "分清 model、retrieval、tool、agent、adaptation 与 inference，才知道哪个是系统选择，哪个只是名词。",
+        "en": "Separate model, retrieval, tool, agent, adaptation and inference so you know which is a system choice and which is only a term."
+      },
+      "focus": ["LLM", "RAG", "MCP", "agent", "fine-tuning", "quantization"],
+      "evidence": {
+        "zh-HK": "留下一張選型卡：寫清一個決定、資料界線、AI 可以做乜，同埋保留畀人做嘅動作。呢張卡只交代點揀，未證明系統已經可用。",
+        "zh-TW": "留下一張選型卡：寫清 decision、資料邊界、AI 可以做的事，以及人工保留的動作。",
+        "zh-Hans": "留下一张选型卡：写清 decision、数据边界、AI 可以做的事，以及人工保留的动作。",
+        "en": "Leave a choice card: the decision, data boundary, what AI may do, and which action stays with a person."
+      },
+      "resources": [{ "kind": "article", "target": "build-an-ai-engineering-mental-model", "primary": true }, { "kind": "interview-question", "target": "long-context-is-not-a-free-upgrade" }, { "kind": "interview-question", "target": "softmax-is-not-a-stability-plan" }]
+    },
+    {
+      "id": "ml-decisions",
+      "number": "01",
+      "phase": "foundations",
+      "status": "available",
+      "title": {
+        "zh-HK": "由分數去到決定",
+        "zh-TW": "從分數走到決策",
+        "zh-Hans": "从分数走到决策",
+        "en": "Move from a score to a decision"
+      },
+      "summary": {
+        "zh-HK": "將一個模型分數放返入決定：要先知道資料標記、基準做法、誤報與漏報、可處理數量同錯誤代價。",
+        "zh-TW": "先分清 label、baseline、precision／recall、capacity 與 business cost，才知道模型分數是否有用。",
+        "zh-Hans": "先分清 label、baseline、precision／recall、capacity 与 business cost，才知道模型分数是否有用。",
+        "en": "Separate labels, baselines, precision/recall, capacity and business cost before deciding whether a model score is useful."
+      },
+      "focus": ["baseline", "label", "precision", "recall", "capacity"],
+      "evidence": {
+        "zh-HK": "留下一頁決定表：每個門檻對到佇列量、人手處理量同錯誤代價。張表幫你比較取捨，唔等於已量度到節省或業務成效。",
+        "zh-TW": "一頁 decision table：每個 threshold 對到佇列量、人工處理量與錯誤代價。",
+        "zh-Hans": "一页 decision table：每个 threshold 对到队列量、人工处理量与错误代价。",
+        "en": "A one-page decision table linking each threshold to queue volume, human workload and error cost."
+      },
+      "resources": [{ "kind": "article", "target": "model-score-to-workflow-decision", "primary": true }, { "kind": "article", "target": "ml-learning-modes-and-baselines" }, { "kind": "article", "target": "linear-logistic-and-feature-decisions" }, { "kind": "interview-question", "target": "offline-score-and-human-workflow" }, { "kind": "interview-question", "target": "a-model-metric-is-not-a-business-metric" }, { "kind": "interview-question", "target": "a-baseline-is-not-a-benchmark-winner" }, { "kind": "interview-question", "target": "a-label-definition-can-change-the-model" }, { "kind": "interview-question", "target": "a-random-split-can-know-the-future" }]
+    },
+    {
+      "id": "neural-learning",
+      "number": "02",
+      "phase": "foundations",
+      "status": "available",
+      "title": {
+        "zh-HK": "看懂模型點樣由誤差學習",
+        "zh-TW": "看懂模型如何從誤差學習",
+        "zh-Hans": "看懂模型如何从误差学习",
+        "en": "See how a model learns from error"
+      },
+      "summary": {
+        "zh-HK": "用一個小型訓練例子追蹤輸入、目標、誤差同參數點樣調整；訓練失敗時，先知道由邊度查。",
+        "zh-TW": "理解 representation、loss、gradient 與 backprop，不是為了背公式，而是知道訓練失敗可以從哪裡查。",
+        "zh-Hans": "理解 representation、loss、gradient 与 backprop，不是为了背公式，而是知道训练失败可以从哪里查。",
+        "en": "Understand representations, loss, gradients and backpropagation—not to memorise equations, but to know where a training failure can be investigated."
+      },
+      "focus": ["representation", "loss", "gradient", "backpropagation"],
+      "evidence": {
+        "zh-HK": "留下一份小型訓練筆記：輸入、目標、誤差曲線、過度擬合訊號同下一個檢查。一次練習唔等於模型喺真實資料上會穩定。",
+        "zh-TW": "一個小型訓練筆記：input、target、loss curve、過擬合訊號與下一個檢查。",
+        "zh-Hans": "一个小型训练笔记：input、target、loss curve、过拟合信号与下一个检查。",
+        "en": "A small training note with input, target, loss curve, overfitting signal and next check."
+      },
+      "resources": [{ "kind": "article", "target": "understand-neural-learning-before-you-tune", "primary": true }, { "kind": "article", "target": "model-score-to-workflow-decision" }, { "kind": "article", "target": "regularisation-loss-and-generalisation" }, { "kind": "article", "target": "gradient-backprop-and-loss-debugging" }, { "kind": "article", "target": "training-stability-dropout-normalisation" }, { "kind": "article", "target": "sequence-models-and-framework-boundaries" }, { "kind": "interview-question", "target": "regularisation-is-not-a-fairness-control" }, { "kind": "interview-question", "target": "a-gradient-check-precedes-a-bigger-model" }]
+    },
+    {
+      "id": "transformer-mental-model",
+      "number": "03",
+      "phase": "foundations",
+      "status": "available",
+      "title": {
+        "zh-HK": "由 token 走到 attention",
+        "zh-TW": "從 token 走到 attention",
+        "zh-Hans": "从 token 走到 attention",
+        "en": "Move from tokens to attention"
+      },
+      "summary": {
+        "zh-HK": "畫出文字點樣切成 token、帶入位置資料、互相計算關聯，先判斷長內容、檢索同延遲會喺邊度卡住。",
+        "zh-TW": "用 token、embedding、attention、mask 與 position 建一個 Transformer 心智模型，才判斷長 context、retrieval 與 latency 的限制。",
+        "zh-Hans": "用 token、embedding、attention、mask 与 position 建一个 Transformer 心智模型，才判断长 context、retrieval 与 latency 的限制。",
+        "en": "Build a Transformer mental model from tokens, embeddings, attention, masks and position before judging long-context, retrieval and latency limits."
+      },
+      "focus": ["token", "embedding", "attention", "mask", "position"],
+      "evidence": {
+        "zh-HK": "留下一張由輸入到輸出嘅資料流圖，標出上下文成本同一個預期會失敗嘅位置。呢張圖唔證明長內容喺實際流程已經可用。",
+        "zh-TW": "一張 input 到 output 的資料流圖，標出 context 成本與一個會失敗的位置。",
+        "zh-Hans": "一张 input 到 output 的数据流图，标出 context 成本与一个会失败的位置。",
+        "en": "A data-flow sketch from input to output that marks context cost and one point of failure."
+      },
+      "resources": [{ "kind": "article", "target": "attention-qkv-mask-position", "primary": true }, { "kind": "article", "target": "tokenisation-and-domain-terms" }, { "kind": "article", "target": "transformer-blocks-and-architecture-choice" }, { "kind": "article", "target": "choose-transformer-generation-and-adaptation-tradeoffs" }, { "kind": "interview-question", "target": "long-context-is-not-a-free-upgrade" }, { "kind": "interview-question", "target": "softmax-is-not-a-stability-plan" }]
+    },
+    {
+      "id": "generation-control",
+      "number": "04",
+      "phase": "foundations",
+      "status": "available",
+      "title": {
+        "zh-HK": "理解一次輸出點樣出現",
+        "zh-TW": "理解一次輸出如何出現",
+        "zh-Hans": "理解一次输出如何出现",
+        "en": "Understand how one response is produced"
+      },
+      "summary": {
+        "zh-HK": "追一次輸出生成過程：模型分數點樣變成抽樣選字、點樣串流送出，以及內容上下文點樣食成本。",
+        "zh-TW": "從 logits、sampling、temperature、streaming 與 context budget 講清楚：輸出不穩定從哪裡開始，成本又在哪裡累積。",
+        "zh-Hans": "从 logits、sampling、temperature、streaming 与 context budget 讲清楚：输出不稳定从哪里开始，成本又在哪里累积。",
+        "en": "Use logits, sampling, temperature, streaming and context budget to locate where variability starts and where cost accumulates."
+      },
+      "focus": ["logits", "sampling", "temperature", "streaming", "context budget"],
+      "evidence": {
+        "zh-HK": "留下一組固定提示詞對照：每次只改一個抽樣設定，記錄輸出差異、延遲同 token 用量。呢個對照只講到呢組題目，唔代表產品品質。",
+        "zh-TW": "用一組固定 prompt 做對照：每次只改一個 sampling setting，記錄輸出差異、延遲與 token 成本。這個對照只描述這組 prompt 與設定下的表現，不是產品品質或可 release 的證明。",
+        "zh-Hans": "用一组固定 prompt 做对照：每次只改一个 sampling setting，记录输出差异、延迟与 token 成本。这个对照只描述这组 prompt 与设置下的表现，不是产品质量或可 release 的证明。",
+        "en": "A fixed-prompt comparison: change one sampling setting and record output variation, latency, and token cost. This comparison describes only the output, latency, and token cost for these prompts and settings; it is not evidence of product quality or release readiness."
+      },
+      "resources": [{ "kind": "article", "target": "decoding-strategies-and-output-policy", "primary": true }, { "kind": "article", "target": "long-context-retrieval-and-lost-middle" }, { "kind": "article", "target": "choose-transformer-generation-and-adaptation-tradeoffs" }, { "kind": "interview-question", "target": "token-budget-is-not-a-language-test" }, { "kind": "interview-question", "target": "temperature-is-not-a-reproducibility-contract" }]
+    },
+    {
+      "id": "architecture-tradeoffs",
+      "number": "05",
+      "phase": "foundations",
+      "status": "available",
+      "title": {
+        "zh-HK": "理解現代模型點樣換取速度同容量",
+        "zh-TW": "理解現代模型如何換取速度與容量",
+        "zh-Hans": "理解现代模型如何换取速度与容量",
+        "en": "Understand the trades behind modern model architecture"
+      },
+      "summary": {
+        "zh-HK": "比較稀疏專家、attention 變體同 cache，問佢哋換到嘅係吞吐量、內容長度，定係另一種工程代價。",
+        "zh-TW": "MoE、attention 變體與 cache 是工程取捨：它們可能改善吞吐或 context，但同時改變 memory、routing 與 serving 複雜度。",
+        "zh-Hans": "MoE、attention 变体与 cache 是工程取舍：它们可能改善吞吐或 context，但同时改变 memory、routing 与 serving 复杂度。",
+        "en": "MoE, attention variants and caches are engineering trade-offs: they may improve throughput or context while changing memory, routing and serving complexity."
+      },
+      "focus": ["MoE", "attention variants", "KV cache", "throughput"],
+      "evidence": {
+        "zh-HK": "留下一張選型備忘：工作負載、延遲目標、記憶體限制，同埋今次唔追嘅架構變體。佢只係取捨紀錄，唔係性能保證。",
+        "zh-TW": "一張選型備忘：工作負載、latency target、memory 限制，以及無需追的架構花式。",
+        "zh-Hans": "一张选型备忘：工作负载、latency target、memory 限制，以及无需追的架构花式。",
+        "en": "A selection memo with workload, latency target, memory constraint and architecture fashion you do not need to chase."
+      },
+      "resources": [{ "kind": "article", "target": "modern-attention-moe-and-serving-tradeoffs", "primary": true }, { "kind": "article", "target": "choose-transformer-generation-and-adaptation-tradeoffs" }, { "kind": "interview-question", "target": "model-routing-needs-a-fallback" }, { "kind": "interview-question", "target": "kv-cache-needs-a-capacity-contract" }, { "kind": "interview-question", "target": "batching-quantisation-and-fallback-need-one-policy" }]
+    },
+    {
+      "id": "model-family-choice",
+      "number": "06",
+      "phase": "foundations",
+      "status": "available",
+      "title": {
+        "zh-HK": "按工作揀 model，唔係按名氣揀",
+        "zh-TW": "按工作選 model，不是按名氣選",
+        "zh-Hans": "按工作选 model，不是按名气选",
+        "en": "Choose a model for the work, not the name"
+      },
+      "summary": {
+        "zh-HK": "選模型時，逐樣比較可用資料、成本、等待時間、掌控程度同固定驗收個案；名氣唔作準。",
+        "zh-TW": "比較 closed／open、small／large、reasoning／general model 時，先問資料、成本、latency、control 與 acceptance case。",
+        "zh-Hans": "比较 closed／open、small／large、reasoning／general model 时，先问数据、成本、latency、control 与 acceptance case。",
+        "en": "When comparing closed/open, small/large and reasoning/general models, begin with data, cost, latency, control and acceptance cases."
+      },
+      "focus": ["model choice", "latency", "cost", "control", "acceptance cases"],
+      "evidence": {
+        "zh-HK": "留下一份模型選擇紀錄：基準做法、兩個候選、拒絕原因同仍未證實嘅主張。佢交代點揀，唔證明候選已適合正式上線。",
+        "zh-TW": "一個 model selection record：baseline、兩個候選、拒絕原因與未證實的 claim。",
+        "zh-Hans": "一个 model selection record：baseline、两个候选、拒绝原因与未证实的 claim。",
+        "en": "A model-selection record with a baseline, two candidates, rejection reasons and unproven claims."
+      },
+      "resources": [{ "kind": "article", "target": "language-model-families-and-when-to-use-them", "primary": true }, { "kind": "article", "target": "choose-transformer-generation-and-adaptation-tradeoffs" }, { "kind": "interview-question", "target": "fine-tune-or-fix-the-system" }]
+    },
+    {
+      "id": "adaptation-choice",
+      "number": "07",
+      "phase": "foundations",
+      "status": "available",
+      "title": {
+        "zh-HK": "先判斷修系統，定係調模型",
+        "zh-TW": "先判斷修系統，還是調模型",
+        "zh-Hans": "先判断修系统，还是调模型",
+        "en": "Decide whether to fix the system or adapt the model"
+      },
+      "summary": {
+        "zh-HK": "遇到結果唔對，先逐層排查資料、檢索、提示詞、流程同測試；冇足夠理由，唔好為微調開工。",
+        "zh-TW": "fine-tuning 不是預設答案。先排查資料、retrieval、prompt、workflow 與 evaluation，再決定是否投入 training。",
+        "zh-Hans": "fine-tuning 不是默认答案。先排查数据、retrieval、prompt、workflow 与 evaluation，再决定是否投入 training。",
+        "en": "Fine-tuning is not the default answer. Inspect data, retrieval, prompts, workflow and evaluation before investing in training."
+      },
+      "focus": ["fine-tuning", "retrieval", "prompt", "evaluation", "training data"],
+      "evidence": {
+        "zh-HK": "留下一份調整決定紀錄：失敗模式、較平嘅基準做法、資料要求、測試閘口同停止條件。呢份紀錄唔證明一定要微調，更唔代表訓練已成功。",
+        "zh-TW": "一份 adaptation decision record：failure pattern、較省成本 baseline、資料要求、eval gate 與停止條件。",
+        "zh-Hans": "一份 adaptation decision record：failure pattern、较省成本 baseline、数据要求、eval gate 与停止条件。",
+        "en": "An adaptation decision record: failure pattern, cheaper baseline, data requirement, evaluation gate and stop condition."
+      },
+      "resources": [{ "kind": "article", "target": "adaptation-data-and-alignment-choice", "primary": true }, { "kind": "article", "target": "choose-transformer-generation-and-adaptation-tradeoffs" }, { "kind": "interview-question", "target": "fine-tune-or-fix-the-system" }, { "kind": "interview-question", "target": "adaptation-method-needs-a-memory-and-eval-budget" }, { "kind": "interview-question", "target": "a-fine-tune-win-can-still-fail-a-critical-slice" }]
+    },
+    {
+      "id": "prompt-context-interface",
+      "number": "08",
+      "phase": "applications",
+      "status": "available",
+      "title": {
+        "zh-HK": "將 prompt 同 context 當可測試嘅介面",
+        "zh-TW": "把 prompt 與 context 當成可測試的介面",
+        "zh-Hans": "把 prompt 与 context 当成可测试的接口",
+        "en": "Treat prompt and context as a testable interface"
+      },
+      "summary": {
+        "zh-HK": "將提示詞同資料脈絡當成要測嘅介面：寫清輸入、資料從邊度嚟、輸出格式同固定個案，先比較改動。",
+        "zh-TW": "不要追一段神 prompt。寫清 input contract、context 來源、output schema 與 fixed cases，才比較改動。",
+        "zh-Hans": "不要追一段神 prompt。写清 input contract、context 来源、output schema 与 fixed cases，才比较改动。",
+        "en": "Do not chase a magic prompt. State the input contract, context source, output schema and fixed cases before comparing changes."
+      },
+      "focus": ["prompt versioning", "context", "output schema", "fixed cases"],
+      "evidence": {
+        "zh-HK": "留下一份提示詞實驗紀錄：版本、固定測試個案、預期輸出、實際輸出同覆核決定。呢個練習唔代表使用者場景已經驗證。",
+        "zh-TW": "一份 prompt experiment record：版本、case、預期輸出、實際輸出、review decision。",
+        "zh-Hans": "一份 prompt experiment record：版本、case、预期输出、实际输出、review decision。",
+        "en": "A prompt experiment record with version, case, expected output, actual output and review decision."
+      },
+      "resources": [{ "kind": "article", "target": "prompt-play-to-professional-evidence", "primary": true }, { "kind": "article", "target": "prompt-patterns-context-compaction-and-multilingual-evals" }, { "kind": "interview-question", "target": "prompt-contracts-need-an-acceptance-test" }, { "kind": "interview-question", "target": "structured-output-is-not-a-grounding-check" }, { "kind": "interview-question", "target": "prompt-versioning-is-not-an-audit-trail" }]
+    },
+    {
+      "id": "retrieval-rag",
+      "number": "09",
+      "phase": "applications",
+      "status": "available",
+      "title": {
+        "zh-HK": "用 retrieval 處理知識缺口",
+        "zh-TW": "用 retrieval 處理知識缺口",
+        "zh-Hans": "用 retrieval 处理知识缺口",
+        "en": "Use retrieval for a knowledge gap"
+      },
+      "summary": {
+        "zh-HK": "知識不足時，逐段拆開資料來源、切段、找段、生成答案、引用同權限；每一段都有可能出錯。",
+        "zh-TW": "RAG 不是「加向量庫」。先說清 source of truth、chunk、retrieval、generation、citation 與 permission 各自如何失敗。",
+        "zh-Hans": "RAG 不是“加向量库”。先说清 source of truth、chunk、retrieval、generation、citation 与 permission 各自如何失败。",
+        "en": "RAG is not “add a vector database.” State how source of truth, chunking, retrieval, generation, citation and permission can each fail."
+      },
+      "focus": ["source of truth", "chunking", "retrieval", "citation", "permission"],
+      "evidence": {
+        "zh-HK": "留下一張 RAG 故障地圖：每種故障對應基準做法、測試個案、負責人同可接受嘅轉交方式。地圖唔會自動授權資料，亦唔代表檢索已可靠。",
+        "zh-TW": "一張 RAG failure map：每個 failure 有 baseline、test case、owner 與可接受 handoff。",
+        "zh-Hans": "一张 RAG failure map：每个 failure 有 baseline、test case、owner 与可接受 handoff。",
+        "en": "A RAG failure map where every failure has a baseline, test case, owner and acceptable handoff."
+      },
+      "resources": [{ "kind": "article", "target": "rag-chatbot-to-portfolio-evidence", "primary": true }, { "kind": "interview-question", "target": "high-similarity-is-not-relevance" }, { "kind": "article", "target": "enterprise-ai-portfolio-policy-pilot" }, { "kind": "lab", "target": "build-lab", "anchor": "build-lab-output-decision-brief", "title": { "zh-HK": "去 Build Lab 寫決定簡介", "zh-TW": "到 Build Lab 寫決策簡介", "zh-Hans": "到 Build Lab 写决策简介", "en": "Build Lab: write the decision brief" } }, { "kind": "article", "target": "retrieval-index-chunk-rerank-and-cache" }, { "kind": "article", "target": "rag-freshness-conflicts-and-advanced-patterns" }, { "kind": "interview-question", "target": "rag-retrieval-generation-or-permission" }, { "kind": "interview-question", "target": "a-reranker-cannot-restore-a-missing-permission" }, { "kind": "interview-question", "target": "conflicting-sources-need-an-owner" }, { "kind": "interview-question", "target": "an-embedding-change-needs-an-index-migration" }, { "kind": "interview-question", "target": "ann-recall-needs-a-latency-budget" }, { "kind": "interview-question", "target": "metadata-needs-a-backfill-contract" }, { "kind": "interview-question", "target": "a-document-deletion-needs-a-retrieval-receipt" }]
+    },
+    {
+      "id": "agents-tools",
+      "number": "10",
+      "phase": "applications",
+      "status": "available",
+      "title": {
+        "zh-HK": "畀模型用 tool，但唔交出後果性行動",
+        "zh-TW": "讓模型用 tool，但不交出後果性行動",
+        "zh-Hans": "让模型用 tool，但不交出后果性行动",
+        "en": "Let a model use tools without giving away consequential action"
+      },
+      "summary": {
+        "zh-HK": "想畀模型用工具時，先分清固定流程同會自己循環嘅 agent；只開最低需要嘅權限，寫出狀態、停止條件同人手批准。",
+        "zh-TW": "分清固定 workflow 與 agent loop；最小權限、可觀察 state、停止條件與 human approval 才是 agent 設計。",
+        "zh-Hans": "分清固定 workflow 与 agent loop；最小权限、可观察 state、停止条件与 human approval 才是 agent 设计。",
+        "en": "Separate a fixed workflow from an agent loop; least privilege, observable state, stop conditions and human approval are the actual agent design."
+      },
+      "focus": ["tool use", "agent loop", "least privilege", "stop condition", "approval"],
+      "evidence": {
+        "zh-HK": "留下一份工具合約：輸入格式、容許動作、拒絕動作、結束狀態同覆核者。寫咗合約唔等於模型有權做會造成外部後果嘅動作。",
+        "zh-TW": "一份 tool contract：input schema、allowed action、denied action、terminal state 與 reviewer。",
+        "zh-Hans": "一份 tool contract：input schema、allowed action、denied action、terminal state 与 reviewer。",
+        "en": "A tool contract with input schema, allowed action, denied action, terminal state and reviewer."
+      },
+      "resources": [{ "kind": "article", "target": "review-an-ai-agent-before-clicking-allow", "primary": true }, { "kind": "article", "target": "agent-memory-planning-and-reflection" }, { "kind": "interview-question", "target": "agent-draft-without-consequential-actions" }, { "kind": "interview-question", "target": "an-agent-eval-needs-a-route-verdict" }, { "kind": "interview-question", "target": "tool-schema-is-not-least-privilege" }, { "kind": "interview-question", "target": "mcp-discovery-is-not-an-approval-gate" }, { "kind": "interview-question", "target": "memory-must-expire-before-it-becomes-policy" }]
+    },
+    {
+      "id": "agentic-engineering",
+      "number": "11",
+      "phase": "applications",
+      "status": "available",
+      "title": {
+        "zh-HK": "將 agent 變成可停止、可 review 嘅 workflow",
+        "zh-TW": "把 agent 變成可停止、可 review 的 workflow",
+        "zh-Hans": "把 agent 变成可停止、可 review 的 workflow",
+        "en": "Turn an agent into a stoppable, reviewable workflow"
+      },
+      "summary": {
+        "zh-HK": "將 agent workflow 寫成可停止、可覆核嘅流程：記下狀態、重試、資源上限、處理紀錄、失敗後去向同何時算完成。",
+        "zh-TW": "可靠性不靠 framework 名。把 state、retry、budget、trace、failure route 與 definition of done 放入同一條 execution path。",
+        "zh-Hans": "可靠性不靠 framework 名。把 state、retry、budget、trace、failure route 与 definition of done 放入同一条 execution path。",
+        "en": "Reliability does not come from a framework name. Put state, retries, budget, traces, failure routes and definition of done on one execution path."
+      },
+      "focus": ["state", "retry", "budget", "trace", "definition of done"],
+      "evidence": {
+        "zh-HK": "留下一組成功、失敗同復原情境，連同每個結束狀態要點樣交回畀人。呢組個案唔代表流程可以無人看管運行。",
+        "zh-TW": "一組 success、failure 與 recovery cases，連同每個 terminal state 的 human handoff。",
+        "zh-Hans": "一组 success、failure 与 recovery cases，连同每个 terminal state 的 human handoff。",
+        "en": "A set of success, failure and recovery cases with a human handoff for every terminal state."
+      },
+      "resources": [{ "kind": "article", "target": "build-stoppable-ai-agents-with-serving-budgets", "primary": true }, { "kind": "interview-question", "target": "a-retry-is-not-a-recovery-plan" }, { "kind": "article", "target": "evaluate-an-ai-agent-workflow-not-just-the-final-answer" }, { "kind": "article", "target": "from-vague-request-to-accepted-feature" }, { "kind": "article", "target": "agent-protocols-orchestration-and-computer-use" }, { "kind": "article", "target": "harness-definition-of-done-and-framework-choice" }, { "kind": "interview-question", "target": "an-agent-loop-needs-terminal-states" }, { "kind": "interview-question", "target": "a-queue-needs-a-dead-letter-path" }]
+    },
+    {
+      "id": "inference-budget",
+      "number": "12",
+      "phase": "production",
+      "status": "available",
+      "title": {
+        "zh-HK": "將 latency 同 cost 當產品 budget",
+        "zh-TW": "把 latency 與 cost 當產品 budget",
+        "zh-Hans": "把 latency 与 cost 当产品 budget",
+        "en": "Treat latency and cost as product budgets"
+      },
+      "summary": {
+        "zh-HK": "量度慢同貴發生喺邊一段，先決定係咪加 GPU、快取、批次處理或換模型；P99 同錯誤路徑都要睇。",
+        "zh-TW": "先 trace 哪裡慢、哪裡貴，再加 GPU、cache、batch 或換 model。P99 與 error path 要和平均值一起看。",
+        "zh-Hans": "先 trace 哪里慢、哪里贵，再加 GPU、cache、batch 或换 model。P99 与 error path 要和平均值一起看。",
+        "en": "Trace where the system is slow and expensive before adding GPUs, caching, batching or switching models. Read P99 and error paths beside averages."
+      },
+      "focus": ["P99", "prefill", "decode", "cache", "batching", "cost"],
+      "evidence": {
+        "zh-HK": "留下一張效能預算表：目標、基準處理紀錄、最慢步驟、每項改善嘅成本同替代做法。一次本機紀錄唔係正式上線嘅延遲或成本承諾。",
+        "zh-TW": "一張 performance budget：target、baseline trace、最慢 step、每項改善的成本與 fallback。",
+        "zh-Hans": "一张 performance budget：target、baseline trace、最慢 step、每项改善的成本与 fallback。",
+        "en": "A performance budget with target, baseline trace, slowest step, cost of each improvement and fallback."
+      },
+      "resources": [{ "kind": "article", "target": "inference-memory-scheduling-and-serving-engines", "primary": true }, { "kind": "article", "target": "build-stoppable-ai-agents-with-serving-budgets" }, { "kind": "article", "target": "build-a-resumable-ai-batch-worker" }, { "kind": "lab", "target": "build-lab", "anchor": "build-lab-output-deterministic-run-trace", "title": { "zh-HK": "去 Build Lab 睇一次固定跑程", "zh-TW": "到 Build Lab 看一次固定執行", "zh-Hans": "到 Build Lab 看一次固定运行", "en": "Build Lab: inspect one deterministic run" } }, { "kind": "interview-question", "target": "trace-p99-latency-before-adding-gpus" }, { "kind": "interview-question", "target": "a-faster-average-can-hide-a-worse-p99" }, { "kind": "interview-question", "target": "mixed-prefill-decode-needs-a-shared-budget" }, { "kind": "interview-question", "target": "kv-cache-needs-a-capacity-contract" }, { "kind": "interview-question", "target": "batching-quantisation-and-fallback-need-one-policy" }]
+    },
+    {
+      "id": "evaluation-observability",
+      "number": "13",
+      "phase": "production",
+      "status": "available",
+      "title": {
+        "zh-HK": "用測試、處理紀錄同交付規則檢查系統行為",
+        "zh-TW": "用測試、處理紀錄與交付規則檢查系統行為",
+        "zh-Hans": "用测试、处理记录与交付规则检查系统行为",
+        "en": "Check system behaviour with tests, records, and release rules"
+      },
+      "summary": {
+        "zh-HK": "唔好只睇最後答案。分開檢查結果、工具路徑、安全、成本、穩定性同交回畀人處理嘅時機，先知道可唔可以交出去。",
+        "zh-TW": "不要只看最後答案。把結果、工具路徑、安全、成本、穩定性與交回人處理分開看，才知道這一版能不能交出去。",
+        "zh-Hans": "不要只看最后答案。把结果、工具路径、安全、成本、稳定性与交回人处理分开看，才知道这一版能不能交出去。",
+        "en": "Do not look only at the final answer. Check the result, tool path, safety, cost, reliability, and cases returned to a person separately before deciding whether this version can ship."
+      },
+      "focus": ["evaluation set", "trace", "release gate", "regression", "handoff"],
+      "evidence": {
+        "zh-HK": "留下一組有版本嘅測試個案、一段處理紀錄、一次是否交付嘅決定，同埋退返上一版嘅條件。測試通過只代表呢組個案，唔證明真實使用結果。",
+        "zh-TW": "一組有版本的測試案例、一段處理紀錄、一次是否交付的決定，以及退回上一版的條件。",
+        "zh-Hans": "一组有版本的测试案例、一段处理记录、一次是否交付的决定，以及退回上一版的条件。",
+        "en": "A versioned set of test cases, a processing record, a shipping decision, and the conditions for returning to the previous version."
+      },
+      "resources": [{ "kind": "article", "target": "evaluate-an-ai-agent-workflow-not-just-the-final-answer", "primary": true }, { "kind": "article", "target": "llm-evals-human-review-and-observability" }, { "kind": "lab", "target": "build-lab", "anchor": "build-lab-output-fixed-cases", "title": { "zh-HK": "去 Build Lab 寫固定檢查情境", "zh-TW": "到 Build Lab 寫固定檢查情境", "zh-Hans": "到 Build Lab 写固定检查情境", "en": "Build Lab: write the fixed checks" } }, { "kind": "interview-question", "target": "release-or-rollback-with-evidence" }, { "kind": "interview-question", "target": "an-eval-score-needs-human-calibration" }, { "kind": "interview-question", "target": "an-adversarial-matrix-needs-a-regression-contract" }, { "kind": "interview-question", "target": "an-agent-eval-needs-a-route-verdict" }, { "kind": "interview-question", "target": "data-drift-is-not-just-a-retraining-trigger" }, { "kind": "interview-question", "target": "a-rollout-needs-a-safe-baseline" }, { "kind": "interview-question", "target": "a-fine-tune-win-can-still-fail-a-critical-slice" }]
+    },
+    {
+      "id": "safety-security",
+      "number": "14",
+      "phase": "production",
+      "status": "available",
+      "title": {
+        "zh-HK": "安全、私隱同可追溯決定",
+        "zh-TW": "安全、隱私與可追溯決策",
+        "zh-Hans": "安全、隐私与可追溯决策",
+        "en": "Safety, privacy and traceable decisions"
+      },
+      "summary": {
+        "zh-HK": "將不可信內容當資料，唔當指令。資料界線、最小權限、攻擊測試同可追查紀錄要喺按 Allow 之前。",
+        "zh-TW": "把 untrusted content 當成 data，而不是 instruction。最小權限、資料邊界、red-team case 與 audit trail 要早過「按 Allow」。",
+        "zh-Hans": "把 untrusted content 当成 data，而不是 instruction。最小权限、数据边界、red-team case 与 audit trail 要早过“按 Allow”。",
+        "en": "Treat untrusted content as data, not instruction. Least privilege, data boundaries, red-team cases and audit trails come before “Allow.”"
+      },
+      "focus": ["prompt injection", "least privilege", "PII", "audit trail", "red teaming"],
+      "evidence": {
+        "zh-HK": "留下一份風險與轉交表：資料、攻擊面、控制、負責人同需要停低嘅情況。呢份表唔取代安全審批或私隱判斷。",
+        "zh-TW": "一份 threat-and-handoff table：資料、攻擊面、控制、owner、需要停止的情況。",
+        "zh-Hans": "一份 threat-and-handoff table：数据、攻击面、控制、owner、需要停止的情况。",
+        "en": "A threat-and-handoff table with data, attack surface, control, owner and conditions that require a stop."
+      },
+      "resources": [{ "kind": "article", "target": "safety-governance-privacy-and-incident-response", "primary": true }, { "kind": "article", "target": "review-an-ai-agent-before-clicking-allow" }, { "kind": "interview-question", "target": "treat-untrusted-documents-as-data" }, { "kind": "interview-question", "target": "an-adversarial-matrix-needs-a-regression-contract" }, { "kind": "interview-question", "target": "an-agent-eval-needs-a-route-verdict" }, { "kind": "interview-question", "target": "masking-prevents-a-leak-not-a-bad-decision" }, { "kind": "interview-question", "target": "a-public-dataset-needs-a-source-receipt" }]
+    },
+    {
+      "id": "multimodal",
+      "number": "15",
+      "phase": "production",
+      "status": "available",
+      "title": {
+        "zh-HK": "多模態：唔只係加張相或者把聲",
+        "zh-TW": "多模態：不只是加一張圖片或一段聲音",
+        "zh-Hans": "多模态：不只是加一张图片或一段声音",
+        "en": "Multimodal is more than adding an image or voice"
+      },
+      "summary": {
+        "zh-HK": "圖像、聲音同文字各有延遲、品質、私隱同替代做法。先畫使用者流程，再選模型同資料傳遞方式。",
+        "zh-TW": "image、audio、text 各自有 latency、quality、privacy 與 fallback。先畫 user journey，再決定模型與 transport。",
+        "zh-Hans": "image、audio、text 各自有 latency、quality、privacy 与 fallback。先画 user journey，再决定模型与 transport。",
+        "en": "Image, audio and text each bring latency, quality, privacy and fallback concerns. Draw the user journey before choosing model and transport."
+      },
+      "focus": ["vision", "speech", "latency", "privacy", "fallback"],
+      "evidence": {
+        "zh-HK": "留下一張多模態預算表：每種輸入／輸出嘅使用情境、失敗情況、替代做法同驗收訊號。佢唔代表已驗證到真人使用、私隱或無障礙需要。",
+        "zh-TW": "一張 modality budget：每種 input／output 的使用情境、failure、fallback 與驗收訊號。",
+        "zh-Hans": "一张 modality budget：每种 input／output 的使用情境、failure、fallback 与验收信号。",
+        "en": "A modality budget with use case, failure, fallback and acceptance signal for each input/output."
+      },
+      "resources": [{ "kind": "article", "target": "make-a-multimodal-demo-reviewable", "primary": true }, { "kind": "interview-question", "target": "voice-latency-is-a-system-budget" }, { "kind": "article", "target": "multimodal-architectures-generation-and-evaluation" }, { "kind": "interview-question", "target": "ocr-text-is-still-untrusted-input" }, { "kind": "interview-question", "target": "a-visual-claim-needs-a-region-and-an-abstention" }, { "kind": "interview-question", "target": "image-preprocessing-needs-a-task-contract" }, { "kind": "interview-question", "target": "multimodal-evals-need-a-modality-slice" }]
+    },
+    {
+      "id": "system-delivery",
+      "number": "16",
+      "phase": "production",
+      "status": "available",
+      "title": {
+        "zh-HK": "由 architecture 走到可以交付嘅系統",
+        "zh-TW": "從 architecture 走到可以交付的系統",
+        "zh-Hans": "从 architecture 走到可以交付的系统",
+        "en": "Move from architecture to a deliverable system"
+      },
+      "summary": {
+        "zh-HK": "由使用者要作嘅決定開始，串起資料界線、基準做法、服務步驟、容量、推出同回退安排，先有一份可討論嘅架構。",
+        "zh-TW": "從 user decision、data boundary、baseline、service path、capacity、release 與 rollback 講成一條系統故事。",
+        "zh-Hans": "从 user decision、data boundary、baseline、service path、capacity、release 与 rollback 讲成一条系统故事。",
+        "en": "Tell one system story from user decision, data boundary and baseline through service path, capacity, release and rollback."
+      },
+      "focus": ["system design", "capacity", "deployment", "rollback", "human handoff"],
+      "evidence": {
+        "zh-HK": "留下一份架構簡報：決定、非目標、服務界線、失敗後去向、負責人同試行閘口。佢只交代設計選擇，唔係正式上線架構或批准。",
+        "zh-TW": "一份 architecture brief：decision、non-goal、service boundary、failure route、owner 與 pilot gate。",
+        "zh-Hans": "一份 architecture brief：decision、non-goal、service boundary、failure route、owner 与 pilot gate。",
+        "en": "An architecture brief with decision, non-goal, service boundary, failure route, owner and pilot gate."
+      },
+      "resources": [{ "kind": "article", "target": "from-offline-evaluation-to-an-authorised-pilot", "primary": true }, { "kind": "lab", "target": "build-lab", "anchor": "build-lab-output-handoff-pilot-boundary", "title": { "zh-HK": "去 Build Lab 寫交人處理同試行界線", "zh-TW": "到 Build Lab 寫人工交接與試行界線", "zh-Hans": "到 Build Lab 写人工交接与试行边界", "en": "Build Lab: write the handoff and pilot boundary" } }, { "kind": "article", "target": "ai-hardware-routing-deployment-and-transport" }, { "kind": "interview-question", "target": "design-an-internal-policy-assistant" }, { "kind": "interview-question", "target": "coding-and-data-structures" }, { "kind": "interview-question", "target": "a-priority-queue-needs-a-staleness-rule" }, { "kind": "interview-question", "target": "a-cursor-is-not-a-stable-order" }, { "kind": "interview-question", "target": "applied-ai-delivery" }]
+    },
+    {
+      "id": "frontier-filter",
+      "number": "17",
+      "phase": "career-evidence",
+      "status": "available",
+      "title": {
+        "zh-HK": "追新概念，但唔追 hype",
+        "zh-TW": "追新概念，但不追 hype",
+        "zh-Hans": "追新概念，但不追 hype",
+        "en": "Follow frontier ideas without chasing hype"
+      },
+      "summary": {
+        "zh-HK": "讀論文、模型發布或新 framework 時，問佢改變咗乜限制、同邊個基準相比、仲有乜未知；唔替熱門字背書。",
+        "zh-TW": "面對 paper、model release 與新 framework，先問它改變了哪個 constraint、比較了什麼 baseline，以及哪個部分仍未知。",
+        "zh-Hans": "面对 paper、model release 与新 framework，先问它改变了哪个 constraint、比较了什么 baseline，以及哪个部分仍未知。",
+        "en": "When reading a paper, model release or new framework, ask which constraint changed, what baseline was compared and what remains unknown."
+      },
+      "focus": ["primary source", "baseline", "method", "limitation", "decision"],
+      "evidence": {
+        "zh-HK": "留下一張來源紀錄：主張、原始來源、方法、限制，同埋佢會唔會改變你下一步。佢唔等於來源已喺你嘅情境證實可行。",
+        "zh-TW": "一張 source receipt：主張、原始來源、方法、限制，以及你是否會改變下一步。",
+        "zh-Hans": "一张 source receipt：主张、原始来源、方法、限制，以及你是否会改变下一步。",
+        "en": "A source receipt: claim, primary source, method, limit and whether it changes your next step."
+      },
+      "resources": [{ "kind": "article", "target": "read-frontier-ai-claims-with-source-receipts", "primary": true }, { "kind": "article", "target": "choose-ai-learning-sources-by-evidence" }, { "kind": "article", "target": "frontier-world-models-and-self-improvement" }, { "kind": "interview-question", "target": "a-public-dataset-needs-a-source-receipt" }]
+    },
+    {
+      "id": "interview-evidence",
+      "number": "18",
+      "phase": "career-evidence",
+      "status": "available",
+      "title": {
+        "zh-HK": "將工作證據講成面試回答",
+        "zh-TW": "把工作證據講成面試回答",
+        "zh-Hans": "把工作证据讲成面试回答",
+        "en": "Turn work evidence into an interview answer"
+      },
+      "summary": {
+        "zh-HK": "每次只練一條問題：講清決定、點樣運作、取捨、會喺邊度失敗，同埋有咩紀錄可以畀人追問。",
+        "zh-TW": "每次只練一條問題：先講 decision，再講 mechanism、trade-off、failure boundary，以及你有什麼 artefact 可以讓人追問。",
+        "zh-Hans": "每次只练一条问题：先讲 decision，再讲 mechanism、trade-off、failure boundary，以及你有什么 artefact 可以让人追问。",
+        "en": "Practise one question at a time: state the decision, mechanism, trade-off, failure boundary and the artefact someone can probe."
+      },
+      "focus": ["decision", "mechanism", "trade-off", "failure boundary", "artefact"],
+      "evidence": {
+        "zh-HK": "留下一段 90 秒回答，加一個 README、測試個案或決定紀錄作為可追問證據。佢幫你如實講工作，唔係工作成果或面試結果保證。",
+        "zh-TW": "一段 90 秒回答，加上一個 README、eval case 或 decision record 作為可追問證據。",
+        "zh-Hans": "一段 90 秒回答，加上一个 README、eval case 或 decision record 作为可追问证据。",
+        "en": "A 90-second answer plus a README, evaluation case or decision record as inspectable evidence."
+      },
+      "resources": [
+        { "kind": "article", "target": "build-a-github-portfolio-proof-pack", "primary": true },
+        { "kind": "interview-prep", "target": "ai-engineer-interview-prep", "title": { "zh-HK": "按要補嘅能力揀下一條題", "zh-TW": "依要補的能力選下一題", "zh-Hans": "按要补的能力选下一题", "en": "Choose the next question by capability" } },
+        { "kind": "lab", "target": "build-lab", "anchor": "build-lab-output-readme-evidence-map", "title": { "zh-HK": "去 Build Lab 整理 README 同證據地圖", "zh-TW": "到 Build Lab 整理 README 與證據地圖", "zh-Hans": "到 Build Lab 整理 README 与证据地图", "en": "Build Lab: assemble the README and evidence map" } },
+        { "kind": "article", "target": "turn-an-ai-course-project-into-portfolio-evidence" },
+        { "kind": "article", "target": "score-an-ai-portfolio-by-evidence-not-fluency" },
+        { "kind": "interview-question", "target": "project-deep-dive-and-role-fit" },
+        { "kind": "interview-question", "target": "a-project-story-needs-a-counterexample" }
+      ]
+    }
+  ],
+  "selfLearning": {
+    "eyebrow": {
+      "zh-HK": "揀起點",
+      "zh-TW": "選起點",
+      "zh-Hans": "选起点",
+      "en": "Choose an entry point"
+    },
+    "title": {
+      "zh-HK": "先由你手上嘅問題入場",
+      "zh-TW": "先從你手上的問題開始",
+      "zh-Hans": "先从你手上的问题开始",
+      "en": "Start with the problem already in your hands"
+    },
+    "intro": {
+      "zh-HK": "四條分支幫你按而家嘅問題揀起點。做落發現有基礎未補到，就返去相關站點補一份可核對嘅紀錄。",
+      "zh-TW": "四條分支不是捷徑。它們只是幫你依現況選第一個檢查點；實作時若答不出前面的問題，就回到相關一站補證據。",
+      "zh-Hans": "四条分支不是捷径。它们只是帮你按现状选第一个检查点；实作时若答不出前面的问题，就回到相关一站补证据。",
+      "en": "These four branches are not shortcuts. They help you choose a first check from your current situation; if the work exposes an earlier gap, return to that stop and add the evidence."
+    },
+    "root": {
+      "zh-HK": "我而家最需要解決嘅係……",
+      "zh-TW": "我現在最需要解決的是……",
+      "zh-Hans": "我现在最需要解决的是……",
+      "en": "What do I most need to resolve right now?"
+    },
+    "routes": [
+      {
+        "id": "choose-a-problem",
+        "range": "00–07",
+        "startStage": "00",
+        "title": {
+          "zh-HK": "我仲未揀到一個值得做嘅問題",
+          "zh-TW": "我還沒選到一個值得做的問題",
+          "zh-Hans": "我还没选到一个值得做的问题",
+          "en": "I have not chosen a problem worth working on yet"
+        },
+        "description": {
+          "zh-HK": "由 00 開始，揀一個低風險、做錯亦可以收回嘅決定。寫清資料界線同點樣揀；未釐清前，唔好急住做自動循環流程（agent workflow）。",
+          "zh-TW": "從 00 開始，選一個低風險、可逆的決策，先建立共同語言與選型理由。還沒寫清 data boundary 前，不要急著做 agent。",
+          "zh-Hans": "从 00 开始，选一个低风险、可逆的决策，先建立共同语言与选型理由。还没写清 data boundary 前，不要急着做 agent。",
+          "en": "Begin at 00 with one low-risk, reversible decision. Establish shared language and a selection rationale before building an agent or using data with an unclear boundary."
+        },
+        "action": {
+          "zh-HK": "由第 00 站開始",
+          "zh-TW": "從第 00 站開始",
+          "zh-Hans": "从第 00 站开始",
+          "en": "Start at stage 00"
+        }
+      },
+      {
+        "id": "make-a-workflow-testable",
+        "range": "08–11",
+        "startStage": "08",
+        "title": {
+          "zh-HK": "我有 prompt／chatbot demo，但冇穩定做法",
+          "zh-TW": "我有 prompt／chatbot demo，但沒有穩定做法",
+          "zh-Hans": "我有 prompt／chatbot demo，但没有稳定做法",
+          "en": "I have a prompt or chatbot demo, but no repeatable way to work"
+        },
+        "description": {
+          "zh-HK": "由 08 入手：為輸入、可用資料同輸出寫規格，並定幾個固定驗收個案。講唔清模型取捨，就返 00–07。",
+          "zh-TW": "把 08 當診斷起點：先為 input、context 與 output 寫 contract 與 fixed cases。如果說不出 model 取捨，回到 00–07。",
+          "zh-Hans": "把 08 当诊断起点：先为 input、context 与 output 写 contract 与 fixed cases。如果说不出 model 取舍，回到 00–07。",
+          "en": "Use 08 as a diagnostic entry point: write contracts and fixed cases for input, context and output. If you cannot explain the model trade-off, return to 00–07."
+        },
+        "action": {
+          "zh-HK": "由第 08 站檢查",
+          "zh-TW": "從第 08 站檢查",
+          "zh-Hans": "从第 08 站检查",
+          "en": "Check stage 08 first"
+        }
+      },
+      {
+        "id": "make-a-demo-reviewable",
+        "range": "12–16",
+        "startStage": "12",
+        "title": {
+          "zh-HK": "我有可以跑嘅 demo，但唔知可唔可以交付",
+          "zh-TW": "我有可以跑的 demo，但不知道能不能交付",
+          "zh-Hans": "我有可以跑的 demo，但不知道能不能交付",
+          "en": "I have a runnable demo, but do not know whether it is deliverable"
+        },
+        "description": {
+          "zh-HK": "由 12 入手檢查測試、成本、權限同失敗後嘅轉交。未有基準做法或驗收個案，就先返 08–11。",
+          "zh-TW": "從 12 開始檢查 eval、cost、permission 與 failure route。如果連 baseline 或 acceptance cases 都沒有，回到 08–11。",
+          "zh-Hans": "从 12 开始检查 eval、cost、permission 与 failure route。如果连 baseline 或 acceptance cases 都没有，回到 08–11。",
+          "en": "Start at 12 to inspect evaluation, cost, permission and the failure route. If there is no baseline or acceptance case, return to 08–11."
+        },
+        "action": {
+          "zh-HK": "由第 12 站檢查",
+          "zh-TW": "從第 12 站檢查",
+          "zh-Hans": "从第 12 站检查",
+          "en": "Check stage 12 first"
+        }
+      },
+      {
+        "id": "package-work-evidence",
+        "range": "17–18",
+        "startStage": "17",
+        "title": {
+          "zh-HK": "我有 project，但講唔成作品證據",
+          "zh-TW": "我有 project，但講不成作品證據",
+          "zh-Hans": "我有 project，但讲不成作品证据",
+          "en": "I have a project, but cannot turn it into portfolio evidence"
+        },
+        "description": {
+          "zh-HK": "由 17 開始收窄來源、README 同 90 秒回答。如果份紀錄指唔返一個具體決定，就返相關系統站補。",
+          "zh-TW": "從 17 開始收斂 source、README 與 90 秒回答。如果 artefact 指不回一個明確決策，回到相關系統站補齊。",
+          "zh-Hans": "从 17 开始收敛 source、README 与 90 秒回答。如果 artefact 指不回一个明确决策，回到相关系统站补齐。",
+          "en": "Start at 17 to consolidate sources, a README and a 90-second answer. If the artefact cannot point back to a clear decision, return to the relevant system stop."
+        },
+        "action": {
+          "zh-HK": "由第 17 站開始收證據",
+          "zh-TW": "從第 17 站開始收證據",
+          "zh-Hans": "从第 17 站开始收证据",
+          "en": "Start packaging evidence at stage 17"
+        }
+      }
+    ],
+    "loop": {
+      "title": {
+        "zh-HK": "每站用呢三步留低紀錄",
+        "zh-TW": "每一站跟著這三步做",
+        "zh-Hans": "每一站跟着这三步做",
+        "en": "Use the same three moves at every stop"
+      },
+      "steps": [
+        {
+          "title": {
+            "zh-HK": "寫清一件要拍板嘅事",
+            "zh-TW": "寫下一個決策",
+            "zh-Hans": "写下一个决策",
+            "en": "Write one decision"
+          },
+          "text": {
+            "zh-HK": "寫清邊個要決定乜，同埋今次明確唔做乜；工具等到之後先開。",
+            "zh-TW": "先寫誰要作什麼決策，以及這次明確不做什麼；不要先打開一堆工具。",
+            "zh-Hans": "先写谁要作什么决策，以及这次明确不做什么；不要先打开一堆工具。",
+            "en": "Name who needs which decision and the explicit non-goal before opening a pile of tools."
+          }
+        },
+        {
+          "title": {
+            "zh-HK": "跟第一條導讀留低紀錄",
+            "zh-TW": "依首要導讀交 artefact",
+            "zh-Hans": "按首要导读交 artefact",
+            "en": "Use the primary guide to make the artefact"
+          },
+          "text": {
+            "zh-HK": "讀卡內第一條導讀，將「完成後留低」當最低交付；唔需要一次過讀晒所有連結。",
+            "zh-TW": "先讀卡內第一條導讀，把「完成後應有」當最低交付；不需要一次讀完所有連結。",
+            "zh-Hans": "先读卡内第一条导读，把“完成后应有”当作最低交付；不需要一次读完所有链接。",
+            "en": "Read the first guide in the card and treat “Leave with” as the minimum deliverable; you do not need to read every link at once."
+          }
+        },
+        {
+          "title": {
+            "zh-HK": "用一個反例核對",
+            "zh-TW": "用一個反例驗收",
+            "zh-Hans": "用一个反例验收",
+            "en": "Check it with one counterexample"
+          },
+          "text": {
+            "zh-HK": "用相關練習題或一個固定驗收個案核對份紀錄，記低會喺邊度失敗、邊個覆核，同埋下一步。",
+            "zh-TW": "用連結題目或一個固定 acceptance case 測 artefact，記下會在哪裡失敗、誰要 review，以及下一步。",
+            "zh-Hans": "用链接题目或一个固定 acceptance case 测 artefact，记下会在哪里失败、谁要 review，以及下一步。",
+            "en": "Use the linked question or one fixed acceptance case to test the artefact. Record where it can fail, who reviews it, and the next step."
+          }
+        }
+      ]
+    },
+    "boundary": {
+      "zh-HK": "未有一份可查嘅紀錄，唔使急住下一站；有咗亦唔代表已經完美或可以正式上線。只要你講得清決定、取捨同失敗邊界，就帶住紀錄前進。",
+      "zh-TW": "還沒有 artefact 前，不需要急著下一站；但也不必等到完美。只要能說清 decision、取捨與失敗邊界，就帶著紀錄前進。",
+      "zh-Hans": "还没有 artefact 前，不需要急着下一站；但也不必等到完美。只要能说明 decision、取舍与失败边界，就带着记录前进。",
+      "en": "Do not rush to the next stop before you have an artefact, but do not wait for perfection. Move on with a record once you can explain the decision, trade-off and failure boundary."
+    }
+  },
+  "sourceNote": {
+    "label": {
+    "zh-HK": "點樣用呢條路線",
+    "zh-TW": "怎樣使用這條路線",
+    "zh-Hans": "怎样使用这条路线",
+    "en": "How to use this route"
+    },
+    "text": {
+    "zh-HK": "呢條 AI.DOG 路線幫你排好自學次序：每站有要理解嘅機制、最小 artefact，同埋卡住時應回看的地方。團隊、職級同職位要求會唔同；呢條路線唔係任何機構嘅課程、合作或招聘承諾。想比較另一份公開學習地圖，可以開下面連結，再按自己要解嘅問題揀下一步。",
+    "zh-TW": "這條 AI.DOG 路線幫你安排一個自學次序：每一站有要理解的機制、最小 artefact，以及卡住時該回看的地方。團隊、職級與職務會有不同要求；它不是任何機構的課程、合作或招聘承諾。想比較另一份公開學習地圖，可開啟下方連結，再依自己要解決的問題選下一步。",
+    "zh-Hans": "这条 AI.DOG 路线帮你安排一个自学次序：每一站有要理解的机制、最小 artefact，以及卡住时该回看的地方。团队、职级与职位会有不同要求；它不是任何机构的课程、合作或招聘承诺。想比较另一份公开学习地图，可打开下方链接，再按自己要解决的问题选下一步。",
+    "en": "This AI.DOG route gives you an order for self-directed learning: each stop names a mechanism, a minimum artefact, and where to return when you get stuck. Teams, levels, and roles ask for different things; this is not an institution’s course, partnership, or hiring promise. Use the link below to compare another public learning map, then choose the next step from the problem you are trying to solve."
+    },
+    "reference": {
+      "url": "https://github.com/amitshekhariitbhu/ai-engineer-roadmap",
+      "label": {
+      "zh-HK": "比較公開學習地圖",
+      "zh-TW": "比較公開學習地圖",
+      "zh-Hans": "比较公开学习地图",
+      "en": "Compare the public learning map"
+      }
+    }
+  }
+}

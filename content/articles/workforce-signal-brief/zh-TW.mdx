@@ -1,0 +1,100 @@
+> 這個 portfolio build 不是在預測勞動市場，而是在回答一個更小、也更實際的問題：一份來源資料夠不夠完整，能不能交給人看一份有邊界的 context brief？
+
+## 真正要做的決定，比「AI 市場洞察」小得多
+
+想像一位虛構的 workforce-planning research lead 收到一條公共統計來源。在寫 brief 以前，他只要判斷一件事：**這張 source receipt 是否完整到可以讓人 review 一份沒有外部 action 的資料包？**
+
+這刻意不是「哪裡會增加職缺」、「公司應不應該招人」、「應該開多少薪資」或「一個人的下一步工作該怎麼選」。一張漂亮圖表或一段流暢文字，單靠自己回答不了任何一項。
+
+[ABS Data API user guide](https://www.abs.gov.au/statistics/application-programming-interfaces-apis/data-api-user-guide)、[Labour Force, Australia release collection](https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia) 與 [ABS citation guidance](https://www.abs.gov.au/how-cite-abs-sources) 是未來設計 acquisition 時可查核的官方路線，但不代表這個 learning package 曾經 fetch release、query API、選過 series，或使用過 current observation。
+
+文中的情境、月度數值、receipt、cases 與 output 都是 source-shaped synthetic fixture。因此這個作品集只做一項誠實主張：展示未來 briefing workflow 的邊界可以怎樣被人檢查。
+
+## 先寫 source receipt，不要先相信看起來合理的數字
+
+source receipt 是一張短紀錄，讓 reviewer 看見什麼真的收到、什麼還沒證實。一張有用的 receipt 會寫下：
+
+- 預定的官方來源路線與 citation key；
+- 未來 owner 需要確認的 series identity、reference period、unit、adjustment 與 retrieval rule；
+- 哪些 fields 可以進 packet，哪些 private 或 operational fields 必須 reject；
+- freshness rule、schema version 與 fixture identity；以及
+- 誰負責判斷 source suitability、interpretation 與任何未來的 release。
+
+這個 local reference 使用虛構 geography，每個數值都標示為 `synthetic`；manifest 寫的是 `synthetic_source_shaped_not_live_acquired`，不是 current statistic。如果 receipt 不完整、超出自己定下的 freshness rule、period 亂序、沒有 unit，或出現 private field，正確結果是 reject，不是硬補一段聽起來合理的說明。
+
+```text
+source receipt + source-shaped synthetic series
+  -> metadata、order、freshness、private-field checks
+  -> CONTEXT_BRIEF_READY 或 SOURCE_REJECTED
+  -> 給 human reviewer 的 no-action context packet
+  -> fixed cases、change comparison、release/rollback evidence
+```
+
+`CONTEXT_BRIEF_READY` 只代表可以給人看一份範圍受限的 packet，不是 forecast、causal explanation、hiring recommendation、salary decision、個人職涯建議、policy recommendation、publication 或任何 external action。
+
+## Model 前面先有一份 deterministic packet
+
+最小 baseline 完全不需要 LLM。它只保留 allowlisted facts、清楚標示數值是 synthetic、計算簡單的 period-to-period difference，並留下 human reviewer 需要確認的問題。它不能自行補 trend、補 missing context，或把 difference 變成建議。
+
+因此在 prose 進入系統以前，可以先固定下面的 cases：
+
+| Case | 必須具備的行為 |
+| --- | --- |
+| Complete synthetic receipt | 回傳有 synthetic label 與 reviewer questions 的 context packet |
+| Missing unit 或 unordered period | 在 build packet 前 reject |
+| Stale receipt | reject，並指出是 freshness failure |
+| Private field | reject，不可投影進 output |
+| 藏在 source text 裡的 instruction | 不可改變 route |
+| Forecast request | 拒絕要求，維持 no-action boundary |
+
+這些才是 interviewer 或 reviewer 能追問的工程證據：data contract、allowed fields、reject path、result schema，以及改 prompt 或 parser 後仍穩定的 cases。它比一張漂亮答案的 screenshot 更有用。
+
+## GPT-5 mini 與 Promptfoo 應該放在哪裡——又不該當成什麼
+
+案例保留一個 optional `gpt-5-mini` Responses request shape，讓 reviewer 看見未來可能接入的 seam。它是 static、non-executing：沒有 API key、SDK call、network request 或 model output。[GPT-5 mini 文件](https://developers.openai.com/api/docs/models/gpt-5-mini) 描述 model surface，但完全不能證明這個 workforce use case 適合、安全、有效或 ready to release。
+
+Promptfoo 也要分開理解。local fixture configuration 可以描述固定 input、assertions、result shape 與 deterministic provider，而完全不 call provider。另一份 optional Responses configuration 是未來的 execution choice，需要另外有 authority、key handling、data review、cost decision 與 release gate。[Promptfoo configuration guide](https://www.promptfoo.dev/docs/configuration/guide/) 與 [OpenAI provider guide](https://www.promptfoo.dev/docs/providers/openai/) 只是工具文件，不是本項目的 run result。
+
+如果未來真的獲授權接 model，它只能收到 allowlisted packet、回傳 strict schema、保留 synthetic label；一旦 forecast、提出沒有 source 支持的 explanation、加入 private context 或建議 external action，就應該 reject。deterministic route 仍然是它的 baseline。
+
+## Evidence Delta 讓每次改動可以討論
+
+「新 prompt 讀起來比較順」不是選版本的理由。freeze source-shaped fixture 與 fixed case manifest，一次只改一件事，再逐 case compare baseline 和 candidate。
+
+例如 `CHANGE-001` 留下了一個曾接受 forecast request 的 candidate，和一個會 reject 這個 request 的新版 candidate。comparison 只能在同一份 fixture 與 protocol 下寫 `NO_DECLARED_REGRESSION`；那句不是 release approval。
+
+每次改動至少要保留：
+
+1. 改動的 parser、schema、prompt 或 model version；
+2. 每條 case 的固定 input 與預期 boundary；
+3. per-case diff，包括新 failure 或 unchanged result；
+4. human reviewer 的 `KEEP`、`HOLD` 或 `REVERT` 決定；以及
+5. 一個叫得出名稱的 rollback target。
+
+source 是否適合、packet 是否有 context、未來 release 能不能做，仍然由人決定。test 可以證明某條 boundary 有守住，不能拿走這些 decision rights。
+
+## 自己做 portfolio repo 時，應該放什麼
+
+不要圍著 chatbot screen 堆證據；要圍著這個 decision 建立：
+
+```text
+data/source-receipt.md          source route、limits、freshness rule、excluded fields
+data/fixture-manifest.json      synthetic fixture identity 與 schema version
+schemas/context-packet.json     no-action output contract
+src/validate-source.mjs         deterministic reject paths
+src/build-packet.mjs            fact-preserving baseline
+evals/cases.json                fixed normal 與 failure cases
+scripts/evidence-delta.mjs      per-case comparison
+CHANGE-001.md                   hypothesis、reviewer decision、rollback target
+README.md                       commands、evidence map、limits、non-claims
+```
+
+技術上，你展示 validation、schema、versioning、fixed evaluation 與 rollback；交付上，你展示 source rights、data minimisation、named decision owner，以及 consequential action 之前的 stop。[NIST AI RMF Playbook](https://www.nist.gov/itl/ai-risk-management-framework/nist-ai-rmf-playbook) 可以協助討論角色與 documentation；在這裡引用它不是 compliance claim。
+
+## 幾條必須說清楚的 boundary
+
+這裡沒有 acquire 或 check currentness 的 live ABS data。沒有任何數值是 ABS observation、public statistic、trend、forecast 或 causal conclusion。沒有 employer、employee、candidate、salary、customer 或 operational data。沒有 OpenAI request、model output、Promptfoo run、latency、cost、quality 或 safety result。
+
+你可以從 portfolio planner 下載配套 English starter pack：裡面有一張 `not acquired` source receipt、四行 invented monthly values、七個手動 cases 與 `CHANGE-001`，讓你從一份可核對的練習開始。它不是完整的 local reference package，也不是 public repository。完整 reference package 目前沒有經查核的 GitHub URL，所以不能 clone；下載的 starter pack 則有自己的本機 run 指引，也不代表完整 reference package。未來若要發布或做 live-data pilot，仍由 owner 確認 data rights、source handling、human review 與 release authority。
+
+延伸閱讀：[做一份 public-data KEV review packet](/zh-TW/articles/build-a-public-data-kev-review-packet)、[LLM Eval、Human Review 與 Observability](/zh-TW/articles/llm-evals-human-review-and-observability)、[從 offline evaluation 到 authorised pilot](/zh-TW/articles/from-offline-evaluation-to-an-authorised-pilot)、[用 evidence 而不是 fluency 評 portfolio](/zh-TW/articles/score-an-ai-portfolio-by-evidence-not-fluency)，以及 [做一份 GitHub portfolio proof pack](/zh-TW/articles/build-a-github-portfolio-proof-pack)。

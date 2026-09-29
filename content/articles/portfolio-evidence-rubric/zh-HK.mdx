@@ -1,0 +1,74 @@
+> 一個 demo 跑得順，未必代表別人看得出你做過甚麼。作品集最重要，是交代要幫誰處理哪個小決定、資料從哪裏來、出錯時怎樣停下，以及哪些結果仍未可以聲稱。
+
+## 先答兩條不同問題
+
+面試官、合作人或未來 reviewer 看作品集，通常同時想知道兩件事：系統怎樣運作，以及你有沒有把它放在合理範圍。很多 project 只露出前者，所以看起來只像一次 model 或 UI 練習。
+
+### 系統到底做咗乜
+
+這一部分解答「系統怎樣做事，能否重跑」。你不需要堆滿名詞；每項技術選擇都應回答一個具體問題，例如資料有沒有偷看未來、答案能否回到來源、改 prompt 後高風險情境有沒有退步。schema、baseline、固定測試、處理紀錄和回退規則，按需要才放進來。
+
+### 呢個結果又可以、唔可以用來做乜
+
+另一部分要交代：系統替誰處理哪個小決定，錯咗有咩後果，誰拍最後一板，以及別人怎樣接手。問題說明、README、改動紀錄和限制都可以用；文件唔使湊到齊齊整整，重點係人哋睇得出呢段 code 有冇放喺正確問題上。
+
+前者是你怎樣把車砌好和測煞車；後者是你知道它只可在哪裏行、甚麼情況要停，以及誰可以決定下一步。
+
+## 用 0–2 分找下一個缺口
+
+每一欄只給 0、1 或 2 分。0 代表還未寫出來；1 是已有雛形，但別人一追問便答不上；2 是另一個人可以開檔、重跑或讀懂你的取捨。六欄最高 12 分，但不是招聘分數；它只幫你找下一件最值得補的事。
+
+| 檢查位 | 0 分：只見 demo | 1 分：已有雛形 | 2 分：可重跑、可解釋 |
+| --- | --- | --- | --- |
+| **誰會用，它只幫哪個決定** | 「我做了一個 AI assistant。」 | 有一個一般 use case。 | 寫明使用者、他要作的決定、決定時間點、錯誤代價和刻意不做的事。 |
+| **資料從哪裏來，哪些不可用** | 資料來源、權限和時間不清楚。 | 說明用了 sample data，但沒有欄位說明或限制。 | 有資料說明；合成／公開／授權資料分開；敏感資料、未來資料和不能保留的欄位明確被排除。 |
+| **有甚麼可比較的簡單做法** | 只展示一個 model output 或 UI。 | 有 pipeline 或 model，但沒有可比較的起點。 | 用可信的規則、搜尋或人工做法作對照；說明新元件解決哪個已定義問題，以及代價是甚麼。 |
+| **用甚麼情境驗證，出錯時怎辦** | 「結果看起來不錯。」 | 有 accuracy、AUC 或幾張成功 screenshot。 | 固定測試情境包含正常、無答案、資料錯、越權或退步的 case；有預期結果、錯誤分類和失敗例子。 |
+| **怎樣交人看，誰有權停下** | 沒有 README、tests 或 owner。 | README 提到如何 run。 | 有可重跑 command、版本／trace、推出或退回條件；有後果的 action 停在人手關口，並寫清誰拍板。 |
+| **已觀察到甚麼，仍然未知甚麼** | 把 local demo 說成真實業務成果。 | 有指標，但 model 和流程指標混在一起。 | 分開模型表現、流程訊號和真實業務成果；明講只有合成或本地觀察，沒有聲稱採用、節省或可在真實環境使用。 |
+
+### 怎樣讀總分
+
+- **0–4 分**：可能是一個有用的學習練習，但他人只能看見成品，未能看見判斷。
+- **5–8 分**：已經有可討論的方向。不要急着加 agent；優先補一個 baseline、固定 evaluation 或 data boundary。
+- **9–12 分**：可以成為強的面試證據包。它仍不是 production certification，也不保證任何職位結果。
+
+分數不能取代閱讀 artefact。若一個 project 有 10 分，但「human owner」只是一句 prompt，仍要扣問：實際上哪一層權限會阻止外發或寫入？Rubric 的用途是引出呢類問題，不是把分數當答案。
+
+## 一個完全虛構的 worked example
+
+假設一名學習者做了 **Clinic FAQ Draft Desk**。名稱聽起來像醫療產品，但這個 portfolio case 刻意只用她自己寫的合成 FAQ，沒有病人資料、沒有診斷、沒有預約或外發功能。使用者是一位假想的 admin reviewer；工具只會把一段合成問題配對至 FAQ，輸出帶引用的回覆草稿，或者標記「資料不足，交人處理」。
+
+第一版可能有一個漂亮聊天介面：貼上問題，模型就寫一段流暢文字。用 rubric 看，它在六欄多數是 0 分：不知誰會用、FAQ 是否過期、錯答怎樣處理、模型有沒有憑空補內容，亦不知為何需要 LLM。
+
+學習者把它改成可供核對的版本。介面的光效沒有被當成證據；以下內容才讓別人有得逐項核對：
+
+- 一頁 brief：admin reviewer 只決定是否採用草稿；任何醫療建議、個人資料或預約要求一律 handoff。
+- 一套帶 ID、版本和生效日期的合成 FAQ；trace 只保留 FAQ ID、route 和版本，沒有保留問題全文。
+- keyword retrieval 加人工 template 的 baseline；只有在 citation coverage 或正確 handoff 有改善時，才保留生成層。
+- 十六個 fixed cases：四個正常 FAQ、四個找不到答案、兩個矛盾 FAQ、兩個過期版本、兩個 prompt injection、兩個要求系統做禁止動作。
+- 一個 reviewer note：candidate 只有在所有禁止動作仍被 blocked、過期 FAQ 不被引用、並且沒有令 handoff regression 時，才可進入下一次本地 demo；否則回到 baseline。
+
+六欄都可以拎到 2 分，合共 12 分。分數唔係因為它叫做「醫療 AI」，而係因為它避開醫療決定和真實資料，同時留低一套別人查得到嘅替代流程。
+
+## 你的 GitHub repo 應讓人可以驗甚麼
+
+不要把 repo 變成一堆截圖。README 首段先交代 case 是合成還是真實、使用者和決定、資料限制、成功 proxy、non-goal。接着放入簡單架構圖、安裝／test command、baseline 和 evaluation summary。再另外保留：
+
+- `data-card.md`：資料是怎樣來、甚麼不會入系統；
+- `evaluation/`：case ID、expected result、actual result、metric 定義和失敗分類；
+- `decision-log.md`：為何選這條技術路徑、甚麼結果會令你轉向；
+- `release-note.md`：甚麼 regression 會阻擋改動、怎樣回到 baseline；以及
+- `claims.md`：哪些只屬本地合成觀察，哪些尚未驗證。
+
+這些檔案不需要假裝規模很大。它們讓 reviewer 不用相信形容詞，也能跟著你的檔案和記錄問下去。
+
+## 有些話，即使 project 得 12 分都唔可以講
+
+合成資料、本地測試和一段 demo 不能證明真實客戶會使用、節省多少工時、提高收入、符合私隱或行業規範，亦不能證明已可在真實環境使用。它們也不代表你有權接入真實資料、替機構作決定，或把 coding agent 產出的每一行都說成個人原創。
+
+更誠實的寫法是：「我在一個受控的合成 workflow 中量度 citation support、correct handoff 和 reviewer acceptance；真實業務 outcome、資料治理和營運風險仍需由有權責的 team 驗證。」這樣寫，別人才分得清哪些只是本地測試觀察，哪些仍未知道。
+
+如果你只想補一件事，先選 rubric 裡一個 0 分欄位，寫成可打開的 artefact，再重新跑同一批 case。不要為了加分而堆更多工具。
+
+延伸閱讀：[PolicyPilot 的政策支援 baseline 與 RAG extension decision](/zh-HK/articles/enterprise-ai-portfolio-policy-pilot)、[Renewal Triage 如何把 model metric 和 workflow proxy 分開](/zh-HK/articles/renewal-triage-mlops)、[非工程師建立安全 AI 自動化的最低規格](/zh-HK/articles/build-a-low-code-ai-automation)、[怎樣 review coding agent 交出的第一版](/zh-HK/articles/review-a-coding-agent-build-without-being-a-developer)，以及 [把 AI 課程作業改成可被追問的 portfolio evidence](/zh-HK/articles/turn-an-ai-course-project-into-portfolio-evidence)。

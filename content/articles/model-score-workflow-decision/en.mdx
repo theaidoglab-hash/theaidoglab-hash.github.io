@@ -1,0 +1,131 @@
+> A higher F1 score is evidence about a defined test set. It is not permission to change a person's priority, and it is not proof that a team or business is better off.
+
+## The scenario is deliberately synthetic
+
+Imagine a fictional operations team that reviews a finite number of renewal-risk cases each week. A candidate model has a higher F1 score than a simple rules-based baseline. Before anyone receives the candidate queue, the interviewer asks:
+
+> “The candidate's F1 is higher. What evidence do you need before staff receive its queue?”
+
+**A half-right answer:** “F1 combines precision and recall, so the candidate is ready to ship.”
+
+That answer knows one metric, but skips the decision. It does not say how many people can review a queue, what a false alert costs, whether the score means what it appears to mean, whether the data was available at the time of the decision, or who can stop the change.
+
+Everything below is a fictional learning case. It uses no customer data, does not contact anyone, does not make an offer or change an account, and does not claim retention, revenue, time savings, or production readiness.
+
+## Start with the decision, not the score
+
+Write one sentence before choosing a metric:
+
+> “A named reviewer may use this synthetic queue to decide which cases to inspect first; the system may not decide or take an action for them.”
+
+That sentence gives every later number a job. The queue has an owner, a capacity limit, a baseline, and a safe stop. Without those, “better” is only an attractive adjective.
+
+In this example, the useful question is not “Which model predicts a label most accurately?” It is “Can a reviewer receive a small, explainable queue that is more useful than the current rules, without hiding unacceptable mistakes?”
+
+## F1 went up. Ask these six questions first
+
+### 1. Base rate: how rare is the event?
+
+The **base rate** is how often the outcome occurs before the model looks at anything. Suppose only 20 out of 1,000 synthetic cases later receive a fictional “needs review” label. A system that always says “no” is wrong in an important way, yet it can look accurate because most cases are negative.
+
+This is why accuracy alone can mislead on rare events. Start by recording the number of positive and negative cases in each split. A metric only makes sense alongside the population it describes.
+
+### 2. Confusion matrix: what kind of wrong answer happened?
+
+A **confusion matrix** separates four outcomes:
+
+- A true positive: the queue flags a case that later matches the fictional review label.
+- A false positive: the queue flags a case that did not need that review.
+- A false negative: the queue misses a case that did need review.
+- A true negative: the queue correctly leaves a case out.
+
+The matrix is more useful than a single score because false positives consume reviewer time while false negatives may leave an important case unseen. The team, not the model, must decide which error is less acceptable for this bounded task.
+
+### 3. Precision, recall, and F1: which trade-off is improving?
+
+**Precision** asks: of the cases we placed in the queue, how many were actually useful? **Recall** asks: of all cases that should have appeared, how many did we catch? **F1** is the harmonic mean of precision and recall, so it falls when either one is poor.
+
+F1 is a sensible summary only when its trade-off matches the workflow. If reviewers can inspect 20 cases, a model that finds every possible case by sending 400 weak alerts has not made their work easier. If missing a small number of urgent cases is unacceptable, a highly precise but low-recall queue may also be unsafe. Show precision and recall beside F1 and state why the chosen balance fits this fictional workflow.
+
+### 4. Calibration: does a score mean what it appears to mean?
+
+**Calibration** asks whether a score can be interpreted consistently. Across a large, comparable synthetic holdout set, cases assigned a score near 0.70 should have an observed outcome rate reasonably near 70%; if the score says 0.70 but the observed rate is closer to 0.20, it is overconfident.
+
+Calibration does not tell a reviewer what to do. It helps them avoid treating a rank or probability-like number as a promise. Record a calibration plot or bucket table and inspect it by the groups that matter to the fictional decision, such as score band and queue position.
+
+### 5. Threshold: who fits into the queue?
+
+A **threshold** turns scores into a queue: for example, include cases above a chosen score, or take the top 20. It must be chosen against reviewer capacity and error cost, not because 0.50 feels neutral.
+
+Keep a small capacity table: 10, 20, and 40 cases per review period; the expected precision and recall; expected handoffs; and the baseline result under the same capacity. A named reviewer should be able to reject the queue or change the threshold through an approved process. The model never owns that decision.
+
+### 6. Point-in-time split: did the model see the future?
+
+A **point-in-time split** tests the candidate using only fields that would have existed when a past decision was made. Later outcomes, corrected records, end-of-month totals, or fields populated after a case is reviewed cannot quietly enter training.
+
+This prevents **future-data leakage**: a model appearing clever because it has already seen a clue from the future. Keep a simple data-availability table: field, available-at timestamp, permitted use, and reason. Then evaluate the rules baseline and candidate on the same held-out time window.
+
+## The teacher's tray is not a leaderboard
+
+Imagine a helper who sorts stickers into a small “look at these first” tray for a teacher. The helper says it is better because it got more answers right in a practice box.
+
+First ask: are rare red stickers hard to find? Does the tray contain too many ordinary stickers? When the helper says a sticker is very red, is it usually really red? Can the teacher only check 20 stickers today? Did the helper peek at a sticker's colour from tomorrow's answer sheet?
+
+The helper can make a suggestion. The teacher decides what to check, can put a sticker back, and stops using the helper if the tray becomes confusing.
+
+## Inspect the workflow from queue to rollback
+
+1. **Name the decision and non-goal.** A reviewer prioritises a fictional queue. The system does not contact people, set prices, approve actions, or claim an outcome.
+2. **Build the simplest baseline.** Start with a transparent rules queue or manual checklist. Preserve its cases and results instead of replacing it when the candidate arrives.
+3. **Freeze a synthetic data contract.** Version the fictional fields, labels, availability timestamps, point-in-time split, and excluded future fields.
+4. **Compare candidate and baseline fairly.** Use the same held-out cases, capacity limit, error definitions, precision/recall/F1 table, calibration buckets, and representative failures.
+5. **Run in shadow mode.** Produce a candidate queue without changing a live workflow. A reviewer compares it with the baseline and records whether each suggestion is understandable and usable.
+6. **Use a pre-agreed release gate.** For this exercise, write the conditions that must hold: no data-contract failure, no capacity overrun, no unacceptable error class, and reviewer sign-off on the sampled cases.
+7. **Retain rollback.** If a gate fails, return to the versioned baseline or manual checklist, record the failure, and investigate before proposing another change.
+
+Shadow mode is not a launch. It is a limited comparison in which the candidate cannot cause a downstream action. A local synthetic result is still not evidence of a business outcome.
+
+## What the model work leaves behind
+
+- A point-in-time data contract that makes future-data leakage visible.
+- A baseline-versus-candidate comparison using a confusion matrix, precision, recall, F1, calibration, and capacity-aware thresholds.
+- Versioned test cases, failure examples, and an explicit release/rollback gate instead of a score-only dashboard.
+- A traceable connection between a score, queue position, model/data version, reviewer observation, and safe stop state.
+
+## What the delivery work leaves behind
+
+- A decision owner and finite reviewer capacity, rather than an imaginary promise of automated impact.
+- The difference between a model proxy, a usable queue, and a delayed real-world outcome.
+- A shadow-mode boundary: no customer contact, account change, offer, price, or other consequential action.
+- Clear non-claims: synthetic data and local evaluation do not prove fairness, adoption, retention, revenue, or production readiness.
+
+## Where a better score can still mislead
+
+Do not say, “F1 rose, therefore we created business value.” Do not pick a threshold after looking at the test result until it sounds good. Do not compare the candidate's best month with a baseline's hardest month. Do not let a score automatically assign an action.
+
+The simpler, credible baseline is a capacity-limited rules queue plus a manual checklist. It is easier to explain, easier to audit, and gives the candidate something meaningful to beat. If the candidate cannot improve the fictional reviewer workflow without hiding new risks, keep the baseline.
+
+## Evidence a reviewer can inspect
+
+Put these in a clearly synthetic repository:
+
+- `problem-brief.md`: user, decision, capacity, non-goal, named owner, and stop condition.
+- `data-card.md`: fictional fields, label definition, permitted timestamps, excluded future fields, and limitations.
+- `baseline-vs-candidate.md`: confusion matrices, precision/recall/F1, calibration buckets, capacity table, and representative failures.
+- `threshold-decision.md`: why the capacity and threshold were selected, rejected alternatives, and the reviewer who would approve a change.
+- `shadow-review-form.md`: a small rubric for usefulness, explanation quality, missing cases, and handoff.
+- `release-rollback-checklist.md`: gates, version identifiers, rollback target, and explicit non-claims.
+
+None of these files turns a synthetic project into a production system. They give an interviewer evidence that you can distinguish a model experiment from a decision workflow.
+
+## A concise interview answer
+
+“A higher F1 is a starting observation, not a release decision. I would first confirm a point-in-time split and compare the candidate with the same rules baseline at the same reviewer capacity. I would inspect the confusion matrix, precision, recall, calibration, and representative failures, then run the candidate in shadow mode. A named reviewer would decide whether the queue is usable. If a data, capacity, or safety gate fails, I would retain or roll back to the baseline. In a portfolio, I would label all of that as synthetic and would not claim a business outcome.”
+
+## Further reading
+
+[The score-to-workflow practice card](/en/interview-lab/offline-score-and-human-workflow), [Renewal Triage: the capacity-aware ML lab](/en/articles/renewal-triage-mlops), [score a portfolio by evidence rather than fluency](/en/articles/score-an-ai-portfolio-by-evidence-not-fluency), and [the AI Engineer capability map](/en/articles/ai-engineer-interview-learning-map).
+
+## Boundary and source note
+
+This is AI.DOG teaching material, informed by recurring public interview topic patterns but not a translation or reproduction of a company question. It is not a prediction of any current interview loop. The scenario, data, labels, capacity, outputs, and artefacts are fictional. Treat it as a way to practise transparent judgement, not as proof of a real model, team, or business result.

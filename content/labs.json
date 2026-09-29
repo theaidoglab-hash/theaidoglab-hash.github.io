@@ -1,0 +1,489 @@
+[
+  {
+    "id": "build-lab",
+    "status": "review",
+    "visibility": "public",
+    "updatedAt": "2026-09-25",
+    "reviewBy": "2026-12-24",
+    "relatedArticleSlugs": [
+      "enterprise-ai-portfolio-policy-pilot",
+      "use-ai-without-writing-code",
+      "build-a-low-code-ai-automation",
+      "approval-queue-low-code-portfolio",
+      "build-a-resumable-ai-batch-worker",
+      "renewal-triage-mlops",
+      "build-a-public-data-kev-review-packet",
+      "build-a-source-bound-context-brief"
+    ],
+    "translations": {
+      "zh-HK": {
+        "eyebrow": "BUILD LAB",
+        "title": "由一個做得完嘅本地案例開始",
+        "intro": "每個 Lab 都用公開或合成資料，帶你做一段本地流程：先用簡單方法做對照、按固定情境檢查、寫低邊啲事唔可以做，最後由邊個決定。全部只係學習參考，唔代表已部署或有商業成果。",
+        "workflowPath": {
+          "eyebrow": "一段本地練習",
+          "title": "做完，手上應該有五份可以畀人睇嘅紀錄",
+          "intro": "揀一個細小虛構流程練習。PolicyPilot 同 AI Batch Worker 各自示範其中一段；全程留喺本機。",
+          "steps": [
+            { "id": "build-lab-output-decision-brief", "title": "決定簡介", "text": "寫低邊個會睇草稿、可以用乜資料、簡單對照做法、明確唔做乜，同埋下一步由邊個拍板。", "href": "/labs#build-lab-kit-enterprise-ai-portfolio-policy-pilot", "action": "開 PolicyPilot 的決定簡介" },
+            { "id": "build-lab-output-fixed-cases", "title": "固定檢查情境", "text": "寫一般、缺資料、唔安全同講唔清嘅情境，並寫低每種情況應該交出乜。", "href": "/labs#build-lab-kit-enterprise-ai-portfolio-policy-pilot", "action": "睇 PolicyPilot 的固定檢查" },
+            { "id": "build-lab-output-deterministic-run-trace", "title": "一次固定輸入嘅執行紀錄", "text": "用一組合成輸入跑一次，保留輸入識別、去咗邊條路、點解重試或停低，同埋畀人覆核嘅紀錄。", "href": "/labs#build-lab-kit-build-a-resumable-ai-batch-worker", "action": "開 AI Batch Worker" },
+            { "id": "build-lab-output-handoff-pilot-boundary", "title": "交人處理同試行界線", "text": "寫清楚邊度要停、之後邊個決定，同埋如果要試行，要先有乜批准。唔接真實資料或服務。", "href": "/articles/from-offline-evaluation-to-an-authorised-pilot", "action": "睇試行前嘅界線" },
+            { "id": "build-lab-output-readme-evidence-map", "title": "README：將決定、情境同紀錄放埋一頁", "text": "將決定、情境、跑程紀錄、限制同連結放埋一齊，令覆核者唔使靠一個靚展示，都可以逐樣追返。", "href": "/articles/build-a-github-portfolio-proof-pack", "action": "整理 README" }
+          ],
+          "boundary": "所有內容都只係本地、固定測試資料練習。佢唔會帶來批准、部署、模型表現、商業成果或公開程式庫。"
+        },
+        "kits": [
+          {
+            "title": "No-code Starter Lab",
+            "kind": "本地試算表練習",
+            "text": "用一張合成 CSV、工作摘要、固定檢查情境同權限紀錄，將補貨規劃整理成本地草稿，交畀人手覆核。",
+            "steps": ["合成試算表與有限決定", "只要求先交計劃；唔會連工具、帳戶或連接器", "固定檢查情境、權限紀錄及覆核準則", "輸出只可標為 DRAFT／HANDOFF／BLOCKED；唔做外部動作"],
+            "demonstrates": {
+              "technical": ["可帶走嘅資料格式、合成 CSV 同固定輸出路徑", "把任何看似指示嘅欄位當成資料處理；有六個固定檢查情境和只限本地嘅界線", "可下載或複製嘅工作摘要、情境表、權限紀錄、覆核準則同只要求先交計劃嘅指令"],
+              "nonTechnical": ["將「整理補貨資料」收窄成人手覆核者可以接受或拒絕嘅草稿決定", "記低資料權限、禁止動作、最後拍板的人同 PASS／REVISE／STOP；唔聲稱採購、成效或部署"]
+            },
+            "internalRoute": "/no-code-starter-lab",
+            "action": "由本地 Starter Lab 開始"
+          },
+          {
+            "title": "Coder Starter Lab",
+            "kind": "本地純函式覆核練習",
+            "text": "用一個虛構、可以丟棄嘅純函式改動，先做手動比較，再只覆核 AI 助手交出嘅計劃、改動內容同測試；唔接觸真實程式庫、資料或外部動作。",
+            "steps": ["改動摘要與明確不做的事", "手動比較與六個固定情境", "只要求計劃、改動內容同測試嘅 AI 助手指令", "覆核紀錄、PASS／REVISE／STOP 與丟棄方案"],
+            "demonstrates": {
+              "technical": ["一個唔讀寫檔案、唔連網、唔需要金鑰嘅 TypeScript 純函式骨架和固定測試情境", "BLOCKED 優先嘅判斷次序、最小改動範圍和可逐項核對嘅覆核紀錄", "可下載或複製嘅英文 README、工作摘要、程式骨架、情境、AI 助手指令和退回舊版紀錄"],
+              "nonTechnical": ["把『叫 AI 助手改程式碼』收窄成人手覆核者可接受、拒絕或叫停嘅本地改動建議", "保留唔做嘅事、資料界線、禁止動作，同埋呢個練習唔可以聲稱嘅部署、可靠性或商業成果"]
+            },
+            "internalRoute": "/coding-starter-lab",
+            "action": "開始 Coder Starter Lab"
+          },
+          {
+            "title": "PolicyPilot",
+            "kind": "作品集主題案例",
+            "text": "一個只會從獲准使用的虛構政策文件找資料、附上出處草稿，遇到例外就交畀人手的助手。",
+            "steps": ["先寫清誰要用、要答甚麼和不做甚麼", "用關鍵字搜尋做簡單對照，並保存文件版本", "用固定情境檢查答得對不對和會否越界", "保存處理紀錄、推出前檢查和退回舊版方法"],
+            "demonstrates": {
+              "technical": ["有版本的合成政策文件、關鍵字搜尋對照、附來源草稿和交人手的路徑", "固定的正確和不安全情境、移除內容的處理紀錄、推出前檢查和退回舊版", "靜態 gpt-5-mini Responses 請求範例和可選 Promptfoo 設定；沒有金鑰、連線或模型回覆"],
+              "nonTechnical": ["寫清支援人員找錯資料的後果、誰要作決定和哪些事唔做", "保留資料界線、人手批准，以及呢個案例唔可以聲稱嘅商業結果"]
+            },
+            "articleSlug": "enterprise-ai-portfolio-policy-pilot",
+            "action": "由 PolicyPilot 開始"
+          },
+          {
+            "title": "Approval Queue",
+            "kind": "低程式流程練習",
+            "text": "一個只會產生 FAQ 回覆草稿、不可自行發送或改資料的審批隊列。",
+            "steps": ["寫清可以做和一定不可以做的事", "預先寫好檢查情境", "交人手覆核和安全停下", "README、處理紀錄和作品說明"],
+            "demonstrates": {
+              "technical": ["用合成 FAQ 資料找資料、附來源草稿、固定回覆模擬器，以及唔會發送嘅 gpt-5-mini Responses API 範例", "固定檢查情境；遇到惡意指示或要求自行發送時會攔住，並只留不含個人資料的處理紀錄"],
+              "nonTechnical": ["把「回覆草稿」和「真正發送」分開，最後決定留給覆核者", "README 寫清範圍、資料可否用、錯誤怎樣記錄和不可聲稱的事"]
+            },
+            "articleSlug": "approval-queue-low-code-portfolio",
+            "action": "由低程式流程開始"
+          },
+          {
+            "title": "AI Batch Worker",
+            "kind": "程式穩定性練習",
+            "text": "一個只產生人手覆核用補充資料紀錄、用合成資料練處理隊列、重試、中斷後續做和花費上限的批次工作。",
+            "steps": ["每次只處理有限項目，同一項不可重複做", "遇到 429 或逾時時怎樣重試和續做", "失敗項目交人看，超出花費就停", "固定測試、處理紀錄和最後拍板的人"],
+            "demonstrates": {
+              "technical": ["每次處理數量上限、可重現的成功／429／逾時／重複／無效輸入情境、重試、不重複處理和續做位置；並解釋同時處理和速率限制的分別", "失敗項目交人看的路徑、每次執行紀錄、花費上限、靜態 gpt-5-mini 範例和回歸測試"],
+              "nonTechnical": ["清楚分開人手覆核用補充資料和真正修改文件", "保留資料界線、預算、覆核者，以及案例不可聲稱的可靠性或商業結果"]
+            },
+            "articleSlug": "build-a-resumable-ai-batch-worker",
+            "action": "由批次工作練習開始"
+          },
+          {
+            "title": "Renewal Triage",
+            "kind": "預測模型排序練習",
+            "text": "一個只會為固定人手名額嘅覆核隊列排先後、完全唔接觸客戶或作續約決定嘅合成機器學習案例。",
+            "steps": ["只用當時可見資料，檢查有沒有偷看將來", "用簡單規則做對照，再比較候選模型", "模型分數、隊列處理和實際流程訊號分開看", "推出前檢查、持續留意和退回舊版"],
+            "demonstrates": {
+              "technical": ["「當時可見資料」規則、偷看將來資料檢查、規則對照和候選排序模型", "固定人手名額下的隊列指標、推出前檢查、持續留意和退回舊版"],
+              "nonTechnical": ["把人手覆核隊列排先後，同自動聯絡、續約或定價決定清楚分開", "把模型分數、流程訊號、最後拍板的人和不可聲稱的成效分開記錄"]
+            },
+            "articleSlug": "renewal-triage-mlops",
+            "action": "由預測模型排序練習開始"
+          },
+          {
+            "title": "KEV Review Packet",
+            "kind": "公開漏洞資料核對練習",
+            "text": "用一條公開漏洞記錄，練習只交出畀人手安全覆核嘅資料摘要。只會記低容許欄位和未知資料；唔掃描、修補、開工單，亦唔會話任何公司受影響。",
+            "steps": ["記低可用來源、容許欄位和資料不合格時怎樣處理", "先用規則將資料整理成固定的覆核資料包", "用固定情境檢查；Promptfoo 只作可選的本地測試設定", "逐項比較改動；必要情境一項失敗，就交人決定並不放行"],
+            "demonstrates": {
+              "technical": ["只檢查容許的公開欄位；結果只可為「拒絕來源」或「交人手安全覆核」，並禁止所有外部動作", "固定情境會逐項比對。可選的 gpt-5-mini Responses／Promptfoo 設定只描述本地測試，並不會連線或執行；任何必要情境失敗都不可放行"],
+              "nonTechnical": ["公開資料只可幫人手判斷是否值得覆核；佢唔係公司內部資產證據，更唔會處理漏洞", "記低來源條款、未知資料和最後拍板的人；本地測試通過唔等於安全審批或任何公司受影響"]
+            },
+            "articleSlug": "build-a-public-data-kev-review-packet",
+            "action": "由公開漏洞資料覆核練習開始"
+          },
+          {
+            "title": "Workforce Signal Brief",
+            "kind": "公開統計資料核對＋背景摘要練習",
+            "text": "用按公開數列格式排好嘅虛構數字，練習判斷來源資料夠唔夠畀人手寫背景摘要。呢個練習唔會估勞動市場，更唔會作招聘、薪酬或個人工作選擇推斷。",
+            "steps": ["記低可用來源、欄位、時間和不可用資料", "先用規則檢查資料，再整理成不會觸發行動的摘要材料", "用固定情境檢查；Promptfoo 只作可選的本地測試設定", "逐項比較改動；必要情境失敗就拒絕來源或交人決定"],
+            "demonstrates": {
+              "technical": ["用虛構數字排成公開數列的格式，檢查描述資料、時間順序和時效；結果只可為「可寫背景摘要」或「拒絕來源」", "固定情境逐項核對。可選的 gpt-5-mini Responses／Promptfoo 設定只描述本地測試，並不會連線或執行；任何必要情境失敗都不可放行"],
+              "nonTechnical": ["只判斷能否寫背景摘要；唔作招聘、薪酬、個人工作選擇、投資或發佈決定", "記低來源是否適用、誰拍板和何時要停；本地結果唔代表勞動市場、招聘或薪酬結果"]
+            },
+            "articleSlug": "build-a-source-bound-context-brief",
+            "action": "查看公開統計資料摘要練習"
+          }
+        ],
+        "note": "先用簡單做法做對照，再考慮加入模型。若未獲資料授權、未寫清誰拍板或範圍不能安全退回，停喺本地練習，唔好接入真實系統。"
+      },
+      "zh-TW": {
+        "eyebrow": "BUILD LAB",
+        "title": "從一個做得完的本機案例開始",
+        "intro": "每個 Lab 都使用公開或合成資料，帶你做一段本機流程：先用簡單方法作對照、按固定情境檢查、寫下哪些事不能做，最後由誰決定。它們只作學習參考，不代表已部署或有商業成果。",
+        "workflowPath": {
+          "eyebrow": "一段本機練習",
+          "title": "完成時，手上應該有五份別人看得懂的紀錄",
+          "intro": "選一個小型虛構流程練習。PolicyPilot 與 AI Batch Worker 各自示範其中一段；全程留在本機。",
+          "steps": [
+            { "id": "build-lab-output-decision-brief", "title": "決策簡介", "text": "寫下誰會看草稿、可使用哪些資料、簡單的對照做法、明確不做什麼，以及下一步由誰決定。", "href": "/labs#build-lab-kit-enterprise-ai-portfolio-policy-pilot", "action": "開啟 PolicyPilot 的決策簡介" },
+            { "id": "build-lab-output-fixed-cases", "title": "固定檢查情境", "text": "寫一般、缺資料、不安全和無法判斷的情境，並註明每種情境應交出什麼。", "href": "/labs#build-lab-kit-enterprise-ai-portfolio-policy-pilot", "action": "查看 PolicyPilot 的固定檢查" },
+            { "id": "build-lab-output-deterministic-run-trace", "title": "一次固定輸入的執行紀錄", "text": "用一組合成輸入執行一次，保留輸入識別、走了哪條路、為何重試或停止，以及供人覆核的紀錄。", "href": "/labs#build-lab-kit-build-a-resumable-ai-batch-worker", "action": "開啟 AI Batch Worker" },
+            { "id": "build-lab-output-handoff-pilot-boundary", "title": "交給人處理與試行界線", "text": "寫清楚在哪裡停止、之後由誰決定，以及若要試行前還要取得什麼核准。不要連接真實資料或服務。", "href": "/articles/from-offline-evaluation-to-an-authorised-pilot", "action": "查看試行前的界線" },
+            { "id": "build-lab-output-readme-evidence-map", "title": "README：把決策、情境與紀錄放在一頁", "text": "把決策、情境、執行紀錄、限制與連結放在一起，讓覆核者不必只靠漂亮展示，也能逐項追查。", "href": "/articles/build-a-github-portfolio-proof-pack", "action": "整理 README" }
+          ],
+          "boundary": "所有內容都只是本機、固定測試資料練習。它們不帶來核准、部署、模型表現、商業成果或公開程式庫。"
+        },
+        "kits": [
+          {
+            "title": "No-code Starter Lab",
+            "kind": "本機試算表練習",
+            "text": "用一張合成 CSV、工作摘要、固定檢查情境與權限紀錄，把補貨規劃整理成本機草稿，交給人工覆核。",
+            "steps": ["合成試算表與有限決策", "只要求先列計畫；不連接工具、帳戶或連接器", "固定檢查情境、權限紀錄與覆核準則", "輸出只可標為 DRAFT／HANDOFF／BLOCKED；不做外部動作"],
+            "demonstrates": {
+              "technical": ["可帶走的資料格式、合成 CSV 與固定輸出路徑", "把看起來像指令的欄位當資料處理；有六個固定檢查情境與僅限本機的界線", "可下載或複製的工作摘要、情境表、權限紀錄、覆核準則與只要求先列計畫的提示詞"],
+              "nonTechnical": ["把「整理補貨資料」收窄成人工覆核者可接受或拒絕的草稿決定", "記下資料權限、禁止動作、最後決定的人與 PASS／REVISE／STOP；不宣稱採購、成效或部署"]
+            },
+            "internalRoute": "/no-code-starter-lab",
+            "action": "從本地 Starter Lab 開始"
+          },
+          {
+            "title": "Coder Starter Lab",
+            "kind": "本機純函式覆核練習",
+            "text": "用一個虛構、可丟棄的純函式改動，先做手動對照，再只覆核 AI 助手交出的計畫、改動內容與測試；不接觸真實程式庫、資料或外部動作。",
+            "steps": ["改動摘要與明確不做的事", "手動對照與六個固定情境", "只要求計畫、改動內容與測試的 AI 助手指令", "覆核紀錄、PASS／REVISE／STOP 與丟棄方案"],
+            "demonstrates": {
+              "technical": ["一個不讀寫檔案、不連網、不需金鑰的 TypeScript 純函式骨架與固定測試情境", "BLOCKED 優先的判斷順序、最小改動範圍與可逐項核對的覆核紀錄", "可下載或複製的英文 README、工作摘要、程式骨架、情境、AI 助手指令與回退紀錄"],
+              "nonTechnical": ["把「請 AI 助手改程式碼」收窄成人工覆核者可接受、拒絕或停止的本機改動建議", "保留不做的事、資料界線、禁止動作，以及這個練習不能聲稱的部署、可靠性或商業成果"]
+            },
+            "internalRoute": "/coding-starter-lab",
+            "action": "開始 Coder Starter Lab"
+          },
+          {
+            "title": "PolicyPilot",
+            "kind": "作品集代表案例",
+            "text": "一個只從核准的虛構政策文件找資料、輸出附來源草稿並把例外交由人工處理的助手。",
+            "steps": ["問題、使用者與不做的事", "關鍵字搜尋對照與版本化資料", "正確性、安全與流程檢查", "處理紀錄、推出前檢查與回退"],
+            "demonstrates": {
+              "technical": ["版本化的合成政策資料、關鍵字搜尋對照、附來源草稿與人工交接路徑", "固定的正確與不安全情境、經遮蔽的處理紀錄、推出前檢查與回退", "靜態 gpt-5-mini Responses 請求範例與可選的 Promptfoo 評估設定；沒有金鑰、連線或模型輸出"],
+              "nonTechnical": ["把支援人員找資料的決定寫成問題、找錯資料的代價與不做的事", "保留資料界線、人工核准及不能聲稱的商業成果"]
+            },
+            "articleSlug": "enterprise-ai-portfolio-policy-pilot",
+            "action": "從 PolicyPilot 開始"
+          },
+          {
+            "title": "Approval Queue",
+            "kind": "低程式練習案例",
+            "text": "一個只產生 FAQ 回覆草稿、不可自行發送或修改資料的 AI 審核隊列。",
+            "steps": ["行動規格與禁止動作", "預先寫好的檢查情境", "人工覆核與安全停止", "README、處理紀錄與作品證據"],
+            "demonstrates": {
+              "technical": ["用合成 FAQ 資料檢索、附來源草稿、固定回覆模擬器，以及不會發送的 gpt-5-mini Responses API 範例", "固定檢查情境；攔截提示注入與禁止動作，並只保留不含個人資料的處理紀錄"],
+              "nonTechnical": ["把「回覆草稿」與「真正發送」分開，將決定權保留給覆核者", "用範圍、權限、失敗紀錄與 README 建立可追問的作品證據"]
+            },
+            "articleSlug": "approval-queue-low-code-portfolio",
+            "action": "從低程式流程開始"
+          },
+          {
+            "title": "AI Batch Worker",
+            "kind": "批次工作穩定性練習",
+            "text": "一個只產生人工覆核用補充資料紀錄的批次工作。用合成資料練習逐項處理、失敗後重試、停止後從哪裡接續，以及超出花費時停下。",
+            "steps": ["每次只處理有限項目，同一項不可重複做", "遇到 429 或逾時時怎麼重試和接續", "失敗項目交人看，超出花費就停止", "用固定情境檢查，留下處理紀錄和最後拍板的人"],
+            "demonstrates": {
+              "technical": ["每次處理數量上限、可重現的成功／429／逾時／重複／無效輸入情境、重試、不重複處理和接續位置；並說明同時處理和速率限制的差別", "失敗項目的人工覆核路徑、每次執行紀錄、花費上限、靜態 gpt-5-mini 範例和回歸測試"],
+              "nonTechnical": ["清楚分開人工覆核用補充資料和真正修改文件", "保留資料界線、預算、覆核者，以及案例不可聲稱的可靠性或商業結果"]
+            },
+            "articleSlug": "build-a-resumable-ai-batch-worker",
+            "action": "從批次工作練習開始"
+          },
+          {
+            "title": "Renewal Triage",
+            "kind": "預測模型排序練習",
+            "text": "一個只為固定人手名額的覆核隊列排先後、完全不接觸客戶或作續約決定的合成機器學習案例。",
+            "steps": ["只用當時可見資料，檢查有沒有偷看將來", "用簡單規則做對照，再比較候選模型", "模型分數、隊列處理和實際流程訊號分開看", "推出前檢查、持續留意和退回舊版"],
+            "demonstrates": {
+              "technical": ["「當時可見資料」規則、偷看將來資料檢查、規則對照和候選排序模型", "固定人手名額下的隊列指標、推出前檢查、持續留意和退回舊版"],
+              "nonTechnical": ["把人手覆核隊列排先後，同自動聯絡、續約或定價決定清楚分開", "把模型分數、流程訊號、最後拍板的人和不可聲稱的成效分開記錄"]
+            },
+            "articleSlug": "renewal-triage-mlops",
+            "action": "從預測模型排序練習開始"
+          },
+          {
+            "title": "KEV Review Packet",
+            "kind": "公開漏洞資料核對練習",
+            "text": "用一筆公開漏洞記錄，練習只交出給人工安全覆核的資料摘要。只記錄允許欄位與未知資料；不掃描、修補、開單，也不聲稱任何公司受影響。",
+            "steps": ["記下可用來源、允許欄位，以及資料不合格時怎麼處理", "先用規則整理成固定的覆核資料包", "用固定案例檢查；Promptfoo 僅是可選的本地測試設定", "逐案比較變更；必要案例一項失敗，就交人決定且不放行"],
+            "demonstrates": {
+              "technical": ["只檢查允許的公開欄位；結果只有 SOURCE_REJECTED（拒絕來源），或 EVIDENCE_PACKET_READY（可交給人工安全覆核），並禁止外部動作", "固定案例會逐案比對。可選的 gpt-5-mini Responses／Promptfoo 設定只描述本地測試，不會連線或執行；任何必要案例失敗都不可放行"],
+              "nonTechnical": ["公開資料只能幫人判斷是否值得覆核；它不是公司內部資產證據，也不會處理漏洞", "記下資料條款、未知項目與最後拍板的人；本地測試通過不等於安全核准或任何公司受影響"]
+            },
+            "articleSlug": "build-a-public-data-kev-review-packet",
+            "action": "從公開漏洞資料覆核練習開始"
+          },
+          {
+            "title": "Workforce Signal Brief",
+            "kind": "公開統計資料核對＋背景摘要練習",
+            "text": "用照公開數列格式排好的虛構數字，練習判斷來源資料是否足夠讓人工寫背景摘要。不估勞動市場，也不作招聘、薪資或個人職涯推論。",
+            "steps": ["記下可用來源、欄位、時間與不可用資料", "先用規則檢查資料，再整理成不會觸發行動的摘要材料", "用固定案例檢查；Promptfoo 僅是可選的本地測試設定", "逐案比較變更；必要案例失敗就拒絕來源或交人決定"],
+            "demonstrates": {
+              "technical": ["用虛構數字排成公開數列格式，檢查描述資料、時間順序與時效；結果只有 CONTEXT_BRIEF_READY（可寫背景摘要）或 SOURCE_REJECTED（拒絕來源）", "固定案例會逐案比對。可選的 gpt-5-mini Responses／Promptfoo 設定只描述本地測試，不會連線或執行；任何必要案例失敗都不可放行"],
+              "nonTechnical": ["只判斷人工能否寫背景摘要；不作招聘、薪資、個人職涯、投資或發布決策", "記下來源是否適用、由誰負責與何時要停；本地結果不代表勞動市場、招聘或薪資結果"]
+            },
+            "articleSlug": "build-a-source-bound-context-brief",
+            "action": "查看公開統計資料摘要練習"
+          }
+        ],
+        "note": "先完成更簡單的對照做法，再加入模型。若沒有資料授權、明確負責人或可逆範圍，停在本地練習，不要接入真實系統。"
+      },
+      "zh-Hans": {
+        "eyebrow": "BUILD LAB",
+        "title": "从一个能做完的本地案例开始",
+        "intro": "每个 Lab 都使用公开或合成数据，带你做一段本地流程：先用简单方法作对照、按固定情境检查、写下哪些事不能做，最后由谁决定。它们只作学习参考，不代表已部署或有商业成果。",
+        "workflowPath": {
+          "eyebrow": "一段本地练习",
+          "title": "完成时，手上应该有五份别人看得懂的记录",
+          "intro": "选一个小型虚构流程练习。PolicyPilot 和 AI Batch Worker 各自演示其中一段；全程留在本地。",
+          "steps": [
+            { "id": "build-lab-output-decision-brief", "title": "决策简介", "text": "写下谁会看草稿、可使用哪些资料、简单的对照做法、明确不做什么，以及下一步由谁决定。", "href": "/labs#build-lab-kit-enterprise-ai-portfolio-policy-pilot", "action": "打开 PolicyPilot 的决策简介" },
+            { "id": "build-lab-output-fixed-cases", "title": "固定检查情境", "text": "写一般、缺资料、不安全和无法判断的情境，并注明每种情境应交出什么。", "href": "/labs#build-lab-kit-enterprise-ai-portfolio-policy-pilot", "action": "查看 PolicyPilot 的固定检查" },
+            { "id": "build-lab-output-deterministic-run-trace", "title": "一次固定输入的运行记录", "text": "用一组合成输入运行一次，保留输入识别、走了哪条路、为何重试或停止，以及供人复核的记录。", "href": "/labs#build-lab-kit-build-a-resumable-ai-batch-worker", "action": "打开 AI Batch Worker" },
+            { "id": "build-lab-output-handoff-pilot-boundary", "title": "交给人处理与试行边界", "text": "写清楚在哪里停止、之后由谁决定，以及若要试行前还要取得什么批准。不要连接真实资料或服务。", "href": "/articles/from-offline-evaluation-to-an-authorised-pilot", "action": "查看试行前的边界" },
+            { "id": "build-lab-output-readme-evidence-map", "title": "README：把决策、情境与记录放在一页", "text": "把决策、情境、运行记录、限制与链接放在一起，让复核者不必只靠漂亮展示，也能逐项追查。", "href": "/articles/build-a-github-portfolio-proof-pack", "action": "整理 README" }
+          ],
+          "boundary": "所有内容都只是本地、固定测试资料练习。它们不带来批准、部署、模型表现、商业成果或公开代码库。"
+        },
+        "kits": [
+          {
+            "title": "No-code Starter Lab",
+            "kind": "本地电子表格练习",
+            "text": "用一张合成 CSV、工作摘要、固定检查情境和权限记录，把补货规划整理成本地草稿，交给人工复核。",
+            "steps": ["合成电子表格和有限决定", "只要求先列计划；不连接工具、账户或连接器", "固定检查情境、权限记录和复核准则", "输出只可标为 DRAFT／HANDOFF／BLOCKED；不做外部动作"],
+            "demonstrates": {
+              "technical": ["可带走的资料格式、合成 CSV 和固定输出路径", "把看起来像指令的单元格当资料处理；有六个固定检查情境和仅限本地的边界", "可下载或复制的工作摘要、情境表、权限记录、复核准则和只要求先列计划的提示词"],
+              "nonTechnical": ["把“整理补货资料”收窄成人工复核者可接受或拒绝的草稿决定", "记下资料权限、禁止动作、最后决定的人和 PASS／REVISE／STOP；不声称采购、成效或部署"]
+            },
+            "internalRoute": "/no-code-starter-lab",
+            "action": "从本地 Starter Lab 开始"
+          },
+          {
+            "title": "Coder Starter Lab",
+            "kind": "本地纯函数复核练习",
+            "text": "用一个虚构、可丢弃的纯函数改动，先做手动对照，再只复核 AI 助手交出的计划、改动内容和测试；不接触真实代码库、资料或外部动作。",
+            "steps": ["改动摘要与明确不做的事", "手动对照与六个固定情境", "只要求计划、改动内容和测试的 AI 助手指令", "复核记录、PASS／REVISE／STOP 与丢弃方案"],
+            "demonstrates": {
+              "technical": ["一个不读写文件、不联网、不需要密钥的 TypeScript 纯函数骨架和固定测试情境", "BLOCKED 优先的判断顺序、最小改动范围和可逐项核对的复核记录", "可下载或复制的英文 README、工作摘要、程序骨架、情境、AI 助手指令和回退记录"],
+              "nonTechnical": ["把“请 AI 助手改代码”收窄成人工复核者可接受、拒绝或停止的本地改动建议", "保留不做的事、资料边界、禁止动作，以及这个练习不能声明的部署、可靠性或商业结果"]
+            },
+            "internalRoute": "/coding-starter-lab",
+            "action": "开始 Coder Starter Lab"
+          },
+          {
+            "title": "PolicyPilot",
+            "kind": "作品集代表案例",
+            "text": "一个只从获批的虚构政策文件找资料、输出带来源草稿并把例外交由人工处理的助手。",
+            "steps": ["问题、使用者与不做的事", "关键词检索对照与版本化数据", "正确性、安全与流程检查", "处理记录、发布前检查与回退"],
+            "demonstrates": {
+              "technical": ["版本化的合成政策数据、关键词检索对照、带来源草稿与人工交接路径", "固定的正确与不安全情境、经遮蔽的处理记录、发布前检查与回退", "静态 gpt-5-mini Responses 请求示例与可选的 Promptfoo 评估设置；没有密钥、连线或模型输出"],
+              "nonTechnical": ["把支持人员找资料的决定写成问题、找错资料的代价与不做的事", "保留数据边界、人工批准及不能声明的商业结果"]
+            },
+            "articleSlug": "enterprise-ai-portfolio-policy-pilot",
+            "action": "从 PolicyPilot 开始"
+          },
+          {
+            "title": "Approval Queue",
+            "kind": "低代码练习案例",
+            "text": "一个只产生 FAQ 回复草稿、不可自行发送或修改数据的 AI 审批队列。",
+            "steps": ["行动规范与禁止动作", "预先写好的检查情境", "人工复核与安全停止", "README、处理记录与作品证据"],
+            "demonstrates": {
+              "technical": ["用合成 FAQ 资料检索、带来源草稿、固定回复模拟器，以及不会发送的 gpt-5-mini Responses API 示例", "固定检查情境；拦截提示注入与禁止动作，并只保留不含个人资料的处理记录"],
+              "nonTechnical": ["把“回复草稿”与“真正发送”分开，将决定权保留给复核者", "用范围、权限、失败记录与 README 建立可追问的作品证据"]
+            },
+            "articleSlug": "approval-queue-low-code-portfolio",
+            "action": "从低代码流程开始"
+          },
+          {
+            "title": "AI Batch Worker",
+            "kind": "批次工作稳定性练习",
+            "text": "一个只产生人工复核用补充资料记录的批次工作。用合成资料练习逐项处理、失败后重试、停止后从哪里接续，以及超出花费时停下。",
+            "steps": ["每次只处理有限项目，同一项不可重复做", "遇到 429 或超时时怎样重试和接续", "失败项目交人看，超出花费就停止", "用固定情境检查，留下处理记录和最后拍板的人"],
+            "demonstrates": {
+              "technical": ["每次处理数量上限、可重现的成功／429／超时／重复／无效输入情境、重试、不重复处理和接续位置；并说明同时处理和速率限制的区别", "失败项目的人工复核路径、每次执行记录、花费上限、静态 gpt-5-mini 示例和回归测试"],
+              "nonTechnical": ["清楚分开人工复核用补充资料和真正修改文件", "保留资料边界、预算、复核者，以及案例不可声称的可靠性或商业结果"]
+            },
+            "articleSlug": "build-a-resumable-ai-batch-worker",
+            "action": "从批次工作练习开始"
+          },
+          {
+            "title": "Renewal Triage",
+            "kind": "预测模型排序练习",
+            "text": "一个只为固定人工名额的复核队列排先后、完全不接触客户或作续约决定的合成机器学习案例。",
+            "steps": ["只用当时可见资料，检查有没有偷看将来", "用简单规则做对照，再比较候选模型", "模型分数、队列处理和实际流程信号分开看", "推出前检查、持续留意和退回旧版"],
+            "demonstrates": {
+              "technical": ["“当时可见资料”规则、偷看将来资料检查、规则对照和候选排序模型", "固定人工名额下的队列指标、推出前检查、持续留意和退回旧版"],
+              "nonTechnical": ["把人工复核队列排先后，同自动联络、续约或定价决定清楚分开", "把模型分数、流程信号、最后拍板的人和不可声称的成效分开记录"]
+            },
+            "articleSlug": "renewal-triage-mlops",
+            "action": "从预测模型排序练习开始"
+          },
+          {
+            "title": "KEV Review Packet",
+            "kind": "公开漏洞资料核对练习",
+            "text": "用一条公开漏洞记录，练习只交出给人工安全复核的资料摘要。只记录允许字段和未知资料；不扫描、修补、开工单，也不声称任何公司受影响。",
+            "steps": ["记下可用来源、允许字段，以及资料不合格时怎样处理", "先用规则整理成固定的复核资料包", "用固定情境检查；Promptfoo 只作可选的本地测试设置", "逐项比较改动；必要情境一项失败，就交人决定并不放行"],
+            "demonstrates": {
+              "technical": ["只检查允许的公开字段；结果只有 SOURCE_REJECTED（拒绝来源），或 EVIDENCE_PACKET_READY（可交给人工安全复核），并禁止外部动作", "固定情境会逐项比对。可选的 gpt-5-mini Responses／Promptfoo 设置只描述本地测试，不会连线或执行；任何必要情境失败都不可放行"],
+              "nonTechnical": ["公开资料只可帮人工判断是否值得复核；它不是公司内部资产证据，也不会处理漏洞", "记下来源条款、未知资料和最后拍板的人；本地测试通过不等于安全审批或任何公司受影响"]
+            },
+            "articleSlug": "build-a-public-data-kev-review-packet",
+            "action": "从公开漏洞资料复核练习开始"
+          },
+          {
+            "title": "Workforce Signal Brief",
+            "kind": "公开统计资料核对＋背景摘要练习",
+            "text": "用按公开数列格式排好的虚构数字，练习判断来源资料够不够让人工写背景摘要。不估劳动力市场，也不作招聘、薪资或个人职业推断。",
+            "steps": ["记下可用来源、字段、时间和不可用资料", "先用规则检查资料，再整理成不会触发动作的摘要材料", "用固定情境检查；Promptfoo 只作可选的本地测试设置", "逐项比较改动；必要情境失败就拒绝来源或交人决定"],
+            "demonstrates": {
+              "technical": ["用虚构数字排成公开数列格式，检查描述资料、时间顺序和时效；结果只有 CONTEXT_BRIEF_READY（可写背景摘要）或 SOURCE_REJECTED（拒绝来源）", "固定情境会逐项比对。可选的 gpt-5-mini Responses／Promptfoo 设置只描述本地测试，不会连线或执行；任何必要情境失败都不可放行"],
+              "nonTechnical": ["只判断人工能否写背景摘要；不作招聘、薪资、个人职业、投资或发布决定", "记下来源是否适用、由谁负责和何时要停；本地结果不代表劳动力市场、招聘或薪资结果"]
+            },
+            "articleSlug": "build-a-source-bound-context-brief",
+            "action": "查看公开统计资料摘要练习"
+          }
+        ],
+        "note": "先完成更简单的对照做法，再加入模型。若没有数据授权、明确负责人或可逆范围，停在本地练习，不要接入真实系统。"
+      },
+      "en": {
+        "eyebrow": "BUILD LAB",
+        "title": "Start with one local case you can finish",
+        "intro": "Each Lab uses public or synthetic material to take you through one local workflow: compare with a simple method, check fixed cases, write down what it must not do, and name who decides at the end. They are learning references, not evidence of deployment or business results.",
+        "workflowPath": {
+          "eyebrow": "ONE LOCAL WORKFLOW",
+          "title": "Finish with five records someone else can inspect",
+          "intro": "Use one small fictional workflow. PolicyPilot and AI Batch Worker each show part of it; keep the work on your own machine.",
+          "steps": [
+            { "id": "build-lab-output-decision-brief", "title": "Decision brief", "text": "Name who reads the draft, which data may enter, the simple comparison method, what must not happen, and who makes the next decision.", "href": "/labs#build-lab-kit-enterprise-ai-portfolio-policy-pilot", "action": "Open the PolicyPilot decision brief" },
+            { "id": "build-lab-output-fixed-cases", "title": "Fixed checks", "text": "Write ordinary, missing-data, unsafe, and uncertain cases before changing a prompt or model. State what each case should produce.", "href": "/labs#build-lab-kit-enterprise-ai-portfolio-policy-pilot", "action": "See the PolicyPilot checks" },
+            { "id": "build-lab-output-deterministic-run-trace", "title": "One run you can repeat", "text": "Run one set of synthetic inputs and keep the input identity, route, retry or stop reason, and the record used for review.", "href": "/labs#build-lab-kit-build-a-resumable-ai-batch-worker", "action": "Open AI Batch Worker" },
+            { "id": "build-lab-output-handoff-pilot-boundary", "title": "Human handoff and pilot boundary", "text": "Write where the local workflow stops, who decides what happens next, and what approval a later trial would need. Do not connect real data or a provider.", "href": "/articles/from-offline-evaluation-to-an-authorised-pilot", "action": "Read the pilot boundary" },
+            { "id": "build-lab-output-readme-evidence-map", "title": "README: put the decision, cases, run record, and limits in one place", "text": "Put the decision, cases, run record, limits, and links together so a reviewer can follow the work without trusting a polished demo.", "href": "/articles/build-a-github-portfolio-proof-pack", "action": "Organise the README" }
+          ],
+          "boundary": "Everything here is local learning material with fixed test data. It does not create an approval, deployment, model result, business result, or public repository."
+        },
+        "kits": [
+          {
+            "title": "No-code Starter Lab",
+            "kind": "Local spreadsheet practice",
+            "text": "Use one synthetic CSV, a short brief, fixed checks, and a permission record to turn supply-planning notes into a local draft for human review.",
+            "steps": ["Synthetic spreadsheet and a limited decision", "Ask for a plan only; do not connect a tool, account, or connector", "Fixed checks, a permission record, and review criteria", "Output only DRAFT／HANDOFF／BLOCKED; take no external action"],
+            "demonstrates": {
+              "technical": ["A portable field layout, synthetic CSV, and one fixed route for each record", "Treat instruction-like cells as data and test six common failure cases within a local-only boundary", "Downloadable or copyable brief, case sheet, permission record, review criteria, and a prompt that asks for a plan only"],
+              "nonTechnical": ["Narrow “organise supply information” to a draft decision a human reviewer can accept or reject", "Record what data is allowed, which actions are prohibited, who decides, and why a case is PASS／REVISE／STOP; make no procurement, impact, or deployment claim"]
+            },
+            "internalRoute": "/no-code-starter-lab",
+            "action": "Start the local Starter Lab"
+          },
+          {
+            "title": "Coder Starter Lab",
+            "kind": "Local pure-function review practice",
+            "text": "Use one fictional, disposable pure-function change to write a manual baseline, then review only an agent plan, diff, and tests; do not touch a real repository, data source, or external action.",
+            "steps": ["Change brief and non-goals", "Manual baseline and six fixed cases", "Plan/diff/tests-only agent prompt", "Reviewer record, PASS/REVISE/STOP, and a discard path"],
+            "demonstrates": {
+              "technical": ["A TypeScript pure-function skeleton and fixed test cases with no I/O, network, or key", "BLOCKED-first decision order, minimal diff scope, and a line-by-line review record", "Downloadable or copyable English README, brief, source skeleton, cases, agent prompt, and rollback record"],
+              "nonTechnical": ["Narrowing 'ask an agent to change code' into a local change proposal a human reviewer can accept, reject, or stop", "Non-goals, data boundaries, prohibited actions, and deployment, reliability, or business outcomes the exercise cannot claim"]
+            },
+            "internalRoute": "/coding-starter-lab",
+            "action": "Start the Coder Starter Lab"
+          },
+          {
+            "title": "PolicyPilot",
+            "kind": "Flagship portfolio case",
+            "text": "A policy-support assistant that cites only approved fictional documents, drafts an answer and hands exceptions to a human.",
+            "steps": ["Problem, user and non-goal", "Keyword baseline and versioned data", "Quality, safety and operations evaluation", "Trace, release gate and rollback"],
+            "demonstrates": {
+              "technical": ["Versioned synthetic policy data, a keyword baseline, a cited draft and a handoff route", "Fixed quality and safety cases, redacted traces, a release gate and rollback", "A static gpt-5-mini Responses request fixture and optional Promptfoo evaluation configuration: no key, network call, or model output"],
+              "nonTechnical": ["A support-worker lookup decision expressed as a problem, cost of error and non-goal", "Data boundaries, human approval and business outcomes the project cannot claim"]
+            },
+            "articleSlug": "enterprise-ai-portfolio-policy-pilot",
+            "action": "Start with PolicyPilot"
+          },
+          {
+            "title": "Approval Queue",
+            "kind": "Low-code practice case",
+            "text": "An AI approval queue that drafts FAQ replies but can never send messages or change data by itself.",
+            "steps": ["Action contract and prohibited actions", "Prewritten acceptance cases", "Human review and safe stop", "README, traces and portfolio evidence"],
+            "demonstrates": {
+              "technical": ["Synthetic FAQ retrieval, cited drafts, a deterministic mock and a non-executing gpt-5-mini Responses API fixture", "Fixed acceptance cases, prompt-injection and forbidden-action blocks, and privacy-safe traces"],
+              "nonTechnical": ["A deliberate separation between drafting a reply and sending one, with authority retained by a reviewer", "Scope, permissions, failure records and README evidence that can survive a follow-up question"]
+            },
+            "articleSlug": "approval-queue-low-code-portfolio",
+            "action": "Start the low-code flow"
+          },
+          {
+            "title": "AI Batch Worker",
+            "kind": "Batch-work reliability practice",
+            "text": "A batch job that creates only extra records for human review. Use synthetic data to practise processing items one at a time, retrying failures, resuming after a stop, and stopping when cost goes too high.",
+            "steps": ["Process a limited number of items and never do the same item twice", "Decide how to retry and resume after a 429 or timeout", "Send failed items to a person and stop when cost is too high", "Check fixed cases and keep a processing record and decision owner"],
+            "demonstrates": {
+              "technical": ["A limit on items per run; repeatable success, 429, timeout, duplicate, and invalid-input cases; retries, duplicate prevention, and a resume point; plus the difference between simultaneous work and rate limits", "A human review route for failures, a record of each run, a cost limit, a static gpt-5-mini example, and regression tests"],
+              "nonTechnical": ["A clear separation between extra information for human review and changing a real document", "The data boundary, budget, reviewer, and reliability or business results the exercise cannot claim"]
+            },
+            "articleSlug": "build-a-resumable-ai-batch-worker",
+            "action": "Start the batch-work exercise"
+          },
+          {
+            "title": "Renewal Triage",
+            "kind": "Ranking practice for a human review queue",
+            "text": "A synthetic machine-learning case that ranks only a fixed number of items for human review. It never contacts customers or makes renewal decisions.",
+            "steps": ["Use only information that was available at the time and check that future information did not slip in", "Compare a simple rule with candidate models", "Keep model scores, queue handling, and real workflow signals separate", "Check before use, keep watching, and know how to return to the previous version"],
+            "demonstrates": {
+              "technical": ["A rule for what information was available at the time, a check for future-data leakage, a simple rule comparison, and candidate ranking models", "Queue measures under a fixed review capacity, checks before use, ongoing monitoring, and a return-to-previous-version plan"],
+              "nonTechnical": ["A clear distinction between sorting a human review queue and making customer-contact, renewal, or pricing decisions", "Separate model scores, workflow signals, the final decision-maker, and outcomes the exercise cannot claim"]
+            },
+            "articleSlug": "renewal-triage-mlops",
+            "action": "Start the review-queue ranking exercise"
+          },
+          {
+            "title": "KEV Review Packet",
+            "kind": "Public vulnerability-data checking practice",
+            "text": "Use one public vulnerability record to practise preparing a short packet for human security review. Record only allowed fields and unknowns; do not scan, patch, create tickets, or claim an organisation is affected.",
+            "steps": ["Record the allowed sources and fields, and what to do when the data is unsuitable", "Use rules first to create a fixed review packet", "Check fixed cases; Promptfoo is an optional local test setup", "Compare each change; if a required case fails, a person decides and it does not go forward"],
+            "demonstrates": {
+              "technical": ["Check only allowed public fields. The result is either SOURCE_REJECTED (the source cannot be used) or EVIDENCE_PACKET_READY (ready for human security review); external actions stay prohibited", "Compare fixed cases one by one. The optional gpt-5-mini Responses/Promptfoo configuration describes local testing only; it does not connect or run. A required-case failure blocks release"],
+              "nonTechnical": ["Public data can only help a person decide whether review is worthwhile; it is not evidence about internal assets and does not handle a vulnerability", "Record source terms, unknowns, and the final decision-maker. A local passing check is not security approval or evidence that an organisation is affected"]
+            },
+            "articleSlug": "build-a-public-data-kev-review-packet",
+            "action": "Start the public vulnerability-data checking exercise"
+          },
+          {
+            "title": "Workforce Signal Brief",
+            "kind": "Check public statistics before writing a context brief",
+            "text": "Use invented monthly values laid out like the public series to decide whether there is enough material for a human-written context brief. Do not forecast a labour market or make hiring, pay, or personal career inferences.",
+            "steps": ["Record allowed sources, fields, time information, and excluded material", "Check the material with rules before arranging a no-action brief", "Check fixed cases; Promptfoo is an optional local test setup", "Compare each change; reject the source or hand it to a person when a required case fails"],
+            "demonstrates": {
+              "technical": ["Arrange invented values like the public series, then check metadata, time order, and freshness. The result is only CONTEXT_BRIEF_READY (enough material for a context brief) or SOURCE_REJECTED (the source cannot be used)", "Compare fixed cases one by one. The optional gpt-5-mini Responses/Promptfoo configuration describes local testing only; it does not connect or run. A required-case failure blocks release"],
+              "nonTechnical": ["It decides only whether a person can write a context brief; it does not decide who to hire, how much to pay, what someone should do next in their career, what to invest in, or what to publish", "Record source suitability, who makes the next decision, and when to stop. A local result does not establish a labour-market, hiring, or pay outcome"]
+            },
+            "articleSlug": "build-a-source-bound-context-brief",
+            "action": "Open the public-statistics context-brief exercise"
+          }
+        ],
+        "note": "Complete the simpler baseline before adding a model. Without authorised data, a named owner and reversible scope, stay in local practice rather than connecting a real system."
+      }
+    }
+  }
+]

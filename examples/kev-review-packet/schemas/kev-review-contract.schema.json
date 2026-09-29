@@ -1,0 +1,280 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai.dog/schemas/kev-review-contract.schema.json",
+  "title": "KEV Review Packet Contract",
+  "description": "A local portfolio-reference contract for an evidence packet or SOURCE_REJECTED result.",
+  "$defs": {
+    "date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "kevRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cveID",
+        "vendorProject",
+        "product",
+        "vulnerabilityName",
+        "dateAdded",
+        "shortDescription",
+        "requiredAction",
+        "dueDate"
+      ],
+      "properties": {
+        "cveID": {
+          "type": "string",
+          "pattern": "^CVE-[0-9]{4}-[0-9]{4,19}$"
+        },
+        "vendorProject": {
+          "type": "string",
+          "minLength": 1
+        },
+        "product": {
+          "type": "string",
+          "minLength": 1
+        },
+        "vulnerabilityName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dateAdded": {
+          "$ref": "#/$defs/date"
+        },
+        "shortDescription": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiredAction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dueDate": {
+          "$ref": "#/$defs/date"
+        },
+        "knownRansomwareCampaignUse": {
+          "enum": [
+            "Known",
+            "Unknown"
+          ]
+        },
+        "forensicTriage": {
+          "enum": [
+            "Yes",
+            "No"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        },
+        "cwes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^CWE-[0-9]+$"
+          }
+        }
+      }
+    },
+    "sourceManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifestVersion",
+        "fixtureId",
+        "acquisitionMode",
+        "fixturePreparedAt",
+        "snapshotAsOf",
+        "recordClassification",
+        "sourceReceipt",
+        "nonClaims"
+      ],
+      "properties": {
+        "manifestVersion": {
+          "const": "1.0"
+        },
+        "fixtureId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "acquisitionMode": {
+          "const": "fixture_not_live_acquired"
+        },
+        "fixturePreparedAt": {
+          "$ref": "#/$defs/date"
+        },
+        "snapshotAsOf": {
+          "$ref": "#/$defs/date"
+        },
+        "recordClassification": {
+          "const": "public_cisa_kev_fields_only"
+        },
+        "sourceReceipt": {
+          "type": "object"
+        },
+        "nonClaims": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "reviewInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kevRecord",
+        "sourceManifest"
+      ],
+      "properties": {
+        "kevRecord": {
+          "$ref": "#/$defs/kevRecord"
+        },
+        "sourceManifest": {
+          "$ref": "#/$defs/sourceManifest"
+        },
+        "wrapperNote": {
+          "type": "string"
+        },
+        "requestedAction": {
+          "type": "string"
+        },
+        "assetClaim": {
+          "type": "string"
+        }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "mode",
+        "status",
+        "requiresHumanReview"
+      ],
+      "properties": {
+        "kind": {
+          "const": "none"
+        },
+        "mode": {
+          "const": "evidence_only"
+        },
+        "status": {
+          "const": "not_executed"
+        },
+        "requiresHumanReview": {
+          "const": true
+        }
+      }
+    },
+    "evidencePacket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packetVersion",
+        "purpose",
+        "dataStatus",
+        "fixtureId",
+        "sourceReceipt",
+        "record",
+        "sourceProse",
+        "interpretationBoundaries"
+      ],
+      "properties": {
+        "packetVersion": {
+          "const": "1.0"
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "dataStatus": {
+          "const": "fixture_not_live_acquired"
+        },
+        "fixtureId": {
+          "type": "string"
+        },
+        "sourceReceipt": {
+          "type": "object"
+        },
+        "record": {
+          "$ref": "#/$defs/kevRecord"
+        },
+        "sourceProse": {
+          "type": "object"
+        },
+        "interpretationBoundaries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "readyResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "reasonCode",
+        "packet",
+        "action",
+        "trace"
+      ],
+      "properties": {
+        "status": {
+          "const": "EVIDENCE_PACKET_READY"
+        },
+        "reasonCode": {
+          "const": "SOURCE_GROUNDED_PACKET"
+        },
+        "packet": {
+          "$ref": "#/$defs/evidencePacket"
+        },
+        "action": {
+          "$ref": "#/$defs/action"
+        },
+        "trace": {
+          "type": "object"
+        }
+      }
+    },
+    "rejectedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "reasonCode",
+        "rejectionMessage",
+        "action",
+        "trace"
+      ],
+      "properties": {
+        "status": {
+          "const": "SOURCE_REJECTED"
+        },
+        "reasonCode": {
+          "type": "string"
+        },
+        "rejectionMessage": {
+          "type": "string"
+        },
+        "action": {
+          "$ref": "#/$defs/action"
+        },
+        "trace": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/readyResult"
+    },
+    {
+      "$ref": "#/$defs/rejectedResult"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+Reviewer 把一本很長的 policy handbook 貼進 assistant，只問一個很窄的問題。正確 exception 在第十二頁，夾在兩段談同一產品 family 的文字中間；回應卻很有信心地引用了開頭。Context window 變大，最多代表 model 收到更多文字，不代表相關 evidence 一定會被選中、保留，或用在最後 route。
+
+## 這一課幫你做哪個決定
+
+你應該能判斷一個 failure 究竟需要更長 context、更好 retrieval、不同 document structure，還是安全 handoff。要留下的 artefact 是一組受控的 evidence-coverage tests，不是一張一次成功的長 prompt 截圖。
+
+## Context window 和 retrieval 做的是不同工作
+
+**Context window** 是 model 在一次 request 中可以處理的有限 input。它可以包含 instructions、user request、retrieved passages、對話歷史、structured fields 與正在生成的 output tokens。較大的 window 可能讓你少一些過早截斷文件的問題，但也會增加 input work、cost proxy，以及需要處理的競爭訊息。
+
+**Retrieval** 是另一個 system step：它在 approved collection 中搜尋，用 query 與 metadata constraints 找 candidate passages、排序，再組成有限的 evidence package 給 model。目的不是「越多越好」，而是把正確、最新、獲准使用的 evidence，以 reviewer 能檢查的形式送進去。
+
+「lost in the middle」可以視為一種實務 test pattern：同一份 evidence 放在長 context 開頭或尾端時 system 能做到，放在很多干擾文字中間時卻沒有使用。不要把它說成所有 model、所有 workload 的定律；它是提醒你測試 position 與 context assembly 的理由。
+
+## 做一組 document-position evaluation
+
+使用虛構、versioned、沒有個人資料的 policy corpus。設計一個 fixed question，答案由一段有名稱的 passage 支持。把這段分別放在其他內容相近的 context 開頭、中間與尾端，再加一段聽起來相似、但明確不是正確 policy 的近似文字。比較三條 path：
+
+| Path | 進入 model 的內容 | 要量測什麼 |
+| --- | --- | --- |
+| whole-document baseline | 有上限的完整 handbook | 正確 source ID、正確 route、input size、latency |
+| metadata-first retrieval | 只取相關 policy version 和 category 的 passages | evidence recall、排除 stale versions、route |
+| retrieval + compact context | top approved passages 加 task contract | grounding、missing-evidence handoff、review edit rate |
+
+每個 case 記下 source version、query、selected passage IDs、discarded candidates、真 evidence 的位置、output、validator 結果與 reviewer judgment。Retrieval score 不能取代完整驗收：高分 passage 仍可能過期、太寬泛，或不適合這項決定。
+
+## 讓 assembly rule 可以被追問
+
+Evidence package 進 model 前，先回答四個問題：
+
+1. 這個 case 可以使用哪個 policy version？
+2. 哪些 metadata 能縮小搜尋：category、jurisdiction、product、effective date 或 permission boundary？
+3. Context budget 放得下幾段，重複或 overlap 怎麼處理？
+4. 沒有 passage 支持答案，或兩段 approved passages 衝突時，會怎麼辦？
+
+最終規則可以是：沒有任何一個 approved source 足以支持 route，就回 `HANDOFF`；每個 draft 都列出 source ID 與 version；排除 request jurisdiction 以外的文件；retrieved passage 不可用來直接做 action。這比只聲稱「有 RAG」有用得多。
+
+## Long context 的真實取捨
+
+把整本 handbook 送進去，可能保留跨 section 的細節，減少 retrieval miss；也可能拖慢第一個回應、淹沒 task instruction，讓人難以檢查哪份文字影響答案。切 chunk 切得太細，search 可能更準，卻會把一個條件與它的 exception 拆開。Top-k 太少會漏掉 qualifier；太多又變成一堆 noisy near matches。
+
+沒有 universal chunk size 或 context limit。應使用 evaluation set 檢查產品真會遇到的 failure shapes：互相衝突的 revisions、關鍵條件放中間、很相似但 stale 的 policy、需要兩節合併才答得出來的問題，以及最安全 output 是「evidence 不足」的 case。
+
+## Demo 以外值得保留的證據
+
+保留 `retrieval-coverage.md`、source manifest、position-controlled cases、query 與 metadata rules、retrieved evidence receipts 與 results table。加入一個讓你改設計的 failure。也用人話說明後果：reviewer 要知道 draft 是由哪個 version 支持，以及 system 何時拒絕猜。技術上也要寫清：輸入較長不會自動變成較好的 context；relevance、authority、coverage 與 traceability 必須分開測。
+
+這是一個可信的 AI-engineering 故事：你沒有把大 context window 當成 knowledge system，而是比較 baseline、訂 retrieval contract，並保留人可以質疑結果的 evidence。
+
+延伸閱讀：[similarity 高仍可能取錯文件](/zh-TW/interview-lab/high-similarity-is-not-relevance)、[Transformer generation 與 model choice](/zh-TW/articles/choose-transformer-generation-and-adaptation-tradeoffs)，以及[workflow-level agent evaluation](/zh-TW/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)。
+
+## 邊界
+
+這是 AI.DOG 教學，使用虛構、approved corpus。它不代表某個 model、embedding system、context length 或 retrieval method 的表現。真實文件需要自己的 permission、versioning、privacy、evaluation 與 human-review controls。

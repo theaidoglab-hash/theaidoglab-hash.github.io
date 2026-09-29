@@ -1,0 +1,33 @@
+When a training run suddenly produces `NaN`, a flat loss curve or a prediction that never changes, adding layers is usually a guess. Start with the path from one labelled example to one parameter update. That path is where gradients and backpropagation become practical engineering tools.
+
+## Follow one prediction backwards
+
+Suppose a fictional triage model sees a case and estimates a 0.80 chance that it needs manual review. The recorded target is 1 because a reviewer previously escalated it. A loss function converts the disagreement into a numerical signal. The **gradient** asks a local question: if one parameter moves a tiny amount, which direction would reduce that signal?
+
+**Backpropagation** applies the chain rule through the calculation graph. It starts at the loss, works backwards through the final output and then earlier layers, assigning each learnable parameter a contribution to the error. An optimiser uses those gradients and a learning rate to choose an update. Backpropagation is not a separate intelligence mechanism. It is efficient accounting for how a current computation affected the loss.
+
+This also explains a limit: it can lower the specified objective while still learning the wrong operational behaviour. If the label captures an inconsistent historic route, the gradient faithfully optimises that inconsistency.
+
+## Debug the smallest case before the full run
+
+Use a controlled sequence rather than changing five settings at once.
+
+1. Print one input, its target, the raw model output and the computed loss. Confirm their shapes, units and order agree.
+2. Check the output/loss pairing. A loss expecting raw logits behaves differently from one expecting probabilities.
+3. Train on a tiny, fixed batch until the model can deliberately overfit it. If it cannot, inspect the data pipeline, frozen parameters, gradient flow and optimiser wiring.
+4. Log gradient norms and parameter changes for a few layers. All-zero, exploding or non-finite values are diagnostic clues, not a reason to hide the run.
+5. Only then vary one factor such as learning rate, batch size or feature representation, and compare against the same baseline.
+
+The tiny-batch test does not demonstrate generalisation. It checks whether the learning machinery can move at all.
+
+## Keep a debugging trail someone else can inspect
+
+For each run, store a run ID, code and data revision, seed, input schema, target definition, loss configuration, optimiser settings and a short observation. Write one hypothesis before a change: “the loss expects logits but receives probabilities,” for example. Record the expected signal, the actual result and whether you kept or rolled back the change.
+
+A reviewer can see that you managed uncertainty, changed one variable at a time, and did not turn a lucky curve into a claim. Add two failure examples to the record: one where the model is confidently wrong and one where the label itself needs human reconsideration.
+
+## Common false fixes
+
+Clipping gradients may prevent an explosion, but it does not prove the architecture or target is right. Lowering the learning rate can make a curve look calmer while making learning too slow to test. A missing-value default can create a deceptively easy shortcut. And a low loss cannot tell you whether the queue threshold is acceptable for the people who receive the outcome.
+
+The next task is to make runs repeatable and stable without confusing a training convenience with a release gate. Continue with [stability, dropout and normalisation](/en/articles/training-stability-dropout-normalisation) and [from a vague AI request to an accepted change](/en/articles/from-vague-request-to-accepted-feature).

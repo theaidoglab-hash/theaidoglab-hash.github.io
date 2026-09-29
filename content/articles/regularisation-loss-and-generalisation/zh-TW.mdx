@@ -1,0 +1,38 @@
+「loss 下降了」不是 product result。它只表示 model 在某一批 example 上，較能完成你提供的數學 objective。真正的工作，是判斷這個 objective 是否代表有用的決定，以及改善能否在新資料上延續。
+
+## 先為你在意的錯誤定價
+
+想像一個虛構團隊，預測有多少預約申請會錯過 service window。Loss function 把 prediction error 壓縮成 optimiser 可最小化的數字。Squared error 會讓大錯誤特別重；absolute error 對每多錯一筆的處理較平均。沒有一個永遠正確。如果團隊是在安排人力，用 case 數表達誤差可能比抽象分數更有意義；如果低估的代價遠高於高估，也要寫明這個不對稱，而不是希望 default loss 自己理解。
+
+Training loss 和 evaluation metric 可以刻意不同。你可以用較平滑的 objective 來 train，再用營運指標，例如誤差是否落在可接受的人力範圍，來評估。關鍵是清楚交代兩者各自存在的原因。
+
+## Generalisation 是 notebook 之外的考驗
+
+當 model 在未看過、且與未來決定相關的資料上仍合理運作，我們說它具有 **generalisation**。最後的 test period 要保留；用 validation period 比較 model setting，只有準備好做決定後才看最後 test。對時間相關的工作，較晚的時段通常比隨機洗牌更真實。
+
+要理解落差。Training loss 很低而 validation loss 變差，可能是 model 記住偶然 feature。Training 與 validation 接近也不等於好：兩個切分都可能漏掉重要 group、季節或 failure mode。保留簡單 baseline，才知道「更好」的意思。
+
+## Regularisation 是限制，不是萬靈丹
+
+**Regularisation** 是 training 時加入的一種偏好，讓 parameter 不要太複雜。L2 regularisation 會抑制很大的 weight；L1 regularisation 可把部分 weight 推到零。用白話說，它使 model 較不容易過度依賴一個脆弱細節。它能減少 overfitting，但無法修復有歧義的 label、未來資訊 leakage、未取得 consent 的資料，或選錯的決定。
+
+不要把 penalty value 當成神奇 setting。比較少量的數值、記錄 data split，再看兩條 error curve。Penalty 太弱可能改變不了脆弱 fit；太強則可能 underfit，連有用 pattern 都看不到。
+
+## 留下可經覆核的實驗紀錄
+
+每個 candidate 都應有一張 **experiment card**：
+
+- exact target 與 loss 定義；
+- data version、observation cutoff 與 split rule；
+- baseline 與 model configuration；
+- training、validation、final-test 結果，並用營運單位表達；
+- error slice 與幾個已覆核 miss；
+- 下一個決定：進行有人覆核的有限試行、修改資料，或停止。
+
+把 final test 當成 receipt，不要當 tuning dashboard。看完後不斷修改 setting，等於把它也變成 validation set，最後報出的結果會過度樂觀。
+
+## Regularisation 不會保證什麼
+
+Regularisation 不會讓 model 自動公平、隱私安全、因果正確或可部署。一條平滑 validation curve 仍可能配上一個有害的 action threshold。若 model 改變隊列，請和 rule 或 human baseline 比較後果，並給人推翻它的權力。若沒有方案在真正重要的決定上勝過 baseline，誠實結論就是保留 baseline。
+
+延伸閱讀：[gradient 與 backpropagation 如何讓 objective 移動](/zh-TW/articles/gradient-backprop-and-loss-debugging) 與 [調參前先理解 neural learning loop](/zh-TW/articles/understand-neural-learning-before-you-tune)。

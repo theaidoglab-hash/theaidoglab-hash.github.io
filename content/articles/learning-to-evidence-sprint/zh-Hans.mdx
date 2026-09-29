@@ -1,0 +1,138 @@
+开始另一项学习来源前，先点名八周后要留下的一件 artefact，以及 reviewer 应可凭它追问的问题。课程可以提供节奏、feedback 或一个技术机制；它代替不了数据权利、baseline、failure cases 或可重跑交付。
+
+## 先问“我缺哪一种证据”，不是“下一门热门课是什么”
+
+课程完成记录可以说明你曾投入时间，但它不会自动回答面试官或 reviewer 的问题：你正在替谁处理哪一个决定？数据能否使用？较简单的方法表现如何？什么情况要停止？别人怎样重跑你的结果？
+
+先写一张 evidence-gap card，只选一个目前缺少的 artefact：
+
+- **问题与取舍缺口**：你会写 code，却说不清用户决定、错误代价和 non-goal。需要的是一页 problem brief。
+- **数据与责任缺口**：你有 notebook，却没有交代数据来源、版本、同意和不可使用的字段。需要的是 data card 和 action boundary。
+- **比较与评估缺口**：你有一个成功画面，却没有 baseline、固定 test cases 或 failure analysis。需要的是 evaluation pack。
+- **交付与重跑缺口**：你做过 prototype，却无法让陌生人从 README 得到相同结果。需要的是可重跑指引、config、测试和 decision log。
+
+再选学习来源。官方 tutorial 适合补一个明确技术机制；有作业的课程可提供 deadline 和 feedback；bootcamp 可能适合需要 code review 或 project critique 的人。不要假定名称更大、价格更高或证书更漂亮，就一定能补到你的缺口。选择最小、能让你在第一或第二周产出 artefact 的来源。
+
+开始前写 SOURCE_RECEIPT.md：来源网址、日期或版本、授权／条款、你会采用的概念、你不会复制的 solution 或数据，以及你会自行加入的问题定义、数据、评估和文档。若条款不清楚，不要把课件、答案、截图或数据集放上公开 repository。
+
+## 一个完全虚构的八周案例：不是“做模型”，而是帮人排一个有限队列
+
+假设有一间完全虚构的订阅学习服务“Harbour Classroom”。每周，一位 customer-success reviewer 只能逐一检查二十个账户。她想先看可能需要人工跟进的账户，但不想把模型分数直接变成自动消息、折扣、取消或客户决定。
+
+这个 sprint 的 project brief 可以写成：
+
+- **用户与决定**：reviewer 决定本周先检查哪二十个合成账户，以及哪些因数据不足而不应排序。
+- **输入**：你自行建立、去标识化的合成账户摘要；每个字段都写在 schema 和 data card。
+- **输出**：一份 draft review queue、每个项目的可读理由、数据质量警告和 human handoff 标记。
+- **不可做的事**：不读真实账户、不发消息、不修改计划、不提供价格或权益决定，也不把预测当成客户的真实意图。
+- **成功 proxy**：在受控的合成 cases 中，比较简单规则和课程教的 candidate 方法，观察它们在固定 reviewer capacity 下如何排序、如何处理缺数据，以及何时正确交给人。
+
+名称、账户、结果和指标在这个例子里全是虚构。它不是在宣称真的提升 retention、节省时间或代表任何公司。它的价值是让你同时练习技术工作和交付判断。
+
+## 你的 sprint 必须有两条并行的证据线
+
+许多作品集只讲系统那一边：数据进来、模型跑了、画面出来。另一边也要回答：为什么做、谁承担、什么不可做、怎样知道要停止。
+
+**系统部分要留下什么**
+
+- 清楚的 schema、数据版本和合成数据 generator；
+- 一个足够简单、可解释的 baseline；
+- 一个从课程或 tutorial 学到、只针对一种 failure mode 的 candidate 改动；
+- 固定 evaluation cases、预期行为和 error taxonomy；
+- 可重跑 command、config、测试、run ID 和结果 report；
+- 改动后的 release gate 或最小 rollback 方法。
+
+**用在工作上，要交代什么**
+
+- 用户真正要做的有限决定，而不是“有 AI 功能”；
+- reviewer capacity、错误代价和不应自动化的 action；
+- 数据权利、隐私、非公开内容和不可放进 trace 的界线；
+- 哪一个 proxy 有用、哪一个真实 KPI 尚未测量；
+- 谁会 review、谁拥有最终决定、出现问题怎样停止；
+- 不把 local test、合成结果或课程完成写成 production readiness。
+
+两边都要有。一边让人知道系统怎样做；另一边让人知道为什么这样做，以及什么不应交给系统自行处理。
+
+## 八周安排：每周留下一件可检查的东西
+
+### 第 1 周：锁定证据缺口和验收问题
+
+从目标职位或自己的能力盘点中选一个缺口。例如：“我会写分类 demo，但还不能证明我会把模型结果变成有容量限制的 review queue。”把它改成验收问题：在二十个名额的限制下，candidate 是否比简单规则更容易保留应交给人处理的 case？
+
+选一个只补这个缺口的课程单元或 tutorial。产出 problem brief、SOURCE_RECEIPT.md 和明确的 non-goal 清单。若第一周就需要三种模型、登录、付款或真实数据，范围太大。
+
+### 第 2 周：写出数据、决定和权限 contract
+
+建立 synthetic schema，例如账户状态、已知使用信号、数据可用日期和缺失字段。每一栏都问：为什么 reviewer 需要它？它会不会造成不公平、隐私或错误推断？它能否安全地用合成数据替代？
+
+同时写 action contract：系统只生成 queue draft；人必须决定采用、忽略或升级处理。用 test 验证这个边界：任何要求系统发送、改价或改变账户状态的 case 都必须被阻挡或 handoff。
+
+### 第 3 周：先完成能解释的 baseline
+
+baseline 不必漂亮。Harbour Classroom 可以先按“最近活跃度下降”和“数据完整度”写规则，或让 reviewer 用简单 spreadsheet 排队。记录它如何处理二十个名额、数据缺失和同分项目。
+
+这周的技术收据是 baseline code、config 和初步 cases；交付收据是你为什么先用这个方法，以及它不足以处理哪一类 case。没有 baseline，后来的模型分数很难转成可信的取舍。
+
+### 第 4 周：只加入一个有理由的 candidate
+
+把课程教的一个技术放进同一个 contract。例如它教 supervised classifier，就让它只产生 priority suggestion；若它教 LLM workflow，就让它只把结构化合成 notes 转成 reviewer-readable reason，不能替代排序规则或执行 action。
+
+不要同时更换数据、feature、model、prompt、UI 和 metric。写一条假设：“加入这个 candidate，是为了改善 X 类 case；若没有改善，就保留 baseline。”这让失败也可以成为作品证据。
+
+### 第 5 周：评估 workflow，不只看 model metric
+
+建立不随意改写的 evaluation set，至少包括正常个案、数据缺失、矛盾信号、边界情况、要求越权的输入，以及 candidate 比 baseline 差的反例。每个 case 都有 expected queue 或 handoff 行为。
+
+把结果分四层看：
+
+- **模型／排序质量**：例如固定合成 labels 上的 precision、recall 或 calibration；只在数据和定义清楚时才使用。
+- **workflow utility**：二十个名额内有多少应被 reviewer 看见的 case 被保留，错误 queue 是否挤掉必须 handoff 的 case。
+- **安全与边界**：有没有使用禁止字段、把数据不足个案假装成高信心结果，或试图执行不在 scope 的 action。
+- **操作可行性**：一次 run 要多久、输出是否可读、失败如何记录、reviewer 是否能理解理由。
+
+这些不是现成 KPI，也不是 business impact 保证。你要先把它们写成 measurement hypothesis，再用合成 cases 验证系统是否遵守预期。
+
+### 第 6 周：补最小的 MLOps 和可重跑性
+
+MLOps 不等于先租一套昂贵云端平台。这个 sprint 的最低版本可以是：数据和 config 有版本；每次 run 记录 data version、code revision、parameters 和 timestamp；固定 test command 会重跑 cases；report 保留成功、失败和 handoff；改动没有通过 gate 时可以回到上一个 config。
+
+把原始个案最小化，trace 只保留必要的 case ID、版本、结果类别和理由代码。若你用 coding agent，请它先列出会修改的文件、要新增的 test 和验收方法；不要只接受一张漂亮画面。
+
+### 第 7 周：找一位 reviewer 做反向检查
+
+请同学、mentor 或自己扮演陌生 reviewer，按 README 走一次：他能否分清数据是 synthetic？他能否看出 baseline 和 candidate 的唯一差别？他能否找到失败 case 和停用方式？他会不会误以为系统已经连接真实客户？
+
+把问题放进 decision log。若 reviewer 无法重跑、看不懂 metric 或不知道谁做最终决定，不要用更多 feature 掩盖；先修 brief、README、trace 或 test。
+
+### 第 8 周：把 GitHub README 变成可核对的证据入口
+
+GitHub repository 的 README 不是 marketing page。它应让读者在两分钟内找到：
+
+1. 问题、用户、有限决定和 non-goal；
+2. synthetic／已授权数据边界和 SOURCE_RECEIPT；
+3. baseline、candidate 和它们各自要解决的 failure mode；
+4. evaluation cases、metric definitions、已知 failure 和不应作的推论；
+5. 如何安装、跑 tests、生成 report 和回退设置；
+6. 系统部分做了什么，以及用在工作上仍要交代什么；
+7. 你的实际贡献、课程／队友材料的边界，以及尚未验证的地方。
+
+保留 source code、数据字段、test names 和 commands 的英文，让 repository 可被更广泛地重跑；可以在 README 提供不同语言的阅读导览。只展示你确实跑过的 command 和 output，不要贴伪造的 dashboard、客户 KPI 或 production 截图。
+
+## 何时应该停止、缩小或换来源
+
+停止条件不是失败管理的附录，而是 sprint 的一部分。出现以下情况就停下来重新界定：
+
+- 到第 2 周仍说不清用户决定、数据权利或 expected output；
+- 课程材料只能照抄答案，或条款不允许你公开改作；
+- 你需要真实个人、雇主或客户数据才能做出 demo；
+- 到第 5 周 candidate 没有比 baseline 更好，或只靠改测试答案才变好；
+- 任何错误可能改变金钱、权益、安全、医疗、法律或重要账户状态，却没有负责的人工 gate；
+- README 只能展示成功画面，无法展示限制、failure 或 handoff。
+
+你可以回到 baseline、缩小到 draft-only、改用合成数据，或放弃这个课程单元。这比硬把不合适的 tutorial 包装成看似更大的项目，更能显示判断力。
+
+完成八周后，你得到的不是“已证明可获聘”的证书替代品，而是一套诚实、有限且可检查的作品记录：它让别人看见你能把学习材料转成问题定义、技术比较、评估、交付边界和清楚的下一步。
+
+第八周完成的不是“可以公开”按钮。先用 [GitHub Proof Pack](/zh-Hans/articles/build-a-github-portfolio-proof-pack) 整理 source receipt、rerun command、failure record 和 non-claims，再用 [portfolio evidence rubric](/zh-Hans/articles/score-an-ai-portfolio-by-evidence-not-fluency) 找出下一个仍答不出的地方；回到对应周补，不要把 local result 写成 production claim。
+
+延伸阅读：[先按能力证据选择 AI 学习来源](/zh-Hans/articles/choose-ai-learning-sources-by-evidence)、[把课程作业改成可检查 portfolio evidence](/zh-Hans/articles/turn-an-ai-course-project-into-portfolio-evidence)、[Renewal Triage 如何把 model metric 连回 reviewer capacity](/zh-Hans/articles/renewal-triage-mlops)、[把模糊要求写成可验收 workflow](/zh-Hans/articles/from-vague-request-to-accepted-feature)，以及 [非工程师如何审核 AI automation](/zh-Hans/articles/build-a-low-code-ai-automation)。

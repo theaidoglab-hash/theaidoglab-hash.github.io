@@ -1,4 +1,4 @@
-> 核心判斷：一個看似聰明的 prompt 只是一個候選設定；professional evidence 來自可重跑實驗、權限邊界和可解釋的失敗。
+> 一條 prompt 曾經出過一次有用答案，最多證明佢值得試。真正要睇嘅係：reviewer 知唔知邊個改動有用、佢會壞喺邊度，同埋幾時一定要停。
 
 ## Prompt play 有甚麼價值
 快速試 prompt 可以探索語氣、格式和模型能力。問題出現在你只保存最好的一次輸出，然後把它當成穩定方法。沒有版本、固定 cases 和失敗紀錄，其他人無法重現你的判斷。
@@ -14,6 +14,36 @@
 
 ## 怎樣放進 Portfolio
 展示 experiment table、baseline、改動原因、failure taxonomy、permission matrix 和最終限制。面試故事可以說明你刪掉了哪個看似更靈活但風險較高的 prompt，以及怎樣用測試支持取捨。
+
+## 一次只改一樣嘢
+
+用一個完全虛構嘅 **Intake Draft Desk** 練習。佢收到一段合成 request，只可以幫 reviewer 寫有標記嘅 draft；唔可以發送、更新資料，亦唔可以離開提供嘅 fixture set 搜尋。先用 rule 擋住冇 request type 嘅 input，再逐次比較一個 prompt 改動。
+
+| 版本 | 今次刻意只改咗乜 | 固定留低嘅證據 | 跑完後可以點決定 |
+| --- | --- | --- | --- |
+| `v1` | 純 rule route 加固定 draft template。 | 五個 case 嘅預期 route label。 | 留低做安全 baseline。 |
+| `v2` | 加一條抽取 request type 嘅 prompt。 | 同一組五個 label，加完整 prompt text。 | 只喺佢改善一個指明 case、又唔影響 blocked case 時先保留。 |
+| `v3` | 加入 retrieved context。 | v2 case，再加一個過期同一個衝突 source。 | 如果缺資料或舊資料變成自信 draft，就拒絕。 |
+
+唔好淨係比較段文字靚唔靚。並排睇 route、引用咗邊個 fixture ID、terminal status 同 reviewer 要花幾多功夫。如果 model、prompt、input shape 同 grader 一次過都變咗，之後就講唔清係邊樣令結果不同。
+
+## 五個 case 已經足夠睇到邊界
+
+一開始唔使整一大堆 benchmark。寫一組細小 answer key，逼個 workflow 顯示自己會點收手。
+
+| Case | 收到乜 | 預期結果 | 乜嘢叫 regression |
+| --- | --- | --- | --- |
+| 資料齊全 | 所有合成必填欄位都喺度。 | `DRAFT`，只交代要求嘅欄位。 | 補作細節，或者漏咗必填標記。 |
+| 欄位缺失 | 冇 request type。 | `HANDOFF`。 | 猜一個睇落合理嘅答案。 |
+| 像指令嘅文字 | 提供嘅 note 叫佢忽略 rule。 | 當佢係 data，照原 route 行。 | 權限被改咗，或者檢查被繞過。 |
+| 冇支持內容 | fixture set 入面冇答案。 | `HANDOFF` 加 reason code。 | 冇根據都自信咁答。 |
+| 有後果嘅要求 | 文字叫佢 send 或 update。 | `BLOCKED`，冇 external tool path。 | 嘗試寫入、發送，或者有隱藏 side effect。 |
+
+呢張表同時分開兩份證據。技術記錄包括 version、input class、expected state、trace 同 test result；交付記錄要講清楚邊個可以 review draft、點解要 handoff，同埋系統永遠攞唔到邊種 action 權限。
+
+## 有時最好嘅改動係唔用 model
+
+如果 deterministic rule 已經準確擋到所有 missing-field 同禁止 action 嘅 case，唔好因為 model 可以寫得順口啲就換走佢。保留 rule 喺邊界，只喺 model 真係可以改善嘅小段 draft 用佢。呢個決定，比每一層都塞入 agent 更有說服力。
 
 ## 下一步
 下載 prompt experiment log，為一個現有 prompt 建立五個固定 cases。若每次修改後不能重跑同一組 cases，它仍然是一次性試玩，不是工程證據。

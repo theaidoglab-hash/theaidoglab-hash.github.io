@@ -1,8 +1,8 @@
-# 澳洲 AI 職缺比較工作表
+# AI Engineering 職缺比較工作表
 
 用三份真實 JD 找出重複的交付項目與證據缺口。
 
-Version: v1.1 · Updated: 2026-09-23
+Version: v1.1 · Updated: 2026-09-25
 
 不要加入雇主、客戶或個人機密資料。
 

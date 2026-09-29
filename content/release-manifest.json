@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "mode": "LOCAL_REVIEW_ONLY",
+  "releaseId": null,
+  "selection": {
+    "articles": [],
+    "labs": [],
+    "readerPaths": [],
+    "series": [],
+    "roadmapStages": [],
+    "interviewPrepTracks": [],
+    "interviewTopics": [],
+    "routeSurfaces": [],
+    "downloads": [],
+    "templates": []
+  },
+  "reviewEvidence": null
+}

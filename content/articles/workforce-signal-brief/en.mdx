@@ -1,0 +1,100 @@
+> This portfolio build is not about predicting a labour market. It is about deciding whether a source is complete enough to enter a brief that a person can review.
+
+## The useful decision is smaller than an “AI market insight”
+
+Imagine a fictional workforce-planning research lead receiving a proposed public-statistics source. Before someone writes a context brief, the lead needs to answer one narrow question: **is this receipt complete enough for a human to inspect a bounded, no-action summary?**
+
+That is deliberately not a question about where jobs are heading, what a company should hire, how much it should pay, or what someone should do next in their career. A tidy chart or fluent paragraph cannot answer any of those questions by itself.
+
+The official [ABS Data API guide](https://www.abs.gov.au/statistics/application-programming-interfaces-apis/data-api-user-guide), [Labour Force, Australia release collection](https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia), and [ABS citation guidance](https://www.abs.gov.au/how-cite-abs-sources) are useful routes to inspect when designing a future acquisition. They are not evidence that this learning package fetched a release, queried an API, selected a series, or used a current observation.
+
+The scenario, monthly values, receipts, cases, and outputs described here are source-shaped synthetic fixtures. The project therefore makes a much more honest claim: it shows how to make the boundary around a future briefing workflow inspectable.
+
+## Start with a source receipt, not a promising-looking number
+
+A source receipt is the short record that lets a reviewer see what arrived and what has not been established. A useful one records:
+
+- the intended official route and a citation key;
+- the series identity, reference period, unit, adjustment, and retrieval rule a future owner would need to confirm;
+- which fields may enter the packet and which private or operational fields must be rejected;
+- a freshness rule, schema version, and fixture identity; and
+- the human owner of source suitability, interpretation, and any later release decision.
+
+The local example contains a fictional geography and synthetic values marked as synthetic. It records `synthetic_source_shaped_not_live_acquired`, not a current statistic. If the receipt is incomplete, stale under its declared rule, unordered, missing a unit, or carries a private field, the correct result is rejection—not a helpful-sounding recovery.
+
+```text
+source receipt + source-shaped synthetic series
+  -> metadata, order, freshness, and private-field checks
+  -> CONTEXT_BRIEF_READY or SOURCE_REJECTED
+  -> no-action context packet for a human reviewer
+  -> fixed cases, change comparison, release/rollback evidence
+```
+
+`CONTEXT_BRIEF_READY` is only permission to show a constrained packet to a person. It is not a forecast, causal explanation, hiring recommendation, salary decision, individual career advice, policy recommendation, publication, or external action.
+
+## A deterministic packet comes before the optional model seam
+
+The baseline has no need for an LLM. It preserves allowed facts, labels the values as synthetic, calculates only a simple period-to-period difference, and asks the reviewer what must be checked next. It cannot invent a trend, fill in missing context, or turn a difference into a recommendation.
+
+That gives you clear cases to test before prose becomes part of the system:
+
+| Case | Required behaviour |
+| --- | --- |
+| Complete synthetic receipt | Return a context packet with synthetic labels and reviewer questions |
+| Missing unit or unordered period | Reject before a packet is built |
+| Stale receipt | Reject and name the freshness failure |
+| Private field | Reject rather than project it into the output |
+| Instruction hidden in source text | Keep source text from changing the route |
+| Forecast request | Refuse the request and keep the no-action boundary |
+
+This is engineering evidence a reviewer can follow: data contracts, allowed fields, rejection paths, result schemas, and cases that remain stable after a prompt or parser change. It is more useful than a screenshot of one polished answer.
+
+## Where GPT-5 mini and Promptfoo fit—and where they do not
+
+The example keeps an optional `gpt-5-mini` Responses request shape visible so that a reviewer can see a possible future seam. It is static and non-executing: no API key, SDK call, network request, or model output is included. The [GPT-5 mini documentation](https://developers.openai.com/api/docs/models/gpt-5-mini) describes a model surface; it does not establish that this workforce use case is suitable, safe, effective, or ready to release.
+
+The same separation applies to Promptfoo. A local fixture configuration can describe fixed inputs, assertions, result shapes, and a deterministic provider without calling a provider. A separate, optional Responses configuration is a future execution choice that needs its own authority, key handling, data review, cost decision, and release gate. The [Promptfoo configuration guide](https://www.promptfoo.dev/docs/configuration/guide/) and [OpenAI provider guide](https://www.promptfoo.dev/docs/providers/openai/) explain their tools; neither is a run result from this project.
+
+If a model layer is later authorised, it should receive only the allowlisted packet, return a strict schema, retain the synthetic label, and be rejected whenever it forecasts, presents an unsupported explanation, introduces private context, or suggests an external action. The deterministic route remains the baseline against which it is judged.
+
+## Evidence Delta makes a change discussable
+
+“The new prompt reads better” is not enough to choose a version. Freeze the source-shaped fixture and fixed case manifest, change one thing, and compare the baseline and candidate case by case.
+
+For example, `CHANGE-001` records a candidate that had accepted a forecast request and a later candidate that rejects it. A comparison can say `NO_DECLARED_REGRESSION` only when the same fixture and protocol apply. It does not approve a release.
+
+For each change, keep:
+
+1. the parser, schema, prompt, or model version that changed;
+2. the fixed input and expected boundary for every case;
+3. the per-case difference, including a new failure or unchanged result;
+4. the human reviewer’s `KEEP`, `HOLD`, or `REVERT` decision; and
+5. a named rollback target.
+
+The person reviewing the source decides whether it is suitable, whether the packet is meaningful in context, and whether any future release is authorised. A test can show a boundary held; it cannot take those decisions away.
+
+## What to place in your own portfolio repository
+
+Build the evidence around the decision, not around a chatbot screen:
+
+```text
+data/source-receipt.md          source route, limits, freshness rule, excluded fields
+data/fixture-manifest.json      synthetic fixture identity and schema version
+schemas/context-packet.json     no-action output contract
+src/validate-source.mjs         deterministic reject paths
+src/build-packet.mjs            fact-preserving baseline
+evals/cases.json                fixed normal and failure cases
+scripts/evidence-delta.mjs      per-case comparison
+CHANGE-001.md                   hypothesis, reviewer decision, rollback target
+README.md                       commands, evidence map, limits, and non-claims
+```
+
+A reviewer can inspect validation, schemas, versioning, fixed evaluation, and rollback. Before anything affects a decision, the work must also state source rights, data minimisation, who owns the decision, and when to stop. The [NIST AI RMF Playbook](https://www.nist.gov/itl/ai-risk-management-framework/nist-ai-rmf-playbook) is one way to discuss roles and documentation; using it here is not a compliance claim.
+
+## Boundaries worth saying out loud
+
+No live ABS data is acquired or checked for currentness here. No included value is an ABS observation, a public statistic, a trend, a forecast, or a causal conclusion. No employer, employee, candidate, salary, customer, or operational data appears. No OpenAI request, model output, Promptfoo run, latency, cost, quality, or safety result is shown.
+
+You can download the accompanying English starter pack from the portfolio planner. It contains a `not acquired` source receipt, four invented monthly values, seven manual cases, and `CHANGE-001`, so you can begin with a reviewable exercise. It is not the full local reference package or a public repository. There is currently no verified GitHub URL for the full reference package, so it cannot be cloned. The downloadable starter has its own local run instructions and does not represent the full reference package. Publication or a live-data pilot remains an owner decision after data rights, source handling, human review, and release authority have been checked.
+
+Related reading: [build a public-data KEV review packet](/en/articles/build-a-public-data-kev-review-packet), [LLM evals, human review, and observability](/en/articles/llm-evals-human-review-and-observability), [from offline evaluation to an authorised pilot](/en/articles/from-offline-evaluation-to-an-authorised-pilot), [score an AI portfolio by evidence, not fluency](/en/articles/score-an-ai-portfolio-by-evidence-not-fluency), and [build a GitHub portfolio proof pack](/en/articles/build-a-github-portfolio-proof-pack).

@@ -1,0 +1,60 @@
+團隊希望一個 AI system 同時做兩件事：判斷 request 是否應進 standard queue，以及替 reviewer 草擬附有 citation 的解釋。「使用 Transformer」還不是設計。第一件事需要穩定的 label；第二件事需要根據已提供的 evidence 受控地寫作。理解 Transformer 內部的 blocks 能幫你說明差異，但真正決定是否合適的是 workflow contract。
+
+## 先定義決定，不要先選 model family
+
+先寫出最小 task statement：
+
+> 給定 approved、已處理的 request 與 policy version，將它 route 至 `standard`、`review` 或 `out-of-scope`；如有需要，只能替 reviewer 草擬引用指定 policy 的內容。系統不得聯絡客戶或修改任何 record。
+
+這一句已交代 output type、boundary 與 baseline。已知 category 可以先用 deterministic rule；有足夠 versioned labels 的 routing task，才考慮 representation model；route 與 evidence 都已確認後，generative model 才可能協助 reviewer 起草。Architecture 必須贏得它的位置，而不是理所當然存在。
+
+## Transformer block 裡做什麼
+
+高層來說，Transformer 接收 token representations、加入 position 的表示、反覆讓不同位置交換訊息，再轉換每個位置，最後輸出結果。一個典型 block 包含：
+
+1. **Self-attention**：讓每個 token 混合可見 context positions 的訊息。
+2. **Feed-forward network** 或 MLP：在每個位置進一步轉換結果。
+3. **Residual connections**：把較早的 signal 加回 sublayer 周圍，避免完全消失。
+4. **Normalisation**：讓重複計算時的數值尺度較穩定。
+
+這些 blocks 疊在一起。最後 output head 把 representations 轉成 next-token scores、class scores、token labels 或其他 target。實作可以不同，但工程問題一樣：我們需要哪種 output？要怎麼驗收？
+
+## 三種 architecture shape，回答三個不同問題
+
+**Encoder-style** model 能雙向讀完整的 allowed input，產生適合 classification、search 或 ranking 的 representation。當 output 是固定 routes，且有合理的 labelled data，它是一個可比較的選項。
+
+**Decoder-only** model 在 causal mask 下由左至右生成，適合草擬、對話和 structured text。但它也可能寫出很有信心卻沒有根據的句子，因此需要 output contract、evidence check 與安全 handoff。
+
+**Encoder-decoder** design 先讀 source sequence，再生成 target sequence。當 source 與 output 的形式確實不同，這個 sequence-to-sequence pattern 很有用；但它不會自動成為小型 routing task 的最佳選擇。
+
+不要把它背成一張表。能寫出漂亮 draft 的模型，不代表它適合 route case；能穩定分類，也不代表它足以向人解釋 policy exception。
+
+## 一個小型 architecture-choice experiment
+
+用虛構 desk 的同一組 fixed synthetic cases，比較三條 path：
+
+| Candidate | Product role | 要測什麼 | 何時淘汰 |
+| --- | --- | --- | --- |
+| rule baseline | 已知 category routing | route、原因、維護成本 | category 常變或 rules 衝突 |
+| representation classifier | 選擇固定 route | held-out route accuracy、安全的 `out-of-scope` | labels 不足或有高風險 false approval |
+| decoder draft layer | 為 reviewer 引用指定 evidence | schema、source grounding、handoff、可讀性 | invented source、不安全 route 或 review burden 太高 |
+
+Input schema、source version、expected route、forbidden route 與 reviewer rule 都要相同。不要把 polished generative demo 與沒有量測的 baseline 相比。最有用的結論可能是：rule 仍然負責 routing，draft model 只在下游一個可 review 的位置協助。
+
+## Design note 應承認的取捨
+
+更多 layers 與 parameters 不會補回沒有提供的 policy；更長的 prompt 也不是 labelled routing criteria。Decoder 可以降低 reviewer 的 blank-page effort，但增加 generation cost、output variability、prompt injection exposure 與 source verification 工作。Classifier 對 closed labels 可能較快且較容易評估，但新 category 出現時可能突然失準。
+
+Retrieval 也是另一回事。若必須使用最新 policy，依 metadata 取回 approved version，並顯示真正進入 draft 的 evidence。不要承諾 attention 儲存了最新 policy，或 fine-tuning 能讓一份 source 變成權威。
+
+## 能承受追問的 portfolio evidence
+
+保留 `architecture-decision.md`：user decision、alternatives、fixed case set、evaluation measures、costs、failures 與 no-go condition。再畫一張只包含任務所需元件的圖：input validation、route baseline、evidence lookup、draft layer、output validator、reviewer handoff。清楚標示哪些是 simulation，哪些 action 刻意不可用。
+
+這能讓 interviewer 或 reviewer 看見：你能正確解釋 Transformer blocks，也知道 system architecture 是一連串有理由的 operational choices。
+
+延伸閱讀：[Transformer generation 與 model choice](/zh-TW/articles/choose-transformer-generation-and-adaptation-tradeoffs)、[model score 如何變 workflow decision](/zh-TW/articles/model-score-to-workflow-decision)，以及[需要 acceptance test 的 prompt contract](/zh-TW/interview-lab/prompt-contracts-need-an-acceptance-test)。
+
+## 邊界
+
+這是 AI.DOG 教學，使用虛構、只產生 draft 的 workflow。它沒有指定 production architecture，也不代表任何 model class 一定達到某個 quality、cost、latency 或 business target。真實使用前，必須驗證實際 data、task 與 human-review process。

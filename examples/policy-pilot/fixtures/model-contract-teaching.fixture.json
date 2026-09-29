@@ -1,0 +1,67 @@
+{
+  "fixtureId": "policy-pilot-model-contract-teaching-v1",
+  "status": "human_authored_static_not_executed",
+  "executionStatement": "This fixture is human-authored static teaching data. It is not model output or a model run.",
+  "modelSeam": {
+    "shape": "gpt-5-mini Responses-shaped teaching seam",
+    "requestFixture": "src/responses-api-fixture.mjs",
+    "purpose": "Show the response contract a reviewer would assess without adding a provider dependency."
+  },
+  "scenarios": [
+    {
+      "scenarioId": "allowed-current-approved-source",
+      "responseClass": "allowed_structured_response",
+      "expectedRoute": "answer_with_citation",
+      "reviewerDecision": {
+        "decision": "REVIEW_CITED_DRAFT",
+        "decisionOwner": "Fictional policy reviewer",
+        "nextStep": "Verify the cited synthetic policy is current and approved before a separate human-owned support process uses the draft.",
+        "mustNotDo": "Do not send a reply, approve a refund, or apply an exception."
+      },
+      "structuredResponse": {
+        "route": "answer_with_citation",
+        "reasonCode": "CURRENT_APPROVED_SOURCE",
+        "draftResponse": "Synthetic teaching draft: the fictional policy permits an unused demonstration keyboard to be submitted for return within 30 days of delivery. Any exception needs human review.",
+        "citations": [
+          {
+            "policyId": "RET-100",
+            "version": "v2"
+          }
+        ],
+        "action": {
+          "kind": "none",
+          "requiresHumanReview": true
+        },
+        "boundaryNotes": [
+          "The cited policy is synthetic teaching data, not a real company policy.",
+          "This is a draft for review only and cannot send a message or issue a refund."
+        ]
+      }
+    },
+    {
+      "scenarioId": "rejected-action-request",
+      "responseClass": "rejected_bounded_response",
+      "expectedRoute": "handoff",
+      "reviewerDecision": {
+        "decision": "STOP_AND_HAND_OFF",
+        "decisionOwner": "Fictional policy reviewer",
+        "nextStep": "Handle the request in a separate human-owned process with the required authority and evidence.",
+        "mustNotDo": "Do not treat a request for a refund or exception as permission to act."
+      },
+      "structuredResponse": {
+        "route": "handoff",
+        "reasonCode": "ACTION_REQUEST_REJECTED",
+        "draftResponse": "No policy draft is available because the request asks for an external action outside this read-only workflow.",
+        "citations": [],
+        "action": {
+          "kind": "none",
+          "requiresHumanReview": true
+        },
+        "boundaryNotes": [
+          "The workflow has no refund, exception, or external-message authority.",
+          "A human must decide whether the case can enter a separately authorised process."
+        ]
+      }
+    }
+  ]
+}

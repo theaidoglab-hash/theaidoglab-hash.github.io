@@ -1,0 +1,41 @@
+Retrieval demo 可以找出一段很相似的文字，卻仍然支持錯的決定。工程問題在於：它有沒有為這次 claim 找到正確、最新、允許使用的 evidence；search 回傳 text 並不足夠。
+
+## 一條 note，三個可能 source
+
+想像一個完全虛構的 policy-evidence desk。reviewer 問為何某個 refund route 被擋。system 只可 search 一小組 approved document，產生有 citation 的 draft；它不可改 refund、讀 customer account 或用未批准文件。
+
+真正答案在 policy chapter。旁邊 FAQ 有相近句子，但 exception 不同；一份舊 version 的 policy 又有很強 lexical match。naive vector search 可能把三份都找回。最後答案看似合理，實際根據的是錯 record。
+
+## Retrieval 有多個獨立選擇
+
+**Index** 儲存可搜尋 representation 和 metadata。**Chunk** 是一次 retrieval 的單位，通常小過整份 document。小 chunk 容易定位一句話，但太小會丟掉前後 exception；大 chunk 留住 context，卻可能埋沒關鍵句並花掉 context budget。
+
+如果範圍本來已知，例如地區、產品或文件類型，先用欄位篩選；不要把所有分流都交給相似度搜尋：document status、policy version、region、effective date、permission scope、content type。然後先取一個適量 candidate set。**Reranker** 可以更仔細比較 request 和 candidates，再排序；它不是 authority source，不應跨過 metadata rule 把 stale 或 forbidden document 推上去。
+
+Cache 同樣有 boundary。response cache 的 key 應包含問題形狀、audience 或 permission scope、document version 和 validity interval。retrieval cache 則要在 index 或 approved source 改變時有清楚 invalidation rule。「昨天很快」不代表今天可以安全重用。
+
+## 令每個選擇可測
+
+起一張小型 retrieval evaluation table：
+
+| Case | 必須 evidence | 必須排除 | Expected route |
+| --- | --- | --- | --- |
+| 精確 policy exception | 現行 chapter 和 section | 舊 version | Cited draft |
+| 相似但錯的 FAQ | 現行 policy | FAQ exception | Cited draft |
+| 沒有 source | 無 | 編造 passage | HANDOFF |
+| Region 不符 | 正確 region | 其他 region | HANDOFF 或 scoped draft |
+| 新 policy version | 新 version | cache 舊 answer | Cache miss 再 retrieval |
+
+每次 run 保留 document ID、version、chunk boundary、metadata filter、candidate count、reranked order、selected evidence、cache decision 和 final route。量 retrieval recall 時，要對照已知必需 evidence；但不能只停在分數，還要看 assembled draft 是否真用對 source，以及沒有 source 時是否正確 handoff。
+
+## Simple baseline 也要比較
+
+若只有十份 approved documents，filtered keyword search 可能比 vector index 更易 audit。若每次都要一整段 policy section，根本未必需要 chunk。只有某個已命名 failure 令維護與 regression risk 值得時，才加 embedding、reranking、hybrid search 或 cache。
+
+作品頁應交代索引內有甚麼、如何切段、哪些欄位用來篩選、測試題目、資料更新後怎樣處理、一次查詢經過哪些步驟，以及一個失敗例子。business evidence 則是 user decision、freshness requirement、access boundary、named reviewer 和用錯 source 的代價。不要把高 retrieval score 說成可靠 RAG product。
+
+延伸閱讀：[把 RAG 由 chat demo 變成 portfolio evidence](/zh-HK/articles/rag-chatbot-to-portfolio-evidence)、[RAG 的 freshness 和 conflict handling](/zh-HK/articles/rag-freshness-conflicts-and-advanced-patterns)，以及[workflow evaluation](/zh-HK/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)。
+
+## 邊界
+
+policy desk、document、version rule 和結果皆為示範。本文不是法律、refund、privacy 或 production search 建議；列出的 test 只示範怎樣檢查有界 prototype，不代表真實 knowledge system 準確或安全。

@@ -1,0 +1,52 @@
+有人看着 model catalogue 说：“这个有超大 context window，又是 Mixture-of-Experts，一定比我们的 assistant 快。”这个结论跳过了 workload。长 reviewer request、短 batch classification jobs，以及 peak load 下的 streaming draft，压力都落在 serving system 的不同位置。Modern architecture terms 只有连到可观察 workload、quality rule 与 user-facing budget，才有用。
+
+## 这是一个工程决定
+
+你应该能比较 small dense model、sparse expert model 与更简单 workflow，而不是把 parameter count 当成 product metric。实际要交出的，是一份 serving decision note：量了什么、还有什么未知、什么时候要 stop 或 handoff。
+
+## Long context 为何改变 serving work
+
+在 standard full attention 中，每个位置可以和 allowed context 内很多其他位置比较。Input 越长，与这些比较相关的 work 与 memory 可能越大。较新的 attention patterns 和 implementation techniques 可以改变确实的 cost profile，但仍有取舍：哪些位置可互动、保留多少 state、有什么 hardware path，以及 task 是否真的需要那么多 input。
+
+Autoregressive model 的 serving 有两个看得见的 phases：
+
+- **Prefill** 在第一个 generated token 前处理 prompt 与 retrieved context；long input 会拉长 time to first result。
+- **Decode** 一个 token 一个 token 产生 output，并重用如 **KV cache** 的已存 token state；long answer 会拉长 completion time 与 memory pressure。
+
+因此“模型慢”是不完整的 diagnosis。高 tail latency 可能来自 queueing、long context assembly、cache pressure、output length、batch scheduling 或 service overloaded，不一定只是 model 算得慢。
+
+## Mixture-of-Experts 改变了什么
+
+Dense model 每个 token 都会用到很大部分 parameters。**Mixture-of-Experts（MoE）** layer 有多个 specialised sub-networks，加上一个 router，为每个 token 只选部分 experts。原则上，较大的 total parameter pool 不需要每次把所有 experts 都跑完。
+
+但“sparse”不等于免费。Router 可以让 demand 不平均；expert capacity 可以成为 bottleneck；tokens 可能要在 devices 之间移动；一个纸面很有效率的 batch，若太多 tokens 选同一 expert，P99 可能很差。Quality 也会随 task 与 input distribution 改变。应把 MoE 当成有 routing 与 capacity 问题的 systems design，不是一个保证更快或更好的徽章。
+
+## 测 workload，不要测 brochure
+
+为虚构、只产生 draft 的 evidence desk，先定三种 synthetic workload shapes：
+
+| Workload | User need | Measurements | Safety check |
+| --- | --- | --- | --- |
+| short route | 快速 standard classification | queue delay、route quality、P50/P95/P99 | unknown category 必须 handoff |
+| evidence draft | 用有限 evidence package 写有 citation 的回应 | time to first result、total time、source grounding | 无 source 就无 draft |
+| long review packet | 一个严格有上限的长 input | context size、cache memory、completion time、review usefulness | conflict 或 budget stop 就 handoff |
+
+每个 candidate 都记下 exact prompt/context version、batch setting、cache state、quantisation 或 runtime setting、output cap、quality checks，以及如知道的 hardware 或 hosted-service environment。用同一套 fixed cases 比较。Cost proxy 只在你的 measurement 支持时报告；不要把一次 local run 说成 provider-capacity claim。
+
+## Serving levers 需要成对 guardrails
+
+Dynamic batching 可以改善 throughput，却可能让 urgent request 排在大 batch 后面。Prefix cache 能减少重复的 stable prompt work，但 policy text 改变就必须 invalidate。KV cache 避免 decode 时重算已见 token states，代价是吃 memory 与限制 batch size。Quantisation 可降低 memory demand，但改前改后都要跑同一套 quality 与 safety cases。
+
+第一个有用 optimisation 往往更简单：少放不相关 context、返回 compact schema、cap 掉没有根据的 retries，或把不确定工作交给 reviewer。这些 control 可以同时改善 cost 与 correctness，不必一开始就押注复杂 serving stack。
+
+## 一份 portfolio-quality serving receipt
+
+保留 `serving-decision.md`：workload assumptions、P50/P95/P99 targets、latency slices、quality 与 handoff criteria、runtime settings、observed failures，以及 rollback 或 stop rule。再加 trace fields：request class、context version、cache condition、batch condition、output size、terminal state 与安全的 reviewer destination。私人文字与 secrets 要在设计上排除。
+
+可重跑的 benchmark shape，加上你对 prefill、decode、cache、batching 与 expert routing 的解释，会说明模型与 serving work 做到了什么。交给 reviewer 前，要定清楚等待上限，也要确保 source conflict 不会变成流畅答案；time budget 用尽时，handoff 要看得到，不能暗中 loop。
+
+延伸阅读：[可停止 agent 与 serving budget](/zh-Hans/articles/build-stoppable-ai-agents-with-serving-budgets)、[long context、retrieval 与 evidence coverage](/zh-Hans/articles/long-context-retrieval-and-lost-middle)，以及[workflow-level agent evaluation](/zh-Hans/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)。
+
+## 边界
+
+这是 AI.DOG 教学，使用 synthetic workloads。它没有 benchmark 任何 named model、没有建立 hardware performance，也不承诺 latency、cost 或 quality outcome。真实 serving choice 需要 approved workload data、provider documentation、security review、capacity testing 与可问责的 owner。

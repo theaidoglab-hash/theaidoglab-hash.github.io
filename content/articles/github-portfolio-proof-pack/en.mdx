@@ -1,0 +1,123 @@
+A reviewer opening a repository should quickly find the decision you prepared, whether the data may be used, the comparison, the checks, the limits, and the part you completed. If one is missing, add a file someone can inspect rather than a shinier screen. A public synthetic project is not evidence that anyone uses it in real work or that it changed a business outcome.
+
+## Start with a decision someone can inspect
+
+Do not begin by asking an AI agent to build a “full-stack AI app.” Begin with one fictional, bounded decision. For example: a fictional programme coordinator needs a **draft-only** summary of a synthetic application packet, or a clear handoff when the packet is incomplete. The coordinator remains the decision owner. The project does not rank people, send messages, change a record, use real applications or claim that it improved an organisation.
+
+Write this in the first screen of the README:
+
+- **User and decision:** who reads the output, what limited decision they can make, and when.
+- **Cost of error:** what must not happen, such as invented facts, a privacy leak or an unauthorised action.
+- **Non-goal:** what the project deliberately cannot do.
+- **Success proxy:** a local, synthetic observation such as correct source citation or correct handoff—not a revenue, accuracy or adoption claim.
+
+The build begins by choosing a problem before choosing a model. Its files and tests let a reviewer inspect whether the implementation supports that decision, rather than merely decorating it.
+
+## Give each file a job
+
+Use a small public-safe structure. Keep source code, commands, test names and runtime strings in English so a reviewer can rerun them. Translate only README entry points if you want a reader to start in a different language.
+
+~~~text
+README.md                  # decision, setup, test command, limits
+README.zh-HK.md            # localised entry point; links to English source docs
+SOURCE_RECEIPT.md          # what inspired the work and what you changed
+DATA_CARD.md               # synthetic/public/authorised boundary and schema
+docs/problem-brief.md      # owner, error cost, non-goal, success proxy
+src/                       # small, readable implementation
+eval/cases.jsonl           # fixed normal, failure and prohibited-action cases
+tests/                     # deterministic checks and expected routes
+reports/                   # generated local comparison or test summary
+docs/decision-log.md       # baseline, one change, result and next decision
+docs/claims.md             # evidence held and claims intentionally not made
+.github/workflows/check.yml # repeatable validation trigger
+~~~
+
+GitHub surfaces a repository README as an introduction to the project. That makes the opening explanation important, but it does not replace the supporting files. A reviewer should be able to move from the claim in the README to the data card, test, source fixture and result. If the repository is public, assume that committed code and repository-visible workflow material can be seen by strangers. Never place a secret, real workplace extract, customer content, private URL or copied course solution in it.
+
+Think of the README as the label on a box. The proof pack is the instruction sheet, safety rule, list of pieces, and test showing the brakes work. A polished label does not prove the system is safe.
+
+## Let people check both the system and the way it will be used
+
+People need to see how the system behaves, when it may be used, and when it must stop. Code alone does not show whether you chose the right problem; a business story alone does not show whether the system behaves as claimed.
+
+| What you demonstrate | Files that show how the system behaves | What must be clear before work use |
+| --- | --- | --- |
+| A useful first route | A transparent rule or keyword baseline, input schema and deterministic output | Named user, narrow decision, cost of error and explicit non-goal |
+| A model or prompt candidate | Versioned configuration, fixed test cases, expected output and failure taxonomy | Why this change is worth testing and which decision it must not automate |
+| Evaluation | Same cases for baseline and candidate; pass/fail rule; error examples | Separate model behaviour from a workflow proxy and from unmeasured real outcomes |
+| Operations | Test command, dependency version, local trace fields and a rollback target | Human owner, approval gate, data retention limit and stop condition |
+| Public repository | English source, comments, test labels and workflow file | Localised README, source receipt, data rights, individual contribution and nonclaims |
+
+This map is useful for non-developers too. You may use an AI coding tool to draft files, but you still own the decision, acceptance cases, data boundary, final review, and decision to stop.
+
+## Make the baseline deliberately boring
+
+The first runnable version should be simple enough to explain in two minutes. For the fictional packet-summary example, a baseline could check mandatory fields, list the supplied synthetic facts in a fixed template and hand off anything missing. It may be less fluent than an LLM, but it establishes what a candidate must beat.
+
+Then make one deliberate change. Perhaps a static gpt-5-mini Responses API fixture describes a future structured draft request, while the runnable reference remains local and deterministic. Or perhaps a model candidate creates a summary only after the same field checks pass. Do not change the prompt, retrieval, UI, model and data schema together. If the output changes, you need to know why.
+
+An API fixture without a key or network call is a discussion artefact, not an integration. It can demonstrate an intended request shape and safety requirement. It cannot demonstrate current API compatibility, model quality, cost, permissions, security or production readiness. State that plainly in the README and claims file.
+
+## Write the evaluation before you admire the output
+
+Create a small fixed set of synthetic cases. Each case needs an ID, input, expected route, expected source or missing-support result, and a reason it matters. Start with:
+
+1. A complete normal packet that should produce a labelled draft.
+2. A missing-field packet that must hand off rather than invent a value.
+3. A conflicting or stale synthetic source that must not be selected.
+4. An instruction-override attempt that must not change the contract.
+5. A request for an external action that must be blocked before any action.
+6. A candidate regression where the simple baseline is safer or more correct.
+
+Run the baseline and candidate against the same cases. Store a compact report with version, command, expected result, actual result and failure reason. Fixed cases are not proof of statistical significance or business impact. They prevent you from keeping only the one screenshot that worked.
+
+The comparison needs the same conditions for both versions: put the same puddles, rocks, and finish line in front of each paper boat. Do not give the candidate an easier river and call it a win.
+
+## Treat CI as a repeatable check, not a quality certificate
+
+A GitHub Actions workflow is a YAML instruction that can run the same validation after selected repository events. A small workflow can run the test command and write a clear pass or failure result. It proves only that the checked revision met your specified checks in that run. It cannot prove that the product is secure, correct for real users, legally approved or ready to deploy.
+
+For a portfolio repository, keep the workflow modest:
+
+- install the pinned dependencies;
+- run the deterministic test suite;
+- reject a missing data-card or claims file if that is part of your contract;
+- avoid live credentials, external write actions and production data; and
+- make the local command in README match the command in the workflow.
+
+Before making anything public, do a release preflight: search for keys and personal data, read the generated report and logs, confirm every dataset is synthetic or public under terms you understand, verify the licence, and check that translated README files do not overstate the English source documentation. If any item is unclear, keep the repository private or local and publish a short learning note instead. This is not legal or compliance advice.
+
+## Practise the five-minute GitHub walkthrough
+
+Use this order when a reviewer opens the repository:
+
+1. **0:00–0:40:** Read the user, decision, cost of error and non-goal from the README.
+2. **0:40–1:20:** Open the source receipt and data card; say exactly why the fixture is safe to show.
+3. **1:20–2:10:** Run or explain the simple baseline and the one change you tested.
+4. **2:10–3:20:** Show the fixed cases, including a handoff, blocked action or regression.
+5. **3:20–4:10:** Open the generated test report and workflow file; distinguish repeatable checks from real-world validation.
+6. **4:10–5:00:** Read the claims file: what the project shows, what it does not show, and the next evidence that needs an authorised team.
+
+This gives an interviewer more than a polished UI: implementation choices they can inspect, plus the authority boundary that keeps the system inside its scope.
+
+## What public access still does not show
+
+A public synthetic reference can show a clear repository structure, local execution, tests and decision records. It does not show adoption, time saved, revenue, legal permission, privacy compliance, model safety or operational readiness. Do not replace those missing facts with phrases such as “enterprise-ready,” “production-grade” or “used by clients.”
+
+The honest alternative is specific: “This is a local, synthetic reference. It measures fixed-case behaviour and preserves a human decision gate. Real data use, external actions, deployment, monitoring and business outcomes require separate authorisation and evaluation.” That sentence is not a weakness. It tells a hiring reviewer you know the difference between a prototype and a claim.
+
+## Completion checklist
+
+- A stranger can name the fictional user, decision, non-goal and cost of error in under a minute.
+- The repository contains a source receipt, data card, baseline, fixed cases, tests, decision log and claims file.
+- Code, runtime messages, commands and tests are English; alternative-language README files explain rather than duplicate or change the source contract.
+- The candidate is compared with the baseline on the same synthetic cases, including failure and prohibited-action cases.
+- The test workflow is safe, credential-free and described as a repeatable check—not a certification.
+- No secret, private material, unlicensed learning solution, employer trace or invented business outcome is committed.
+- The final walkthrough includes a limit and a next approval question, not just a happy path.
+
+## Leave a handoff record before there is a public repository
+
+Finishing a README, tests, and fixed cases does not mean you should create a repository. Use the [Portfolio Evidence Handoff Pack](/templates/portfolio-evidence-handoff-pack/v1/README.md) first to record the project brief, data rights, an actual local run, non-claims, reviewer decision, and rollback. It begins at `NOT_RUN`, so it does not pressure you to invent an execution result. Its CI candidate is deliberately an inactive example: it cannot create a workflow or upload anything on its own. Completing the records only makes the next step reviewable by an owner; it does not establish that work may be shared, deployed, or credited with an outcome.
+
+Further reading: [score your project by portfolio evidence](/en/articles/score-an-ai-portfolio-by-evidence-not-fluency), [turn a course exercise into an inspectable project](/en/articles/turn-an-ai-course-project-into-portfolio-evidence), [PolicyPilot’s bounded AI workflow](/en/articles/enterprise-ai-portfolio-policy-pilot), [Renewal Triage’s model-to-workflow evidence](/en/articles/renewal-triage-mlops), and [the Portfolio Evidence Planner](/en/portfolio-evidence-planner).

@@ -1,0 +1,40 @@
+一句 `model.generate()` 可以輸出文字；它本身沒有交代使用者要完成甚麼、錯誤時何時停下，或誰負責處理。面試時，把幾個詞混成「我會加個 agent」通常正正顯示你未分得開能力、資料和權限。
+
+## 用一條小流程建立共同語言
+
+想像一位內部 reviewer 想根據**已批准、完全虛構**的政策文件寫一份回覆草稿。最小流程是：
+
+`問題 → 揀合資格文件 → 取相關段落 → model 生成草稿 → rule check → reviewer 決定`
+
+**LLM** 是根據輸入的 tokens 預測下一段文字的 model。它可以寫得流暢，但不會自動知道哪些文件仍有效，亦不會因此獲得發信或改資料的權限。
+
+**Token** 是 model 讀寫的細小單位；**context** 是今次 request 放入 model 可見範圍的 tokens，包括指示、問題、檢索片段和對話。context 大不代表理解更完整：它增加 cost 和 latency，亦可能令重要資料被雜訊淹沒。
+
+## RAG、MCP 和 agent 各自解決甚麼
+
+**RAG**（retrieval-augmented generation）由文件庫取回候選內容，並把少量可引用片段交給 model。它處理的是「model 今次可以根據哪份資料作答」，不是保證答案正確。metadata filter、文件版本、citation 和無足夠證據時的 handoff 仍要另外設計。
+
+**MCP**（Model Context Protocol）可以令一個 host 以標準方式看見工具或資源的 description 和 input schema。它是連接介面，不是 authorization。就算工具叫做 `send_reply`，仍要由 host policy 決定誰可叫、甚麼資料可傳、何時必須要求人批准。
+
+**Agent** 是一個可選的 loop：model 觀察 state、提出下一步、可能使用受限工具，再檢查結果。若流程其實永遠是「search → draft → reviewer」，固定 workflow 通常較容易測試。只有在任務真的需要根據中途結果選路時，才值得加 loop。
+
+## Quantization 不是免費加速
+
+**Quantization** 用較低精度表示部分 model weights 或 activation，通常為了省 memory、提高可部署性或吞吐量。它不是單靠名字就一定更快或更便宜：要比較硬件、batch、context 長度、quality regression 和 fallback。若高風險 case 的表現下降，較便宜的 serving 不一定是較好決定。
+
+## 面試回答可以怎樣落地
+
+不要由模型名開始。一個清楚的回答會講明 reviewer 要作甚麼決定和 data boundary：只用哪類文件、何時拒答、輸出只是一份 draft。再畫出上面六個節點，為每個節點寫一個可檢查的問題：
+
+- retrieval 是否拿到仍有效而且合資格的文件？
+- model output 是否符合 schema、附有 citation，還是應 handoff？
+- tool 是否只有 read scope，外發行動是否停在 reviewer 前？
+- 每次 request 可否由 version、trace 和 case ID 重現？
+
+這張小圖比背十個定義更有用：它同時展示你知道模型做甚麼、系統補甚麼、以及人不應交出甚麼決定權。
+
+## 邊界
+
+這是學習用的 synthetic flow，不代表真實公司文件、真實 MCP server 或 production authorization。不要把 tool description、model guardrail 或「有 RAG」誤當存取控制；權限和外部行動要在可驗證的 policy 層執行。
+
+延伸閱讀：[將 prompt 變成可驗收介面](/zh-HK/interview-lab/prompt-contracts-need-an-acceptance-test)、[拆開 RAG 的 retrieval、generation 和 permission](/zh-HK/interview-lab/rag-retrieval-generation-or-permission) 和 [按 Allow 前審 agent](/zh-HK/articles/review-an-ai-agent-before-clicking-allow)。

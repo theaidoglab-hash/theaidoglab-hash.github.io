@@ -1,0 +1,64 @@
+“Could the agent improve itself after every bad answer?” sounds efficient until you ask what is allowed to change, how a bad answer is recognised, and who carries the consequence of a mistaken update. For a portfolio, a safer and more revealing exercise is a fictional case-triage simulator. It receives only invented case states, proposes a next step for a reviewer, and is evaluated offline. It never contacts a person, changes a production system, or approves its own release.
+
+## A world model is a state-and-change hypothesis
+
+In this setting, a **world model** is not a claim that a system understands the real world. It is a model or explicit simulation of how a bounded state may change after an allowed action. The state might contain evidence completeness, the presence of a conflict, a time budget, a reviewer-capacity band, and an unresolved-question count. Allowed actions might be `request-more-evidence`, `prepare-draft`, `handoff`, and `stop`. A transition rule predicts what could happen next: a clarification may reduce an unresolved count; a handoff may end automated work; a time budget may expire even if the draft is incomplete.
+
+The useful question is not “can it imagine?” It is: can the system represent the information needed for this decision, state what it does not know, and avoid choosing an action when the state is too uncertain? A plain decision table can be a better world model than a learned neural network when the state is small, rules are known, and the stakes of a false prediction are high.
+
+## Planning needs candidates and a separate judge
+
+Write the loop in small pieces:
+
+1. An **observer** converts an invented case into the allowed state schema.
+2. A **transition model** or rule simulator predicts the possible next state for each permitted action.
+3. A **planner** proposes one or more action sequences under a time and action budget.
+4. An **evaluator** checks fixed cases for evidence coverage, policy compliance, stop behaviour, and reviewer usefulness.
+5. A **human owner** decides whether any proposed change may replace the baseline.
+
+Keeping the evaluator separate matters. If the same prompt proposes an action and declares it safe, it can reward its own explanation rather than the outcome you need. A useful evaluator has cases that should fail: missing evidence must stop, a policy conflict must hand off, an exhausted budget must not create another retry, and two equally plausible routes must expose uncertainty rather than quietly choosing one.
+
+## What controlled self-improvement actually means here
+
+For a draft-only portfolio exercise, “self-improvement” should mean a controlled offline change loop, not autonomous self-modification. Freeze a baseline prompt, routing rule, and evaluator version. Permit only a short list of changes, such as a planner instruction, an action-ranking threshold, or a retrieval ordering rule over synthetic notes. For every candidate change:
+
+- record the hypothesis before running it;
+- run the same fixed evaluation suite against the baseline and candidate;
+- inspect the case-level diff, including new failures and changed handoffs;
+- reject the change if a hard safety or evidence rule regresses;
+- require a named human approval before a later test run uses it.
+
+Do not let the system edit its evaluator, expand its allowed actions, overwrite its own history, select its own success metric, or move a change into a live environment. Those freedoms turn a learning claim into an unbounded governance problem.
+
+## Build an inspectable simulation packet
+
+Start with twelve to twenty invented trajectories rather than a large dataset. For each trajectory, provide an initial state, a sequence of permitted actions, a resulting state supplied by the simulator, and a terminal reviewer outcome. Add intentionally awkward examples: conflicting evidence, capacity unavailable, a misleading high-scoring draft, and a state with too little information to plan.
+
+Keep the following files together:
+
+- `state-schema.json` defining known, unknown, and prohibited fields;
+- `transition-notes.md` explaining each rule or learned approximation and its limit;
+- `synthetic-trajectories.jsonl` with reproducible cases;
+- `eval-cases.yaml` including expected stop and handoff behaviour;
+- `change-001.md` comparing a candidate configuration with the frozen baseline;
+- `decision-log.md` recording who accepted, rejected, or deferred a change and why.
+
+The key output is not a dramatic success score. It is a change receipt that distinguishes an apparent improvement in easy cases from a real improvement that survives the difficult ones. If the candidate improves format compliance but causes one conflict case to continue automatically, the receipt should make that regression impossible to miss.
+
+## What a reviewer can inspect in the system
+
+Show the state schema, action contract, transition mechanism, planner budget, evaluator cases, reproducible command, and case-level evaluation diff. Demonstrate that unknown fields are first-class values rather than blanks silently treated as safe. If you use an LLM for planning, preserve a static fixture or recorded mock response so another reader can inspect the control flow without an API key or a paid call.
+
+## What must be decided before use
+
+Show whose decision remains human, what a “better” result means for the reviewer, which kinds of change are forbidden, and how a regression is escalated. A strong project makes ownership visible: the system proposes; a person approves; a release gate can say no. This is the difference between an impressive autonomous story and a design that someone could responsibly operate.
+
+## Where the idea fails
+
+A simulator only represents the assumptions you put into it. A transition learned from narrow or invented data may fail when conditions change. Optimising a proxy score can produce fluent but unhelpful plans. Feedback can be delayed, biased, or unavailable; an improvement seen in a small offline set may not be causal. A simpler checklist, decision table, or retrieval-backed playbook is the better choice when the work does not genuinely require multi-step state prediction.
+
+Continue with [agent protocols and orchestration boundaries](/en/articles/agent-protocols-orchestration-and-computer-use), [definition of done for an AI harness](/en/articles/harness-definition-of-done-and-framework-choice), and [evaluation, human review, and observability](/en/articles/llm-evals-human-review-and-observability).
+
+## Boundary
+
+This is AI.DOG teaching material. All cases, states, trajectories, and change results are synthetic and kept as a local draft. It does not demonstrate a general intelligence claim, self-training, live optimisation, autonomous release, or real-world planning performance. Any use beyond a controlled simulation requires approved data, a defined action authority, independent evaluation, security and privacy review, rollback ownership, and human accountability.

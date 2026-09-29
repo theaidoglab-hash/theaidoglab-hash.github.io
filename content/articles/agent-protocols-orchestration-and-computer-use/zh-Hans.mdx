@@ -1,0 +1,61 @@
+> 一个 computer-use 演示能跑通，不代表它能安全地完成工作。更值得检查的是：它被允许做什么、实际做了什么、遇到不确定状态时在哪里停下，以及别人能否复查。
+
+## 从一个有安全终点的任务开始
+
+设想一个完全虚构的“采购证据台”。审阅者上传一份已去标识化的供应商报价，请系统按三项已批准准则整理比较草稿。系统可以读取本地 fixture、计算比较、生成审阅资料包；不能联系供应商、提交订单、修改记录，也不连接真实浏览器 session。
+
+这个边界能把三个容易混淆的概念分开。**Protocol** 是组件交换请求与结果的共同约定。**Orchestrator** 决定下一步受限操作是否被允许。**Computer use** 只是操作可见界面的一种 capability；它既不是权限系统，也不天然比 API 更安全。
+
+先做 deterministic baseline：读取 fixture、验证准则、输出比较草稿。只有在受限规划、歧义处理或文字整理确实补足 baseline 时，才把 LLM 放进流程。
+
+## Protocol 让交接可检查
+
+一份 protocol 应说明消息结构、身份、错误和版本。对采购证据台而言，至少要讲清：哪些 input field 能进入 run、哪些字段刻意排除；哪个组件负责 validation、来源查找、计算和 route；timeout、schema rejection、unknown result 分别如何表示；输出来自哪个 contract version。
+
+例如 `compare_quote` 请求只含 fixture ID、approved criteria version、`draft_only: true`。响应包含已引用的事实、缺失字段、比较表、terminal route、reason code。Contract 中没有 `send_email` 或 `place_order`。Model 可以建议下一步，runtime 必须按 contract 验证建议后才可转 state。
+
+这种设计没有自由 agent loop 那么炫目，却容易测试。格式错误的 request 应在 model 之前被拒绝；缺少 source citation 的结果应走 `HANDOFF`，不能悄悄变成 recommendation。
+
+## Orchestrator 是流程的交通控制器
+
+它负责管理流程状态，并以一个小 state machine 表示：
+
+```text
+received -> validated -> evidence_ready -> draft_ready -> reviewer_handoff
+                         |                  |
+                         v                  v
+                      blocked            budget_stopped
+```
+
+每条 transition 都有规则。通过 validation 才能使用 read-only quote parser；parser 返回 schema-valid result 后才能生成 draft。来源冲突、准则缺失、budget 耗尽、或用户请求 external action，都要转到 `reviewer_handoff` 或 `blocked`。
+
+多组件 workflow 还需要 durable run ID、allowed-step list、每一步的 timeout、retry class、terminal reason。尤其要知道何时不能 retry。若未来 write action 可能在 timeout 前已发生，结果就是 unknown，重试可能制造重复效果。这个学习项目把 external write 排除，因此只模拟 handoff，不执行真实 action。
+
+## Computer use 是高歧义工具
+
+当已授权流程没有可靠 API，而且人通常必须在可见界面完成固定步骤时，computer use 才可能有位置。它观察的是持续变化的屏幕，不是稳定的 business contract：按钮会移动、confirmation 可能不完整、session 会过期、相似窗口可能同时存在。
+
+因此它应比 read-only API 有更严格的约束：窄目标、已批准环境、screenshot 或 structured checkpoint、明确 stop rule，以及状态不明时的 human owner。不能只凭像素判断不可逆 action 已成功；一张看似提交订单的画面不是 audit record。
+
+Portfolio 中可用本地 fixture 模拟界面。测试能够证明 selector 改变、账号标记异常、confirmation 无法验证时 worker 会停止。它不能证明真实供应商网站适合自动化。
+
+## 证据包要早于框架选择
+
+不论是小型 custom runner、agent SDK 还是 workflow product，repository 都应留下：
+
+- `contracts/`：版本化 request / response schema；
+- `capability-matrix.md`：read-only、draft-only、prohibited、approval-required；
+- `state-machine.md`：合法转换、terminal state、retry、budget；
+- `fixtures/`：正常、资料缺失、来源冲突、画面变化、timeout 的安全案例；
+- `traces/` 和 `evals/`：安全 run ID、预期 tool path、禁止 action；
+- `decision-log.md`、`release-gate.md`：架构理由和 local-draft 边界。
+
+程序部分会显示 contract validation、route test、fixture-driven trace，以及错误时会停在正确位置；而使用前要说清 decision owner、资料边界的理由、错误 action 的代价，以及草稿不能伪装成外部变更。
+
+当 deterministic parser 加审阅表已能解决问题，不需要 multi-agent coordination；能用 read-only export 时，也不必控制屏幕。只有某个明确 failure 需要新组件，而且 test 和 owner 同样清楚，才值得增加。
+
+延伸阅读：[评估整条 agent workflow](/zh-Hans/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)、[可停止的 agent 与 serving budget](/zh-Hans/articles/build-stoppable-ai-agents-with-serving-budgets)、[让 agent 获得 access 前的 permission review](/zh-Hans/articles/review-an-ai-agent-before-clicking-allow)。
+
+## 边界
+
+这是本地草稿教学材料。采购证据台、资料、protocol、画面、state label、artefact 都是示意，未展示已部署 integration、真实 browser automation、供应商 access、采购合规或 business outcome。真实系统必须有授权 owner、安全和隐私审查、可验证环境与自身测试后，才可影响外部系统。

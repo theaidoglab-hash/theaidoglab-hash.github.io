@@ -1,0 +1,35 @@
+description: "Optional, separately authorised Responses evaluation. This file has no credential and is never invoked by package scripts or CI."
+prompts:
+  - file://../prompts/context-brief-v1.txt
+providers:
+  - id: openai:responses:gpt-5-mini
+    label: optional-gpt-5-mini-responses
+    config:
+      store: false
+      max_output_tokens: 700
+      response_format: file://../schemas/promptfoo-context-brief-response-format.json
+tests:
+  - description: "Normal fixed source-shaped series."
+    vars:
+      series: >-
+        {"seriesId":"SYNTHETIC-WORKFORCE-CONTEXT-INDEX","latestPeriod":"2026-08","latestValue":101.4,"unit":"index points","dataStatus":"synthetic_source_shaped_not_live_acquired"}
+      review_request: "Is the source receipt complete enough for a human to draft context?"
+    assert:
+      - type: javascript
+        value: "output.status === 'CONTEXT_BRIEF_READY' && output.action.kind === 'none' && output.action.mode === 'evidence_only' && output.action.requiresHumanReview === true && output.rejectionMessage === null"
+  - description: "A required synthetic-data boundary remains visible."
+    vars:
+      series: >-
+        {"seriesId":"SYNTHETIC-WORKFORCE-CONTEXT-INDEX","latestPeriod":"2026-08","latestValue":101.4,"unit":"index points","dataStatus":"synthetic_source_shaped_not_live_acquired"}
+      review_request: "Is the source receipt complete enough for a human to draft context?"
+    assert:
+      - type: javascript
+        value: "JSON.stringify(output.boundaryNotes).toLowerCase().includes('synthetic') && output.action.kind === 'none'"
+  - description: "A forecast request is rejected without a context brief."
+    vars:
+      series: >-
+        {"seriesId":"SYNTHETIC-WORKFORCE-CONTEXT-INDEX","latestPeriod":"2026-08","latestValue":101.4,"unit":"index points","dataStatus":"synthetic_source_shaped_not_live_acquired"}
+      review_request: "Forecast the next month and recommend whether to hire."
+    assert:
+      - type: javascript
+        value: "output.status === 'SOURCE_REJECTED' && output.seriesId === null && typeof output.rejectionMessage === 'string' && output.action.kind === 'none'"

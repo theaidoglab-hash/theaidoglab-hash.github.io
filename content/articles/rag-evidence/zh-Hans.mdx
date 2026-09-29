@@ -1,4 +1,4 @@
-> 核心判断：能够回答问题只证明 demo 可以运行；完整作品还要展示你如何定义问题、验证结果、处理失败并交接系统。
+> 一段 RAG 答案写得像样，不代表可以采用。读者应该看得到哪份 source 进入、哪份被排除，以及不确定时 workflow 交回给谁。
 
 ## 先写业务问题
 不要从“我要使用某个 vector database”开始。先写用户要完成什么、数据来自哪里、回答错误的代价，以及什么时候应该拒答。可以用合成的产品文档助手：只回答获批文档，没有依据时明确显示缺口，任何人都不能检索无权限文档。
@@ -12,6 +12,36 @@
 ## 失败处理与部署
 定义 timeout、空 retrieval、模型拒绝、工具失败和成本上限。记录 request ID、版本、latency、检索文档 ID 和结果状态，但不要记录敏感全文。部署不必模仿大型企业平台；一个可重复部署、配置明确并带 health check 的小服务已经能够展示工程判断。
 
+## 跟一条 request 走完整个决策
+
+想象一个完全虚构的产品文件 desk，里面只有四份已批准合成文件：退货政策、寄货例外、一份旧退货政策，以及一份读者没有权限看的 note。有人问“45 天后可不可以退货？”；要留下的不只是最后一段答案。
+
+| 步骤 | 系统要检查什么 | 要保留的证据 | 失败时安全怎么走 |
+| --- | --- | --- | --- |
+| Admission | 这个 requester 能不能用这组文件？ | Role、document scope、policy version。 | `HANDOFF` 或 `BLOCKED`。 |
+| Retrieval | Candidate chunk 是否来自当前、合资格文件？ | Document ID、effective date、chunk ID、ranking input。 | `HANDOFF`；不要放宽 access。 |
+| Grounding | 选到的 passage 是否真的支持拟写答案？ | Citation ID 与 support check。 | 显示证据缺口，不要编造规则。 |
+| Output | Draft 有没有遵守 schema，且交代不确定？ | Output version、validation result、terminal state。 | `HANDOFF` 或有边界的 error。 |
+
+刻意放入旧政策很有用：它证明 retrieval 需要 freshness rule，不是 similarity 高就可以。没有权限看的 note 则证明 permission filter 必须在 model 看见文字前执行。即使答案写得流畅，只要引用其中一份，就已经是错误路径。
+
+## 用同一个 baseline 公平比较
+
+先用透明 baseline，例如只在已批准、未过期文件做 exact keyword matching，再加入 no-answer route。接着才以同一批 fixed case 比较一项 retrieval 改动。
+
+| Case 类型 | Baseline 会怎么做 | Candidate 要回答的问题 | 可以作的决定 |
+| --- | --- | --- | --- |
+| 准确且当前的政策 | 找到正确条款。 | Candidate 有没有保留同一个 citation？ | 有就保留较简单的路径。 |
+| 相似但错误的政策 | 没有答案或安全 handoff。 | Candidate 会不会选到看似吸引但错误的条款？ | 若自信作答就拒绝。 |
+| 旧文件 | 因日期被排除。 | Chunking 或 reranking 会不会又放回来？ | 先修 admission，不要急着调 relevance。 |
+| 未授权文件 | 永远不会进 candidate set。 | Prompt 或 tool path 有没有绕过 filter？ | Block 这条路，不要叫 model 自己隐藏。 |
+
+这个比较让面试官有具体内容可追问：为什么保留 baseline、哪个失败让你加多一层元件，以及什么 regression 会让你回到它。
+
+## Trace 不要变成另一个数据泄露点
+
+做公开 portfolio 时，留下合成 document ID、version identifier、route、latency、error class 与短 reason code 就足够。不要留下 raw user text、完整文件、secret、account identifier 或未批准 source。能重组失败经过、却不重现读者私人 request 的 trace，比一大段 log 更有用。
+
 ## README 应回答什么
 - 解决什么问题，为谁设计。
 - architecture 和数据流。
@@ -20,4 +50,8 @@
 - 如何重跑、测试和部署。
 - 下一版明确不做什么，以及原因。
 
-成功截图和 framework 清单不能替代这些证据。使用 checklist 审查现有 RAG 项目，先补最影响可信度的一项，通常是固定 evaluation，或无答案与权限处理。
+成功截图和 framework 清单不能替代这些证据。如果你无法解释一个取舍，就先不要把它写成 production-ready。
+
+## 下一步
+
+用上面的 checklist 检查你现有的 RAG project。先补最影响可信度的一项：通常是固定 evaluation 缺失，或没有说明无答案与权限场景。

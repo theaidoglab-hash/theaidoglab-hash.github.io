@@ -1,0 +1,61 @@
+> 一段 computer-use 示範跑得動，還不能證明它能安全處理工作。更關鍵的是：它被允許做什麼、實際做了什麼、狀態不明時會在哪裡停止，其他人能不能查驗。
+
+## 從一個能安全收尾的任務開始
+
+想像一個完全虛構的「採購佐證台」。審查者上傳一份已去識別化的供應商報價，請它依三項已核准準則整理比較草稿。系統可以讀取本機 fixture、計算比較、建立審查資料包；不能聯絡供應商、送出訂單、修改紀錄，也不會連到真實瀏覽器 session。
+
+這個小範圍能把三個概念分開。**Protocol** 是元件交換請求與結果的共同約定。**Orchestrator** 決定下一個受限步驟是否可執行。**Computer use** 是操作可見介面的一種 capability，既不是權限系統，也不比 API 天生可靠。
+
+先做最簡單的 deterministic baseline：讀 fixture、檢查準則、輸出比較草稿。只有當受限規劃、歧義處理或文字整理確實補足 baseline，才加入 LLM。
+
+## Protocol 讓交接可被檢查
+
+Protocol 應交代訊息形狀、身分、錯誤與版本。對這個採購佐證台而言，至少要說明：哪些 input field 可以進入 run、哪些欄位刻意排除；哪個元件負責 validation、來源查找、計算與 route；timeout、schema 被拒、unknown result 分別如何表示；產出來自哪一個 contract version。
+
+例如 `compare_quote` 請求只含 fixture ID、approved criteria version、`draft_only: true`。回應則含引用過的 facts、缺失欄位、比較表、terminal route、reason code。Contract 裡沒有 `send_email` 或 `place_order`。Model 可以提出下一步，runtime 必須先依 contract 驗證，才能轉換 state。
+
+這種設計不如自由 agent loop 吸睛，卻很容易測試。格式不對的 request 應在 model 之前被擋下；缺少 source citation 的結果應轉到 `HANDOFF`，不能默默變成 recommendation。
+
+## Orchestrator 是流程的交通控制器
+
+它負責管理流程狀態，並以一個小 state machine 表示：
+
+```text
+received -> validated -> evidence_ready -> draft_ready -> reviewer_handoff
+                         |                  |
+                         v                  v
+                      blocked            budget_stopped
+```
+
+每一條 transition 都有規則。通過 validation 才能用 read-only quote parser；parser 回傳 schema-valid result 後才能組 draft。來源衝突、準則遺漏、budget 耗盡、或要求 external action，都要走到 `reviewer_handoff` 或 `blocked`。
+
+多元件 workflow 還需要 durable run ID、allowed-step list、每步 timeout、retry class、terminal reason。尤其要分清何時不該 retry。若未來的 write action 可能已在 timeout 前發生，結果就是 unknown；重試可能造成重複效果。這個學習參考把 external write 排除，只模擬 handoff，不做真實動作。
+
+## Computer use 是高歧義工具
+
+當已授權流程沒有可靠 API，而且人平常確實必須在可見介面做固定操作時，computer use 才可能有用途。它看到的是會變動的畫面，不是穩定的 business contract：按鈕會移動、confirmation 可能不完整、session 會過期、相似的視窗可能同時存在。
+
+因此，它應比 read-only API 有更嚴格的條件：狹窄目標、核准環境、screenshot 或 structured checkpoint、明確 stop rule，以及狀態不明時可接手的 human owner。不能只憑像素猜測不可逆 action 是否成功；一張看似已送出的訂單畫面不是 audit record。
+
+Portfolio 中可以用本機 fixture 模擬介面，測試 selector 改變、帳號標記不符、confirmation 無法驗證時 worker 是否停止。這無法證明真實供應商網站適合自動化。
+
+## 不要把 framework 名稱當成證據
+
+不論用小型 custom runner、agent SDK 或 workflow product，repository 都應留下：
+
+- `contracts/`：版本化 request / response schema；
+- `capability-matrix.md`：read-only、draft-only、prohibited、approval-required；
+- `state-machine.md`：合法轉換、terminal state、retry、budget；
+- `fixtures/`：正常、資料不足、衝突、畫面變動、timeout 的安全案例；
+- `traces/` 與 `evals/`：安全 run ID、預期 tool path、禁止 action；
+- `decision-log.md`、`release-gate.md`：架構理由與 local-draft 邊界。
+
+程式部分會顯示 contract validation、route test、fixture-driven trace，以及錯誤時會停在正確位置；而使用前要講清 decision owner、資料邊界的理由、錯誤 action 的代價，以及草稿不能偽裝成外部變更。
+
+一個 deterministic parser 加審查表就能解決問題時，不需要 multi-agent coordination；能拿 read-only export 時，也不必控制畫面。只有明確 failure 需要新元件，而且 test 和 owner 都清楚，才值得加進來。
+
+延伸閱讀：[評估整條 agent workflow](/zh-TW/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)、[可停止的 agent 與 serving budget](/zh-TW/articles/build-stoppable-ai-agents-with-serving-budgets)、[讓 agent 取得 access 前的 permission review](/zh-TW/articles/review-an-ai-agent-before-clicking-allow)。
+
+## 邊界
+
+這是本機草稿教材。採購佐證台、資料、protocol、畫面、state label、artefact 都是示意，未展示已部署 integration、真實 browser automation、供應商 access、採購合規或 business outcome。真實系統必須由授權 owner 完成安全與隱私審查、驗證環境與自身測試後，才可影響外部系統。

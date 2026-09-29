@@ -1,0 +1,41 @@
+A retrieval demo can return a very similar paragraph and still support the wrong decision. The engineering question is not “did search return text?” but “did the workflow find the right, current, permitted evidence for this particular claim?”
+
+## One note, three possible sources
+
+Imagine a fictional policy-evidence desk. A reviewer asks why a proposed refund route is blocked. The system can search a small, approved document set and produce a cited draft. It cannot alter a refund, read a customer account, or use unapproved documents.
+
+The exact answer sits in a policy chapter. A nearby FAQ contains a similar phrase but a different exception. An old policy version also has a strong lexical match. A naive vector search may surface all three. The visible answer can sound sensible while grounding itself in the wrong record.
+
+## Retrieval has several independent choices
+
+An **index** stores searchable representations and metadata. A **chunk** is the retrieval unit, often smaller than a whole document. Smaller chunks can localise a statement; overly small chunks lose the surrounding exception. Larger chunks preserve context but can bury the decisive sentence and waste the context budget.
+
+Use metadata before semantic similarity whenever a known boundary exists: document status, policy version, region, effective date, permission scope, or content type. Then retrieve a modest candidate set. A **reranker** can compare the request against those candidates more closely and reorder them. It is not a source of authority; it should not promote a stale or forbidden document past a metadata rule.
+
+Caching has the same boundary problem. A response cache is safe only when its key includes the relevant question shape, audience or permission scope, document version, and validity interval. A retrieval cache needs a clear invalidation rule when an index or approved source changes. “It was fast yesterday” is not evidence that it is safe today.
+
+## Make each choice testable
+
+Build a small retrieval evaluation table:
+
+| Case | Required evidence | Must exclude | Expected route |
+| --- | --- | --- | --- |
+| Exact policy exception | Current chapter and section | Older version | Cited draft |
+| Similar but wrong FAQ | Current policy only | FAQ exception | Cited draft |
+| Missing source | None | Invented passage | HANDOFF |
+| Region mismatch | Correct region only | Other region | HANDOFF or scoped draft |
+| New policy version | New version | Cached prior answer | Cache miss and re-retrieval |
+
+For each run, retain document IDs, version, chunk boundaries, metadata filter, candidate count, reranked order, selected evidence, cache decision, and final route. Measure retrieval recall against the known required evidence, but do not stop there. Also inspect whether the assembled draft used the right source and correctly handed off when no source survived filtering.
+
+## The simpler baseline matters
+
+If there are ten approved documents, a filtered keyword search may be easier to audit than a vector index. If every answer needs one whole policy section, chunking may be unnecessary. Add embeddings, reranking, hybrid search, or caching only when a named failure makes the extra system piece worth its maintenance and regression risk.
+
+The portfolio artefacts are an index manifest, chunking rationale, metadata schema, case set, cache invalidation rule, query trace, and one failure analysis. The business evidence is the user decision, freshness requirement, access boundary, named reviewer, and cost of a wrong source. Do not claim that a high retrieval score equals a reliable RAG product.
+
+Next, continue with [RAG as portfolio evidence rather than a chat demo](/en/articles/rag-chatbot-to-portfolio-evidence), [freshness and conflict handling in RAG](/en/articles/rag-freshness-conflicts-and-advanced-patterns), and [workflow evaluation](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer).
+
+## Boundary
+
+The policy desk, documents, version rules, and outcomes are illustrative. This lesson does not provide legal, refund, privacy, or production-search advice. The listed tests show how to inspect a bounded prototype, not that a real knowledge system is accurate or safe.

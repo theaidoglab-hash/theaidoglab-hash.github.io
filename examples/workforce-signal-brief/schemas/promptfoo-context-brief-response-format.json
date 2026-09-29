@@ -1,0 +1,42 @@
+{
+  "type": "json_schema",
+  "json_schema": {
+    "name": "workforce_context_draft_result",
+    "strict": true,
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "reasonCode",
+        "seriesId",
+        "latestPeriod",
+        "latestValue",
+        "unit",
+        "rejectionMessage",
+        "action",
+        "boundaryNotes"
+      ],
+      "properties": {
+        "status": { "enum": ["CONTEXT_BRIEF_READY", "SOURCE_REJECTED"] },
+        "reasonCode": { "type": "string" },
+        "seriesId": { "type": ["string", "null"] },
+        "latestPeriod": { "type": ["string", "null"] },
+        "latestValue": { "type": ["number", "null"] },
+        "unit": { "type": ["string", "null"] },
+        "rejectionMessage": { "type": ["string", "null"] },
+        "action": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "mode", "requiresHumanReview"],
+          "properties": {
+            "kind": { "const": "none" },
+            "mode": { "const": "evidence_only" },
+            "requiresHumanReview": { "const": true }
+          }
+        },
+        "boundaryNotes": { "type": "array", "minItems": 2, "items": { "type": "string" } }
+      }
+    }
+  }
+}

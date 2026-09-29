@@ -1,0 +1,36 @@
+A model choice starts before model code. It starts with a question: what evidence exists at the moment a person or system must decide? If that evidence includes a credible past outcome, you may have a supervised-learning problem. If it contains only observations and you are looking for structure, you may have an exploratory problem. Mixing those two jobs is how a tidy notebook becomes an unclear portfolio claim.
+
+## Start with the decision, not the algorithm name
+
+Imagine a fictional operations team that receives service requests. Each morning it can review only fifty cases manually. The useful question is not “can we cluster the requests?” It is “which cases should enter the limited review queue, based only on information available before a reviewer looks at them?”
+
+**Supervised learning** fits when old cases have a defined target: for example, whether a trained reviewer later escalated a request under a stable policy. Inputs from before that decision become features; the historic decision becomes a label. The model can estimate how closely a new case resembles prior escalations. That is still not proof that it has found every risky case, or that the old policy was fair.
+
+**Unsupervised learning** fits a different job. It can group requests with similar patterns or flag records far from the usual shape. That may help an analyst inspect an unfamiliar batch, but a cluster number is not an urgency score. Someone must decide what the grouping means and whether acting on it is useful.
+
+There are middle cases. Weak labels may come from rules, delayed outcomes may arrive months later, and a human may label a small review set. State that uncertainty plainly. A portfolio becomes more credible when the learning mode matches the evidence instead of being selected because it sounds advanced.
+
+## A baseline is the first honest competitor
+
+Before training a model, write down what a team could do without it. For the review queue, that might be:
+
+- a published rule for clearly urgent cases;
+- the historical escalation rate for each request type;
+- a simple last-period estimate; or
+- a reviewer looking at the next fifty cases in arrival order.
+
+The baseline is not a ceremonial first step. It tells you whether the added model complexity creates a decision improvement. If a request-type rate performs almost as well as a complex model, the rate may be easier to explain, monitor and correct. If the model wins only on a random split but not on a later time period, it has not earned a workflow change.
+
+## Make the boundary inspectable
+
+Create a one-page **learning-mode decision record**. Include the decision owner, the action the system is allowed to recommend, the observation cutoff, the target definition, and why the target can or cannot be trusted. List one non-model baseline and the result you would need before considering a trial. Add a refusal: the prototype must not auto-close, penalise or contact anyone.
+
+Then keep a small, dated evaluation slice. Compare the baseline and candidate on the same cases. Inspect false positives and false negatives by request type, not only a single average score. A reviewer should be able to trace every input used in the comparison back to information that was available at decision time.
+
+## The failure worth reporting
+
+Historical labels often record a previous process, not ground truth. A model trained to predict past escalation can amplify uneven staffing, inconsistent reviewers or a rule that has since changed. An unsupervised cluster can also look persuasive while changing no action at all. In both cases, “we found a pattern” is weaker than “we tested a bounded recommendation against a clear baseline.”
+
+For an AI/data role, the evidence is the judgement: you chose a learning mode for a real decision, kept a simpler alternative, exposed the label limits, and left a human able to disagree.
+
+Continue with [linear and logistic models as decision tools](/en/articles/linear-logistic-and-feature-decisions) and [why a higher model score may not create a better workflow](/en/articles/model-score-to-workflow-decision).

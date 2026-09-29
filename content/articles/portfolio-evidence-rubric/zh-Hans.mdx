@@ -1,0 +1,74 @@
+> 能跑的画面，还不足以说明你做了什么。读者应能找到：它支持哪一个小决定、用了什么数据、出错时怎样处理，以及它尚未能声明什么。
+
+## 先回答两个不同问题
+
+面试官、合作对象或未来 reviewer 看 portfolio 时，通常同时在找两种证据。许多 project 只交出第一种，因此看起来像一次模型或 UI 练习。
+
+### 系统到底做了什么
+
+这部分说明系统如何运作，而且能否重跑与检查：数据 schema、data boundary、baseline、模型或 retrieval、test case、evaluation、trace、release gate、monitoring 或 rollback。技术细节不是越多越好；每一项都要回答明确问题，例如“数据有没有偷看未来？”“答案能否回到来源？”“改 prompt 后怎么知道 high-risk case 退步？”
+
+### 这个结果又可以、不能用来做什么
+
+这部分说明系统替谁处理哪一个决策、做错会怎样、谁仍保有最终决定权，以及你如何交付一份别人可以使用或审核的成果。它包括 problem brief、success proxy、non-goal、权限、human handoff、GitHub README、change log 和不能宣称的结果。这些资料把一段代码放回正确问题上。
+
+想象：技术展示是你怎么组好一台玩具车，还有怎么测刹车；交付与风险展示是你知道它只能在哪条路上走、谁可以推它、撞到人之前要停下来。
+
+## 用 0–2 分找出下一个缺口
+
+每一栏只给 0、1 或 2 分。0 不是羞耻，而是尚未有证据；1 是有初步 artefact，仍不足以回答合理追问；2 是另一个人可以打开文件、重跑或看见你的判断。六栏最高 12 分，但不要把总分当成招聘分数。它只用来找下一个最值得补的缺口。
+
+| 检查项目 | 0 分：只看得到 demo | 1 分：开始有证据 | 2 分：可被追问的证据 |
+| --- | --- | --- | --- |
+| **使用者与决策** | “我做了一个 AI assistant。” | 有一个泛用 use case。 | 写出使用者、他要作的决策、决策时间点、错误代价与 non-goal。 |
+| **数据与边界** | 数据来源、权限与时间不清楚。 | 说明用了 sample data，没有 schema 或限制。 | 有 data card；合成／公开／授权数据分开；敏感数据、未来数据与不能保留字段明确排除。 |
+| **技术路径与 baseline** | 只展示一个 model output 或 UI。 | 有 pipeline 或 model，没有可比较的起点。 | 先有可信的 rule、search 或人工 baseline；再说明新组件改善哪个已定义问题与代价。 |
+| **Evaluation 与 failure** | “结果看起来不错。” | 有 accuracy、AUC 或成功 screenshot。 | 固定 test set 包含正常、无答案、数据错误、越权或 regression case；有 expected result、error taxonomy 与 failure example。 |
+| **交付、运行与人工决策** | 没有 README、tests 或 owner。 | README 说明怎么 run。 | 有可重跑 command、版本／trace、release 或 rollback 条件；敏感 action 停在 human gate，并写清 owner。 |
+| **结果与宣称** | 将 local demo 说成 business impact。 | 有 metrics，却混合 model 与 workflow 指标。 | 分开 model quality、workflow proxy 与真实 business outcome；说明只有合成或 local evidence，没有宣称采用、节省或 production readiness。 |
+
+### 如何读总分
+
+- **0–4 分**：可能是有用的学习练习，但其他人只能看见成品，还看不见判断。
+- **5–8 分**：已有可讨论的方向。别急着加 agent；优先补一个 baseline、固定 evaluation 或 data boundary。
+- **9–12 分**：可以成为强的面试证据包。它仍不是 production certification，也不保证任何职位结果。
+
+分数不能取代阅读 artefact。若一个 project 有 10 分，但“human owner”只是一句 prompt，仍要追问：实际上是哪一层权限阻止外发或写入？Rubric 的用途是引出这类问题，不是把分数当答案。
+
+## 一个完全虚构的 worked example
+
+假设一位学习者做了 **Clinic FAQ Draft Desk**。名称听起来像医疗产品，但这个 portfolio case 刻意只用她自己写的合成 FAQ，没有病人资料、没有诊断、没有预约或外发功能。使用者是一位假想的 admin reviewer；工具只会将一段合成问题配对到 FAQ，输出附引用的回复草稿，或标记“资料不足，交由人工处理”。
+
+第一版可能有一个漂亮聊天界面：贴上问题，模型就写出流畅文字。用 rubric 来看，它在六栏多数是 0 分：不知道谁会用、FAQ 是否过期、错答怎么处理、模型是否凭空补内容，也不知道为什么需要 LLM。
+
+学习者把它改成 evidence-rich version，不是替界面加更多特效，而是加入这些 artefact：
+
+- 一页 brief：admin reviewer 只决定是否采用草稿；任何医疗建议、个人资料或预约要求都必须 handoff。
+- 一套带 ID、版本与生效日期的合成 FAQ；trace 只保留 FAQ ID、route 与版本，不保留问题全文。
+- keyword retrieval 加人工 template 的 baseline；只有在 citation coverage 或正确 handoff 有改善时，才保留生成层。
+- 十六个 fixed cases：四个正常 FAQ、四个找不到答案、两个矛盾 FAQ、两个过期版本、两个 prompt injection、两个要求系统执行禁止动作。
+- 一份 reviewer note：candidate 只有在所有禁止动作仍被 blocked、过期 FAQ 不被引用、且没有造成 handoff regression 时，才可以进入下一次本地 demo；否则回到 baseline。
+
+这个版本可以得到：使用者与决策 2、数据与边界 2、技术路径与 baseline 2、evaluation 与 failure 2、交付与人工决策 2、结果与宣称 2，合计 12。它不是因为“做了医疗 AI”而得高分，反而是因为它拒绝碰医疗决策和真实数据，并留下可检查的替代流程。
+
+## 你的 GitHub repo 应该让人验证什么
+
+不要把 repo 变成一堆截图。README 第一段先交代 case 是合成还是真实、使用者与决策、数据限制、success proxy、non-goal。接着放入简单架构图、安装／test command、baseline 与 evaluation summary。再另外保留：
+
+- `data-card.md`：数据如何来、什么不会进入系统；
+- `evaluation/`：case ID、expected result、actual result、metric 定义与失败分类；
+- `decision-log.md`：为什么选这条技术路径、什么结果会让你改变决定；
+- `release-note.md`：什么 regression 会阻挡改动、如何回到 baseline；以及
+- `claims.md`：哪些只属本地合成观察，哪些尚未验证。
+
+这些文件不必假装规模很大。它们让 reviewer 不需要相信你的形容词，也能沿着证据链追问。
+
+## 有些话，即使 project 得 12 分也不能说
+
+合成数据、local tests 与一段 demo 不能证明真实客户会使用、节省多少工时、提高收入、符合隐私或行业规范，也不能证明 production ready。它们也不代表你有权接入真实数据、替机构作决策，或把 coding agent 产出的每一行都宣称成个人原创。
+
+更诚实的写法是：“我在受控的合成 workflow 中量测 citation support、correct handoff 与 reviewer acceptance；真实 business outcome、数据治理与运行风险仍需由有权责的 team 验证。”这句少了吹捧，却让人知道你分得开 evidence 与愿望。
+
+如果你只想补一件事，先选 rubric 里一个 0 分栏位，把它写成可打开的 artefact，再重新跑同一批 case。别为了加分而堆更多工具。
+
+延伸阅读：[PolicyPilot 的政策支持 baseline 与 RAG extension decision](/zh-Hans/articles/enterprise-ai-portfolio-policy-pilot)、[Renewal Triage 如何分开 model metric 与 workflow proxy](/zh-Hans/articles/renewal-triage-mlops)、[非工程师建立安全 AI 自动化的最低规格](/zh-Hans/articles/build-a-low-code-ai-automation)、[如何 review coding agent 交出的第一版](/zh-Hans/articles/review-a-coding-agent-build-without-being-a-developer)，以及 [把 AI 课程作业改成可被追问的 portfolio evidence](/zh-Hans/articles/turn-an-ai-course-project-into-portfolio-evidence)。

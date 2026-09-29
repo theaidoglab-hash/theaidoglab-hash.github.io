@@ -1,0 +1,104 @@
+> 一個 portfolio project 的價值，不在於你堆了多少模型名稱，而在於另一個人能否檢查你如何把一個有代價的決定，做成可衡量、可拒絕、可交接的系統。
+
+## 這個 demo 明確展示什麼
+
+### Code 裡看得到的東西
+
+- 版本化合成政策紀錄、deterministic keyword baseline、approval／日期 eligibility check、引用、handoff route，以及只保留 query fingerprint 而非原文的 trace。
+- 固定 local quality／safety check 與 redacted trace，加上一份記錄好的 local release decision 與未來 rollback plan；這些都可由 README、tests 和一次 local run 重看。
+
+### Code 以外要交代的事
+
+- 先界定客服人員要作的資料查找決定、錯誤代價與 non-goal，而不是先賣弄 RAG。
+- 資料只限虛構文件；最終回覆、例外與任何會影響金錢或權益的行動仍由人工負責。
+- 成功只用合成 workflow proxy 表達，絕不把 local result 說成真實節省、採用或 production readiness。
+
+## 這是一個完全虛構的案例
+
+**PolicyPilot** 是一個合成的政策支援 assistant。假設一間中型網店的客服人員經常在退貨、保固和例外規則之間找答案；答錯會造成重工和信任問題。已實作的 local reference 會對已核准、已版本化的虛構政策紀錄做 keyword score，輸出帶引用的回覆草稿或「交給人工」的建議。
+
+它沒有運行 RAG、semantic search、文件 index 或 model。下文談到的 retrieval／RAG 架構，是可考慮的下一輪實驗，不是 local code 已做到的行為。
+
+它**不會**退款、不會改訂單、不會讀取真實客戶帳戶，也不會自動發送訊息。這些 non-goal 不是讓作品變小，而是讓讀者看見你理解哪些行動必須由人負責。
+
+## 第一步：把 business problem 寫得可檢查
+
+不要以「我要做一個 RAG chatbot」開始。先寫一頁 problem brief：
+
+- **使用者與決定**：客服人員要決定能否依政策草擬回覆，還是必須升級處理。
+- **錯誤代價**：沒有根據的答案、使用過期政策、把例外當一般規則，或在不確定時沒有交接。
+- **成功 proxy**：在控制好的合成任務中，找到合適政策的時間、引用支持答案的比例、正確交接比例和 reviewer 接受 draft 的比例。
+- **non-goal**：不直接執行客戶操作；不把真實個人資料或雇主資料放進 corpus、trace 或 demo。
+- **human owner**：人工仍決定例外、最終發送和任何有資產／權益影響的動作。
+
+這些是 measurement plan，不是成效聲稱。不要替虛構系統填上「節省 40% 時間」之類數字；如果要估算，公開公式、假設和限制即可。
+
+## 第二步：先做 baseline，再證明 LLM 值得出現
+
+建立一小套你自己寫的虛構政策文件，例如標準退貨、保固例外、會員優惠和已撤回版本。每份文件有 policy ID、version、生效日期和狀態。再建立合成問題和預期處理方式。
+
+第一個 baseline 可以只是 keyword search 加人工模板。它未必漂亮，但會迫你回答：RAG 真正改善的是 coverage、找資料時間、引用能力，還是只讓回答看似自然？如果沒有 baseline，任何 demo 成功畫面都沒有比較對象。
+
+## 第三步：保持已實作 flow 細小；把 RAG 留作下一個決定
+
+架構不是要模仿某間公司的內部平台。現有 local reference 實作的是這個最小、可重跑的 flow：
+
+```text
+已寫好的虛構政策紀錄，附 version、status 和生效日期
+  -> input safety boundary
+  -> deterministic keyword score
+  -> 在固定 as-of date 做 current-and-approved eligibility check
+  -> cited draft OR human handoff
+  -> privacy-minimised trace + 固定 local quality/safety checks
+```
+
+這裡的 version 用來標示引用背後的合成紀錄；trace 裡的 SHA-256 值只用來 fingerprint query。Code **沒有** parse 文件、hash 文件、拆 chunk、建 index、按 region 或 role filter、rerank candidate、call model，也不會作 external action。
+
+若固定 case 顯示 keyword baseline 不夠用，應另行設計和核准 retrieval／RAG 實驗，不要把它默認為已完成：
+
+```text
+有授權的 source intake
+  -> parse、validate、version，必要時 fingerprint 文件
+  -> 按明確 metadata 規則 chunk 和 indexed retrieval
+  -> optional reranking 和 model-assisted cited draft
+  -> human handoff、evaluation 和 release decision
+```
+
+每一個新箭頭都要有理由和 owner。例如 metadata rule 可以阻止不適用資料進入 draft；citation 讓 reviewer 回到來源；handoff 處理低信心、衝突和例外。這些是 extension requirement，不是現有 local implementation 的聲稱。
+
+## 第四步：把 evaluation 拆成四類，而不是一個分數
+
+現有 local reference 檢查固定 synthetic route、citation、no-action behaviour 和 trace privacy。若日後加入 retrieval 或 model，才應擴展 evaluation；不能把這些 local check 說成 RAG result。
+
+**供 retrieval／model extension 使用的 Quality**：retrieval recall@k、citation-supported answer rate、人工 rubric 的正確性、該拒答時的正確 abstention。不是每一題都需要生成長文；有些答案應該是「找不到足夠根據」。
+
+**Safety**：未授權動作率必須是零、未支持政策主張、source scope 錯配、prompt injection 和繞過 handoff 的測試。若不能測試，只能說這是待驗證風險，不能說安全。
+
+**供 retrieval／model extension 使用的 Operations**：p95 latency、每次 request 的成本、error rate、corpus version coverage 和 retry 情況。這些不是為了假裝流量很大，而是讓設計有容量和故障語言。
+
+**Business proxy**：在相同的合成任務中，記錄完成一次政策查找所需時間、reviewer 是否接受草稿、以及多少情境被正確交接。它們是模擬指標，不是企業 KPI。
+
+Test set 至少要有：正常問題、文件沒有答案、兩份文件互相矛盾、過期政策、source scope 不符、需要例外處理和 prompt injection。每次只改一項主要變數，保存 baseline 和 error taxonomy。否則你只知道分數變了，不知道原因。
+
+## 第五步：把日後要覆核的事也記下來
+
+作品集不是靠一張雲端架構圖顯得厲害。留下足夠資料、測試、決策和限制，別人才有具體問題可以問：
+
+- data card：哪些資料是你寫的、哪些欄位不會進 trace、政策如何更新。
+- 為日後 RAG extension 而設的 decision log：為何用 retrieval 而不是 fine-tuning；什麼證據會讓你改變這個決定。
+- evaluation report：baseline、test cases、metric definitions、failure examples 和限制。
+- 為 extension 而設的 redacted trace schema：request ID、版本、latency、retrieved policy IDs、handoff status；不保留敏感全文。
+- reproducibility：`README`、環境設定、seed／版本、tests、Docker 或同等可重跑方法。
+- release note：什麼條件下可以 shadow test、何時停用、怎麼 rollback、誰擁有最後決定。
+
+CI 不必很複雜。日後改 prompt、index 或 model setting 時，可以讓它跑固定 evaluation，當 high-risk case 退步或引用不支持率超標時阻擋改動。這是建議中的 release control，不是聲稱你已經營運 production service。
+
+## 第六步：把 project 變成可面試的證據包
+
+你的 README 開頭應包含 problem、user、non-goal 和 data boundary；接著放架構圖、baseline 和 evaluation 結果；最後列出三個你刻意沒有做的事情及原因。Demo 影片只要走一個正常 case、一個拒答或 handoff case，以及一個 version change。面試時就能從 artefact 回答：為何用 RAG、如何衡量、何時不讓系統做事、出事時怎麼停止。
+
+## 不要把這個案例吹成真實企業交付
+
+這是使用合成資料和模擬情境的學習案例，不能證明真實客戶採用、成本節省、資安合規或 production readiness。它的目標是讓你顯示相同的思考順序：問題、baseline、資料邊界、evaluation、決定權、觀測和 rollback。
+
+延伸閱讀：[RAG chatbot 為何不足以成為完整 portfolio](/zh-TW/articles/rag-chatbot-to-portfolio-evidence)、[用公開 KEV 資料做可 review 的證據包](/zh-TW/articles/build-a-public-data-kev-review-packet)、[面試中如何解釋 evaluation 與 system design](/zh-TW/articles/ai-engineer-interview-learning-map)、[非工程師也可驗收的 AI 自動化流程](/zh-TW/articles/build-a-low-code-ai-automation)。

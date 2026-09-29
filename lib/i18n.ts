@@ -1,29 +1,61 @@
-import { LOCALES, type CategoryId, type Locale } from './types';
+import { LOCALES, canonicalLocaleRecord, normalizeLocaleContent, type ArticleType, type CategoryId, type Locale } from './types';
 
-export const ui = {
-  'zh-HK': { name:'香港繁體', shortName:'香港', brand:'AI.DOG 職涯資源庫', nav:['開始這裡','文章','資源','關於'], hero:'由「識用 AI」走到「證明你能交付」', intro:'為準備進入澳洲 AI／Data 職場的技術人才，拆解職位、作品證據與專業工作流程。', browse:'選一條路開始', latest:'深度指南', read:'閱讀指南', search:'搜尋文章、技術或職位', noResults:'找不到相符內容。', waitlist:'收到新指南通知', email:'電郵地址', join:'加入 waitlist', consent:'我同意 AI.DOG 使用此電郵通知我新資源；不會要求 CV 或僱主資料。', success:'已收到。正式通知功能會在私隱設定獲批准後啟用。', source:'來源與版本', download:'下載資源', updated:'更新', privacy:'私隱', about:'關於 AI.DOG' },
-  'zh-TW': { name:'台灣繁體', shortName:'台灣', brand:'AI.DOG 職涯資源庫', nav:['從這裡開始','文章','資源','關於'], hero:'從「會使用 AI」走到「證明你能交付」', intro:'為準備進入澳洲 AI／Data 職場的技術人才，拆解職務、作品集證據與專業工作流程。', browse:'選一條路開始', latest:'深度指南', read:'閱讀指南', search:'搜尋文章、技術或職務', noResults:'找不到符合的內容。', waitlist:'接收新指南通知', email:'電子郵件地址', join:'加入候補名單', consent:'我同意 AI.DOG 使用此電子郵件通知我新資源；不會要求履歷或雇主資料。', success:'已收到。正式通知功能會在隱私設定核准後啟用。', source:'來源與版本', download:'下載資源', updated:'更新', privacy:'隱私', about:'關於 AI.DOG' },
-  'zh-Hans': { name:'简体中文', shortName:'简体', brand:'AI.DOG 职业资源库', nav:['从这里开始','文章','资源','关于'], hero:'从“会用 AI”走到“证明你能交付”', intro:'面向准备进入澳洲 AI／Data 职场的技术人才，拆解职位、作品证据与专业工作流程。', browse:'选择一条路线', latest:'深度指南', read:'阅读指南', search:'搜索文章、技术或职位', noResults:'没有找到匹配内容。', waitlist:'接收新指南通知', email:'电子邮箱', join:'加入 waitlist', consent:'我同意 AI.DOG 使用此邮箱通知我新资源；不会要求 CV 或雇主资料。', success:'已收到。正式通知功能会在隐私设置获批准后启用。', source:'来源与版本', download:'下载资源', updated:'更新', privacy:'隐私', about:'关于 AI.DOG' },
-  en: { name:'English', shortName:'EN', brand:'AI.DOG Career Library', nav:['Start here','Articles','Resources','About'], hero:'Move from “I can use AI” to “I can prove I deliver”', intro:'Detailed role analysis, portfolio evidence and professional workflows for technical people entering Australia’s AI and data market.', browse:'Choose your path', latest:'Deep guides', read:'Read guide', search:'Search articles, skills or roles', noResults:'No matching content found.', waitlist:'Get new guide updates', email:'Email address', join:'Join waitlist', consent:'I agree that AI.DOG may use this email to notify me about new resources. No CV or employer details will be requested.', success:'Received. Notifications will only activate after the privacy setup is approved.', source:'Sources and version', download:'Download resources', updated:'Updated', privacy:'Privacy', about:'About AI.DOG' }
-} satisfies Record<Locale, Record<string, string | string[]>>;
+export const ui: Record<Locale, Record<string, string | string[]>> = canonicalLocaleRecord({
+  'zh-HK': { name:'香港繁體', shortName:'香港', brand:'AI.DOG 學習與作品集資源庫', nav:['由呢度開始','文章','資源','關於'], hero:'學 AI，也要砌出講得清楚嘅作品集', intro:'俾想學 AI、砌一個可以畀人檢查嘅 AI 作品集嘅人。由系統點樣設計、點樣驗，到作品要留低咩證據，一步步砌成你可以重做、亦講得清楚嘅作品；本站唔保證求職、商業或學習結果。', browse:'揀一條路開始', latest:'可直接用嘅指南', read:'睇指南', search:'搜尋指南、概念或作品證據', noResults:'搵唔到相符嘅內容。', waitlist:'收到新指南通知', email:'電郵地址', join:'加入 waitlist', consent:'我同意 AI.DOG 使用此電郵通知我新資源；不會要求 CV 或僱主資料。', success:'已收到。正式通知功能會在私隱設定獲批准後啟用。', source:'來源與版本', download:'下載資源', updated:'更新', privacy:'私隱', about:'關於 AI.DOG', interviewLab:'面試練習', buildWithAi:'用 AI 做嘢：寫／唔寫 Code', planner:'學習規劃', portfolioPlanner:'作品集規劃', labs:'實作案例', menu:'選單' },
+  'zh-TW': { name:'繁體中文', shortName:'繁中', brand:'AI.DOG 學習與作品集資源庫', nav:['從這裡開始','文章','資源','關於'], hero:'學 AI，也要做出說得清楚的作品集', intro:'給想學 AI、建立可供他人檢查的 AI 作品集的人。從系統怎麼設計、怎麼驗證，到作品應留下哪些證據，一步步做成可重現、也能清楚說明的作品；本站不保證求職、商業或學習結果。', browse:'選一條路開始', latest:'實用指南', read:'閱讀指南', search:'搜尋指南、概念或作品證據', noResults:'找不到符合的內容。', waitlist:'接收新指南通知', email:'電子郵件地址', join:'加入候補名單', consent:'我同意 AI.DOG 使用此電子郵件通知我新資源；不會要求履歷或雇主資料。', success:'已收到。正式通知功能會在隱私設定核准後啟用。', source:'來源與版本', download:'下載資源', updated:'更新', privacy:'隱私', about:'關於 AI.DOG', interviewLab:'面試練習', buildWithAi:'用 AI 建置：寫／不寫 Code', planner:'學習規劃器', portfolioPlanner:'作品集規劃器', labs:'建置實驗室', menu:'選單' },
+  'zh-Hans': { name:'简体中文', shortName:'简体', brand:'AI.DOG 学习与作品集资源库', nav:['从这里开始','文章','资源','关于'], hero:'学 AI，也要做出说得清楚的作品集', intro:'面向想学习 AI、建立可供他人检查的 AI 作品集的人。从系统怎样设计、怎样验证，到作品应留下哪些证据，一步步做成可重现、也能清楚说明的作品；本站不保证求职、商业或学习结果。', browse:'选择一条路线', latest:'实用指南', read:'阅读指南', search:'搜索指南、概念或作品证据', noResults:'没有找到匹配内容。', waitlist:'接收新指南通知', email:'电子邮箱', join:'加入 waitlist', consent:'我同意 AI.DOG 使用此邮箱通知我新资源；不会要求 CV 或雇主资料。', success:'已收到。正式通知功能会在隐私设置获批准后启用。', source:'来源与版本', download:'下载资源', updated:'更新', privacy:'隐私', about:'关于 AI.DOG', interviewLab:'面试练习', buildWithAi:'用 AI 构建：写／不写 Code', planner:'学习规划器', portfolioPlanner:'作品集规划器', labs:'构建实验室', menu:'菜单' },
+  en: { name:'English', shortName:'EN', brand:'AI.DOG Learning & Portfolio Library', nav:['Start here','Articles','Resources','About'], hero:'Learn AI. Build work you can explain and others can inspect.', intro:'For anyone learning AI and building an AI portfolio that others can inspect. Work through how a system is designed and checked, then keep the evidence that makes your work repeatable and explainable. This site does not promise a job, business, or learning outcome.', browse:'Choose your path', latest:'Practical guides', read:'Read guide', search:'Search guides, concepts or portfolio evidence', noResults:'No matching content found.', waitlist:'Get new guide updates', email:'Email address', join:'Join waitlist', consent:'I agree that AI.DOG may use this email to notify me about new resources. No CV or employer details will be requested.', success:'Received. Notifications will only activate after the privacy setup is approved.', source:'Sources and version', download:'Download resources', updated:'Updated', privacy:'Privacy', about:'About AI.DOG', interviewLab:'Interview practice', buildWithAi:'Build with AI: code / no code', planner:'Learning planner', portfolioPlanner:'Portfolio planner', labs:'Build lab', menu:'Menu' }
+});
 
-export const categories: Record<CategoryId, Record<Locale, {name:string; description:string}>> = {
-  'australia-ai-career': {'zh-HK':{name:'澳洲 AI 職涯',description:'理解市場限制、入行次序與求職現實。'},'zh-TW':{name:'澳洲 AI 職涯',description:'理解市場限制、入行順序與求職現況。'},'zh-Hans':{name:'澳洲 AI 职业',description:'理解市场限制、入行顺序与求职现实。'},en:{name:'Australian AI Careers',description:'Understand market constraints, entry routes and the reality of the work.'}},
-  'roles-pathways': {'zh-HK':{name:'職位與入行路線',description:'按工作輸出分辨 Data、ML、AI Application、Platform 與 FDE。'},'zh-TW':{name:'職務與入行路線',description:'依工作產出分辨 Data、ML、AI Application、Platform 與 FDE。'},'zh-Hans':{name:'职位与入行路线',description:'按工作产出区分 Data、ML、AI Application、Platform 与 FDE。'},en:{name:'Roles & Pathways',description:'Choose a route by the work you will deliver, not the job title alone.'}},
-  'portfolio-evidence': {'zh-HK':{name:'作品集證據',description:'把能運行的 demo 變成可檢查、可追問的能力證據。'},'zh-TW':{name:'作品集證據',description:'把能執行的 demo 變成可檢查、可追問的能力證據。'},'zh-Hans':{name:'作品集证据',description:'把能运行的 demo 变成可检查、可追问的能力证据。'},en:{name:'Portfolio Evidence',description:'Turn a functioning demo into evidence that can survive follow-up questions.'}},
-  'professional-workflows': {'zh-HK':{name:'專業 AI 工作流程',description:'由需求、評估到部署，展示實際交付方法。'},'zh-TW':{name:'專業 AI 工作流程',description:'從需求、評估到部署，呈現實際交付方法。'},'zh-Hans':{name:'专业 AI 工作流程',description:'从需求、评估到部署，展示实际交付方法。'},en:{name:'Professional AI Workflows',description:'Show how requirements, evaluation, deployment and review fit together.'}},
-  'resources-opportunities': {'zh-HK':{name:'資源與機會',description:'判斷課程、活動與實戰機會是否值得投入。'},'zh-TW':{name:'資源與機會',description:'判斷課程、活動與實作機會是否值得投入。'},'zh-Hans':{name:'资源与机会',description:'判断课程、活动与实践机会是否值得投入。'},en:{name:'Resources & Opportunities',description:'Assess courses, events and practical opportunities before investing time.'}}
-};
+export const articleTypes: Record<Locale, Record<ArticleType, string>> = canonicalLocaleRecord({
+  'zh-HK': {
+    'deep-dive': '詳細講解',
+    tutorial: '實作指南',
+    'portfolio-build': '作品集案例',
+    'resource-guide': '資源指南'
+  },
+  'zh-TW': {
+    'deep-dive': '詳細說明',
+    tutorial: '實作指南',
+    'portfolio-build': '作品集案例',
+    'resource-guide': '資源指南'
+  },
+  'zh-Hans': {
+    'deep-dive': '详细说明',
+    tutorial: '实作指南',
+    'portfolio-build': '作品集案例',
+    'resource-guide': '资源指南'
+  },
+  en: {
+    'deep-dive': 'Explainer',
+    tutorial: 'Tutorial',
+    'portfolio-build': 'Portfolio build',
+    'resource-guide': 'Resource guide'
+  }
+});
+
+export const categories: Record<CategoryId, Record<Locale, {name:string; description:string}>> = normalizeLocaleContent({
+  'ai-engineering-interviews': {'zh-HK':{name:'AI Engineer 面試',description:'用公開題型練拆解問題，唔靠背誦或公司傳聞。'},'zh-TW':{name:'AI Engineer 面試',description:'用公開題型練習拆解問題，不靠背誦或公司傳聞。'},'zh-Hans':{name:'AI Engineer 面试',description:'用公开题型练习拆解问题，不靠背诵或公司传闻。'},en:{name:'AI Engineer Interviews',description:'Use public question patterns to practise breaking down problems, not memorising company rumours.'}},
+  'ai-engineering-foundations': {'zh-HK':{name:'AI Engineering 基礎',description:'由一個工程決定開始，再拆模型、資料、檢索、部署、測試同安全。'},'zh-TW':{name:'AI Engineering 基礎',description:'從一個工程決定開始，再拆模型、資料、檢索、部署、測試與安全。'},'zh-Hans':{name:'AI Engineering 基础',description:'从一个工程决定开始，再拆模型、数据、检索、部署、测试与安全。'},en:{name:'AI Engineering Foundations',description:'Start with one engineering decision, then unpack models, data, retrieval, serving, testing, and safety.'}},
+  'ai-engineering-career': {'zh-HK':{name:'AI 職涯',description:'對照目標角色、已學過嘅嘢同作品，揀下一項要補嘅能力或作品證據。'},'zh-TW':{name:'AI 職涯',description:'從目標職務、學習投入與作品集現有內容，判斷下一項要補的能力或證據。'},'zh-Hans':{name:'AI 职业',description:'从目标职位、学习投入与作品集现有内容，判断下一项要补的能力或证据。'},en:{name:'AI Careers',description:'Use a target role, what you have learned, and your portfolio to choose the next capability or piece of evidence to build.'}},
+  'portfolio-evidence': {'zh-HK':{name:'作品集證據',description:'將能運行嘅 demo 補成講得到用途、取捨、測試同限制嘅作品。'},'zh-TW':{name:'作品集證據',description:'把能執行的 demo 補成說得出用途、取捨、測試與限制的作品。'},'zh-Hans':{name:'作品集证据',description:'把能运行的 demo 补成说得出用途、取舍、测试与限制的作品。'},en:{name:'Portfolio Evidence',description:'Turn a working demo into a project you can explain: its use, trade-offs, tests, and limits.'}},
+  'professional-workflows': {'zh-HK':{name:'由要求到人手覆核',description:'將需求、檢查、交接同人手覆核寫清楚。'},'zh-TW':{name:'從要求到人工覆核',description:'把需求、檢查、交接與人工覆核放進同一份工作紀錄。'},'zh-Hans':{name:'从要求到人工复核',description:'把需求、检查、交接与人工复核放进同一份工作记录。'},en:{name:'From request to human review',description:'See how requirements, checks, handover, and human review belong in the same piece of work.'}},
+  'low-code-ai-builders': {'zh-HK':{name:'不寫 Code 用 AI',description:'唔寫 Code 都可以做一個小型、可以驗收嘅方案；保留測試、權限界線同人手決定。'},'zh-TW':{name:'不寫 Code 用 AI',description:'不靠程式也能做可驗收的小方案；保留測試、權限邊界與人工決定。'},'zh-Hans':{name:'不写 Code 用 AI',description:'不靠编程也能做可验收的小方案；保留测试、权限边界与人工决定。'},en:{name:'AI without Code',description:'Build a small, reviewable AI solution without programming, while keeping tests, permission boundaries and a human decision.'}},
+  'ai-for-coders': {'zh-HK':{name:'有寫 Code 的人用 AI',description:'AI 可以做 coding partner；規格、測試、review 同責任仍然要留返自己手上。'},'zh-TW':{name:'有寫 Code 的人用 AI',description:'把 AI 當 coding partner，而不是取代規格、測試、review 或責任。'},'zh-Hans':{name:'写 Code 的人用 AI',description:'把 AI 当 coding partner，而不是替代规格、测试、review 或责任。'},en:{name:'AI for Coders',description:'Use AI as a coding partner, not as a substitute for specification, testing, review or accountability.'}},
+  'resources-opportunities': {'zh-HK':{name:'資源與機會',description:'揀課程、活動同實作機會前，先計清會帶走乜。'},'zh-TW':{name:'資源與機會',description:'判斷課程、活動與實作機會是否值得投入。'},'zh-Hans':{name:'资源与机会',description:'判断课程、活动与实践机会是否值得投入。'},en:{name:'Resources & Opportunities',description:'Assess courses, events and practical opportunities before investing time.'}}
+}) as unknown as Record<CategoryId, Record<Locale, {name:string; description:string}>>;
 
 export function isLocale(value:string): value is Locale { return (LOCALES as readonly string[]).includes(value); }
 
+/** Reuse this in every locale-only App Router leaf during static export. */
+export function localeStaticParams() { return LOCALES.map(lang => ({ lang })); }
+
 export function detectLocale(acceptLanguage:string|null, savedLocale?:string):Locale{
+  if(savedLocale==='zh-HK'||savedLocale==='zh-TW'||savedLocale==='zh-MO')return 'zh-Hant';
   if(savedLocale&&isLocale(savedLocale))return savedLocale;
   const languages=(acceptLanguage??'').toLowerCase().split(',').map(item=>item.trim().split(';')[0]);
   for(const language of languages){
-    if(language==='zh-tw'||language.startsWith('zh-hant-tw'))return 'zh-TW';
-    if(language==='zh-hk'||language==='zh-mo'||language.startsWith('zh-hant-hk')||language.startsWith('zh-hant-mo'))return 'zh-HK';
-    if(language==='zh-hant'||language.startsWith('zh-hant-'))return 'zh-HK';
+    if(language==='zh-hk'||language==='zh-mo'||language==='zh-tw'||language==='zh-hant'||language.startsWith('zh-hant-'))return 'zh-Hant';
     if(language==='zh-cn'||language==='zh-sg'||language==='zh-hans'||language.startsWith('zh-hans-'))return 'zh-Hans';
     if(language==='en'||language.startsWith('en-'))return 'en';
   }

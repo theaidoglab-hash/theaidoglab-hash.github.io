@@ -1,0 +1,17 @@
+{
+  "name": "workforce-signal-brief-reference",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local, fixture-only public-data-route portfolio reference for a workforce context brief",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/workforce-signal-brief.test.mjs",
+    "demo": "node demo.mjs",
+    "fixture:validate": "node scripts/validate-fixture.mjs",
+    "eval:diff": "node scripts/eval-diff.mjs evals/change-001-baseline.fixture.json evals/change-001-candidate.fixture.json"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

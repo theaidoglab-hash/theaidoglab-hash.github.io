@@ -1,0 +1,54 @@
+> 如果 eval 只能說答案聽起來不錯，它就無法說明 system 是否用了錯 source、跳過 stop rule，或把困難案例交到一個沒有人處理的地方。
+
+## Draft-only workflow 就能學到正確目標
+
+採用虛構的「退款政策草稿台」。審查者給一則淨化過的問題和一小組 approved policy。系統可以寫一份帶 source 的內部 draft；不能承諾退款、讀帳戶、發訊息、修改紀錄。
+
+評估目標不該只是「model 有沒有幫助」，而是：在宣告限制內，workflow 是否產出 valid、source-grounded draft，或完整 handoff？目標轉換後，deterministic check、human review、observability 才能一起發揮作用。
+
+## 不要只求一個神奇分數
+
+先建立不需要 model judgement 的四層：
+
+1. **Contract check**：input allowlist、JSON schema、必要 source ID、permitted route、無 prohibited field。
+2. **Scenario check**：normal match、missing source、conflicting source、ambiguous wording、injected instruction、malformed output、budget exhaustion、prohibited action request。
+3. **Quality check**：human reviewer 是否能理解 draft、核實 citation、在不重做整件事下決定下一步。
+4. **Regression check**：baseline 與 candidate 跑同一組凍結 case，逐 case 對照。
+
+LLM-based judge 可協助有限的文字問題，例如是否清楚解釋已引用 policy。它需要 written rubric、fixed example、抽樣 human calibration。它不應被要求從 final paragraph 猜出 forbidden tool call；trace 與 deterministic route check 更直接。
+
+## Human review 是流程的一部分
+
+先決定 reviewer 的工作。每個 case 指定 owner、收到哪些 evidence、能選哪些 action。完整 handoff packet 應含 input fixture ID、approved source ID、missing fact、safe trace summary、terminal reason，以及 `KEEP_DRAFT`、`EDIT`、`REJECT`、`ESCALATE` 之類的選項。
+
+讓 reviewer 看到故意難的 case：source conflict、JSON valid 但措辭弱、流暢卻無 citation、因證據不足而正確被 block 的案例。這讓 review 不會只獎勵 polish 過的 happy path。
+
+Review 也會產生資料，但它不是自動真相。記錄 agreement、correction type、reviewer confidence、unresolved question。幾位 reviewer 的偏好，不能被寫成 system 安全或 business metric 已改善。
+
+## Observability 用來找出變化原因
+
+Eval report 告訴你結果；**observability** 保存足夠的 signal，讓人知道結果為何改變。安全 trace 可保存：
+
+```text
+run_id, fixture_id, input_version, source_set_version,
+prompt_version, model_configuration, parser_version,
+state_transitions, allowed_tool_names, terminal_reason,
+schema_result, citation_result, latency_slices, cost_proxy,
+reviewer_verdict
+```
+
+預設不要存 raw sensitive text；能用 hash、version ID、redacted summary 就不要另建一個私密資料庫。Candidate 品質下降時，不要直接說 model 退步。檢查 source set、prompt version、parser repair、budget stop、cache 是否提供舊 policy；trace 讓它們成為可驗證假設。
+
+## 把 release gate 寫在變更之前
+
+凍結 `eval-v1`，先定 hard gate：零 invalid structured output、零沒有 approved source ID 的 material claim、零 forbidden external-action route；所有 conflict、unknown、budget exhausted case 都要交到有名字的 handoff；reviewer agreement/correction 必須報告；prompt/source projection/parser/model setting 的任何改動都要有 Evidence Delta 與 rollback target。
+
+Hard gate 優先於好看的 aggregate score。一個 candidate invented refund decision，即使風格分數更高，也不應 release。正確 handoff 更多 edge case 的 candidate，completion rate 也許較低，卻可能更安全；兩個數都要展示。
+
+Repository 可保留 `evals/eval-v1.json`、`rubrics/draft-quality.md`、`validators/`、`traces/schema.md`、baseline/candidate report、`CHANGE-002.md`、`review-guide.md`、`release-gate.md`。技術證據是 contract、versioned dataset、trace、comparison report、regression gate；非技術證據是 user decision、review owner、data-retention choice、failure cost、明確的 non-claim。
+
+延伸閱讀：[評估整條 agent workflow](/zh-TW/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)、[使用 Promptfoo 的 public-data evaluation pack](/zh-TW/articles/build-a-public-data-kev-review-packet)、[以證據而非流暢度檢查 portfolio](/zh-TW/articles/score-an-ai-portfolio-by-evidence-not-fluency)。
+
+## 邊界
+
+Desk、policy、reviewer decision、score、trace 都是虛構例子。本文沒有證明真實退款 workflow、customer outcome、合規決策、production reliability、未測 input 下的安全性。它只展示在人依賴系統之前，如何讓 claim 有可檢查證據。

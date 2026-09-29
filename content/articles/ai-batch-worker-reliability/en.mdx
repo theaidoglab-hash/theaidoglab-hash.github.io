@@ -1,0 +1,142 @@
+> Adding more workers is not a reliability plan. An AI batch job needs a bounded queue, an identity for every attempted effect, a place to resume, and an intentional stop when the system cannot know what happened safely.
+
+## The interviewer asks
+
+Imagine a fictional document-enrichment job. It has a bounded set of synthetic records, a fixed synthetic cost ceiling, simulated `429` outcomes, timeouts, duplicate delivery attempts and some records that are invalid before any model work begins. The job must produce a draft-only enrichment record; it must never contact a customer or change an account.
+
+> “How would you make this job resumable without duplicates or uncontrolled spend?”
+
+**A half-right answer:** “I would add more workers and retry every failure.”
+
+More workers can make a rate-limit problem worse. Retrying every failure can repeat a write whose result is unknown, keep spending after a provider is unavailable, and bury a malformed record under a long retry history. A reliable answer starts by deciding which failures may be retried, which must be handed off, and what state proves a record has already been handled.
+
+## What a reviewer can inspect here
+
+### In the code
+
+- A bounded **serial** queue, deterministic fixtures, retry classes, and an attempt/cost stop. The project explains how concurrency and rate caps differ; it does not pretend to implement either production control.
+- An idempotency key, a run ID, a stable job-level correlation ID, an attempt ID, checkpoint/resume state, a dead-letter route, and a draft-only `gpt-5-mini` Responses-API-shaped fixture that never connects to a network.
+- Fixed acceptance cases for success, `429`, timeout, pending and terminal duplicate delivery, invalid input, queue capacity, budget stop, and dead-letter review.
+
+### Around the code
+
+- A narrow fictional decision: should this synthetic document receive a draft enrichment record, be retried later, or be placed in a human review queue?
+- No real API key, customer document, account permission, outbound message or production claim; a named owner still decides whether a later authorised pilot should exist.
+- A cost ceiling, retention boundary, named review owner, and stop condition instead of a vague promise that automation will always finish.
+
+## First make the state visible
+
+Treat the batch worker as a small state machine, not as a loop around a model call:
+
+```text
+incoming -> queued -> completed
+                  -> retry_scheduled -> queued
+                  -> dead_letter (human review required)
+                  -> cost_stop (the job remains checkpointed)
+incoming -> terminal_duplicate_suppressed
+```
+
+The labels can differ. What matters is that a later operator can tell whether a record is queued, safe to retry, complete, waiting for review, or paused by a budget guardrail. A timeout is not proof that no work occurred. If the effect could have happened but confirmation was lost, look up the idempotency key and have the owner decide the repair path instead of blindly running it again.
+
+For each record, keep only fictional, minimum-necessary trace fields such as `run_id`, `document_id`, `source_version`, `idempotency_key`, `attempt`, `route`, `reason_code`, `fixture_kind` and a cost proxy. The run ID identifies one invocation; the stable job-level correlation ID connects retries for one logical record; the attempt ID separates each try. None is a licence to retain the original document forever.
+
+## The decisions hidden inside “just retry it”
+
+### Concurrency limit versus rate limit
+
+A **concurrency limit** caps how many tasks are active at one moment. A **rate limit** caps how many requests can begin in a time window. They solve different problems: ten slow requests may fit a rate limit but exceed available worker capacity; ten fast requests may finish quickly but still exceed a provider's requests-per-minute allowance.
+
+Picture an art table: concurrency is how many children may sit there at once; rate is how many paint pots may be opened each minute. More chairs do not create more paint pots.
+
+Start low, record the observed queue delay and retry rate, then adjust only after the fixed cases stay safe. Do not invent a universal number in an interview answer; it depends on the provider limit, downstream capacity, latency and error cost.
+
+The companion code stays serial so its checkpoint decisions remain easy to replay. A production version would add a separately tested concurrency control and a time-window rate control only when its provider and downstream evidence justify them.
+
+### Retryable error versus permanent error
+
+A `429` or short timeout may be **retryable**. An invalid document shape, missing required field or policy block is normally **permanent** until a person repairs the input. A retry policy therefore needs an error taxonomy, maximum attempts and a terminal route.
+
+**Exponential backoff** waits longer after each retry. **Jitter** adds a small, controlled variation so every worker does not retry at the same instant and cause a new traffic spike.
+
+Picture a closed library counter: waiting can help. A library card with no name needs repair, so it belongs in a review tray instead of a retry loop.
+
+### Idempotency and duplicate delivery
+
+An operation is **idempotent** when repeating it does not create a second effect. Give every hypothetical enrichment operation a stable key derived from the fictional record and source version. Before running it, check the checkpoint. If the same key already has a completed or terminal dead-letter record, suppress the redelivery rather than creating another effect or another cost.
+
+Think of a coat-check ticket: showing ticket 27 twice should still refer to one coat, not create a second coat.
+
+For this learning project, the effect is only a local draft record. The pattern matters because a real retry might otherwise create two messages, two tickets or two payments. Never claim a local duplicate test proves a real external system is idempotent.
+
+### Checkpoint, resume and dead-letter queue
+
+A **checkpoint** records enough state to resume safely after a process stops: completed key, current attempt, next eligible retry time, route and version. A restarted worker reads checkpoints rather than beginning every record from scratch.
+
+A **dead-letter queue** is an explicit holding place for a record that exhausted allowed retries or has a permanent error. It is not a bin to forget. It needs a reason code, named owner and a decision: repair input, change policy, retry under approval, or close the record without a draft.
+
+Think of a bookmark and a repair tray: one tells you where to resume; the other keeps a damaged page out of the reading pile until someone decides what to do.
+
+### When the budget says stop
+
+Set a maximum attempt count and a local cost proxy before the happy path. This reference emits `cost_stop` before a synthetic attempt would cross its cap and keeps the job checkpointed. It does not claim a fixed `BLOCKED_COST` or `HANDOFF` state. A human owner decides whether a later, authorised repair or new source version should receive a new identity.
+
+Picture three arcade tokens: after the third game fails, the next decision belongs with the person who owns the budget—not another automatic attempt.
+
+## Build the smallest inspectable workflow
+
+The companion **AI Batch Worker** reference uses only deterministic synthetic fixtures. Its end-to-end order is intentionally plain:
+
+1. Write a brief: fictional user, draft-only output, data boundary, owner, budget and non-goals.
+2. Define fixed acceptance cases before implementation, including a normal record and the seven negative or ambiguous cases named above.
+3. Validate the input locally. Invalid input goes to `dead_letter` for human review; it never reaches a model-shaped adapter.
+4. Derive an idempotency key and consult the checkpoint before beginning a record.
+5. Call only a deterministic fixture. Its `gpt-5-mini` Responses API shape is a design seam, not an SDK integration, credential check or observed model result.
+6. On a retryable fixture, schedule bounded backoff with deterministic test jitter; on a permanent fixture, record a reason and stop.
+7. Persist a minimal checkpoint after every route decision, then inspect the checked-in deterministic run report and dead-letter fixture alongside the tests. The runtime does not claim to write a production report file.
+8. A human reviews `dead_letter` records and any future proposal to connect real data or a real provider.
+
+That sequence gives an interviewer a path to inspect: a source record, its identity, allowed attempts, final state, trace and owner. It is more convincing than a long prompt and a screenshot of one successful output.
+
+## Measure the workflow without inventing a business result
+
+Use a small measurement map so that a passing local run does not become a business claim. Keep four kinds of evidence separate:
+
+- **Technical contract check:** on fixed synthetic cases, the expected route, terminal state, maximum attempt count, checkpoint and `no_external_action` check all match. This establishes only the local contract.
+- **Workflow proxy:** before any pilot, define a bounded simulation measure: for example, the share of eligible synthetic records that reach a reviewer-ready draft within the agreed attempt and cost limit, median time to assemble the review record, and reviewer correction or handoff rate. Give every measure a denominator, baseline, owner and review window.
+- **Guardrail veto:** a duplicate effect, an unknown outcome after a timeout, a raw document in a trace, an exceeded attempt or cost limit, an unowned dead-letter item, or a regression in a fixed negative case vetoes the candidate. A faster happy path never offsets one of these failures.
+- **Business outcome:** cost saving, throughput gain, customer impact and reliability in a real service remain `not measured` until an authorised pilot establishes the data, provider, capacity and human-review route.
+
+Put this map beside `acceptance-cases.md` and `run-report.json`: name the baseline, denominator, guardrail, owner and what you deliberately did not measure. A reviewer can then see why the batch design should stop, not only how it retries.
+
+## What to ask an AI coding partner to do
+
+Ask for a plan before a diff. A useful request is narrow:
+
+> “Add a deterministic timeout fixture to this local-only batch worker. Do not change the action boundary. Add one acceptance case proving that the timeout creates at most two attempts, keeps one stable job trace across those attempts, saves a retry checkpoint, and never produces an external action. Show the plan, tests and diff.”
+
+Then inspect whether the agent changed only the allowed files, whether the negative test would fail without the code change, and whether the run report reveals an unsafe route. A green test suite is evidence about named fixtures—not permission to deploy or to send real data to a model.
+
+## Portfolio evidence to retain
+
+Keep these artefacts beside the code, with source and test files in English and any reader-facing README translations separate:
+
+- `brief.md` — fictional decision, owner, data boundary, cost stop and non-goals.
+- `acceptance-cases.md` — expected state, attempt count, reason code and forbidden effect for every fixture.
+- `retry-policy.md` — retryable/permanent taxonomy, backoff, jitter, maximum attempts and handoff rule.
+- `run-report.json` — local counts by route, no raw documents, no external result.
+- `dead-letter-fixture.json` — a reproducible invalid or exhausted record and its review reason.
+- `decision-log.md` — why the limit and stop rule exist, what remains unknown, and who would approve any later pilot.
+
+The queue, tests, keys and traces make the local workflow's behaviour inspectable. Before a similar job processes real records, write down the owner, data boundary, cost stop, review capacity and non-claims.
+
+## A concise interview answer
+
+“I would begin with a bounded queue and separate concurrency from provider rate limits. Each fictional record would carry a stable idempotency key, a correlation ID and a checkpointed terminal state. I would classify errors into retryable and permanent, use capped backoff with jitter only for the first group, and send exhausted or invalid records to a dead-letter review queue. I would stop at a pre-agreed attempt or cost threshold, preserve a draft-only action boundary, and make a human owner decide any later external integration. I would test success, `429`, timeout, duplicate, invalid input and budget exhaustion with deterministic fixtures.”
+
+## Further reading
+
+Practise the compact [coding-and-data-structures interview card](/en/interview-lab/coding-and-data-structures), then compare a batch job's evidence with [workflow-level agent evaluation](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer). Before you accept an AI-generated diff, use the [coding-partner review loop](/en/articles/use-ai-as-a-coding-partner-with-proof). For a different end-to-end portfolio pattern, inspect [PolicyPilot](/en/articles/enterprise-ai-portfolio-policy-pilot).
+
+## Boundary and source note
+
+This is AI.DOG teaching material prompted by public capability patterns, not a translation or reproduction of a company interview question. The scenario, records, limits, fixture behaviour, artefacts and results are fictional. The public compilation notes that reported questions vary by team, role, level and region. The `gpt-5-mini` reference is a non-executing request-shape fixture only; official OpenAI documentation should be checked before any real integration: [GPT-5 mini model documentation](https://developers.openai.com/api/docs/models/gpt-5-mini) and [Responses create reference](https://developers.openai.com/api/reference/cli/resources/responses/methods/create). No real key, API call, provider limit, cost, business result, reliability result, deployment or job outcome is claimed.

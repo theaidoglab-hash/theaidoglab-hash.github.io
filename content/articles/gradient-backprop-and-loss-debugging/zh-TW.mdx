@@ -1,0 +1,33 @@
+當 training run 突然出現 `NaN`、loss curve 平得不動，或 prediction 永遠一樣時，先增加 layers 通常只是猜測。先沿著一個 labelled example 走到一次 parameter update。Gradient 與 backpropagation 在這條路上，才會從課本名詞變成實際的 engineering 工具。
+
+## 跟著一個 prediction 倒推一次
+
+想像一個虛構的 triage model，看到一筆 case 後估計它有 0.80 機率需要人工覆核。記錄的 target 是 1，因為過去 reviewer 有將它升級。Loss function 把這個差異轉成數值訊號。**Gradient** 問的是一個局部問題：若某個 parameter 微小變動，往哪個方向能減少這個訊號？
+
+**Backpropagation** 把 chain rule 套用在 calculation graph。它從 loss 開始，倒推過最後 output 與前面的 layers，計算每個可學 parameter 對錯誤的貢獻。Optimizer 再根據 gradients 與 learning rate 決定 update。Backpropagation 不是另一種「智慧」；它只是有效地計算目前這次運算如何影響 loss。
+
+這也說明一個限制：它能降低指定 objective，卻仍可能學到錯誤的營運行為。若 label 記錄的是不一致的舊 routing，gradient 只會忠實最佳化那份不一致。
+
+## 先 debug 最小 case，再跑全套
+
+使用受控順序，不要一次改五個 setting：
+
+1. 印出一個 input、它的 target、raw model output 與計算出的 loss，確認 shape、unit 與順序一致。
+2. 核對 output 與 loss 的配對。預期 raw logits 的 loss，和預期 probabilities 的 loss，行為不同。
+3. 用一小批固定資料 train 到 model 刻意 overfit。若做不到，檢查 data pipeline、被凍結的 parameter、gradient flow 與 optimiser 接線。
+4. 為幾層記錄 gradient norm 與 parameter change。全部為零、爆升或非有限值都是診斷線索，不是該藏起來的 run。
+5. 到這一步才每次改一個因素，例如 learning rate、batch size 或 feature representation，並與同一 baseline 比較。
+
+Tiny-batch test 不是 generalisation 證據。它只檢查 learning machinery 能不能運作。
+
+## 留下他人能檢查的 debugging trail
+
+每一次 run 都保留 run ID、code 與 data revision、seed、input schema、target 定義、loss configuration、optimiser setting 與簡短觀察。變更前先寫一個假設，例如「loss 預期 logits，但現在收到 probabilities」。記下預期訊號、實際結果與該變更是否保留或 rollback。
+
+這也是非技術證據。Reviewer 能看出你管理不確定性、一次只改一個變數，也沒有把一條幸運 curve 包裝成結論。紀錄中加入兩個 failure example：一個 model 很有信心卻錯，另一個連 label 本身都需要人重新判斷。
+
+## 常見但不足的修補
+
+Gradient clipping 可阻止爆炸，卻不能證明 architecture 或 target 正確。降低 learning rate 能讓 curve 看起來平靜，也可能慢到根本還沒學到。Missing value 的 default 可能形成太容易的捷徑。低 loss 也無法回答：這個 queue threshold 對收到結果的人是否可以接受。
+
+下一步是讓 run 能重現且穩定，同時別把 training convenience 誤認為 release gate。延伸閱讀：[training stability、dropout 與 normalisation](/zh-TW/articles/training-stability-dropout-normalisation) 與 [從模糊 AI 需求到可驗收的改動](/zh-TW/articles/from-vague-request-to-accepted-feature)。

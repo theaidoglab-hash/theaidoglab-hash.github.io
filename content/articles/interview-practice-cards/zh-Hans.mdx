@@ -1,0 +1,87 @@
+> 这页是 16 张面试练习起步卡，不是完整题库。每次选一张，先用自己的话回答，再把答案连回一份别人可以检查的证据。
+
+## 一题只处理一个判断
+
+一个面试回答若急着塞进所有工具名称，往往反而失去重点。这份起步卡每张都连到一个独立练习页面：每页从一条面试情境问题开始，先给你一个只答对一半的回应，再带你补上漏掉的机制、取舍、何时该停下来，以及可以承受追问的 artefact。
+
+不要从职称猜题目，先读职位描述里重复出现的动词。`build`、`integrate`、`ship` 通常要说产品与系统决定；`operate`、`secure`、`scale` 通常要说可靠性、权限、成本与事故；`experiment`、`measure` 通常要说 baseline、数据边界与 evaluation。选和目标职位最接近的能力路线，再开一张卡即可；不需要在一个晚上看完 16 张起步卡。
+
+## 四条快速起步路线
+
+这 16 张起步卡只是一个入口，不是完整 Interview Lab。若目标职位需要另一个起点，请到 [Interview Lab](/zh-Hans/interview-lab)：里面目前有全部 **59 道** 逐题练习，分成十条能力路线。
+
+### 01–02、05、08、14：模型行为、serving 与交互
+
+这组看你能否从“模型做得到”走到 context、latency、cost、输出稳定性与交互体验之间的取舍。
+
+- [01｜长 context 不是免费升级](/zh-Hans/interview-lab/long-context-is-not-a-free-upgrade)
+- [02｜加 GPU 前，先 trace p99 latency](/zh-Hans/interview-lab/trace-p99-latency-before-adding-gpus)
+- [05｜该 fine-tune，还是先修正系统？](/zh-Hans/interview-lab/fine-tune-or-fix-the-system)
+- [08｜Voice latency 是系统 budget](/zh-Hans/interview-lab/voice-latency-is-a-system-budget)
+- [14｜Prompt contract 需要 acceptance test](/zh-Hans/interview-lab/prompt-contracts-need-an-acceptance-test)
+
+### 03–04、07、15：retrieval、agents 与安全边界
+
+这组是找出系统在哪一步出错，并限制它究竟能做到哪一步。只说“用 RAG”或“加 guardrail”还不是回答。
+
+- [03｜是 retrieval、generation 还是 permission 出错？](/zh-Hans/interview-lab/rag-retrieval-generation-or-permission)
+- [04｜让 agent 起草，但不让它做后果性动作](/zh-Hans/interview-lab/agent-draft-without-consequential-actions)
+- [07｜把不可信文件当作 data](/zh-Hans/interview-lab/treat-untrusted-documents-as-data)
+- [15｜Similarity 高，不代表真的 relevant](/zh-Hans/interview-lab/high-similarity-is-not-relevance)
+
+### 06、10、13、16：evaluation、data 与可靠 workflow
+
+这组问的是：一个分数、一次 retry，或一条 job 显示成功，放进人工工作流程后还值不值得相信。回答需要 baseline 和可交代的 recovery path。
+
+- [06｜用什么证据决定 release 或 rollback？](/zh-Hans/interview-lab/release-or-rollback-with-evidence)
+- [10｜Partial failure 下的 coding 与 data structures](/zh-Hans/interview-lab/coding-and-data-structures)
+- [13｜离线分数提高，为什么 workflow 没改善？](/zh-Hans/interview-lab/offline-score-and-human-workflow)
+- [16｜Retry 成功，不等于有 recovery plan](/zh-Hans/interview-lab/a-retry-is-not-a-recovery-plan)
+
+### 09、11、12：system design、交付与判断
+
+如果题目从模糊 request、客户抱怨或 project 经验开始，就选这一组。真正有用的答案会先缩小范围，之后才增加架构。
+
+- [09｜设计一个内部 policy assistant](/zh-Hans/interview-lab/design-an-internal-policy-assistant)
+- [11｜把 Applied AI 抱怨变成可逆 pilot](/zh-Hans/interview-lab/applied-ai-delivery)
+- [12｜说一次 evidence 让你改变技术决定](/zh-Hans/interview-lab/project-deep-dive-and-role-fit)
+
+## 用 90 秒，练出真正更好的第二次回答
+
+先开 timer。第一次必须使用自己的说法，不要背稿。
+
+1. **前 20 秒：界定决定。** 说明谁要做什么决定、成功看起来是什么，以及一个 non-goal。若题目从技术症状开始，先把它改写成可观察的 failure，不要急着报工具名。
+2. **接下来 40 秒：交代处理路径。** 先给最简单可信的 baseline，再说第一个要检查的 component／机制，以及什么 trade-off 会让你改选择。好答案有顺序：先观察、做一个可逆的小改动，有证据才升级。
+3. **最后 30 秒：证明别人可以安全地跟着做。** 指出一份 test、trace、decision record 或 demo artefact。以一个 boundary 收尾：何时交给人、何时 rollback、数据到哪里该停止，或何时简单方案其实更好。
+
+接着才读该题页面。不要整段换掉自己的回答，只补上遗漏的那条因果关系。记下四件事：**主张、证据、边界、下一个 test**。隔天再答同一题；若答案变短却更精确，代表你在学判断，而不是背术语。
+
+## 在说“我做过”之前，要有什么证据
+
+面试官合理地会问系统如何运作，也会问它为什么值得做。作品证据应同时回答两边。
+
+### 系统部分可以让人核对什么
+
+- 一个小型 baseline，以及复杂设计在什么情况下才真正胜过它。
+- 数据／输入边界：什么可用、排除、synthetic、过期或未知。
+- 固定的 eval cases、预期行为，以及至少一个保留的 failure case。
+- Trace、状态图或版本记录，让人知道 regression 出现时你会怎么查。
+- 可执行指引与 README，清楚分开已观察到的 output 和尚未证明的 performance claim。
+
+### 真正用之前，还要讲清什么
+
+- 用户要做的决定、最后一个后果性步骤由谁负责，以及 non-goal。
+- 一个实际衡量方式，例如 reviewer capacity、处理时间、错误暴露或 handoff rate；不要虚构收入故事。
+- 你接受的成本／操作 trade-off，以及为什么没有选更简单方案。
+- Stop rule：何时请人处理、rollback、限制功能，或拒绝无法支持的 action。
+- 清楚说明 demo 边界，以及哪些事尚未在真实组织环境测试。
+
+若还没有 artefact，不要再用模型名称装饰回答。补最小的缺口：一个 fixture、一列 eval、一页 decision record，或一个 recovery test。通常比多读一小时更有用。
+
+## 用网站其他文章排出自己的路径
+
+不知道下一步该学什么时，读 [AI Engineer 学习地图](/zh-Hans/articles/ai-engineer-interview-learning-map)，而不是只背面试句子。要把一条回答变成可交付的流程，可看 [从模糊 request 到可验收功能](/zh-Hans/articles/from-vague-request-to-accepted-feature)。准备建立公开 portfolio 例子时，对照 [企业 AI 系统的 portfolio evidence](/zh-Hans/articles/enterprise-ai-portfolio-policy-pilot) 或 [RAG chatbot 证据](/zh-Hans/articles/rag-chatbot-to-portfolio-evidence)。目标是一个小而可检查的主张，不是一个暗示有客户、已 production release 或已带来业务成果的 demo。
+
+## 这个系列的范围
+
+本站的问题、虚构情境、解释和 artefact 建议都是草稿学习材料。它们不是任何公司的当前流程记录、不是逐间公司的题库，也不预测任何 interview loop。练习只使用公开、虚构、synthetic 或妥善去识别化的材料。不要把想象情境说成客户故事，不要用保密工作当公开证据，也不要声称已 production deploy 或做出无法证实的 business outcome。重点是把可靠的工程判断，变成别人能检查的形式。

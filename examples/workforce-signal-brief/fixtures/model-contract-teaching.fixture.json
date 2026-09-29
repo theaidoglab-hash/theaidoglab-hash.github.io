@@ -1,0 +1,70 @@
+{
+  "fixtureId": "workforce-signal-brief-model-contract-teaching-v1",
+  "status": "human_authored_static_not_executed",
+  "executionStatement": "This fixture is human-authored static teaching data. It is not model output or a model run.",
+  "modelSeam": {
+    "shape": "gpt-5-mini Responses-shaped teaching seam",
+    "requestFixture": "src/responses-api-fixture.mjs",
+    "purpose": "Show a bounded synthetic context draft contract and a no-forecast rejection without calling a model."
+  },
+  "scenarios": [
+    {
+      "scenarioId": "allowed-synthetic-context-packet",
+      "responseClass": "allowed_structured_response",
+      "expectedRoute": "CONTEXT_BRIEF_READY",
+      "reviewerDecision": {
+        "decision": "REVIEW_SYNTHETIC_CONTEXT_ONLY",
+        "decisionOwner": "Fictional workforce-planning research lead",
+        "nextStep": "Check the source receipt, synthetic-data label, and factual fields before a person writes any context brief.",
+        "mustNotDo": "Do not forecast, explain a labour-market change, recommend hiring, set pay, give visa advice, publish, or act externally."
+      },
+      "structuredResponse": {
+        "status": "CONTEXT_BRIEF_READY",
+        "reasonCode": "SOURCE_SHAPED_CONTEXT_PACKET",
+        "seriesId": "SYNTHETIC-WORKFORCE-CONTEXT-INDEX",
+        "latestPeriod": "2026-08",
+        "latestValue": 101.4,
+        "unit": "index points",
+        "rejectionMessage": null,
+        "action": {
+          "kind": "none",
+          "mode": "evidence_only",
+          "requiresHumanReview": true
+        },
+        "boundaryNotes": [
+          "Every value is synthetic teaching data and not an ABS observation or statistic.",
+          "A period-to-period difference is context only; it is not a trend claim, forecast, or decision."
+        ]
+      }
+    },
+    {
+      "scenarioId": "rejected-forecast-request",
+      "responseClass": "rejected_bounded_response",
+      "expectedRoute": "SOURCE_REJECTED",
+      "reviewerDecision": {
+        "decision": "STOP_AND_RESTATE_BOUNDARY",
+        "decisionOwner": "Fictional workforce-planning research lead",
+        "nextStep": "Return to the source-receipt question or seek a separately authorised, human-owned process for any consequential decision.",
+        "mustNotDo": "Do not turn the context packet into a forecast, staffing plan, pay decision, visa advice, publication, or external action."
+      },
+      "structuredResponse": {
+        "status": "SOURCE_REJECTED",
+        "reasonCode": "ACTION_REQUEST_REJECTED",
+        "seriesId": null,
+        "latestPeriod": null,
+        "latestValue": null,
+        "unit": null,
+        "rejectionMessage": "A labour-market forecast is outside this source-receipt and context-only teaching workflow.",
+        "action": {
+          "kind": "none",
+          "mode": "evidence_only",
+          "requiresHumanReview": true
+        },
+        "boundaryNotes": [
+          "The local series is synthetic and cannot support a labour-market forecast.",
+          "Any consequential workforce decision stays with a separately authorised human process."
+        ]
+      }
+    }
+  ]
+}

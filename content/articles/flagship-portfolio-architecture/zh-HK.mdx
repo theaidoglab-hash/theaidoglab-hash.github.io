@@ -1,0 +1,66 @@
+> 一個主力案例唔需要好大。它只需要令一個陌生人打開幾個檔案後，看得出你想幫誰處理哪個小決定、怎樣核對，以及你冇把本地練習講成真實成果。
+
+## 主力案例唔係最多功能嗰個
+
+作品集常見的卡位不是能力不足，而是同時起了三、四個半完成 project：一個 RAG chat、一次模型微調、一個 agent、再加一個漂亮介面。每個都可以 demo 幾分鐘，但沒有人能順著檔案追問你的取捨。
+
+主力案例的工作反過來。你只揀一個有限的情境，然後把六樣本來散落在腦裏的資料寫出來。它不需要碰真實客戶、僱主資料或外部帳戶；合成資料或有清楚條款的公開資料已足夠做學習版本。重點不是把它講成企業系統，而是令 reviewer 能用同一條線看你的判斷。
+
+如果仍未揀到題目，先用 [Portfolio Evidence Planner](/zh-HK/portfolio-evidence-planner) 寫出一位使用者、一個小決定、資料界線和一件不會做的事。唔好先由 model、framework 或職稱倒推題目。
+
+## 先用一個問題篩走唔值得做的題目
+
+把候選題目寫成一句：「一位 __ 在 __ 時，要根據 __ 決定 __；如果資料不足、過期或超出權限，就 __。」
+
+例如，並不是「我想做一個 AI 文件助理」，而是「一位虛構 reviewer 收到一條資料更新時，要決定能否準備一份有來源的草稿；來源相撞或缺欄位，就停在交人處理。」這一句已經逼你選擇 owner、時間點、輸入、停止位和錯誤後果。
+
+以下情況先唔好揀作主力案例：要靠未獲准的資料才有意思、只能靠漂亮輸出展示、或你連一個可能失敗的情境都想不到。這些不是「再加一個 agent」可以補救的問題。
+
+## 六格：每格都要有檔案、核對方法和不能聲稱的結果
+
+這六格不是叫你堆六份文件。每一格都對應一條追問。你可以先寫一頁很短的 Markdown；有實際改動時才把它長成 code、測試或紀錄。
+
+| 格 | 留下甚麼 artefact | 別人怎樣核對 | 這格不可以聲稱甚麼 |
+| --- | --- | --- | --- |
+| 01 · 小決定 | `docs/problem-brief.md`，寫使用者、決定時間、錯誤代價、owner 和 non-goal。 | 讀者能用一句話說出工具幫誰作哪個有限決定，也知道誰保留最後決定權。 | 不代表有真實需求、客戶、授權或採用。 |
+| 02 · 資料界線 | `docs/data-receipt.md`、schema 和一小份 synthetic 或公開 fixture。 | 能分辨資料由哪裏來、哪些欄位可用、哪些必須排除、資料是哪個版本。 | 不代表你有真實資料存取權、私隱批准或仍然新鮮的 live data。 |
+| 03 · 簡單起點 | `src/baseline.*` 和 `docs/baseline-and-change.md`，記下最簡單做法和一次刻意改動。 | 同一個 input 可走 baseline 和 candidate；讀者能指出改了甚麼和為何要改。 | 不代表 candidate 在真實工作裏較好，也不代表較複雜就較有價值。 |
+| 04 · 固定情境 | `eval/cases.*`、預期 route 和 failure log。 | 至少可看到正常、資料不足、過期或衝突、越界要求和 regression case 的預期處理。 | 不代表統計 benchmark、全面安全測試或任何認證。 |
+| 05 · 停低和回退 | `docs/reviewer-decision.md` 和 `docs/rollback.md`，寫 `KEEP`、`REVISE` 或 `STOP` 的條件。 | 別人能知道哪個失敗會擋住改動、誰作決定，以及怎樣回到前一個可用方法。 | 不代表已得到 release、部署、資安或合規批准。 |
+| 06 · 交代給下一個人 | `README.md`、最小 run command、`docs/five-minute-walkthrough.md` 和 claims note。 | 一位陌生人能找到入口、明白本地結果從何而來，並聽你講清一個 failure。 | 不代表公開 repository 已存在、每行 code 都是你獨自寫成，或 project 足以保證求職結果。 |
+
+第 03 格特別重要。沒有 baseline 時，你只是在展示「某個組合可以跑」。有了同一批 input 的簡單對照，才可以討論新元件究竟補了哪個 failure，又帶來甚麼成本或新風險。
+
+第 04 格亦唔好只放成功 screenshot。固定情境的價值在於你改 prompt、retrieval、rule 或 model 後，仍可看見舊問題有冇回來。一次本機 pass 只證明該次本機檢查；它不是 live system 的成績單。
+
+## 先把一格做實，再開下一格
+
+這張表最容易被誤用成「今晚要補齊所有文件」。較好的做法是讓每次工作都令一格由空白變成可打開：
+
+1. 先完成第 01 和 02 格，否則你不知道自己可以用甚麼資料和不能做甚麼。
+2. 做出第 03 和 04 格的最小版本；保留一個 baseline、一個改動和同一批 cases。
+3. 最後補第 05 和 06 格，令改動有人可以 review，令你自己幾星期後仍講得返。
+
+想看一個由舊快照排人手隊列的例子，可讀 [Renewal Triage](/zh-HK/articles/renewal-triage-mlops)。它有意把模型分數、隊列行為和真實挽留結果分開。想從一個草稿流程開始，可在 [Build Lab](/zh-HK/labs#build-lab-kit-renewal-triage-mlops) 揀一個本地練習；內容本身不會替你接入帳戶、資料或真實工作流程。
+
+## 第二個 project 甚麼時候先有理由開始
+
+第二個 project 並不是第一個畫面看膩了就開始。至少先問三條問題：
+
+- **它有沒有另一個決定？** 把同一個 FAQ 換 prompt、換 model 或換介面，不算另一個 case。由「可否草擬回覆」轉到「有限 capacity 下先 review 哪一條」，才是不同決定。
+- **它有沒有另一種會出事的方法？** 例如 retrieval project 要處理來源、版本和無根據回答；時間序列或 queue project 要處理資料可用時間、capacity 和 threshold。只改主題顏色不會增加你能展示的判斷。
+- **第一個是否已有一輪完整回應？** 六格每格至少有一件能打開的東西，並且你已根據同一批 cases 接受、修改或放棄過一次改動，才值得把注意力轉走。
+
+PolicyPilot 和 Renewal Triage 可以成為一對好對照，不是因為名稱較大，而是它們的問題不同：前者著重來源支持的草稿和交人；後者著重時間安全的資料、排序和 reviewer capacity。你可由 [PolicyPilot](/zh-HK/articles/enterprise-ai-portfolio-policy-pilot) 讀另一種有限 case，但唔好把兩者混成一句「我做過 enterprise AI」。
+
+## 讓六格變成你面試時講得到的路線
+
+開始前可抄一份 [Portfolio Proof Pack](/zh-HK/articles/build-a-github-portfolio-proof-pack) 的文件結構，再把每一格連到一個檔案。之後打開 [Interview Lab](/zh-HK/interview-lab)，揀一題和你案例最接近的題目。回答時不用重複 README；只要按這條次序講：哪個決定、最簡單做法、哪個 case 逼你改、怎樣停下，以及那次本地練習仍未知甚麼。
+
+若想先檢查自己有沒有遺漏，也可對照 [作品集 evidence review](/zh-HK/articles/score-an-ai-portfolio-by-evidence-not-fluency)。它會幫你找下一個缺口；這篇則幫你避免把缺口分散到幾個半完成 project。
+
+## 這份地圖的界線
+
+這是一份學習用架構，不會建立 GitHub repository、不會把資料公開、不會替你執行 model call，也不會令本地 fixture 變成真實業務結果。使用僱主、客戶、同學或任何個人資料前，仍要由有權的人確認用途、權限、保存和公開範圍。
+
+一個主力案例的價值，是讓別人不必相信你說「我做過 AI」，也可以順著你留下的六格，看到你在哪裏收窄問題、怎樣檢查、何時停手，以及哪些問題仍未有答案。

@@ -1,0 +1,132 @@
+Choose one route that fits your evidence gap this week: name the decision you need to explain, the gap you need to close and the artefact you can retain. A course or other source is an input, not proof that you can already do the job.
+
+## The problem with asking for the “best AI course”
+
+Someone who wants to move into AI can easily collect four tabs, two certificates and a list of model names without gaining a clearer next step. The missing question is usually not “Which brand is best?” It is: **which capability will I be able to show, explain and improve after this week?**
+
+This is a source map, not a ranking or an enrolment recommendation. It deliberately separates four starting routes. Each route says what it is useful for, the first public-safe artefact to make, what the system work lets you inspect, what must be decided before use, and the claim it cannot support.
+
+Before opening anything, write one sentence in this form:
+
+> I am aiming toward **[role or work direction]**. I cannot yet show **[one capability]**. This week I will leave **[one inspectable artefact]**. I will not claim **[an outcome the artefact cannot prove]**.
+
+For example: “I want to move toward an AI application role. I cannot yet explain how a draft workflow is evaluated. This week I will retain five fixed acceptance cases and a human-review decision. I will not claim that I built a deployed agent.”
+
+## Choose your working route before an external course
+
+If you do **not** write code today, begin with the [15-minute manual safe check (AC-01, no account)](/en/no-code-starter-lab#no-code-lab-manual-title). It lets you frame a task, check the no-external-action boundary, and retain a human decision. You do not need Python, a model API or an LLM course before you can practise those abilities.
+
+If you already write code, or want to inspect implementation, a diff or tests, begin with the [Coder Starter Lab](/en/coding-starter-lab). It starts with scope, negative cases, review and rollback—not a request to let an agent change everything. Use the [coder track](/en/series/ai-use-routes#track-coder-title) later if you want to compare the two routes.
+
+The external sources below are selected only after that first choice. They deepen a named capability; they are not a prerequisite for being allowed to start safely.
+
+## The four starting routes
+
+### Route 1: You do not write code yet, but want to use AI safely in real work
+
+Start with the [15-minute manual safe check (AC-01, no account)](/en/no-code-starter-lab#no-code-lab-manual-title), then use the [permission review](/en/articles/review-an-ai-agent-before-clicking-allow) and [reviewable workflow](/en/articles/use-ai-without-writing-code) guides. This is a learning source made of a bounded practice task, not a platform badge.
+
+Use it when the immediate gap is: “I can ask an AI for an answer, but I cannot define what it may touch, how I check the draft, or when a person must decide.”
+
+**First-week artefact:** a one-page fictional “public FAQ triage” brief. Use only synthetic or public text. Define an input schema, a fixed draft format, five acceptance cases, one blocked request, and the named person who accepts or rejects the draft.
+
+| What you are practising | What it looks like in the artefact |
+| --- | --- |
+| System work to inspect | Structured input/output, acceptance cases, route states such as `DRAFT`, `HANDOFF` and `BLOCKED`, and a permission boundary. |
+| Decisions to make before use | Who owns the decision, what data is excluded, the cost of a wrong draft, and why no external message can be sent. |
+
+**It does not prove:** that you are a developer, that the workflow is production-ready, or that an AI tool should receive access to an account. It proves a smaller and more useful thing: you can make a vague AI request reviewable.
+
+### Route 2: You need ML foundations for a decision, metric or data discussion
+
+Use [Google’s Machine Learning Crash Course](https://developers.google.com/machine-learning/crash-course) when your gap is not “I need another chatbot,” but “I cannot yet explain a classification threshold, false positive, false negative, metric, dataset boundary or overfitting.” Google describes it as a practical introduction with exercises and interactive material; its modules include classification, confusion matrices, precision, recall, AUC, datasets, generalisation and production-system considerations.
+
+**First-week artefact:** a synthetic case sheet for a fictional “priority-review queue.” Create 20 labelled examples yourself. Compare a simple rule-based baseline with a hypothetical classifier threshold. Record which cases become false positives and false negatives, and specify that a human reviewer makes the actual decision.
+
+| What you are practising | What it looks like in the artefact |
+| --- | --- |
+| System work to inspect | A labelled dataset boundary, a baseline, a confusion matrix, a threshold and a metric whose failure mode you can explain. |
+| Decisions to make before use | Why one error costs more than another, who has review capacity, and why a score does not authorize an automated action. |
+
+**It does not prove:** that you trained or deployed a useful production model. A lesson or a local synthetic exercise can show your reasoning about a decision; it cannot show business impact, real data quality or operational approval.
+
+### Route 3: You already write Python and want to understand LLM/model building
+
+Use the [Hugging Face LLM Course](https://huggingface.co/learn/llm-course/chapter1/1) when you can already work in Python and want a model-side route. Its early chapters cover Transformer concepts, using a model from the Hub, fine-tuning and sharing; later chapters cover datasets, tokenizers, demos and more advanced LLM topics. The course itself says good Python knowledge is required and that an introductory deep-learning course is a better precursor. That prerequisite is a feature, not a failure: it stops a non-coder from mistaking vocabulary for working understanding.
+
+**First-week artefact:** a source receipt and a tiny, local model-study note. State the model or tutorial you studied, the allowed reuse boundary, a synthetic input, the expected output shape, and one thing you did not understand yet. If you run code, keep the source and tests in English; localise only the README explanation as appropriate.
+
+| What you are practising | What it looks like in the artefact |
+| --- | --- |
+| System work to inspect | The relationship between a dataset, tokenizer, model, input/output contract and an evaluation case. |
+| Decisions to make before use | Reuse and licence awareness, compute or time constraints, the contribution you actually made, and the difference between a tutorial result and original work. |
+
+**It does not prove:** that you can operate an LLM system for users, choose a business use case, or reliably fine-tune a model. It is the right route for model literacy; it is not a substitute for system evaluation, permissions or a product decision.
+
+### Route 4: You write code and want an application-and-evaluation route
+
+Use [Microsoft Learn’s generative-AI application path](https://learn.microsoft.com/en-us/training/paths/develop-generative-ai-apps/) as source material when your gap is application construction: choosing a model, defining a bounded user task, testing a response route and explaining safety or operational boundaries. Microsoft labels its path intermediate, for AI Engineer and Data Scientist roles, and lists programming experience plus Azure AI fundamentals as prerequisites. Its modules span planning, model selection/deployment/evaluation, chat applications, tools, RAG or fine-tuning, and responsible implementation.
+
+**First-week artefact:** a draft-only application evidence pack. Define a fictional user question, a JSON-shaped output contract, a baseline, five fixed evaluation cases, expected `DRAFT`/`HANDOFF`/`BLOCKED` results and a reviewer decision. You may model a `gpt-5-mini` Responses API call as a **static fixture**; do not add a real key, make a live call, or present a mocked response as an observed model result.
+
+Without an API key, start with the [Coder Starter Lab](/en/coding-starter-lab). It uses local fixtures only and leaves a constrained diff, test result, and reviewer decision. Open the [OpenAI developer quickstart](https://developers.openai.com/api/docs/quickstart) later, only when you are ready to use your own key for a real request. That quickstart covers a live API request; it is not required for the first-week static exercise.
+
+| What you are practising | What it looks like in the artefact |
+| --- | --- |
+| System work to inspect | A scoped interface, test fixture, evaluator, trace fields, route states and a regression gate. |
+| Decisions to make before use | Data boundary, named decision owner, tool permissions, cost/timeout stop condition and an honest non-production claim. |
+
+**It does not prove:** that an API call succeeded, that an application is safe for real accounts, or that a cloud deployment creates business value. The point of the first artefact is to make the engineering decision inspectable before adding credentials or infrastructure.
+
+## Choose by the evidence gap, not by the course name
+
+```text
+I need to frame, check and approve a draft without code
+  → Route 1: no-code workflow and permission review
+
+I need to explain metrics, errors and data boundaries
+  → Route 2: ML foundations
+
+I can write Python and need model-side literacy
+  → Route 3: LLM/model builder
+
+I can write code and need a bounded AI application with evaluation
+  → Route 4: application and evaluation
+```
+
+You can move across routes, but not by collecting every introduction first. A useful crossover is triggered by a real limitation: move from Route 1 to Route 4 when you need to inspect implementation or tests; move from Route 2 to Route 3 when model behaviour, data and tokenisation become the question; move from Route 3 to Route 4 when a model notebook needs a user decision, evaluator and human handoff.
+
+## Keep the source receipt beside the artefact
+
+For any route, retain a short source receipt:
+
+- official title and URL, with the date you accessed it;
+- the exact lesson, chapter or guide section that informed your work;
+- what you reused, what you changed, and what you made yourself;
+- prerequisites you met and those you have not met;
+- the public/synthetic data boundary;
+- the command, fixture or manual check someone else can repeat;
+- one failure or unresolved question; and
+- the claim you will not make.
+
+This is how a learning input becomes portfolio evidence without copying an instructor’s solution. See [how to turn a course exercise into evidence](/en/articles/turn-an-ai-course-project-into-portfolio-evidence) for the full source-receipt pattern.
+
+## A first week that is small enough to finish
+
+1. Pick one route and one fictional decision. Do not start with a broad product idea.
+2. Read one bounded module or guide section. Save its URL and access date.
+3. Make the smallest artefact above using synthetic or public material only.
+4. Add five fixed cases, including one missing-information, unsafe, or failure case.
+5. Write a human decision and a stop condition. If the work cannot yet be checked, reduce the task rather than adding another tool.
+
+The [learning-evidence guide](/en/articles/choose-ai-learning-sources-by-evidence) helps you test a source against an evidence gap. Once you have a viable source and first artefact, the [eight-week evidence sprint](/en/articles/turn-an-ai-course-into-an-eight-week-evidence-sprint) shows how to develop it into a bounded, rerunnable portfolio case.
+
+## Before you enrol, check one course properly
+
+Treat the course you are considering as “Source 01” in the [Learning Evidence Planner](/en/learning-evidence-planner). You do not need to enter a provider name. Check whether Week 1 can leave an artefact, useful feedback, an observable assessment and a stop condition. The page creates a local-only brief that you can paste into a private note or README draft.
+
+One or two missing conditions do not make a course bad. They mean it has not yet earned a larger commitment of your time or money for the capability you are trying to build now.
+
+## Limits and source note
+
+These links are examples of official learning sources, not affiliate links, course rankings, employment advice or an assurance of access, price, certification, quality or job outcomes. Course content and prerequisites can change; check the official page before investing time or money. All example decisions, data, user roles, model fixtures and results in this guide are fictional. A static `gpt-5-mini` fixture demonstrates a design contract only; it is not a live API result. Never put a real API key, confidential work data or connected account access in a public portfolio repository.

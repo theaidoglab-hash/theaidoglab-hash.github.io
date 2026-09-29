@@ -1,0 +1,56 @@
+作品集寫了 GPU、container、queue 和幾個 model，不等於讀者已看得出你識做系統。較難的是：同一堆 request 入來時，為何這一個走 text route、那一個要停、另一個又要交給 reviewer？想像一個虛構的公開資料 review desk：短文字通知、圖像為主的表格和很長的 evidence packet 同時到達。它只可為 reviewer 準備 draft，不能替人作真實決定，而且每一個 request 都要有可追溯的去向。
+
+## 先由 request 開始，不要先選硬件
+
+第一個設計決定是寫一份細小的 request contract。未揀 accelerator 或 hosting pattern 前，先記下 input modality、大小範圍、可容許的 handling route、deadline class、policy version 和是否必須 human handoff。Route 要清楚寫明每種 input 的處理：短而 structured 的文字可以走有限制的 drafting route；圖像為主的項目先 extract，然後做 evidence check；缺少 required fields 的項目根本不可叫 model。
+
+這樣 routing 才可測。真正 deterministic 的規則應由 deterministic rule 處理，例如 file type、缺 field、已知 policy exclusion、output size cap 和過期 deadline。只有 contract 准許時，model 才可以協助判斷含糊的分類。每條 route 都要有看得見的終點：`draft-ready`、`needs-review`、`rejected-input` 或 `budget-stopped`。
+
+## Hardware 改到甚麼，又改不到甚麼
+
+Hardware 只是 serving system 的一部分，不是 quality 保證。CPU 很適合做 parsing、schema check、hashing、queue coordination 和細小 deterministic transform。Accelerator 對 model inference 中大量 tensor work 可能有用，但效用取決於 model、batch shape、可用 memory、input 和 output 長度、runtime，以及同一時間到達的工作。Memory 放 active data 和 model state；durable storage 放已批准 artefact；network 讓 service 之間傳資料和 request。每個邊界都會加等候時間、failure mode 和 security decision。
+
+Autoregressive model 的 input-processing phase 和 token-generation phase 可以壓力落在不同資源。Long context 可能在第一個 output 前已佔很多 memory；long completion 可長時間持有 token state；batching 可能提升 accelerator 的有效工作量，卻令 urgent item 排隊。這些是要用 fixed synthetic cases 驗證的假設，不是從一張 dashboard 截圖便可宣布的結論。
+
+## 將 routing、deployment 和 transport 分開看
+
+三條問題不要混在一起：
+
+- **Routing** 決定 request 可進哪條 workflow，以及何時必須 handoff。
+- **Deployment** 決定 workflow 在哪裏跑：local development process、有限制的 batch worker，或有明確 availability expectation 的 online service。
+- **Transport** 決定甚麼資料跨過邊界、用甚麼 format、誰的 identity、怎樣驗 integrity、怎樣 retry 和保存多久。
+
+在這個虛構 desk，將小型 request envelope 同內容本身分開。Envelope 可有 random request ID、route class、content manifest、policy version、allowed deadline 和 checksum。Data payload 只應交給真的需要它的 component。Trace 可以記 content version 或 fingerprint，不要複製原始私密文字。Retry 要帶 idempotency key，避免一個延遲 worker 為同一 request 產生兩份 reviewer packet。
+
+## 做一張只供草稿用的 routing receipt
+
+將 portfolio artefact 控制到可檢查。建立 `synthetic-cases.jsonl`，放約十二個完全虛構 request：有效的短文字、圖像為主的 item、缺 field 的 item、超出 budget 的 item、route conflict 和刻意含糊的 case。再配 `route-contract.md` 和 `routing-receipt.jsonl`。
+
+每個 case 最少記錄：
+
+- execution 前預期走哪條 route；
+- 實際 terminal state；
+- model 是否被准許使用；
+- input/output 的 size band，而不是私密 payload；
+- 如有 local measurement，分開記 queue、processing 和 total elapsed time；
+- evidence check 和 reviewer handoff 的結果。
+
+之後只改一個因素，例如較低的 output cap 或另一個 batch window，再重跑同一套 cases。寫一張 change note，列出預期收益、可能 regression 的 case 和 rollback condition。即使結果只是「四個 case 在 inference 前被停下」，只要 case 和 stopping rule 可看，已是有價值的 evidence；比起不加條件地說 system 很有效率可靠得多。
+
+## 技術作品證據
+
+展示 versioned request schema、deterministic routing rules、synthetic workload manifest、trace-field definition、idempotency behaviour，以及一條可重跑的 local test command。加一張圖分開 control information 和 data payload。若示範 accelerator-backed path，要交代 local environment，並把數字寫成該環境的 observation，不要變成普遍 hardware 比較。
+
+## 非技術作品證據
+
+展示 decision owner、request 為何不可用 model、reviewer 從哪裏接手、time 或 cost budget，以及何時停止工作。一個 reviewer 應該答到：route 錯了誰受到保護、trace 刻意排除了甚麼資料、誰有權批准改 route？這是 operational judgement 的證據，不是 code 外面的裝飾。
+
+## 較簡單的選項與 failure boundary
+
+對小型、低 volume workflow，一條 queue 加一個有上限的 text route，可能比 multimodal routing 或 specialised hardware 安全。只有某個已命名的 workload failure 要求時才加複雜度。Route classifier 可以分錯；queue 可以 duplicate work；network boundary 可以 timeout；accelerator 也可以閒置，因為 request 卡在 parsing 或 review。不要用一句「retry」遮住這些路徑；failed state、alert owner 和 rollback route 都要看得見。
+
+延伸閱讀：[attention 和 expert 的 serving 取捨](/zh-HK/articles/modern-attention-moe-and-serving-tradeoffs)、[inference scheduling 與 serving engine](/zh-HK/articles/inference-memory-scheduling-and-serving-engines)，以及[有 human review 的 workflow evaluation](/zh-HK/articles/llm-evals-human-review-and-observability)。
+
+## 邊界
+
+這是 AI.DOG 教學。Desk、request、timing 和 artefact 都是 synthetic、只供 draft 使用。它沒有 deploy service、處理真實 records、benchmark named hardware，也沒有建立任何 production latency、cost、security 或 quality outcome。真實 deployment 要有已批准的 data handling、security review、capacity test、incident owner 和可問責的 release decision。

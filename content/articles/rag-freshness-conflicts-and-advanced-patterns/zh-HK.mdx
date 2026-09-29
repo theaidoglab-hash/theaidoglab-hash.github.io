@@ -1,0 +1,48 @@
+RAG answer 有 citation，不等於可信。citation 要是最新、適用而且足夠支持這個決定。當 sources 互相矛盾，一段自信的綜合答案反而可以最危險。
+
+## 一個不應靠文筆「解決」的 conflict
+
+想像一個完全虛構的 internal knowledge desk，為 delivery team 從 approved project guidance 產生 checklist draft。coordinator 問某次 release 是否要 security review。search 找到一份較新的 general release guide，寫著「只有 external integration 才 review」；又找回一份較舊但仍 active 的 service-specific guide，寫著「每次 release 前 review」。任何一段都不足以說明哪一條 rule 管這個 project。
+
+正確 output 不是把兩段平均成一句漂亮說話。system 要有 source policy：哪些 document type 有 authority、哪個 version 是 active、文件管甚麼 scope、如何 detect conflict，以及 authority 不清時由誰決定。
+
+## Freshness 是 field，不是感覺
+
+每個可 retrieval record 要有足夠 lifecycle metadata：publication 和 effective date、review 或 expiry date、status、owner、jurisdiction 或 product scope、audience 和 replacement relation。「最新」不一定「適用」；「active」也未必最高 authority。
+
+產生 answer 前，先按這些 field filter 或 weight candidate。draft 要帶 source identifier 並說明 scope。source expired 時，只有清楚定義的 archive task 才可用；問題跨 scope 時，不可讓一份廣泛文件靜靜壓過狹窄 obligation。
+
+fixed cases 要圍繞時間，而不只測整齊的現行文件：
+
+- 舊 source 已被新 source 取代；
+- 兩個 active source scope 不同；
+- source 沒有 effective date；
+- query 太闊，不能分類；
+- evidence relevant 但不足；
+- cache entry 在 replacement 前建立。
+
+每個 case 寫出 allowed cited source、required route 和 forbidden synthesis。正確的 **HANDOFF** 很多時就是 pass。
+
+## Advanced pattern 都是有條件的工具
+
+有幾個 pattern 可以幫手，但沒有一個會消除 governance 問題。
+
+- **Hybrid retrieval** 合併 lexical 和 semantic signal，可同時找 exact code 和 paraphrase，但仍要獨立測 ranking。
+- **Query rewriting** 把模糊 request 變成 search variants。保留原 query 並檢查 rewrite，因為 rewrite 可以縮窄或扭曲 user 意思。
+- **Parent-child retrieval** 回傳 focused chunk 同足夠 parent context，保留 exception；它增加 traceability，但也增加 context 和 version bookkeeping。
+- **Multi-step retrieval** 依次問幾個有界問題，可揭示缺 evidence；每步都要有 stop rule 和 trace。
+- **Graph 或 relationship-aware retrieval** 可表示 document link、owner 或 replacement，只有 relationship data 有維護和測試時才值得。
+
+先用 metadata filtering 和小型 direct-search baseline。遇到已記錄的 miss，才加一種 pattern。前後都跑同一組 freshness 和 conflict cases。一個更複雜、卻仍揀 expired source 的 architecture，沒有解決工作。
+
+## 可審閱的 release gate
+
+public-safe project 可以有 source register 和 release gate。candidate change 若降低 correct-source selection、壓走本應 handoff 的 case、使用 expired record，或移除 source identifier，gate 就要 block。保留一份簡短 change packet：query 和 source fixture version、retrieval configuration、output sample、automated result、human review note，以及 release、hold 或 rollback 決定。
+
+這同時是技術和非技術 evidence。技術 artefact 展示 retrieval design、evaluation、trace 和 regression control；非技術 artefact 展示 authority owner、data lifespan、error impact、escalation path 和 automation limit。它比聲稱 RAG「永遠有最新資料」可信得多。
+
+延伸閱讀：[index、chunk、rerank 與 cache 的取捨](/zh-HK/articles/retrieval-index-chunk-rerank-and-cache)、[如何評估 agent workflow](/zh-HK/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)，以及[從 offline evaluation 走到 authorised pilot](/zh-HK/articles/from-offline-evaluation-to-an-authorised-pilot)。
+
+## 邊界
+
+delivery desk、record、conflict example 和 release gate 均為虛構。本文不是法律、security 或 governance advice，亦沒有替任何 organisation 建立 source-of-truth hierarchy。已測的 synthetic set 不證明真實 RAG system 最新、完整或可作有後果決定。

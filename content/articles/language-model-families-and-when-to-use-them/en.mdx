@@ -1,0 +1,50 @@
+Choosing a language-model family is not a leaderboard exercise. A reviewer is more interested in whether you can connect a task, a failure cost, and a measurable decision than in whether you can name the newest model.
+
+## Begin with the decision, not the model
+
+Imagine a fictional operations team that receives short equipment notes. Each note must be routed to one of five queues, with a short explanation for the reviewer. Some notes contain a product code; some are bilingual; none may trigger a repair or contact a customer.
+
+There are at least four different jobs hidden inside that request:
+
+- Turn a note into a stable category.
+- Find similar approved cases or product guidance.
+- Produce a readable draft for a person.
+- Read an image when the note includes a label or photo.
+
+Those jobs need not use the same model family. An **encoder-style** model or embedding model maps text into a representation that is useful for similarity search or a small classifier. A **decoder-style** model generates one token after another, so it fits a controlled explanation or a structured draft. A **sequence-to-sequence** model reads an input and produces a transformed output, which can suit tightly defined rewriting or translation work. A **multimodal** model can accept more than one input type, but it still needs an output contract and a human boundary.
+
+The point is not that one family is always better. It is that the architecture should match the part of the workflow that creates value.
+
+## A useful first design
+
+For the fictional queue, start with a deterministic parser for the product code, an embedding search over approved examples, and a small routing rule. Only then ask a generative model to write a reviewer-facing explanation from the selected evidence. This baseline is less impressive than “one large model does everything,” but it makes failures easier to locate.
+
+Self-attention helps a Transformer weigh relationships among the tokens that are already in its context. It does not fetch a policy that was never supplied, verify a product record, or grant permission to act. Generation settings can change variety, but they cannot make an unclear queue definition precise.
+
+Keep a model-selection record with:
+
+- the decision and named human owner;
+- the input types and data excluded from the prototype;
+- a non-model baseline;
+- one candidate family for each subtask;
+- fixed normal, ambiguous, multilingual, and no-evidence cases;
+- quality, latency, cost-proxy, and handoff measures;
+- a condition that says when not to use a model at all.
+
+This record is more useful in a portfolio than a diagram full of model names. It lets a reviewer reproduce why the explanatory model is present and why the routing rule remains outside it.
+
+## Test the boundary before praising the result
+
+Run the same cases through two designs: a generative model asked to choose a queue freely, and the narrower workflow above. Check more than prose quality. Did the correct queue receive the case? Did an unknown product code become a handoff rather than a confident guess? Did the bilingual case preserve the product code? Was the explanation supported by the selected evidence?
+
+A common failure is using a chat model as a universal classifier and then treating a fluent rationale as proof. Another is using embeddings as if similarity proves policy relevance. If the job has a small, stable label set and a clear error cost, a deterministic rule or conventional classifier can be the honest baseline. If a photo is optional, do not make vision a dependency for every text-only case.
+
+## What this shows about your engineering judgement
+
+Show the task decomposition, model contract, test set, and comparison report. Then state the user decision, data boundary, failure cost, human handoff, and why some steps stayed simple. None of that proves production readiness or business impact; it shows that you can make a defensible choice before scaling a demo.
+
+Next, read [Transformer, generation, and adaptation trade-offs](/en/articles/choose-transformer-generation-and-adaptation-tradeoffs), then [how a neural model learns before you tune it](/en/articles/understand-neural-learning-before-you-tune), and finally [how to turn a request into an accepted change](/en/articles/turn-an-ai-request-into-an-accepted-change).
+
+## Boundary
+
+This is an AI.DOG learning scenario. The operations team, inputs, queues, measures, and results are illustrative. It does not recommend a particular provider or model, and it does not claim that a local prototype has handled real customer data or improved a business outcome.

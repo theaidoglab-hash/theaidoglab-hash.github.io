@@ -1,0 +1,95 @@
+> An offline metric can tell you how a candidate behaved on a fixed evaluation set. It cannot tell you that a business outcome changed. The bridge is not a prettier dashboard; it is an authorised measurement design with owners, a frozen comparison and a stop rule.
+
+## The portfolio gap after a good local demo
+
+Imagine that your Renewal Triage project has a clean data contract, a baseline, fixed holdout cases, a CI check and a rollback note. You can explain why the candidate is blocked even though its generic ranking metric looks stronger. That is already better evidence than a notebook with one F1 score.
+
+Then a reviewer asks: “So how would you know whether this helps the business?”
+
+A half-right answer is: “I would monitor accuracy and reviewer acceptance.” Those are useful signals, but neither is a business outcome. Reviewer acceptance can show that a draft queue is understandable. Accuracy can show that a model matched a label. Neither proves that a later retention, cost, quality or customer outcome changed because of the workflow.
+
+The honest next answer is: “I would separate four kinds of evidence, run the candidate in a non-consequential shadow review first, and only define a business-outcome question after a data owner, operational owner and comparison method are approved.” This guide shows how to make that answer inspectable without connecting a live system.
+
+## Four numbers that must not be merged
+
+| Evidence layer | Example question | What it can support | What it cannot support alone |
+| --- | --- | --- | --- |
+| Hard gate | Did a forbidden field, missing trace or external-action path appear? | A local build should stop. | That the workflow creates value. |
+| Model or route metric | Did the candidate route the fixed holdout case correctly? | A technical comparison on that dataset. | That a team works faster or a customer outcome improves. |
+| Workflow metric | Could a reviewer complete a packet against a pre-registered checklist in the declared window? | A bounded operational observation. | Revenue, retention, satisfaction or causal effect. |
+| Delayed business outcome | Did an authorised comparison show a changed outcome after its observation window? | A carefully scoped outcome finding. | A permanent or universal benefit. |
+
+Google's ML engineering guidance is useful here because it treats metrics and instrumentation as part of the system, not decoration after the model. It also distinguishes a directly observed objective from broader system health. [Rules of Machine Learning](https://developers.google.com/machine-learning/guides/rules-of-ml) The distinction matters even more in a portfolio: do not turn a local proxy into an outcome claim that nobody measured.
+
+Picture it: a helper sorts practice cards into a tray. You can check whether it put the right cards in the tray and whether a teacher can read the labels. You still cannot say the helper made every child learn more unless you carefully compare what happened later.
+
+## The state map: evidence before action
+
+Use a state map so a learner, reviewer and future employer can see what has happened and what has not.
+
+```text
+PLANNING_ONLY
+  -> SHADOW_REVIEW
+  -> OWNER_APPROVED_PILOT
+  -> OUTCOME_OBSERVATION
+  -> HOLD or ROLLBACK
+```
+
+`PLANNING_ONLY` means the question, metrics and boundaries are being written. Nothing is connected. `SHADOW_REVIEW` means a candidate can make a draft-only recommendation beside a baseline, while a person compares both against a frozen checklist. It cannot change a downstream account, price, message or decision.
+
+`OWNER_APPROVED_PILOT` is not a label you award yourself because a test passed. It requires named authority for the data and workflow, a fixed comparison design, a human reviewer and a stop path. In the local Renewal Triage reference, this state is deliberately **simulated**: the code verifies that a design contains the fields a discussion would need, while keeping `deployable: false`, no connection and no automatic action.
+
+`OUTCOME_OBSERVATION` begins only if a separately authorised organisation decides to collect the defined outcome. A delayed outcome is often unavailable for days or months. Until its observation window and comparison are complete, its status should be `NOT_OBSERVED`, not “probably positive.” `HOLD` and `ROLLBACK` are valid outcomes; a safety breach, protocol change or failed gate should stop the candidate rather than trigger a story about resilience.
+
+## Write the pilot contract before looking at a result
+
+For the fictional review-queue scenario, create one versioned record with these nine rows.
+
+1. **Data owner and boundary.** State the allowed data class, excluded data classes, approval scope, retention expiry and deletion owner. A source that is technically convenient but not authorised is not a pilot input.
+2. **Operational owner and human reviewer.** Name the role that owns the workflow and the person or role that can inspect, hold or reject a recommendation. A model is not the decision owner.
+3. **Frozen comparison.** Record the baseline version, candidate version, assignment unit, comparison strategy and the time at which the protocol was frozen. Do not change the threshold, label or denominator after seeing a pleasing result.
+4. **Primary workflow metric.** Define a short-cycle measure that matches the bounded work, such as the share of review packets completed against a declared checklist within the review window. Include its denominator and claim boundary.
+5. **Safety guardrail.** Set a non-negotiable measure, such as zero external-action breaches, plus the response when it fails. A better average cannot compensate for an action that should never occur.
+6. **Delayed outcome definition.** Write the outcome, observation window, comparison method and the reason it is currently unobserved. The queue ranking is not the intervention; a human-owned downstream action needs its own policy.
+7. **Reviewer evidence.** Decide what the reviewer records: route, reason-code reconstruction, missing evidence, checklist result and unresolved issue. Keep this separate from an outcome label.
+8. **Rollback decision.** Name what holds the candidate, which baseline remains available, who can reopen the work and what new evidence is required.
+9. **Claim statement.** Say exactly what a local design can demonstrate and what it cannot. This prevents a later README from drifting into invented ROI.
+
+### What the system checks, and what must be settled before use
+
+| System implementation and checks | Decisions and limits before work use |
+| --- | --- |
+| Versioned data, feature, model, prompt, baseline and evaluation identifiers. | Decision owner, data owner, operational owner and human reviewer. |
+| Fixed cases, a frozen comparison protocol, traces, failure records and deterministic tests. | Allowed-data boundary, retention, error cost, reviewer capacity and intervention authority. |
+| A static gate that rejects a connected or action-enabled design. | Primary workflow measure, safety guardrail, delayed-outcome definition and stop rule. |
+| A route that remains draft-only and reversible. | A written decision about hold, rollback or evidence still missing. |
+
+If one column is absent, the project is incomplete in a different way. Code without owners cannot establish the right to act. A business narrative without a testable comparison cannot establish that the claimed mechanism worked.
+
+## Work through the local Renewal Triage sidecar
+
+The [Renewal Triage lab](/en/articles/renewal-triage-mlops) now includes a small local pilot-readiness sidecar. Its default synthetic design is blocked because it lacks the owners, data boundary, metric, comparison and rollback rule. A second, fully populated **synthetic** design can reach a simulated `OWNER_APPROVED_PILOT` readiness state only when all checks are present.
+
+The test suite deliberately verifies four failure patterns: a missing human reviewer, an unfrozen comparison, a missing workflow metric or delayed-outcome definition, and an action-enabled design. It still makes no network request, reads no key, sends no message and reports no business outcome. That is the point: a portfolio can show that you know what evidence is needed before a live pilot, without pretending that one occurred.
+
+The code shows a schema-like contract, immutable versions, a gate result, and regression tests. Before work use, data permission, review capacity, outcome ownership, and a stop decision must also be clear. The local implementation is deliberately smaller than a real enterprise system; its purpose is to make those missing decisions visible.
+
+## The common wrong turn
+
+Do not write “the model increased retention” because a candidate has a higher F1, a stronger synthetic utility score or a reviewer says a draft looks good. Do not quietly reuse outcome data to choose the threshold. Do not call a dashboard an experiment because it shows a before-and-after number with no comparable unit, owner or observation rule.
+
+The credible baseline is simpler: keep the existing rules or manual checklist, run a draft-only shadow comparison, and hold the candidate whenever the protocol or safety boundary changes. NIST's AI RMF Core frames governance, context, measurement and management as related work rather than one final compliance tick. [NIST AI RMF Core](https://airc.nist.gov/airmf-resources/airmf/5-sec-core/)
+
+## What you can safely say in a portfolio
+
+> I built a local, synthetic pilot-readiness contract for a human-review ML workflow. It separates fixed technical evaluation from a proposed workflow measure and an unobserved delayed outcome. The design is blocked without owners, data boundaries, a frozen comparison, a safety guardrail and a rollback rule; it has no live connection or external action path.
+
+Only make that statement if the repository contains the evidence. Do not substitute an anonymous role label for a real approval, and do not add a productivity, revenue or retention number until an authorised protocol has actually measured and supported it.
+
+## Next step
+
+Take one existing demo and write the nine-row pilot contract before changing the model. If you cannot name the owner, comparison and stop rule, stay in a local learning state. Then use [the GitHub proof pack](/en/articles/build-a-github-portfolio-proof-pack) to make the contract inspectable, and revisit [why a higher score may not make a better decision](/en/articles/model-score-to-workflow-decision) when choosing the workflow metric.
+
+## Source and boundary note
+
+This is AI.DOG teaching material built around a fictional, synthetic review-queue scenario. It does not describe a current employer workflow, a live pilot or measured business result. The [OpenAI agent-evaluation guide](https://developers.openai.com/api/docs/guides/agent-evals) is included as a source for the general practice of defining evaluation tasks and failure cases; the local sidecar does not call an API or model.

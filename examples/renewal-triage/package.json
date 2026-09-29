@@ -1,0 +1,22 @@
+{
+  "name": "renewal-triage-reference",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Synthetic, local-only renewal triage decision-support reference",
+  "license": "MIT",
+  "keywords": [
+    "decision-support",
+    "renewal-triage",
+    "synthetic-data",
+    "model-governance",
+    "human-in-the-loop"
+  ],
+  "scripts": {
+    "demo": "node demo.mjs",
+    "test": "node --test test/renewal-triage.test.mjs test/pilot-readiness.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

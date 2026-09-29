@@ -1,0 +1,74 @@
+> A smooth demo does not show what you did. A portfolio needs to make four things easy to find: the small decision it supports, the data it uses, what happens when it fails, and what it cannot yet claim.
+
+## Answer two different questions
+
+An interviewer, collaborator, or future reviewer usually wants two things: to see how the system works and to see whether you put it in a sensible setting. Many projects show only the first, so they read as a model or UI exercise.
+
+### What you can inspect in the build
+
+This section answers two plain questions: what does the system do, and can someone rerun it? You do not need every technical label. Each choice should answer a concrete question: Did the data look into the future? Can an answer be traced to a source? Did a prompt change make a high-risk case worse? Add a schema, comparison, fixed tests, run record, or rollback rule only when it helps answer one of those questions.
+
+### What the work needs to make clear
+
+This is who the system helps, which small decision it supports, what an error costs, who makes the final call, and how another person can take over. A short problem note, README, change record, and clear limits are useful when they answer those questions; the point is not to collect documents.
+
+The build tells someone how the car works and whether its brakes were tested. The work context tells them where it may drive, when it must stop, and who decides what happens next.
+
+## Use 0–2 to find the next gap
+
+Give each row 0, 1, or 2. Zero means it is not written down yet. One means there is a start, but a sensible follow-up question breaks it. Two means another person can open a file, rerun the work, or understand the trade-off. The six rows total 12, but this is not a hiring score; it points to the next thing worth improving.
+
+| Check | 0: only a demo | 1: early draft | 2: rerunnable and explainable |
+| --- | --- | --- | --- |
+| **User and decision** | “I built an AI assistant.” | A broad use case is named. | The user, decision, decision time, cost of error, and non-goals are written down. |
+| **Data and boundary** | Source, permission, and timing are unclear. | Sample data is mentioned without a schema or limits. | A data card separates synthetic, public, and authorised data; sensitive, future, and non-retained fields are explicitly excluded. |
+| **Technical path and baseline** | One model output or UI is shown. | There is a pipeline or model but no comparison point. | A credible rule, search, or human baseline comes first; the new component is tied to a named improvement and cost. |
+| **Evaluation and failure** | “The result looks good.” | Accuracy, AUC, or successful screenshots appear. | A fixed test set includes ordinary, no-answer, bad-data, unauthorised-action, or regression cases, with expected results, an error taxonomy, and a failure example. |
+| **Delivery, operation, and human decision** | No README, tests, or owner. | The README says how to run it. | There is a rerunnable command, version or trace, release or rollback condition, and a human gate for sensitive actions with a named owner. |
+| **Results and claims** | A local demo is described as business impact. | Metrics exist but model and workflow measures are mixed. | Model quality, workflow proxies, and real business outcomes are separated; synthetic or local-only evidence is explicit, with no adoption, savings, or production-readiness claim. |
+
+### Reading the total
+
+- **0–4:** It may be a useful learning exercise, but a reviewer can see only the output, not the judgement behind it.
+- **5–8:** There is a discussion-worthy direction. Do not rush to add an agent; first add a baseline, fixed evaluation, or clear data boundary.
+- **9–12:** It can become a strong interview evidence pack. It is still not a production certification and cannot guarantee an employment outcome.
+
+A score never replaces reading the files. A project can score ten while its “human owner” is only a sentence in a prompt. The next question is: what permission layer actually prevents a send or write? The rubric should raise questions like that, not answer them with a number.
+
+## A fully fictional worked example
+
+Imagine a learner building **Clinic FAQ Draft Desk**. The name sounds like a healthcare product, but the portfolio case deliberately uses only fictional FAQ content written by the learner. It has no patient data, diagnosis, bookings, or outbound capability. Its fictional user is an administrative reviewer. The tool matches a synthetic question to an FAQ, produces a cited reply draft, or marks the case “insufficient evidence: hand to a person.”
+
+The first version might have a beautiful chat screen. Paste a question; a model writes fluent text. Under the rubric, most rows are zero: nobody knows who would use it, whether the FAQ is stale, what happens after an incorrect answer, whether the model invented content, or why an LLM was needed.
+
+The learner makes it useful for a reviewer without adding visual effects. They add:
+
+- A one-page brief: the administrative reviewer decides only whether to use a draft; medical advice, personal-data requests, and booking requests must all be handed off.
+- Synthetic FAQs with IDs, versions, and effective dates. A trace retains only FAQ ID, route, and version—not the full question text.
+- A keyword-retrieval and human-template baseline. The generation layer remains only if citation coverage or correct handoff improves.
+- Sixteen fixed cases: four ordinary FAQs, four no-answer cases, two conflicting FAQs, two expired versions, two prompt-injection attempts, and two requests for a prohibited action.
+- A reviewer note: a candidate reaches the next local demo only if prohibited actions remain blocked, expired FAQs are not cited, and handoff does not regress. Otherwise it returns to the baseline.
+
+That version can receive two points in every row. It scores highly not because it “built healthcare AI,” but because it refuses to touch healthcare decisions or real data and leaves a clear, safer alternative.
+
+## What a GitHub repository should allow someone to verify
+
+Do not turn the repository into a stack of screenshots. The first README section should say whether the case is synthetic or real, the user and decision, data limits, success proxy, and non-goals. Follow with a small architecture diagram, install or test command, baseline, and evaluation summary. Keep these artefacts separately as well:
+
+- `data-card.md`: where the data came from and what never enters the system;
+- `evaluation/`: case IDs, expected and actual results, metric definitions, and failure categories;
+- `decision-log.md`: why you chose the technical path and which result would change your mind;
+- `release-note.md`: which regression blocks a change and how to return to the baseline; and
+- `claims.md`: which observations are local and synthetic, and which questions remain unverified.
+
+These files do not need to pretend that the project is large. They let a reviewer follow the work instead of trusting adjectives.
+
+## Things you still cannot claim at 12 points
+
+Synthetic data, local tests, and a demo cannot prove that real customers would use the system, that it saves a stated number of hours, increases revenue, meets privacy or industry requirements, or is production-ready. They do not give you authority to access real data, make an organisation’s decisions, or present every line produced by a coding agent as personal original work.
+
+A more honest claim is: “I measured citation support, correct handoff, and reviewer acceptance in a controlled synthetic workflow. Real business outcomes, data governance, and operational risk still require validation by the team with authority.” It makes clear what was observed locally and what the project still cannot show.
+
+If you improve only one thing, choose one zero-point row, turn it into an artefact someone can open, and rerun the same cases. Do not add more tools merely to make the project look bigger.
+
+Related reading: [PolicyPilot’s policy-support baseline and RAG extension decision](/en/articles/enterprise-ai-portfolio-policy-pilot), [separating model metrics from workflow proxies in Renewal Triage](/en/articles/renewal-triage-mlops), [the minimum standard for safe non-developer automation](/en/articles/build-a-low-code-ai-automation), [how to review a coding agent’s first build](/en/articles/review-a-coding-agent-build-without-being-a-developer), and [turning an AI course exercise into portfolio evidence](/en/articles/turn-an-ai-course-project-into-portfolio-evidence).

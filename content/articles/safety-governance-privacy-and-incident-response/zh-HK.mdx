@@ -1,0 +1,52 @@
+> 一開始已經要定：甚麼資料可入、甚麼 action 可出、誰有權停止、答案錯了後怎樣處理。
+
+## 用一個邊界會改變結果的情境
+
+設想虛構的「供應商合約筆記桌」。採購審閱者上載一段已淨化、public-safe 的 clause excerpt，要一份標出 approved term 和 missing information 的草稿。System 不可給法律意見、接受合約、聯絡 vendor、讀 shared drive，也不可把原始 document 留在 local fixture 以外。
+
+這個邊界帶出實際的 safety programme。**Governance** 是分配決定、記錄 exception、讓 accountability 可見。**Privacy** 控制收甚麼資料、留多久、誰可見。**Incident response** 則講如何偵測、contain、investigate 和從 harmful 或 uncertain event 中學習。只叫 model「要安全」做不到任何一項。
+
+## 先寫細小 risk register
+
+| Risk | Preventive control | Detection | Safe response |
+| --- | --- | --- | --- |
+| private clause 入 run | allowlisted fixture field、local redaction check | input validator | generation 前 block |
+| model 杜撰法律結論 | source-ID requirement、prohibited-claim validator | output contract test | handoff to reviewer |
+| document 有 injected instruction | 視文件為 data，不當 system instruction | adversarial fixture | isolate text、block route |
+| 錯的人見到 draft | role boundary、local-only storage | access-log check | revoke access、investigate |
+| draft 被誤會成 approval | 顯眼 draft status、reviewer gate | release checklist | 防止 external action |
+
+Risk register 不證明一切已解決。它把哪些 risk 屬於 scope、怎量、何時停，變成共同 decision。
+
+## Privacy 是 design constraint，不是清理工作
+
+先做 data minimisation。桌面只需 clause excerpt、synthetic document ID、approved taxonomy version、reviewer route。它不需名字、signature、email、price、raw account identifier、full contract history 或 hidden system prompt。
+
+Retention rule 要寫下來。Portfolio fixture 只有在 synthetic 或可證明 public-safe 時才可 commit。Log 用 run ID、schema version、redacted reason code，不應收藏 raw source text。對 debugging 有用的 trace，不需要變成可搜尋的敏感合約 archive。
+
+Access 也是同樣道理。Model prompt 不是 access control；runtime、storage、review queue 才決定哪個 identity 可讀 fixture 或 approve route。第一版留在 draft-only，因為 language model 無法自己建立作 external action 的 authority。
+
+## Incident 未發生前先設計路徑
+
+Incident 不只等同已確認的 breach。suspected data exposure、forbidden action proposal、無法解釋的 output、draft 用了 stale source、missing audit record 都可以開始 incident。小型 runbook 可分四段：
+
+1. **Detect**：保留安全 event receipt、通知 named owner，以不複製敏感資料的方式分類。
+2. **Contain**：停 affected route，需要時收回 temporary access，禁止 automatic retry 或 external write。
+3. **Investigate**：比較 version、trace、input、evaluator result；分清 confirmed effect 與 unknown outcome。
+4. **Recover and learn**：在授權流程下決定修正、通知、改 control、重跑 fixed case，並寫下 decision。
+
+Portfolio 不必虛構驚險 security story。它需要一個可跑的 test：文件內 injected instruction 應被視為內容、output 被 block、trace 有 terminal route、incident log 指向 rollback 或 control change。
+
+## Governance 把零散 check 變成有人擁有的決定
+
+即使一人學習 project，也可分清 builder、reviewer、data owner、release approver、incident owner 幾頂帽。每次 material change 記下改了甚麼、為何考慮、跑過哪些 case、未測甚麼、誰接受 residual risk、怎樣 revert。
+
+不要把 compliance vocabulary 當 compliance。Template risk register 或 framework reference 不會令 project 自動符合 privacy、security、procurement 或 legal requirement；它只是證據，表明你知道真實組織要跟獲授權專家回答哪些問題。
+
+Repository 可保留 `data-boundary.md`、`risk-register.md`、`access-matrix.md`、`threat-fixtures/`、`incident-runbook.md`、`release-gate.md`、`decision-log.md`。程式同測試會包括 validation code、adversarial fixture、trace schema、access rule 同 tested blocked route；使用前要講清 decision ownership、data purpose、retention choice、incident responsibility 同誠實 scope limit。
+
+延伸閱讀：[讓 agent 取得 access 前的 permission review](/zh-HK/articles/review-an-ai-agent-before-clicking-allow)、[approval queue reference](/zh-HK/articles/approval-queue-low-code-portfolio)、[有人手 handoff 的 workflow evaluation](/zh-HK/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)。
+
+## 邊界
+
+本文是本地草稿教學材料，使用虛構文件和 control。它不是法律、私隱、安全或合規建議，亦不證明 system 已合規或已有真實 incident programme。Production project 需要自己的 legal、security、privacy、operations 和 incident-response owner。

@@ -1,0 +1,52 @@
+Someone points at a model catalogue and says, “This one has a huge context window and Mixture-of-Experts, so it will be faster for our assistant.” That conclusion skips the workload. A long reviewer request, a short batch of classification jobs, and a streaming draft under peak load place pressure on different parts of the serving system. Modern architecture terms are useful only when you can connect them to an observable workload, a quality rule, and a user-facing budget.
+
+## The engineering decision
+
+You should be able to compare a small dense model, a sparse expert model, and a simpler workflow without treating parameter count as a product metric. The practical result is a serving decision note that says what was measured, what remained unknown, and when the system should stop or hand off.
+
+## Why long context changes serving work
+
+In standard full attention, each position can compare with many other positions in the allowed context. As input grows, the work and memory associated with those comparisons can become substantial. Newer attention patterns and implementation techniques may change the exact cost profile, but they still involve trade-offs: which positions can interact, how much state is retained, what hardware path is available, and whether the task actually needs that amount of input.
+
+For an autoregressive model, serving has two visible phases:
+
+- **Prefill** processes the prompt and retrieved context before the first generated token. Long input can raise time to first result.
+- **Decode** generates output one token at a time, reusing stored token state such as a **KV cache**. Long answers can raise total completion time and memory pressure.
+
+This is why “the model is slow” is an incomplete diagnosis. A high tail latency may come from queueing, long context assembly, cache pressure, output length, batch scheduling, or an overloaded service—not only from a model's arithmetic.
+
+## What Mixture-of-Experts changes
+
+A dense model activates much of its parameter set for each token. A **Mixture-of-Experts (MoE)** layer has multiple specialised sub-networks and a router that selects only some of them for a token. In principle, this can make a larger total parameter pool available without running every expert for every token.
+
+The word “sparse” does not mean free. The router can create uneven demand. Expert capacity can become a bottleneck. Tokens may need to move between devices, and a batch that looks efficient on paper may have poor tail latency when many tokens choose the same expert. Quality can also vary by task and input distribution. Treat MoE as a systems design with routing and capacity questions, not a badge that guarantees faster or better output.
+
+## Test the workload, not the brochure
+
+For a fictional draft-only evidence desk, define three synthetic workload shapes before choosing anything:
+
+| Workload | User need | Measurements | Safety check |
+| --- | --- | --- | --- |
+| short route | quick standard classification | queue delay, route quality, P50/P95/P99 | unknown category must hand off |
+| evidence draft | cited response from a bounded evidence package | time to first result, total time, source grounding | no source means no draft |
+| long review packet | a carefully bounded long input | context size, cache memory, completion time, review usefulness | conflict or budget stop means handoff |
+
+For each candidate, record the exact prompt/context version, batch setting, cache state, quantisation or runtime setting, output cap, quality checks, and hardware or hosted-service environment if known. Compare the same fixed cases. Report a cost proxy only where your measurement supports it. Do not convert one local run into a provider-capacity claim.
+
+## Serving levers need paired guardrails
+
+Dynamic batching may improve throughput but can make an urgent request wait behind a large batch. A prefix cache may reduce repeated stable prompt work but must be invalidated when policy text changes. A KV cache avoids recomputing seen token states during decode but consumes memory and restricts available batch size. Quantisation can reduce memory demand, yet it needs the same quality and safety cases before and after the change.
+
+The first useful optimisation is often simpler: send less irrelevant context, return a compact schema, cap unsupported retries, or route uncertain work to a reviewer. These controls can improve both cost and correctness without betting the workflow on a more complex serving stack.
+
+## A portfolio-quality serving receipt
+
+Keep `serving-decision.md` with workload assumptions, P50/P95/P99 targets, latency slices, quality and handoff criteria, runtime settings, observed failures, and a rollback or stop rule. Add a trace field list: request class, context version, cache condition, batch condition, output size, terminal state, and safe reviewer destination. Exclude private text and secrets by design.
+
+Make the benchmark shape repeatable and explain prefill, decode, cache, batching, and expert routing. Before it is used, ensure a reviewer has a bounded wait, a source conflict does not become a fluent answer, and an exhausted time budget creates a visible handoff rather than a hidden loop.
+
+Continue with [building stoppable agents with serving budgets](/en/articles/build-stoppable-ai-agents-with-serving-budgets), [long context, retrieval, and evidence coverage](/en/articles/long-context-retrieval-and-lost-middle), and [workflow-level agent evaluation](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer).
+
+## Boundary
+
+This is AI.DOG teaching material using synthetic workloads. It does not benchmark a named model, establish hardware performance, or promise a latency, cost, or quality outcome. Real serving choices require approved workload data, provider documentation, security review, capacity testing, and an accountable owner.

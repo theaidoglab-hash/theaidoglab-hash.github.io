@@ -1,0 +1,143 @@
+{
+  "artifactType": "synthetic_batch_worker_demo_report",
+  "version": 1,
+  "scope": "synthetic_local_only",
+  "actionBoundary": "human_review_only_no_external_actions",
+  "runs": [
+    {
+      "runId": "run-demo-initial",
+      "status": "QUEUE_DRAINED_OR_WAITING",
+      "attemptsThisRun": 3,
+      "summary": {
+        "pendingCount": 2,
+        "completedCount": 1,
+        "deadLetterCount": 0,
+        "spentCents": 6,
+        "costRemainingCents": 6
+      },
+      "events": [
+        {
+          "route": "queued",
+          "idempotencyKey": "document:SYN-DOC-100:v1",
+          "runId": "run-demo-initial",
+          "jobTraceId": "corr-1i5jtts",
+          "correlationId": "corr-1i5jtts",
+          "attemptId": "attempt-010kwnt",
+          "attempt": 0,
+          "nextEligibleAt": 0
+        },
+        {
+          "route": "queued",
+          "idempotencyKey": "document:SYN-DOC-200:v1",
+          "runId": "run-demo-initial",
+          "jobTraceId": "corr-1imlg7z",
+          "correlationId": "corr-1imlg7z",
+          "attemptId": "attempt-16cfbhi",
+          "attempt": 0,
+          "nextEligibleAt": 0
+        },
+        {
+          "route": "queued",
+          "idempotencyKey": "document:SYN-DOC-300:v1",
+          "runId": "run-demo-initial",
+          "jobTraceId": "corr-1j3n2m6",
+          "correlationId": "corr-1j3n2m6",
+          "attemptId": "attempt-01d55ju",
+          "attempt": 0,
+          "nextEligibleAt": 0
+        },
+        {
+          "route": "completed",
+          "reasonCode": "SYNTHETIC_ENRICHMENT_COMPLETE",
+          "idempotencyKey": "document:SYN-DOC-100:v1",
+          "runId": "run-demo-initial",
+          "jobTraceId": "corr-1i5jtts",
+          "correlationId": "corr-1i5jtts",
+          "attemptId": "attempt-010kwnu",
+          "attempt": 1
+        },
+        {
+          "route": "retry_scheduled",
+          "reasonCode": "rate_limited",
+          "category": "rate_limited",
+          "idempotencyKey": "document:SYN-DOC-200:v1",
+          "runId": "run-demo-initial",
+          "jobTraceId": "corr-1imlg7z",
+          "correlationId": "corr-1imlg7z",
+          "attemptId": "attempt-16cfbhj",
+          "attempt": 1,
+          "nextEligibleAt": 1088
+        },
+        {
+          "route": "retry_scheduled",
+          "reasonCode": "timeout",
+          "category": "timeout",
+          "idempotencyKey": "document:SYN-DOC-300:v1",
+          "runId": "run-demo-initial",
+          "jobTraceId": "corr-1j3n2m6",
+          "correlationId": "corr-1j3n2m6",
+          "attemptId": "attempt-01d55jv",
+          "attempt": 1,
+          "nextEligibleAt": 689
+        }
+      ]
+    },
+    {
+      "runId": "run-demo-resume",
+      "status": "QUEUE_DRAINED_OR_WAITING",
+      "attemptsThisRun": 2,
+      "summary": {
+        "pendingCount": 0,
+        "completedCount": 3,
+        "deadLetterCount": 0,
+        "spentCents": 10,
+        "costRemainingCents": 2
+      },
+      "events": [
+        {
+          "route": "terminal_duplicate_suppressed",
+          "reasonCode": "TERMINAL_IDEMPOTENCY_KEY_ALREADY_SEEN",
+          "idempotencyKey": "document:SYN-DOC-100:v1",
+          "runId": "run-demo-resume",
+          "jobTraceId": "corr-1i5jtts",
+          "correlationId": "corr-1i5jtts",
+          "attemptId": "attempt-1h8uohs",
+          "attempt": 0,
+          "priorTerminalRoute": "completed",
+          "priorTerminalReasonCode": "SYNTHETIC_ENRICHMENT_COMPLETE"
+        },
+        {
+          "route": "completed",
+          "reasonCode": "SYNTHETIC_ENRICHMENT_COMPLETE",
+          "idempotencyKey": "document:SYN-DOC-200:v1",
+          "runId": "run-demo-resume",
+          "jobTraceId": "corr-1imlg7z",
+          "correlationId": "corr-1imlg7z",
+          "attemptId": "attempt-0njl1cf",
+          "attempt": 2
+        },
+        {
+          "route": "completed",
+          "reasonCode": "SYNTHETIC_ENRICHMENT_COMPLETE",
+          "idempotencyKey": "document:SYN-DOC-300:v1",
+          "runId": "run-demo-resume",
+          "jobTraceId": "corr-1j3n2m6",
+          "correlationId": "corr-1j3n2m6",
+          "attemptId": "attempt-1hlexdv",
+          "attempt": 2
+        }
+      ]
+    }
+  ],
+  "finalSummary": {
+    "pendingCount": 0,
+    "completedCount": 3,
+    "deadLetterCount": 0,
+    "spentCents": 10,
+    "costRemainingCents": 2
+  },
+  "nonClaims": [
+    "No real document, provider request, credential, or cost is represented.",
+    "The report demonstrates one deterministic serial reference flow only."
+  ]
+}

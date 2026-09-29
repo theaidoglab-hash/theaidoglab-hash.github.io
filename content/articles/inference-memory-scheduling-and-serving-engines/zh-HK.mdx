@@ -1,0 +1,56 @@
+> 「Model 很慢」多數不是 diagnosis。使用者可能在等 queue、過長 prompt、長輸出、cache miss、memory limit，或者連 model 都不知道的 retry loop。
+
+## 一個有清楚決定邊界的 service 情境
+
+設想虛構的「研究草稿桌」。它把一組已批准、已淨化的 notes 變成短篇內部 research draft。它不能 browse、聯絡任何人、寫入 shared system，也不能用 customer data。它唯一的產品是 structured draft，或 source 不足時的 handoff。
+
+面向使用者的問題很實際：它能否在已同意的等待 budget 內交出已驗證的 draft？這條問題帶出 **inference**、**memory**、**scheduling** 與 **serving**，又不需要假裝自己 benchmark 過 production fleet。
+
+Inference 是讓已訓練 model 產生 output 的運算；serving engine 把這件事包裝成 request、batch、queue、cache、validation 和 metrics。第一步是把一個模糊 latency 數字拆成可觀察的時間段。
+
+## 看完整旅程，不只看最後耗時
+
+```text
+arrival -> admission -> queue -> context assembly -> prefill
+       -> first structured event -> decode -> validation -> terminal route
+```
+
+**Prefill** 處理 input context。長 notes、重複 instruction、太多 retrieved text，都會在第一個 output 前花時間。**Decode** 則逐 token 產生輸出。因此，請求可以很快出現 first event，卻因為要求長 draft 而很慢完成。
+
+記錄 queue delay、context length、time to first event、total completion、output length、validation time、route、cost proxy；再分開看 P50、P95、P99。平均下降並不足夠，若少量長 request 反覆錯過 user deadline，產品感受仍然差。
+
+這裡的 budget 不是 provider 承諾，只是 synthetic acceptance rule。若用盡，正確 output 可以是帶 reason code 的 `HANDOFF`，而不是未驗證的半句答案。
+
+## Memory 其實是幾個不同的限制
+
+人常說「model memory 不夠」，好像只有一個桶。比較有用的拆法是：
+
+- **Weights**：inference 時需要可用的已學習 parameters；
+- **KV cache**：前面 token 的 attention keys 和 values，讓 decode 不用每次重算整個 prefix；
+- **Host and queue memory**：尚未進 model 的 request、retrieved context、log、buffer 和 batch。
+
+更多 concurrent request 和更長 context 會推高 KV-cache pressure。大 batch 可提升 throughput，卻可能令短而急的 request 等更久。Cache 可改善重複的 stable prefix，若 key 沒有 version，亦可能重用舊 policy。Quantisation 可減低 model-memory pressure，卻仍要跑同一組 safety/quality case，因為效率調整可能影響 rare output 或 compatibility。
+
+這些是要按一個宣告 workload 驗證的假設，並沒有說任何 setting 對所有 model 和機器都最好。
+
+## Scheduling 是產品政策
+
+Batching 決定哪些 request 共用 model work；scheduler 決定誰可等多久、何時湊夠 batch。不同做法有不同代價：throughput-oriented batching 可提高 utilisation，卻拉高 tail latency；priority queue 可保護短 review task，卻令 background work 飢餓；prefix cache 要有 versioned key 和 cache-miss route；streaming 只在 final validation 前已有安全進度可展示時才有意義。
+
+研究草稿桌可設定兩種 synthetic traffic class：短 reviewer request 和長 background draft，並為每種定最大 queue wait。超出 budget 不可靜靜擠走另一類工作，要走可見的 `BUDGET_STOPPED`。這比只報最快完成的 run 誠實得多。
+
+## Serving engine 要用 test 來選
+
+有的 engine 擅長 continuous batching，有的較容易處理 structured output 或 metrics integration，hosted endpoint 可免卻部分 infrastructure。適合哪一個，要看 workload、data boundary、operational owner 和可否量到所需行為。Portfolio project 用 local simulator 或 deterministic fixture 已可展示判斷，不必經營 GPU fleet。
+
+先做小 workload model：每種 request 的 context token、預期 output token、traffic class、cache condition、validation rule、terminal route。再用 synthetic table 列出會比較甚麼：短 draft warm prefix、長 context、burst、cache miss、invalid output。它是 evaluation design，不是測得的 benchmark。
+
+作品集宜保留 `latency-budget.md`、`workload-fixtures.json`、`traffic-policy.md`、`metrics-schema.md`、`cache-key-contract.md`、`results-template.md` 和 `decision-log.md`。技術故事包括 prefill/decode、cache semantics、memory pressure、queue policy、schema validation、failure routing；非技術故事包括使用者在等甚麼、miss target 時怎處理、誰擁有 exception、為何不以較漂亮的 latency graph 交換 safety check。
+
+先用短 context、小 structured response、single traffic class 做 baseline。只有 fixed case 出現明確限制，才加 batching、cache 或另一個 engine。
+
+延伸閱讀：[可停止的 agent 與 serving budget](/zh-HK/articles/build-stoppable-ai-agents-with-serving-budgets)、[Transformer generation 與 adaptation trade-off](/zh-HK/articles/choose-transformer-generation-and-adaptation-tradeoffs)、[令 AI change 可審閱的 harness](/zh-HK/articles/harness-definition-of-done-and-framework-choice)。
+
+## 邊界
+
+本文是本地草稿，使用虛構 desk 和 synthetic workload plan。它沒有 provider benchmark、capacity claim、cost estimate、live traffic measurement 或 production architecture 保證。真實 service 需要獲授權 infrastructure、representative measurement、privacy review、incident owner 和 release approval，才可服務真實使用者。

@@ -1,0 +1,48 @@
+> AI harness 不只是呼叫 model 的程式碼。它是圍住模型的可測試系統，讓團隊能說清楚「做到哪裡才算完成」，也能拒絕看起來流暢卻失敗的答案。
+
+## 漂亮 demo 沒回答的問題
+
+假設有一個虛構的「理賠簡報台」。審查者提供已淨化的 incident summary 和小型 approved policy library。它只可建立帶 source 的內部 draft，資料不足就交給 reviewer；不能做 coverage decision、聯絡 claimant、修改 claim，也不用真實 customer data。
+
+展示一段好答案不難。難的是：什麼 input 可進系統、哪個 source 才有權威、來源衝突時怎麼辦、如何抓到 regression、誰可以接受結果？這些共同構成 **harness**。
+
+選 framework 前，先寫出 **definition of done**。Candidate run 必須回傳 schema-valid JSON、引用 approved source ID、走 permitted route、沒有 forbidden claim、留在宣告 budget 裡，並給出 draft 或完整 handoff packet。流暢文字從來不是 acceptance criterion。
+
+## Harness 包住的不只是 prompt
+
+它包含 input contract 與 data-minimisation rule、approved source registry 和 retrieval boundary、prompt/model/parser/policy version、驗證 schema/citation/route/forbidden field 的 deterministic validator、固定 eval set、只記錄安全 state change 的 trace、reviewer queue、decision log、release gate、rollback target。
+
+當 model 回傳無法 parse 的 prose、加入沒有 source ID 的 policy claim、或把不確定寫成肯定判斷，harness 應 reject 或 handoff。這讓 model 變成可替換元件，控制與證據不會藏在單一 prompt 裡。
+
+## 讓「完成」成為可套用的 contract
+
+| 檢查 | 預期 | 失敗時 |
+| --- | --- | --- |
+| Input boundary | 只有 allowed fixture field 進 run | `BLOCKED` |
+| Source fidelity | 每個 material claim 有 approved source ID | `HANDOFF` |
+| Output schema | 必填欄位可 parse、validate | reject candidate |
+| Decision route | 只可 `DRAFT`、`HANDOFF`、`BLOCKED` | reject unknown route |
+| Safety boundary | 沒有 coverage decision、message、record change | hard release failure |
+| Operational budget | step、latency、cost proxy 有上限 | 用 reason code 停止 |
+
+Contract 也要定義可接受的失敗。來源衝突而轉 `HANDOFF` 是 harness 成功；把衝突藏起來再寫出自信摘要才是失敗。
+
+## Framework 選擇要服務 contract
+
+一個 prompt、一種 structured output、少量 fixed case 時，custom script 常是最清楚的第一版。需要標準 tool schema、trace、handoff 或 session boundary 時，agent SDK 可能適合。獨立 job 要 queue、durable retry、scheduled execution，才考慮 workflow orchestrator。
+
+請問四件事：什麼 state 必須跨 restart 保存？哪個 tool call 有可能產生 external effect？失敗後 reviewer 必須看什麼 evidence？換 framework 後是否仍能跑同一 acceptance case？如果 framework 讓答案更難看見，它只是增加 complexity。不要為了 portfolio 圖看起來進階就做 multi-agent graph；deterministic retrieval-and-draft workflow 往往更值得信任。
+
+## 最小實驗要能抓到退步
+
+建立 synthetic fixture：正常 policy match、missing source、source conflict、文件裡的 injected instruction、malformed JSON、over-budget run、prohibited action request。凍結為 `eval-v1`。每次只改一個 variable，例如 prompt version、parser、source projection、model configuration。
+
+保存 fixture ID、versions、output validation、route、prohibited-action check、latency、cost proxy、reviewer verdict，逐 case 比 baseline 與 candidate。整體分數不能掩蓋 invented coverage decision 或 invalid output 這類 hard failure。Rollback target 應是最後一個通過所有 hard gate 的版本。
+
+作品集裡可以保留 `brief.md`、`contracts/output.schema.json`、`sources/registry.json`、`evals/eval-v1.json`、`validators/`、`traces/schema.md`、`CHANGE-001.md`、`decision-log.md`、`release-gate.md`、`README.md`。技術證據是可跑 contract、validator、test case、trace、change comparison；非技術證據是 decision owner、錯誤的 business consequence、data boundary、acceptance rule、non-claim。
+
+延伸閱讀：[以證據而非流暢度檢查 portfolio](/zh-TW/articles/score-an-ai-portfolio-by-evidence-not-fluency)、[評估整條 agent workflow](/zh-TW/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)、[把 course project 變成 portfolio evidence](/zh-TW/articles/turn-an-ai-course-project-into-portfolio-evidence)。
+
+## 邊界
+
+情境完全虛構，並停在 draft-only。本文沒有展示真實理賠處理、法律判斷、合規、customer impact、production readiness；目的只是示範如何在人開始依賴系統前，把 claim 變成可以審查的證據。

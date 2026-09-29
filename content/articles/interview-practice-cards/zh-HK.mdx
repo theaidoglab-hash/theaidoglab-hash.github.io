@@ -1,0 +1,87 @@
+> 呢頁係 16 張面試練習起步卡，唔係完整題庫。每次揀一張，用自己做過的例子答，再攞 README、測試或決策紀錄對照，睇有咩未講清。
+
+## 一條問題，只做一件事
+
+一個答案若塞滿工具名，通常反而散。呢份起步卡每張都連去一條獨立練習頁：每頁由一條情境問題開始，展示一個只答啱一半嘅回應，並補上缺少的機制、取捨、何時停手，和可用來支持說法的實際檔案或測試。
+
+唔好由職位名估題目，先睇 job description 入面重複出現嘅動詞。見到 `build`、`integrate`、`ship`，多數要講產品同系統決定；`operate`、`secure`、`scale`，多數要講可靠性、權限、成本同事故；`experiment`、`measure`，多數要講 baseline、資料邊界同 evaluation。揀最接近目標角色嘅能力路線，再開一張卡。唔使一晚睇晒 16 張起步卡。
+
+## 四條快速起步路線
+
+呢 16 張起步卡只係一個入口，唔係完整 Interview Lab。想按目標職位揀另一個起點，就去 [Interview Lab](/zh-HK/interview-lab)：入面而家有全部 **59 條** 逐題練習，分做十條能力路線。
+
+### 01–02、05、08、14：模型行為、serving 與互動
+
+呢組睇你可唔可以由「模型做得到」講到 context、latency、cost、輸出穩定性同互動體驗嘅取捨。
+
+- [01｜長 context 唔係免費升級](/zh-HK/interview-lab/long-context-is-not-a-free-upgrade)
+- [02｜加 GPU 前，先 trace p99 latency](/zh-HK/interview-lab/trace-p99-latency-before-adding-gpus)
+- [05｜應該 fine-tune，定先修好系統？](/zh-HK/interview-lab/fine-tune-or-fix-the-system)
+- [08｜Voice latency 係一個系統 budget](/zh-HK/interview-lab/voice-latency-is-a-system-budget)
+- [14｜Prompt contract 要有 acceptance test](/zh-HK/interview-lab/prompt-contracts-need-an-acceptance-test)
+
+### 03–04、07、15：retrieval、agents 與安全邊界
+
+呢組係分辨系統喺邊度出錯，同埋限制佢究竟可以做到邊一步。淨係話「用 RAG」或者「加 guardrail」未算回答。
+
+- [03｜係 retrieval、generation 定 permission 出錯？](/zh-HK/interview-lab/rag-retrieval-generation-or-permission)
+- [04｜畀 agent 草擬，但唔畀佢做後果性動作](/zh-HK/interview-lab/agent-draft-without-consequential-actions)
+- [07｜將不可信文件當 data](/zh-HK/interview-lab/treat-untrusted-documents-as-data)
+- [15｜Similarity 高，唔代表真係 relevant](/zh-HK/interview-lab/high-similarity-is-not-relevance)
+
+### 06、10、13、16：evaluation、data 與可靠 workflow
+
+呢組問嘅係：一個分數、一次 retry、或者一條 job 顯示成功，放入真人 workflow 之後仲值唔值得信。答案要有 baseline 同可交代嘅 recovery path。
+
+- [06｜用乜證據決定 release 定 rollback？](/zh-HK/interview-lab/release-or-rollback-with-evidence)
+- [10｜Partial failure 下嘅 coding 同 data structures](/zh-HK/interview-lab/coding-and-data-structures)
+- [13｜Offline score 升咗，點解 workflow 冇改善？](/zh-HK/interview-lab/offline-score-and-human-workflow)
+- [16｜Retry 成功，唔等於有 recovery plan](/zh-HK/interview-lab/a-retry-is-not-a-recovery-plan)
+
+### 09、11、12：system design、交付與判斷
+
+題目由模糊 request、客戶投訴或者 project 經驗開始，就揀呢組。有用嘅答案會先縮窄範圍，架構只在需要時才增加。
+
+- [09｜設計一個內部 policy assistant](/zh-HK/interview-lab/design-an-internal-policy-assistant)
+- [11｜將 Applied AI 投訴變成可逆 pilot](/zh-HK/interview-lab/applied-ai-delivery)
+- [12｜講一次 evidence 令你改變技術決定](/zh-HK/interview-lab/project-deep-dive-and-role-fit)
+
+## 90 秒練習：下一次講得更清楚
+
+開 timer。第一次一定要用自己講法，唔好背稿。
+
+1. **頭 20 秒：定義決定。** 講清楚邊個要作咩決定、成功應該係點，同埋一個 non-goal。題目如果由技術症狀開始，先將佢改寫成可觀察嘅 failure，唔好急住報工具名。
+2. **跟住 40 秒：交代路徑。** 講最簡單可信嘅 baseline、第一個會查嘅 component／機制，同埋乜嘢 trade-off 會令你改選擇。好答案有次序：觀察、做一個可逆小改動，有證據先升級。
+3. **最後 30 秒：留低可以畀人追問的證據。** 點名一份 test、trace、decision record 或 demo artefact。用一個 boundary 收尾：幾時交畀人、幾時 rollback、資料去到邊度要停，或者幾時簡單方案其實更好。
+
+之後先讀該題頁面。唔使將原本答案成段換掉，只補返少咗嗰條因果線。寫低四樣嘢：**主張、證據、邊界、下一個 test**。隔日再答同一題；如果答案短咗但準咗，你學緊嘅係判斷，而唔係術語。
+
+## 開口講「我做過」之前，要有咩證據
+
+面試官合理地會問：系統點運作，亦會問點解值得做。作品證據要同時答到兩邊。
+
+### 別人可以怎樣核對系統
+
+- 一個小型 baseline，同埋複雜設計喺乜情況先真正勝過佢。
+- 資料／輸入邊界：乜嘢可用、排除、synthetic、過期或者未知。
+- 一組固定 eval cases、預期行為，同至少一個保留咗嘅 failure case。
+- Trace、狀態圖或者版本紀錄，令人知道 regression 出現時你會點查。
+- 可運行指引同 README，分清楚已觀察到嘅 output 同未被證明嘅 performance claim。
+
+### 用喺工作上，要交代乜
+
+- 使用者要作嘅決定、最後一個後果性步驟由邊個負責，同埋 non-goal。
+- 一個實際衡量方法，例如 reviewer capacity、處理時間、錯誤暴露或 handoff rate；唔好作收入故事。
+- 你接受咗嘅成本／操作 trade-off，同埋點解冇揀更簡單方案。
+- Stop rule：幾時叫人處理、rollback、限制功能，或者拒絕無法支持嘅 action。
+- 清楚講 demo 邊界，同埋乜嘢未喺真實機構環境測過。
+
+如果未有 artefact，唔好再加模型名去裝飾答案。補最細嗰件：一個 fixture、一條 eval row、一頁 decision record，或者一個 recovery test。通常比再讀一個鐘更有用。
+
+## 用網站其他內容砌返自己嘅路徑
+
+未知道下一步應該學乜，就讀 [AI Engineer 學習地圖](/zh-HK/articles/ai-engineer-interview-learning-map)，唔好只背面試句子。想將一條回答變成可交付的工作流程，可以睇 [由模糊 request 到可驗收功能](/zh-HK/articles/from-vague-request-to-accepted-feature)。準備做公開 portfolio 例子時，對照 [PolicyPilot：將本地 RAG 練習變成可追問的作品](/zh-HK/articles/enterprise-ai-portfolio-policy-pilot) 或 [RAG chatbot 證據](/zh-HK/articles/rag-chatbot-to-portfolio-evidence)。目標係講清一個細小、可核對的做法，唔係整一個暗示有客戶、已正式上線或已做出商業成果嘅 demo。
+
+## 呢個系列嘅範圍
+
+本站嘅問題、虛構情境、解釋同 artefact 建議都係教學用學習材料。佢哋唔係任何公司而家嘅流程紀錄、唔係逐間公司題庫，亦唔會預測任何 interview loop。練習只用公開、虛構、synthetic 或妥善去識別化嘅材料。唔好將幻想情境講成客戶故事，唔好用保密工作做公開證據，亦唔好聲稱自己已正式上線，或者做到無法證實嘅商業成果。重點係將有根據的工程選擇，變成別人可以檢查嘅形式。

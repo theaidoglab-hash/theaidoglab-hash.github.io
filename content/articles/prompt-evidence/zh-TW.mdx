@@ -1,4 +1,4 @@
-> 核心判斷：一個看似聰明的 prompt 只是一個候選設定；professional evidence 來自可重跑實驗、權限邊界和可解釋的失敗。
+> 一條 prompt 曾經產生一次有用答案，最多證明它值得試。真正要看的是：reviewer 能否知道哪個改動有效、它會在哪裡失敗，以及何時一定要停止。
 
 ## Prompt play 有什麼價值
 快速嘗試 prompt 可以探索語氣、格式和模型能力。問題出現在你只保存最好的一次輸出，然後把它當成穩定方法。沒有版本、固定 cases 和失敗紀錄，其他人無法重現你的判斷。
@@ -14,6 +14,36 @@
 
 ## 如何放進作品集
 展示 experiment table、baseline、改動原因、failure taxonomy、permission matrix 和最終限制。面試故事可以說明你刪除了哪個看似更靈活、但風險較高的 prompt，以及如何用測試支持這項取捨。
+
+## 一次只改一件事
+
+用完全虛構的 **Intake Draft Desk** 練習。它收到一段合成 request，只能替 reviewer 寫有標記的 draft；不能發送、更新資料，也不能離開提供的 fixture set 搜尋。先用 rule 擋住沒有 request type 的 input，再逐次比較一個 prompt 改動。
+
+| 版本 | 這次刻意只改了什麼 | 固定留下的證據 | 執行後可作的決定 |
+| --- | --- | --- | --- |
+| `v1` | 純 rule route 加固定 draft template。 | 五個 case 的預期 route label。 | 保留作安全 baseline。 |
+| `v2` | 加一條抽取 request type 的 prompt。 | 同一組五個 label，加完整 prompt text。 | 只有改善指定 case、又不影響 blocked case 才保留。 |
+| `v3` | 加入 retrieved context。 | v2 case，再加一個過期與一個衝突 source。 | 若缺資料或舊資料變成自信 draft，就拒絕。 |
+
+不要只比較文字漂不漂亮。並排看 route、引用哪個 fixture ID、terminal status 與 reviewer 花多少工夫。若 model、prompt、input shape 和 grader 一次都變了，之後無法說明是哪一項造成差異。
+
+## 五個 case 已足夠看見邊界
+
+一開始不用做一大堆 benchmark。寫一組小型 answer key，讓 workflow 顯示自己會如何收手。
+
+| Case | 收到什麼 | 預期結果 | 什麼算 regression |
+| --- | --- | --- | --- |
+| 資料齊全 | 所有合成必填欄位都在。 | `DRAFT`，只交代要求欄位。 | 編造細節，或漏掉必填標記。 |
+| 欄位缺失 | 沒有 request type。 | `HANDOFF`。 | 猜一個看似合理的答案。 |
+| 像指令的文字 | 提供的 note 要求忽略 rule。 | 當作 data，維持原 route。 | 權限被改掉，或檢查被繞過。 |
+| 沒有支持內容 | fixture set 裡沒有答案。 | `HANDOFF` 加 reason code。 | 沒有根據卻自信作答。 |
+| 有後果的要求 | 文字要求 send 或 update。 | `BLOCKED`，沒有 external tool path。 | 嘗試寫入、發送，或有隱藏 side effect。 |
+
+這張表同時分開兩份證據。技術記錄包含 version、input class、expected state、trace 與 test result；交付記錄要說清誰能 review draft、為何需要 handoff，以及系統永遠拿不到哪種 action 權限。
+
+## 有時最好的改動是不使用 model
+
+若 deterministic rule 已準確擋住所有 missing-field 與禁止 action 的 case，不要只因 model 可以寫得較順就換掉它。保留 rule 在邊界，只在 model 真能改善的小段 draft 使用它。這個決定，比每一層都加入 agent 更有說服力。
 
 ## 下一步
 下載 prompt experiment log，為一個現有 prompt 建立五個固定 cases。如果每次修改後不能重跑同一組 cases，它仍然是一次性的嘗試，不是工程證據。

@@ -1,0 +1,29 @@
+Order is useful only when it existed before the decision and changes what a person can do next. A sequence model is not an upgrade badge for a portfolio. It is a way to represent a series of observations when the order, spacing or context between them may matter.
+
+## Define the sequence as an operational contract
+
+Take a fictional service case with events: form submitted, clarification requested, document received, specialist review. A simple tabular baseline might use counts and the latest status. A sequence model receives the ordered events, perhaps with timestamps or gaps, and can learn a representation of their context.
+
+Recurrent networks such as RNNs, LSTMs and GRUs pass a changing internal state from one event to the next. Transformer-style models use attention to compare parts of the sequence more directly. Both families can be useful, but neither can see information that is not in the allowed observation window. Write the cutoff first: “only events recorded before 10:00 are available for the 10:00 routing recommendation.”
+
+That sentence protects the experiment from a convincing but invalid shortcut: accidentally including the later specialist decision in the sequence that predicts whether specialist review is needed.
+
+## Start with a shorter, inspectable baseline
+
+Build an aggregate baseline before a sequence model: event counts by type, elapsed time since the latest event and a rule for clearly incomplete cases. If the sequence model does not improve the bounded review decision on a later time period, its additional complexity has not earned a release discussion.
+
+For variable-length records, decide how to truncate, pad and mask them. **Padding** adds placeholders so a batch has a common length. **Masking** tells the model which positions are placeholders and must not influence the result. Test this directly: adding padding to a case should not change its prediction. Keep an example event trace beside its feature representation so an evaluator can inspect the transformation.
+
+## A framework is not the system design
+
+PyTorch, TensorFlow and high-level training libraries can speed up implementation. They do not decide the target, data boundary, acceptance criterion or human handoff for you. A framework can hide defaults for tokenisation, batching, loss reduction, mixed precision or evaluation mode. Treat those defaults as configuration that belongs in the repository, not as background magic.
+
+Create a **sequence-model contract** containing the event schema, ordering rule, observation cutoff, padding/masking behaviour, model configuration, training/evaluation command, baseline result and rollback condition. Pin important dependency versions and log the run environment. Include a test case with a late event that must be excluded, plus one with a new event type whose fallback behaviour is explicit.
+
+## Failure modes a good demo reveals
+
+Long sequences can be expensive, noisy and difficult to explain. Truncating the wrong end can remove the only useful context. Time leakage can inflate every metric. A library upgrade can change tokenisation or tensor behaviour without changing your business question. And a sequence may simply add no useful signal beyond a few well-designed aggregate features.
+
+The evidence an AI engineer needs is not “I used a Transformer.” It is a defensible reason for using sequence information, tests for the boundary, a baseline that could win, and a human-owned action that can be stopped.
+
+Continue with [choosing a Transformer, generation or adaptation trade-off](/en/articles/choose-transformer-generation-and-adaptation-tradeoffs) and [the implementation evidence loop](/en/articles/turn-an-ai-request-into-an-accepted-change).

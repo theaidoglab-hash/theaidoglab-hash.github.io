@@ -1,0 +1,35 @@
+面試官未必需要你背公式，已經可以看出你是否真正理解一個簡單 model。他可以問一條更實際的問題：「當時有甚麼資料？model 輸出甚麼數字？人因此做了甚麼不同的事？」Linear 和 logistic model 正好把這條鏈攤開來。
+
+## 兩種輸出，對應兩種決定
+
+用一個虛構的支援營運例子。團隊想預測明天要多少人手覆核，也想知道哪些新 case 應該早一點看。
+
+**Linear regression** 預測的是連續數字，例如明天預計有多少宗 case 需要人手覆核。它把星期幾、現時 backlog、request mix 等 feature 合成一個估計。某 feature 的 coefficient 表示它在這個特定 model 裡對結果的方向和大小；它不是自動證明因果。當有互相關連的 feature，或資料定義改變時，coefficient 也會變。
+
+**Logistic regression** 常用在 target 是類別的情況，例如 `review` 或 `standard route`。它會把加權後的 feature 轉成介乎零與一的值。這個值應理解為訓練設定下的 modelled likelihood，不是對一個人或個案的事實判決。Workflow 仍要有 threshold、人手上限和明確的責任人。
+
+例如 0.72 可以代表「把這宗個案放近覆核隊列前面」，不應默默變成「拒絕這個要求」或「它一定有風險」。決定 rule 是 product choice，不是 logistic regression 無可避免的結果。
+
+## Feature 是對「當時可知道甚麼」的聲明
+
+每個 feature 都是刻意交給 model 的一個數值。替它寫一行 data dictionary：意思、來源、更新時間、容許值、owner，以及它是否在作決定前已存在。`09:00 尚未完成個案數` 可能可以用；`最終覆核結果` 就不可以。這個檢查能抓到常見的 leakage：用未來幫過去答題。
+
+亦要小心類別資料。request channel 被編成 3，不代表它天然比編成 1 的 channel「大」。選合適的 representation，再記錄下來。缺失值、新 category 和上游系統改欄位時，都要有指定的行為，而不是任由 default 悄悄決定。
+
+## 一個值得展示的小型測試
+
+做一張比較表：一個按日估算的 baseline、一個 linear forecast，和一個 logistic queue model。Forecast 用 planner 真正在意的單位報告誤差，例如 case 數。Queue 則報告前五十宗裡實際值得覆核的個案有多少、多少普通個案被送去覆核，以及每個已命名 request group 的影響。如果團隊要面對未來的決定，用較後的時間段比隨機 holdout 更貼近現實。
+
+把三樣 artefact 放在 code 旁邊：
+
+- feature dictionary 和 observation cutoff；
+- 不同 threshold 對應人手覆核量的表；
+- 五個被覆核的例子，包括預測令人意外、錯誤或刻意被人推翻的情況。
+
+這些 artefact 讓 reviewer 看得到非技術部分：人手容量、後果、誰負責，以及系統不准決定甚麼。
+
+## 簡單 model 一樣會失敗
+
+可解釋不代表免疫。Linear relationship 可能太粗，label 可以承接歷史偏差，而看似穩定的 coefficient 可以遮住一個壞掉的上游欄位。提高 logistic threshold 可能令 precision 好看，卻漏掉太多重要個案。更複雜的 model 不是自動答案；有時 rule、分組比率 baseline，或者更可靠的資料，才是下一個合理實驗。
+
+專業能力在於把一個分數連到可逆、可覆核的行動。延伸閱讀：[loss、regularisation 和 generalisation](/zh-HK/articles/regularisation-loss-and-generalisation) 與 [把 model score 變成 workflow decision](/zh-HK/articles/model-score-to-workflow-decision)。

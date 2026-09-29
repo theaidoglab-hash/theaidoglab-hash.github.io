@@ -1,0 +1,21 @@
+{
+  "manifestVersion": "1.0",
+  "fixtureId": "workforce-signal-source-shaped-fixture-v1",
+  "acquisitionMode": "synthetic_source_shaped_not_live_acquired",
+  "fixturePreparedAt": "2026-09-20",
+  "snapshotAsOf": "2026-09-20",
+  "sourceReceipt": {
+    "dataApiGuide": "https://www.abs.gov.au/statistics/application-programming-interfaces-apis/data-api-user-guide",
+    "labourForceRelease": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+    "citationGuide": "https://www.abs.gov.au/how-cite-abs-sources",
+    "acquisitionStatus": "not_live_acquired",
+    "routePurpose": "A later, separately reviewed public-statistics acquisition design only; this repository contains no ABS observation.",
+    "termsCheck": "Verify dataset-specific terms, attribution, release timing, series definition, and revision status at acquisition time."
+  },
+  "nonClaims": [
+    "No live ABS API, Data Explorer, release, or dataset is downloaded, queried, cached, or represented as current.",
+    "The included observations are source-shaped synthetic teaching values, not ABS data or an ABS-derived forecast.",
+    "The packet does not make a hiring, salary, visa, migration, policy, investment, staffing, or labour-market forecast decision.",
+    "No model call, credential, external write, deployed service, business outcome, or production readiness is demonstrated."
+  ]
+}

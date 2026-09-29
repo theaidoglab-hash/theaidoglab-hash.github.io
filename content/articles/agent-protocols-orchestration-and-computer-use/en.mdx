@@ -1,0 +1,70 @@
+> A computer-use demo is not evidence of an autonomous worker. The important question is whether a person can tell what the worker was allowed to do, what it actually did, and where it stopped.
+
+## Start with a task that has a safe ending
+
+Imagine a fictional **Procurement Evidence Desk**. A reviewer uploads a sanitised supplier quote and asks for a draft comparison against three approved criteria. The system may read the uploaded fixture, calculate a comparison, and prepare a review packet. It may not contact a supplier, submit an order, change a record, or use a real browser session.
+
+That narrow boundary makes three ideas easier to separate. A **protocol** defines how components exchange a request and a result. An **orchestrator** decides which bounded step is allowed next. **Computer use** is one possible capability for interacting with a visible interface; it is not a permission model and it is not a replacement for an API.
+
+The cheapest useful baseline is a deterministic script that reads the fixture, validates the criteria, and produces a draft packet. Add an LLM only when wording, ambiguity handling, or a carefully constrained plan materially improves that baseline.
+
+## Protocols make a hand-off inspectable
+
+A protocol is a shared agreement about message shape, identity, errors, and versions. It should answer practical questions such as:
+
+- What inputs are allowed, and which fields are deliberately excluded?
+- Which component owns validation, source lookup, calculation, and the final route?
+- What does a timeout, a rejected schema, or an unknown result look like?
+- What version of the contract produced this output?
+
+For the Procurement Evidence Desk, a `compare_quote` request might contain a fixture ID, approved criteria version, and a `draft_only: true` flag. The response could contain cited facts, missing fields, a comparison table, a terminal route, and a reason code. There is no field for `send_email` or `place_order`. An LLM can suggest a next step, but the runtime checks that suggestion against the contract before anything happens.
+
+This is less glamorous than a free-form agent loop, but it gives a reviewer something concrete to test. A malformed request should be rejected before a model sees it. A result that lacks source citations should route to `HANDOFF`, not quietly become a recommendation.
+
+## Orchestration is the traffic controller
+
+The orchestrator is not the model's personality. It owns a small state machine:
+
+```text
+received -> validated -> evidence_ready -> draft_ready -> reviewer_handoff
+                         |                  |
+                         v                  v
+                      blocked            budget_stopped
+```
+
+Each arrow has a rule. The system may call a read-only quote parser after validation. It may assemble a draft only after the parser returns a schema-valid result. A conflicting source, a missing criterion, an expired budget, or a request for an external action takes the safe route to `reviewer_handoff` or `blocked`.
+
+For more than one component, the orchestrator needs a durable run ID, an allowed-step list, per-step timeouts, a retry class, and a terminal reason. It also needs to know when **not** to retry. If a future write action could have happened before a timeout, the result is unknown; repeating it could duplicate an effect. In this learning reference, external writes remain out of scope, so that case becomes a simulated handoff rather than a live action.
+
+## Computer use is a high-ambiguity tool
+
+Computer use can be appropriate when an authorised workflow has no reliable API and a person normally completes the same visible steps. Even then, it observes a changing screen rather than a stable business contract. A button can move, a confirmation can be partial, a session can expire, and two windows can look alike.
+
+Treat a computer-use action as higher risk than a read-only API call. Give it a narrow target, an approved environment, a screenshot or structured checkpoint, an explicit stop rule, and a human owner for ambiguous state. Do not ask it to infer whether an irreversible action succeeded from pixels alone. A screen that appears to show a submitted order is not an audit record.
+
+In a portfolio project, simulate the interface with local fixtures. The test can prove that the worker stops when a selector changes, when the visible account marker is unexpected, or when a confirmation state cannot be verified. It cannot prove that a real vendor website is safe to automate.
+
+## Build the evidence pack before choosing a framework
+
+Framework names are weak evidence on their own. A serious repository can show the same engineering judgement with a small custom runner, an agent SDK, or a workflow product. Keep these artefacts visible:
+
+- `contracts/` for versioned request and response schemas;
+- `capability-matrix.md` for what is read-only, draft-only, prohibited, or requires approval;
+- `state-machine.md` for legal transitions, terminal states, retries, and budgets;
+- `fixtures/` for sanitised normal, missing-data, conflicting-data, changed-screen, and timeout cases;
+- `traces/` for safe run IDs, state transitions, version IDs, and reason codes;
+- `evals/` for expected tool paths and forbidden actions;
+- `decision-log.md` for why a protocol, orchestrator, or tool was selected;
+- `release-gate.md` for the conditions that keep the project in local draft mode.
+
+The code shows contract validation, route tests, fixture-driven traces, and failures that stop in the right place. Before work use, name the decision owner, why the data boundary exists, the cost of a bad action, and why a draft cannot become an external change.
+
+## When the simpler architecture wins
+
+Do not use multi-agent coordination when one deterministic parser and a review form can do the job. Do not use computer control where a read-only export is available. Do not add a protocol layer merely to make a diagram look enterprise-shaped. Add a component only when a named failure requires it and when its test and owner are equally clear.
+
+For next reading, pair this with [workflow-level agent evaluation](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer), [stoppable agents and serving budgets](/en/articles/build-stoppable-ai-agents-with-serving-budgets), and [permission review before an agent receives access](/en/articles/review-an-ai-agent-before-clicking-allow).
+
+## Boundary
+
+This is local-draft teaching material. The desk, data, protocols, screens, state labels, and artefacts are illustrative. It does not demonstrate a deployed integration, real browser automation, supplier access, procurement compliance, or a business outcome. A real implementation needs authorised owners, security and privacy review, a verified environment, and its own tests before it can affect an external system.

@@ -1,0 +1,141 @@
+> A renewal-triage portfolio is not a prediction contest. Its value is whether a reviewer can see which synthetic case needs attention, what evidence was available at that time, what the system refuses to decide, and how a change is tested before anyone relies on it.
+
+## What this demo explicitly demonstrates
+
+### What you can inspect in the build
+
+- A point-in-time data contract, feature-availability and leakage tests, an explainable rule baseline and a candidate risk-only ranking.
+- Queue metrics under fixed review capacity, a release gate, monitoring and rollback rather than one model score presented as a whole system.
+
+### What has to work around the build
+
+- The problem is prioritising synthetic cases for a human reviewer, not contacting customers, making offers or deciding retention.
+- Model metrics, workflow proxies, decision ownership and claimable results are separate; data, results and impact are synthetic.
+- A reviewer can ignore the queue, and an unsafe data condition or regression should stop or return to the baseline.
+
+## This is a fictional, read-only learning lab
+
+**Renewal Triage MLOps Lab** is a deliberately synthetic subscription-renewal review queue. Imagine an operations team sorting cases before a human review meeting. The lab receives only records that the learner wrote or generated: a fictional account segment, a dated product-usage snapshot, a support-status flag and an invented later outcome label. It assigns a proposed review bucket such as **review first**, **review normally** or **insufficient evidence — hand off**.
+
+The system does **not** contact a customer, set a price, make a retention offer, change a subscription, approve a cancellation or decide who deserves an intervention. It contains no real customer data and makes no claim about conversion, retention, revenue or causal impact. This boundary is the point of the project: a model score is never authority to affect somebody's account.
+
+## Start with the decision, not a “renewal prediction model”
+
+“Predict who will renew” sounds impressive, but it hides the work that makes a system inspectable. Write a one-page decision brief instead:
+
+- **User and decision:** a human reviewer chooses which *synthetic* cases to inspect first, or sends incomplete cases back for clarification.
+- **Decision horizon:** every feature must be known on an explicit `INFORMATION_DATE`; any invented label is observed only after a later `OUTCOME_DATE`.
+- **Cost of error:** prioritising a case without enough evidence, treating stale data as current, or skipping the handoff path.
+- **Non-goals:** no customer contact, pricing, offers, renewal/cancellation actions, account updates or automated business decision.
+- **Human owner:** the reviewer owns every follow-up and may ignore the queue entirely.
+
+That brief is more valuable than a dashboard screenshot because it exposes the actual decision boundary. Picture it: the tool may help an adult arrange a pile of pretend cards, but it never gets to phone anyone or change their toys.
+
+## Separate model metrics from workflow evidence
+
+A portfolio often shows accuracy or AUC and calls that “business impact.” They answer different questions.
+
+**Model-quality measures** ask whether the proposed bucket is technically useful on a held-out synthetic set: bucket precision/recall, calibration, abstention correctness, data-freshness rule compliance and error slices by invented segment. Use a confusion matrix and a small error taxonomy rather than one flattering number.
+
+**Workflow proxies** ask whether the queue helps a reviewer perform the defined task under simulation: share of cases with an explainable reason, correct route-to-handoff rate, reviewer agreement with a proposed bucket, and time to assemble a review packet. These are not revenue, retention or customer-outcome metrics. They are controlled learning measures for a fictional workflow.
+
+Put both definitions beside their limits. A high bucket precision cannot prove a pricing strategy works; a faster simulated review cannot prove a real team will save time. This distinction is exactly what makes the project credible.
+
+## Build an availability-safe data contract
+
+The easiest way to make a pretty but invalid model is to let it see the future. Do not decide feature safety from a column name such as `last_status`; decide it from when that value became final and available.
+
+Create a synthetic data card with a small schema:
+
+```text
+case_id              fictional, non-identifying ID
+information_date     date at which the queue is allowed to know facts
+usage_30d            generated activity strictly up to information_date
+support_open_flag    fictional current-state flag with a source timestamp
+plan_segment         invented category, never a real customer field
+outcome_date         later date used only to construct a learning label
+synthetic_label      created after outcome_date; never supplied at scoring time
+```
+
+Then make the pipeline fail closed. Reject a row when a feature timestamp is after `information_date`, a label date is not later than `information_date`, an expected field is missing, or a snapshot version is unknown. A simple `assert` plus a test fixture is more meaningful than an elaborate feature store that nobody can rerun.
+
+Picture it: if you are guessing which page of a story comes next, you cannot peek at the last page first.
+
+## Establish a non-ML baseline first
+
+Start with three transparent rules, for example:
+
+1. If the fictional record is stale, incomplete or conflicts with itself, return **insufficient evidence — hand off**.
+2. If the record meets a published synthetic rule, place it in **review first** with the rule ID and snapshot date.
+3. Otherwise place it in **review normally**.
+
+This is not a throwaway prototype. It tells you what extra value a model must earn. If a gradient-boosted model or an LLM classifier cannot improve a defined synthetic metric without weakening the handoff guardrail, keep the rule baseline. Good engineering includes deciding not to add a model.
+
+## Make the smallest end-to-end pipeline inspectable
+
+You do not need to imitate a private enterprise platform. A local, versioned flow can show the important thinking:
+
+```text
+synthetic source snapshots
+  -> schema and availability checks
+  -> point-in-time feature table + versioned label build
+  -> rule baseline and candidate risk-only ranking
+  -> score with reason codes or abstention
+  -> read-only human review queue
+  -> redacted run record + evaluation gate
+  -> keep, reject, or roll back an offline candidate
+```
+
+Each arrow needs an owner and a test. The source generator owns reproducible synthetic records. The feature job owns the `information_date` rule. The scorer owns no business action; it only emits a candidate bucket, confidence and reasons. The queue screen makes the handoff visible rather than burying it in a prompt. The release gate decides only whether a *local candidate* is eligible for another simulated run.
+
+For an LLM-assisted explanation layer, constrain it to turn approved reason codes into plain language. Do not allow it to infer a new reason from hidden text, invent an outcome, or recommend a contact or offer. Keep the deterministic decision path independently testable.
+
+## Evaluate failures before polishing the demo
+
+Create a fixed synthetic evaluation set with at least these cases:
+
+- a normal, fresh record that should enter each review bucket;
+- a record whose source timestamp is after `information_date`;
+- a missing or malformed field;
+- a label that leaks into the feature table;
+- a low-confidence case that must abstain;
+- a segment slice where the candidate risk-only ranking regresses against the rule baseline;
+- a duplicated case ID or changed schema version; and
+- an instruction-like text field that tries to make an explanation layer ignore the stated boundary.
+
+Report four result groups. **Data quality** records rejected rows and why. **Model quality** records each bucket's precision/recall, calibration and abstention. **Workflow safety** records unauthorised-action attempts, which should be zero because the app has no such capability, and correct handoff behaviour. **Operations** records reproducible run ID, data/model version, duration, error count and a simple cost proxy.
+
+Do not cherry-pick screenshots. Save the expected output, actual output and failure category for every fixed case. When a candidate gets worse on a high-risk case, the correct outcome is a blocked local release, not a new threshold chosen after seeing the answer.
+
+## Add lightweight MLOps artefacts that answer real questions
+
+“MLOps” in a portfolio can be small and still be serious. Include:
+
+- a data card and source-generation seed;
+- a point-in-time availability test and a leakage test;
+- a versioned baseline, model configuration and evaluation fixture;
+- a metric contract explaining each metric, denominator, owner and limit;
+- a model card stating intended learning use, non-goals and known failure modes;
+- a redacted run log containing only fictional IDs, versions, scores, reasons and handoff status;
+- a change log showing what changed, what test was rerun and why a candidate was accepted or rejected; and
+- a rollback note: return to the previous local configuration or rule baseline, then investigate offline.
+
+None of this claims production readiness. It lets an interviewer verify that you understand data lineage, release gates and decision ownership.
+
+## Turn it into a portfolio and interview evidence pack
+
+Your README should open with the fictional problem and non-goals, then show the point-in-time diagram before the model diagram. Add a table with one model-quality measure and one workflow proxy per decision, followed by a failure gallery. A three-minute walkthrough can show: a valid fresh record, a stale record that is refused, one baseline-versus-candidate comparison, and a local gate blocking a regression.
+
+When an interviewer asks, “How did you measure business value?”, a careful answer is: “I did not claim a business outcome. I defined simulated workflow proxies, kept them separate from model metrics, and documented what real-world evidence would still be required.” That is much stronger than inventing retention numbers.
+
+## Run the starter yourself
+
+To turn the reading into a checkable evidence path, download the [Renewal Triage starter](/templates/renewal-triage-starter/v1/renewal-triage-starter-v1.zip). Extract it, run `npm test`, then run `npm run demo`. It uses invented records only and lets you compare how raw risk and capacity-aware priority produce different human-review draft queues.
+
+This is a smaller reader-owned starter, not the full reference package discussed in this article. It has no API key, network, or model call; it is not a retention system or evidence of a real business outcome. Read the [English README](/templates/renewal-triage-starter/v1/README.md) before starting.
+
+## Keep the claim honest
+
+This learning scenario uses synthetic data only and is limited to local fixtures. It is not a renewal system, a pricing tool, a customer-contact workflow or evidence that a real organisation should take action. Its purpose is to make your engineering judgement inspectable: define the decision, respect time availability, compare a baseline, evaluate failure, preserve human ownership and record what changed.
+
+Related reading: [how PolicyPilot separates a deterministic policy-support baseline from a RAG extension](/en/articles/enterprise-ai-portfolio-policy-pilot), [a safe low-code automation workflow](/en/articles/build-a-low-code-ai-automation), [how to select learning sources by evidence](/en/articles/choose-ai-learning-sources-by-evidence), and [AI Engineer interview practice](/en/interview-lab).

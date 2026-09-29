@@ -1,0 +1,132 @@
+本周只选一条配合你 evidence gap 的路线：先定义要解释的决策、要补的缺口和可留下的 artefact；课程或来源只是输入，不是你已经能胜任工作的证明。
+
+## 问“最好的 AI 课程”，通常少问了一件事
+
+想进入 AI 领域的人，很容易同时打开四个网页、收集两张证书、记下一串 model 名称，最后仍然不知道下一步。真正少问的往往不是“哪个品牌最好”，而是：**本周结束后，我能展示、解释并改进哪一项能力？**
+
+这是一张学习来源地图，不是排名或报名建议。我把四条起步路线分开：每条都说明它适合补什么、第一周应完成什么 public-safe artefact、能练习哪些技术与非技术判断，以及它不能支持哪些说法。
+
+开始前，先写一句：
+
+> 我想走向 **[职位或工作方向]**。我目前还无法展示 **[一项能力]**。本周我会留下 **[一份可检查 artefact]**。我不会宣称 **[这份 artefact 无法证明的结果]**。
+
+例如：“我想走向 AI application 工作。我还无法解释一个草稿 workflow 如何被评估。本周我会留下五个固定 acceptance cases 和一个 human-review decision。我不会宣称自己已经做了 deployed agent。”
+
+## 先选今天的工作路线，再选外部课程
+
+如果你今天 **不写 Code**，先从 [15 分钟手动安全试跑（AC-01，不必账户）](/zh-Hans/no-code-starter-lab#no-code-lab-manual-title)开始。它让你界定 task、核对不作外部动作的界线，并保留 human decision。你不需要先懂 Python、model API 或 LLM 课程，才能练习这些能力。
+
+如果你已会写 Code，或想看 implementation、diff 或 tests，先打开 [Coder Starter Lab](/zh-Hans/coding-starter-lab)。它从 scope、负面 cases、review 与 rollback 开始，不是要求你把所有改动交给 agent；需要比较两条路线时，再看 [coder 路线](/zh-Hans/series/ai-use-routes#track-coder-title)。
+
+下方的外部来源，只在这个第一步之后用来深化指定能力；它们不是安全开始的先决条件。
+
+## 四条起步路线
+
+### 路线 1：你还不写 Code，但想安全地把 AI 用进工作
+
+从 [15 分钟手动安全试跑（AC-01，不必账户）](/zh-Hans/no-code-starter-lab#no-code-lab-manual-title)开始，先看 [permission review](/zh-Hans/articles/review-an-ai-agent-before-clicking-allow) 与 [可验收 workflow](/zh-Hans/articles/use-ai-without-writing-code)。这不是平台 badge，而是一个有明确边界的练习任务。
+
+它适合这个缺口：“我会请 AI 写答案，但还说不清它可以接触什么、草稿如何验收，以及什么时候一定要交由人决定。”
+
+**第一周 artefact：** 建立一张虚构的“公开 FAQ 分流”brief。只使用合成或公开文字。定义 input schema、固定 draft 格式、五个 acceptance cases、一个要 blocked 的请求，以及哪一位人员接受或拒绝草稿。
+
+| 你正在练习 | 在 artefact 里的样子 |
+| --- | --- |
+| 技术判断 | Structured input/output、acceptance cases、`DRAFT`、`HANDOFF`、`BLOCKED` 等 route state，以及 permission boundary。 |
+| 非技术判断 | 谁拥有决策、哪些资料不可进入、错误草稿的代价，以及为什么流程不能发出外部讯息。 |
+
+**它不能证明：** 你已是 developer、workflow 已能用于 production，或某个 AI 工具应该取得账户权限。它只证明一件更小也更实用的事：你能把模糊的 AI 要求变成可 review 的工作。
+
+### 路线 2：你需要的是 ML 基础、metric 或 data decision
+
+如果你的缺口不是“我需要再做一个 chatbot”，而是“我还无法解释 classification threshold、false positive、false negative、metric、dataset boundary 或 overfitting”，可使用 [Google Machine Learning Crash Course](https://developers.google.com/machine-learning/crash-course)。Google 将它定位为含练习与互动材料的实用入门；内容包括 classification、confusion matrix、precision、recall、AUC、dataset、generalisation 与 production-system considerations。
+
+**第一周 artefact：** 为虚构的“优先人工审核 queue”建立一张合成 case sheet。自己写 20 个有 label 的例子，对比一个 rule-based baseline 与一个假设 classifier threshold。记录哪些案例成为 false positive、哪些成为 false negative，并明确指定最后决策仍由 human reviewer 做出。
+
+| 你正在练习 | 在 artefact 里的样子 |
+| --- | --- |
+| 技术判断 | Labelled dataset boundary、baseline、confusion matrix、threshold，以及能解释 failure mode 的 metric。 |
+| 非技术判断 | 为什么某种错误代价更高、谁有 review capacity，以及为什么一个分数不等于自动 action 的授权。 |
+
+**它不能证明：** 你已经训练或部署一个有用的 production model。课堂或本机 synthetic exercise 能展示你如何思考决策，不能展示 business impact、真实 data quality 或运营批准。
+
+### 路线 3：你已会写 Python，想理解 LLM／model building
+
+如果你已能使用 Python，并想走 model-side 路线，可参考 [Hugging Face LLM Course](https://huggingface.co/learn/llm-course/chapter1/1)。前段介绍 Transformer、从 Hub 使用 model、fine-tuning 与分享；后段延伸到 datasets、tokenizers、demos 与较进阶的 LLM 主题。课程本身写明需要良好 Python 知识，也建议先有 introductory deep-learning 基础。这个 prerequisite 不是失败，而是避免不写 Code 的人把术语误认为理解。
+
+**第一周 artefact：** 建立一张 source receipt 和一篇极小的 local model-study note。写下读过的 model 或 tutorial、允许 reuse 的边界、一个合成 input、预期 output shape，以及一件尚未理解的事情。若你有执行 code，source 与 tests 保持英文；README 说明才视需要本地化。
+
+| 你正在练习 | 在 artefact 里的样子 |
+| --- | --- |
+| 技术判断 | Dataset、tokenizer、model、input/output contract 与 evaluation case 之间的关系。 |
+| 非技术判断 | Reuse 与 licence 意识、compute 或时间限制、自己实际完成的贡献，以及 tutorial result 与 original work 的差异。 |
+
+**它不能证明：** 你能替用户运行 LLM system、选择 business use case，或可靠地 fine-tune model。它适合补 model literacy；不能取代 system evaluation、permission 或 product decision。
+
+### 路线 4：你会写 Code，想走 application 与 evaluation
+
+当你的缺口是 application construction，例如 model selection、有范围的 user task、response route testing、安全或运营边界，可参考 [Microsoft Learn 的 generative-AI application path](https://learn.microsoft.com/en-us/training/paths/develop-generative-ai-apps/)。Microsoft 将它列为 intermediate、面向 AI Engineer 与 Data Scientist，并写明需要 Azure AI fundamentals 与 programming experience；内容包含 planning、model selection/deployment/evaluation、chat application、tools、RAG 或 fine-tuning，以及 responsible implementation。
+
+**第一周 artefact：** 建立一份 draft-only application evidence pack。定义虚构 user question、JSON-shaped output contract、baseline、五个固定 evaluation cases、预期 `DRAFT`／`HANDOFF`／`BLOCKED` 结果及 reviewer decision。你可以将一次 `gpt-5-mini` Responses API call 表示成 **static fixture**；不要放入真实 key、不要作 live call，也不要把 mocked response 写成 observed model result。
+
+还没有 API key 时，先完成 [Coder Starter Lab](/zh-Hans/coding-starter-lab)：它只用本机 fixture，让你留下受限 diff、测试与 reviewer decision。日后真的准备好用自己的 key 发出 request，才打开 [OpenAI developer quickstart](https://developers.openai.com/api/docs/quickstart)。那份 quickstart 会带你作真正的 API request，不是第一周 static exercise 必需的一步。
+
+| 你正在练习 | 在 artefact 里的样子 |
+| --- | --- |
+| 技术判断 | 有 scope 的 interface、test fixture、evaluator、trace fields、route states 与 regression gate。 |
+| 非技术判断 | Data boundary、已命名的 decision owner、tool permission、cost／timeout stop condition，以及诚实的 non-production claim。 |
+
+**它不能证明：** API 已成功、application 可以安全接触真实账户，或 cloud deployment 自动产生 business value。第一份 artefact 的目的，是在加入 credential 或 infrastructure 前，先让 engineering decision 可以被检查。
+
+## 用 evidence gap 选来源，不要只看课程名称
+
+```text
+我需要在不写 Code 的前提下界定、检查和批准草稿
+  → 路线 1：no-code workflow 与 permission review
+
+我需要解释 metrics、errors 与 data boundaries
+  → 路线 2：ML foundations
+
+我会写 Python，并要补 model-side literacy
+  → 路线 3：LLM／model builder
+
+我会写 Code，并要完成有 evaluation 的 bounded AI application
+  → 路线 4：application 与 evaluation
+```
+
+你可以跨路线，但不需要先积累完所有 introductory content。真正的 crossover 由限制触发：当你需要看 implementation 或 tests，便从路线 1 移到路线 4；当 model behaviour、data 与 tokenisation 成为问题，便从路线 2 移到路线 3；当 model notebook 必须处理 user decision、evaluator 与 human handoff，便从路线 3 移到路线 4。
+
+## 把 source receipt 放在 artefact 旁边
+
+无论哪一条路线，都请保留一张简短 source receipt：
+
+- 官方名称与 URL，以及 access 日期；
+- 哪一个 lesson、chapter 或 guide section 影响了你的 work；
+- 哪些内容是 reuse、哪些有改动、哪些是自己完成；
+- 你符合与尚未符合的 prerequisites；
+- public／synthetic data boundary；
+- 他人可重复的 command、fixture 或 manual check；
+- 一个 failure 或尚未解答的问题；以及
+- 你不会做出的 claim。
+
+这样才能把学习输入转为 portfolio evidence，而不是重抄 instructor solution。完整做法见：[把 AI 课程作业变成可被追问的作品证据](/zh-Hans/articles/turn-an-ai-course-project-into-portfolio-evidence)。
+
+## 小到本周可完成的起步
+
+1. 选一条路线和一个虚构 decision；不要从大型 product idea 开始。
+2. 只读一个有明确边界的 module 或 guide section，记下 URL 与 access date。
+3. 只使用 synthetic 或公开材料，完成上面那份最小 artefact。
+4. 加入五个 fixed cases，至少包括一个资讯不足、不安全或 failure case。
+5. 写下 human decision 与 stop condition。若工作仍不可检查，缩小 task，而不是再加工具。
+
+[学习证据指南](/zh-Hans/articles/choose-ai-learning-sources-by-evidence) 可协助你用 evidence gap 检查来源；有了可行来源与第一份 artefact 后，再利用 [八周作品证据 Sprint](/zh-Hans/articles/turn-an-ai-course-into-an-eight-week-evidence-sprint) 将它发展成有边界、可重复的 portfolio case。
+
+## 真正想报名一门课时，先核对一次
+
+把正在考虑的课程暂时当作“来源 01”，放进[学习证据规划器](/zh-Hans/learning-evidence-planner)逐项核对。你不需要输入平台名称；只要问第一周能否留下成果、收到有用的反馈、看到可以验收的检查，以及什么情况应该停止。页面会生成一段只留在本机的 brief，可贴到私人笔记或 README 草稿。
+
+有一两项尚未做到，不代表那门课不好。这只表示它还未证明值得为你现在想补的能力投入更多时间或金钱。
+
+## 边界与来源说明
+
+这些链接是官方学习来源的例子，不是 affiliate link、课程排名、就业建议，也不保证 access、价格、证书、品质或求职结果。课程内容与 prerequisite 可能改变；投入时间或金钱前请查看官方页面。本文所有 decision、data、user role、model fixture 与 result 都是虚构。Static `gpt-5-mini` fixture 只示范 design contract，并非 live API result。永远不要把真实 API key、机密工作资料或已连接账户的权限放入公开 portfolio repository。

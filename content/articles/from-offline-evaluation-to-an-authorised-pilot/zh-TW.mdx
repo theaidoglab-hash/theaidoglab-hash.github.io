@@ -1,0 +1,93 @@
+> offline evaluation 只能告訴你 candidate 在固定評估集上的表現；它不會自動證明 business outcome 已改變。中間缺少的不是更漂亮的 dashboard，而是一份有 owner、frozen comparison 與 stop rule 的授權量測設計。
+
+## 一個本地 demo 做得不錯以後，真正少了什麼？
+
+假設你的 Renewal Triage project 已有 data contract、baseline、固定 holdout、CI check 與 rollback note。你也能說明，為何 candidate 的 generic ranking metric 較高，卻仍然必須被 gate 擋下來。這已經比只放一個 F1 的 notebook 好得多。
+
+但面試官會接著問：「你怎麼知道它幫到 business？」
+
+答對一半的答案是：「我會 monitor accuracy 與 reviewer acceptance。」兩者都值得量測，但都不是 business outcome。acceptance 只能反映 reviewer 是否看得懂 queue；accuracy 只能反映 model 是否對應某個 label。它們無法證明 retention、cost、quality 或 customer outcome 因為這個 workflow 而改變。
+
+較完整的答案是：「我會先把四類證據分開，用不會改變任何下游狀態的 shadow review 比較 candidate 與 baseline；只有 data owner、operations owner 與 comparison method 都獲得授權後，才定義 business-outcome 問題。」以下示範如何把這個判斷做成可檢查的作品證據，而且不需要連接真實系統。
+
+## 四個數字，不能混成一句『有價值』
+
+| 證據層 | 要問什麼 | 可以支持什麼 | 單靠它不能支持什麼 |
+| --- | --- | --- | --- |
+| Hard gate | 有沒有禁止欄位、缺 trace 或 external-action path？ | 本地 build 應停止。 | workflow 有 business value。 |
+| Model／route metric | candidate 是否正確處理固定 holdout route？ | 該 dataset 上的技術比較。 | team 變快、customer outcome 改善。 |
+| Workflow metric | reviewer 能否在既定時間內依 pre-registered checklist 完成 packet？ | 受限的 operation observation。 | revenue、retention、滿意度或因果效果。 |
+| Delayed business outcome | 經授權的 comparison 在 outcome window 後是否看到改變？ | 有範圍的 outcome finding。 | 永久或所有情況都有效。 |
+
+Google 的 ML engineering 指引把 metric 與 instrumentation 視為系統的一部分，而非 model 完成後才補的裝飾；它也區分直接可觀察的 objective 與較廣泛的 system health。[Rules of Machine Learning](https://developers.google.com/machine-learning/guides/rules-of-ml) 作品集更要守住這個差異：不要把本地 proxy 寫成從未量過的 outcome。
+
+想像：有一個小幫手替老師把練習卡排進盒子。你能檢查它有沒有放對卡、老師看不看得懂標籤；但不能說它讓每個孩子學得更好，除非你小心比較之後真正發生的事情。
+
+## 先畫 state map，再談 action
+
+```text
+PLANNING_ONLY
+  -> SHADOW_REVIEW
+  -> OWNER_APPROVED_PILOT
+  -> OUTCOME_OBSERVATION
+  -> HOLD 或 ROLLBACK
+```
+
+`PLANNING_ONLY` 是寫清問題、metric 與邊界的階段，還沒有任何連接。`SHADOW_REVIEW` 讓 candidate 在 baseline 旁邊只產生 draft queue，再由人以 frozen checklist 比較；它不可以更改 account、price、message 或任何決策。
+
+`OWNER_APPROVED_PILOT` 不是 test pass 後自己加上的標籤。它需要資料與 workflow 的 owner、固定 comparison design、人工作 reviewer 與 stop path。Renewal Triage 的本地 sidecar 只會**模擬**這個狀態：code 檢查設計是否齊備，同時始終保留 `deployable: false`、沒有 connection、沒有 automatic action。它不是任何真實機構的核准。
+
+`OUTCOME_OBSERVATION` 只有在另一個已授權團隊決定收集 outcome 後才開始。許多 outcome 要等數天甚至數月才知道。在 observation window 與 comparison 完成前，狀態應是 `NOT_OBSERVED`，而不是「應該有正面效果」。`HOLD` 與 `ROLLBACK` 都是合理結果：有 safety breach、protocol change 或 gate fail 時，應停止 candidate，而不是用故事掩飾。
+
+## 在看結果前，先寫九格 pilot contract
+
+在虛構 review-queue 情境中，建立一份 versioned record，至少包含以下九格：
+
+1. **Data owner 與 boundary：** 哪一類資料可以用、哪些不能用、approval scope、retention expiry 與 deletion owner。技術上方便的資料，沒有授權就不是 pilot input。
+2. **Operations owner 與 human reviewer：** 誰擁有 workflow，誰能查看、hold 或拒絕 recommendation。model 不是 decision owner。
+3. **Frozen comparison：** baseline version、candidate version、assignment unit、comparison strategy 與 protocol 鎖定時間。看見漂亮結果後不可以改 threshold、label 或 denominator。
+4. **Primary workflow metric：** 定義和受限工作相符的短期量測，例如在指定 review window 內依 checklist 完成 packet 的比例；寫清 denominator 與 claim boundary。
+5. **Safety guardrail：** 設定不可談判的量測，例如 external-action breach 必須是零，並寫明 fail 時的處理方式。平均分再高也補不了不應出現的 action。
+6. **Delayed outcome definition：** 寫 outcome、observation window、comparison method，以及它目前為什麼還未觀察到。queue ranking 本身不是 intervention；由人進行的下游 action 需要另一份 policy。
+7. **Reviewer evidence：** 規定 reviewer 記錄 route、reason-code reconstruction、missing evidence、checklist result 與 unresolved issue；不要與 outcome label 混在一起。
+8. **Rollback decision：** 哪些情況需要 hold candidate、哪一個 baseline 可以保留、誰能重開，以及需要什麼新 evidence。
+9. **Claim statement：** 本地設計真的示範什麼、明確不示範什麼，避免 README 後來變成杜撰 ROI。
+
+### 系統部分，以及使用前要說清的事
+
+| 系統做法與檢查 | 使用前要說清的事 |
+| --- | --- |
+| Versioned data、feature、model、prompt、baseline 與 evaluation identifiers。 | Decision owner、data owner、operations owner 與 human reviewer。 |
+| Fixed cases、frozen comparison protocol、trace、failure record 與 deterministic test。 | Allowed-data boundary、retention、error cost、reviewer capacity 與 intervention authority。 |
+| 一個會拒絕 connected 或 action-enabled design 的 static gate。 | Primary workflow measure、safety guardrail、delayed-outcome definition 與 stop rule。 |
+| 永遠 draft-only、可逆的 route。 | 對 hold、rollback 或仍缺證據的書面決定。 |
+
+少了其中一欄，project 都會以不同方式不完整。只有 code 不能證明你有權採取行動；只有 business story 不能證明宣稱的機制被公平比較過。
+
+## 用 Renewal Triage sidecar 練習
+
+[Renewal Triage Lab](/zh-TW/articles/renewal-triage-mlops) 現在有一個小型 local pilot-readiness sidecar。它的 default synthetic design 會被 blocked，因為缺少 owner、data boundary、metric、comparison 與 rollback rule。第二個資料齊備但仍然**完全 synthetic** 的 design，只有在所有 check 都存在時才能到達模擬的 `OWNER_APPROVED_PILOT` readiness state。
+
+test 特意涵蓋四類失敗：沒有 human reviewer、comparison 未凍結、workflow metric 或 delayed-outcome definition 缺少，以及 action-enabled design。它不會做 network request、不會讀 key、不會傳送 message，更不會報告 business outcome。這正是重點：你能展示自己知道真實 pilot 前需要什麼 evidence，而不是假裝已經執行過。
+
+程式部分會顯示 schema-like contract、immutable version、gate result 與 regression tests；而使用前還要說清 data permission、review capacity、outcome ownership 與 stop decision。這些都是設計的一部分，不是 project 最後才補上的 disclaimer。
+
+## 最常見的錯誤轉彎
+
+不要因為 F1 變高、synthetic utility 漂亮，或 reviewer 覺得 draft 流暢，就寫「model 提升 retention」。不要偷偷使用 outcome data 來挑 threshold。不要因為 dashboard 有 before／after number 就稱為 experiment；如果沒有可比較的 unit、owner 與 observation rule，它只是一張圖。
+
+較可信的 baseline 是保留既有 rule 或 manual checklist，先跑 draft-only shadow comparison；protocol 或 safety boundary 一變就 hold candidate。NIST 的 AI RMF Core 把 governance、context、measurement 與 management 視為相互連結的工作，而不是最後打一次 compliance tick。[NIST AI RMF Core](https://airc.nist.gov/airmf-resources/airmf/5-sec-core/)
+
+## 你可以誠實放進 portfolio 的說法
+
+> 我為一個 human-review ML workflow 建立了 local、synthetic pilot-readiness contract。它把 fixed technical evaluation、擬定的 workflow measure 與尚未觀察到的 delayed outcome 分開；沒有 owner、data boundary、frozen comparison、safety guardrail 與 rollback rule 就會 blocked。它沒有 live connection 或 external action path。
+
+只有 repository 真有相應 evidence 才使用這段。不要把匿名 role label 當作真實 approval，也不要在已授權 protocol 產生量測結果以前，加上 productivity、revenue 或 retention 數字。
+
+## 下一步
+
+在下一個 demo 改 model 前，先寫九格 pilot contract。如果你說不出 owner、comparison 與 stop rule，就停在本地學習狀態。接著用 [GitHub Proof Pack](/zh-TW/articles/build-a-github-portfolio-proof-pack) 讓它可被追問，再回看 [模型分數高，為什麼未必是更好的決策？](/zh-TW/articles/model-score-to-workflow-decision) 選擇合適的 workflow metric。
+
+## 來源與邊界說明
+
+這是 AI.DOG 教學，使用完全虛構的 synthetic review-queue 情境；它不描述現時雇主流程、live pilot 或已量測 business result。[OpenAI 的 agent evaluation guide](https://developers.openai.com/api/docs/guides/agent-evals) 僅作一般 evaluation task 與 failure case 設計的參考；本地 sidecar 不會呼叫 API 或 model。

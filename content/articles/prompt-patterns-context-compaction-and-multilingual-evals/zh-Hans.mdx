@@ -1,0 +1,45 @@
+Prompt 不是越长越灵的咒语。它是一个 versioned instruction interface，把 user need、提供的 evidence 和有界 output 接在一起。用这个视角做 prompt work，才能在 portfolio 留下可审查的证据。
+
+## 一个双语 intake 难题
+
+设想一个完全虚构的 project-intake desk。coordinator 用英文、粤语或混合文字提交短 request。desk 要生成 structured draft：goal、缺失字段、允许的下一步，以及 evidence note 或 **HANDOFF**。它不能承诺 delivery date、不能打开外部 system，也不能把粗略 request 当作已批准 scope。
+
+第一版 prompt 在整齐的英文案例表现不错，却会在粤语夹英文 product name、很长的 thread，或 user 说“和上次一样”而旧 request 有关键限制时出错。这不只是 prompting 问题，而是 context assembly 和 evaluation 问题。
+
+## 把 prompt 分成可检查部分
+
+把变动速度不同的内容分开：
+
+- **Task contract**：必需字段、允许 output、refusal condition 和 decision owner；
+- **Evidence block**：带 identifier 和 version 的 approved source excerpt；
+- **Examples**：教格式或困难区别的一小组案例；
+- **User input**：本次 request，与 instruction 清晰分隔；
+- **Output check**：schema validator，以及 citation、uncertainty、handoff 规则。
+
+这比把整个对话塞进同一条 message 更可控。example 不是 evidence；retrieved note 是 data，不是新 instruction；schema 不能证明 draft 有用，却能避免流畅段落掩盖缺 route 或无依据 claim。
+
+## Context compaction 应保留决策
+
+**Context compaction** 是把很长的旧 interaction 变成下一轮可用的较小 representation。安全的 compact record 应保留 stable fact、open question、source ID 与 version、既有决策、被拒选项和 expiry rule，也要写明什么被丢弃。
+
+这个 intake desk 的 capsule 可以记录：“request 仅限 draft；budget owner 尚未批准 scope；需要 product code RQ-17；上次 exception 在 2026-09-01 到期；source P-4 与 P-9 冲突。”它不该把不确定的事写成 fact，也不该因为方便保留私人 raw text。
+
+用 paired case 测试压缩：一个 system 读取完整 history，另一个只读取 capsule；针对必须保留的事实，二者都要到同一个 allowed route。再加一个危险 case，让唯一关键限制放在很早的对话。如果 capsule 漏掉，应修 compaction contract，而不是把 final prompt 写得更华丽。
+
+## Multilingual quality 不能从单一翻译推断
+
+evaluation set 应由等价 intent 组成，而不是机械翻句。包括粤语加英文 product term、必要时的繁简变体、缩写、模糊日期，以及应该 handoff 的 request。每个 case 写明 expected field、source use、output language 和 forbidden assumption。
+
+将 output validity、route correctness 和自然度分开评分。文字可以很自然，却改错 product code、遗漏限制或猜错日期格式。请 bilingual reviewer 检查一小组困难 cases；对必须保持准确的 field 使用 deterministic check。不要让 model 自己很有信心的翻译成为唯一 multilingual judge。
+
+## 应保留的 evidence packet
+
+保存 prompt contract、prompt version、context-capsule schema、fixed evaluation case、output validator、prompt diff 和简短 error review。非技术方面也应说明：谁拥有 scope decision、哪些信息需要过期、语言不确定时谁接手，以及为什么 desk 不能执行外部 action。
+
+这比“我找到完美 prompt”更有价值。它展示工程 loop：定义行为、每次只改一个 component、比较已命名 cases、检查 regression，并保留较小而安全的 baseline。
+
+延伸阅读：[把 prompt 变成 professional evidence](/zh-Hans/articles/prompt-play-to-professional-evidence)、[把 AI request 变成可接受改动](/zh-Hans/articles/turn-an-ai-request-into-an-accepted-change)，以及[为什么 workflow evaluation 不只看 final answer](/zh-Hans/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)。
+
+## 边界
+
+intake desk 和所有 examples 均为虚构。本文不声称存在通用 multilingual benchmark、production-quality summariser，或已批准处理个人及商业数据的路径。真实使用前应验证语言、retention 和法律要求。

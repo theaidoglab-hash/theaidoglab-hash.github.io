@@ -1,0 +1,29 @@
+只有當順序在決定前已經存在，而且會改變人下一步的行動，sequence 才值得使用。Sequence model 不是 portfolio 的升級徽章；它是表示一連串觀察的方法，適用於事件順序、間隔或前文可能有意義的情況。
+
+## 把 sequence 寫成營運 contract
+
+想像一筆虛構服務案件的 events：表單提交、要求補資料、收到文件、specialist review。簡單的 tabular baseline 可以使用各類 event 數量與最新 status；sequence model 則接收有順序的 event，可能還有 timestamp 或間隔時間，學習它們的 context。
+
+RNN、LSTM 與 GRU 這類 recurrent network，會把持續變動的 internal state 從一個 event 傳到下一個。Transformer-style model 使用 attention 較直接地比較 sequence 的不同部分。兩類都可能有用，但都看不到 observation window 以外的資料。先寫 cutoff，例如：「10:00 的 routing recommendation 只能使用 10:00 前已記錄的 event。」
+
+這一句能保護實驗不走捷徑：不小心把之後 specialist 的決定放進 sequence，再拿來預測是否需要 specialist review。
+
+## 先保留一個短而能檢查的 baseline
+
+先做 aggregate baseline，再做 sequence model：各類 event 的 count、距離最新 event 的時間，以及對明顯資料不完整案件的 rule。若 sequence model 在較晚時段仍無法改善有限的覆核決定，它的額外複雜度還不值得進入 release 討論。
+
+面對不同長度的紀錄，要決定如何 truncate、pad 與 mask。**Padding** 加入 placeholder，使一個 batch 具有相同長度；**masking** 告訴 model 哪些位置只是 placeholder，不該影響結果。直接測試：替一筆 case 加上 padding 後，prediction 不應改變。把一段 event trace 與其 feature representation 放在一起，讓 evaluator 能檢查轉換。
+
+## Framework 不是 system design
+
+PyTorch、TensorFlow 與高階 training library 可以加快實作，但不會替你決定 target、data boundary、acceptance criterion 或 human handoff。Framework 可能隱藏 tokenisation、batching、loss reduction、mixed precision 或 evaluation mode 的 default。把這些 default 視為 repository 內的 configuration，而不是背景魔法。
+
+製作一份 **sequence-model contract**：event schema、排序 rule、observation cutoff、padding／masking 行為、model configuration、training/evaluation command、baseline 結果與 rollback condition。Pin 重要 dependency version，並記錄 run environment。加上一個 late event 必須排除的 test case，以及一個新 event type 的 case，使 fallback 行為明確。
+
+## 一個好 demo 應揭露的失敗
+
+長 sequence 可能昂貴、有雜訊且難以解釋。截錯一端會丟掉唯一有用的 context；time leakage 會讓每個 metric 虛高；library upgrade 也可能在不改 business question 的情況下改變 tokenisation 或 tensor behaviour。也可能 sequence 根本沒有比幾個設計良好的 aggregate feature 帶來更多訊號。
+
+AI engineer 需要的證據不是「我用過 Transformer」，而是使用 sequence information 的可辯護理由、boundary test、有可能勝出的 baseline，以及可由人停止的行動。
+
+延伸閱讀：[Transformer、generation 與 adaptation 的選擇](/zh-TW/articles/choose-transformer-generation-and-adaptation-tradeoffs) 與 [implementation evidence loop](/zh-TW/articles/turn-an-ai-request-into-an-accepted-change)。

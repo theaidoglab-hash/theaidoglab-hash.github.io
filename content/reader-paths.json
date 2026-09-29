@@ -1,0 +1,170 @@
+[
+  {
+    "id": "start-here",
+    "status": "review",
+    "visibility": "public",
+    "updatedAt": "2026-09-25",
+    "reviewBy": "2026-12-24",
+    "relatedArticleSlugs": [
+      "ai-engineer-interview-learning-map",
+      "ai-engineer-interview-practice-cards",
+      "enterprise-ai-portfolio-policy-pilot",
+      "renewal-triage-mlops",
+      "build-a-low-code-ai-automation",
+      "review-a-coding-agent-build-without-being-a-developer",
+      "use-ai-without-writing-code",
+      "use-ai-as-a-coding-partner-with-proof",
+      "choose-ai-learning-sources-by-evidence",
+      "turn-an-ai-course-project-into-portfolio-evidence",
+      "score-an-ai-portfolio-by-evidence-not-fluency",
+    "turn-an-ai-course-into-an-eight-week-evidence-sprint",
+    "choose-an-ai-learning-source-by-role-and-evidence-gap"
+    ],
+    "translations": {
+      "zh-HK": {
+        "eyebrow": "由呢度開始",
+        "title": "先揀你眼前要解嘅問題",
+        "intro": "想學 AI，或者想將一個 demo 補成可以畀人檢查嘅作品集？先揀最貼近你而家情況嘅一條。每條路都有一件要做嘅事、一份要留低嘅證據，亦會寫清楚呢個練習未能證明乜。本站唔保證學習、作品、商業或求職結果。",
+        "browse": "瀏覽全部指南",
+        "paths": [
+          {
+            "title": "準備 AI Engineer 面試",
+            "description": "59 條題目分成 10 組能力。先揀一題，用自己做過嘅事答一次；答到卡住，就補返原理、取捨同失敗情況，再攞 README、測試或決策紀錄做依據。",
+            "action": "先答一條題",
+            "kind": "interview-lab",
+            "target": "interview-lab"
+          },
+          {
+            "title": "將一個 demo 補成可檢查嘅作品集",
+            "description": "寫低邊個會用、可用咩資料、對照做法、檢查方法，同埋出錯後邊個接手。工具選擇留到最後。",
+            "action": "整理我嘅項目證據",
+            "kind": "planner",
+            "target": "portfolio-evidence-planner"
+          },
+          {
+            "title": "用 AI 做事，未必先寫 Code",
+            "description": "無論自己寫唔寫 Code，都由一件細小、可以停低同核對嘅工作開始。寫清楚可用嘅輸入、點樣核對結果、邊啲事唔可以做，以及最後由邊個決定。",
+            "action": "揀一條用 AI 做事嘅路",
+            "kind": "series",
+            "target": "ai-use-routes"
+          },
+          {
+            "title": "按 19 站補 AI Engineer 能力",
+            "description": "19 站各自處理一個決定：補模型概念、做一個小流程、核對風險，或整理一份可追問嘅工作紀錄。每站列出要做嘅事、要留低嘅檔案，亦會講清楚練習未能證明乜。",
+            "action": "由第 00 站開始",
+            "kind": "series",
+            "target": "ai-engineer-roadmap"
+          }
+        ]
+      },
+      "zh-TW": {
+        "eyebrow": "從這裡開始",
+        "title": "先處理你眼前的問題",
+        "intro": "想學 AI，或想把一個 demo 補成可供他人檢查的作品集？先選最貼近你目前情況的一條。每條路都有一件要做的事、一份要留下的證據，也會寫清這個練習還不能證明什麼。本站不保證學習、作品、商業或求職結果。",
+        "browse": "瀏覽全部指南",
+        "paths": [
+          {
+            "title": "準備 AI Engineer 面試",
+            "description": "59 題練習分成 10 組能力。先選一題，用自己做過的事回答一次；卡住時，補上原理、取捨和可能出錯的地方，再找一份 README、測試或決策紀錄做依據。",
+            "action": "先答一題",
+            "kind": "interview-lab",
+            "target": "interview-lab"
+          },
+          {
+            "title": "把一個 demo 補成可檢查的作品集",
+            "description": "寫下誰會用、可用哪些資料、對照做法、檢查方法，以及出錯後由誰接手。工具選擇留到最後。",
+            "action": "整理我的項目證據",
+            "kind": "planner",
+            "target": "portfolio-evidence-planner"
+          },
+          {
+            "title": "用 AI 做事，未必先寫程式",
+            "description": "無論自己寫不寫程式，或請 AI 協助寫程式，都從一件小而能停下來核對的工作開始。寫清楚可用的輸入、怎麼核對結果、哪些事不能做，以及最後由誰作決定。",
+            "action": "選一條用 AI 做事的路",
+            "kind": "series",
+            "target": "ai-use-routes"
+          },
+          {
+            "title": "按 19 站補 AI Engineer 能力",
+            "description": "19 個學習站各自處理一個決策：補模型概念、完成一個小流程、檢查風險，或整理一份能被追問的工作紀錄。每站列出要做的事、要留下的檔案，也會說清這個練習仍然不能證明什麼。",
+            "action": "從第 00 站開始",
+            "kind": "series",
+            "target": "ai-engineer-roadmap"
+          }
+        ]
+      },
+      "zh-Hans": {
+        "eyebrow": "从这里开始",
+        "title": "先处理你眼前的问题",
+        "intro": "想学习 AI，或想把一个 demo 补成可供他人检查的作品集？先选最贴近你目前情况的一条。每条路都有一件要做的事、一份要留下的证据，也会写清这个练习还不能证明什么。本站不保证学习、作品、商业或求职结果。",
+        "browse": "浏览全部指南",
+        "paths": [
+          {
+            "title": "准备 AI Engineer 面试",
+            "description": "59 道练习分成 10 组能力。先选一题，用自己做过的事回答一次；卡住时，补上原理、取舍和可能出错的地方，再找一份 README、测试或决策记录做依据。",
+            "action": "先答一题",
+            "kind": "interview-lab",
+            "target": "interview-lab"
+          },
+          {
+            "title": "把一个 demo 补成可检查的作品集",
+            "description": "写下谁会用、可用哪些数据、对照做法、检查方法，以及出错后由谁接手。工具选择留到最后。",
+            "action": "整理我的项目证据",
+            "kind": "planner",
+            "target": "portfolio-evidence-planner"
+          },
+          {
+            "title": "用 AI 做事，未必先写代码",
+            "description": "无论自己写不写代码，还是请 AI 协助写代码，都从一件小而能停下来核对的工作开始。写清楚可用的输入、怎样核对结果、哪些事不能做，以及最后由谁作决定。",
+            "action": "选一条用 AI 做事的路",
+            "kind": "series",
+            "target": "ai-use-routes"
+          },
+          {
+            "title": "按 19 站补 AI Engineer 能力",
+            "description": "19 个学习站各自处理一个决策：补模型概念、完成一个小流程、检查风险，或整理一份能被追问的工作记录。每站列出要做的事、要留下的文件，也会说清这个练习仍然不能证明什么。",
+            "action": "从第 00 站开始",
+            "kind": "series",
+            "target": "ai-engineer-roadmap"
+          }
+        ]
+      },
+      "en": {
+        "eyebrow": "START HERE",
+        "title": "Start with what is blocking you",
+        "intro": "Learning AI, or turning a demo into a portfolio that others can inspect? Pick the route closest to the problem in front of you. Each route says what to do, what to keep, and what the exercise cannot establish; the site does not guarantee a learning, portfolio, business, or job outcome.",
+        "browse": "Browse every guide",
+        "paths": [
+          {
+            "title": "I am preparing for an AI Engineer interview",
+            "description": "59 practice questions are grouped around 10 areas of work. Take one at a time: answer from something you have done, then add the principle, trade-off, failure case, and a README, test, or decision record you can point to.",
+            "action": "Start with one question",
+            "kind": "interview-lab",
+            "target": "interview-lab"
+          },
+          {
+            "title": "My portfolio feels like a demo",
+            "description": "State who will use it, what data may be used, what you will compare, how you will check it, and who takes over when it fails. Choose tools last.",
+            "action": "Check my project idea",
+            "kind": "planner",
+            "target": "portfolio-evidence-planner"
+          },
+          {
+            "title": "I want to use AI, with or without code",
+            "description": "Start with one small task. State the allowed input, how you will check the result, the actions that remain off-limits, and who makes the final decision.",
+            "action": "Choose a way to work with AI",
+            "kind": "series",
+            "target": "ai-use-routes"
+          },
+          {
+            "title": "I want to work through the AI Engineer roadmap",
+            "description": "Each of the 19 stops deals with one decision: model ideas, a small workflow, a risk check, or a work record you can explain under follow-up. Every stop states the action, the file you will keep, and what the exercise still cannot establish.",
+            "action": "Start at stop 00",
+            "kind": "series",
+            "target": "ai-engineer-roadmap"
+          }
+        ]
+      }
+    }
+  }
+]

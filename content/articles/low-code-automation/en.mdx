@@ -1,0 +1,104 @@
+You do not need to choose a tool first. This exercise does one thing: turn one fictional frequently asked question into a reply draft for a named person to check. The tool never reads a real account, sends a message, or changes another system.
+
+## Understand the whole exercise in five minutes
+
+1. Write one goal: “Draft from an approved fictional FAQ, then hand it to a person for review.”
+2. Prepare three fictional questions: one with a clear answer, one with no answer, and one that asks the tool to send a message.
+3. Write your expected result first: draft, handoff, or stop.
+4. Only then let a tool produce results and compare them one by one. Do not perform any send or write request.
+
+Know four terms before you start:
+
+- **Synthetic FAQ:** invented practice questions and answers that do not belong to real customers.
+- **Draft-only:** the tool may arrange text but may not send it or write to another system.
+- **Handoff:** the tool stops and asks a person to decide when information is missing, rules conflict, or a request exceeds its boundary.
+- **Permission review:** before a tool reads files, connects an account, uses the network, or writes data, check its target, scope, effect, reversibility, and owner.
+
+If you cannot name those five permission details, keep the exercise local, synthetic, and draft-only. Read the [permission review](/en/articles/review-an-ai-agent-before-clicking-allow) before enabling any tool access.
+
+## What this demo explicitly demonstrates
+
+You can finish the five-minute path above without learning the implementation labels below. Read them only when you want to inspect how this safe practice build is checked; they do not give the tool access to real data or systems.
+
+### What you can inspect in the build
+
+- **FAQ lookup (`retrieval`):** before drafting, the tool selects a matching answer from the invented FAQ list. It does not search a real customer system or a private document collection.
+- **Cited draft:** the draft names the invented FAQ item it used so a reviewer can check it.
+- **Fixed stand-in (`deterministic mock`):** a local substitute that returns the same prewritten result for the same test. It lets you test the route without calling a model.
+- **Saved request example (`gpt-5-mini` Responses API request fixture):** a file that shows the shape of a possible model request. It contains no API key or other credential, makes no network call, and is never sent.
+- **Prewritten checks (`acceptance cases`):** the test questions and expected results you wrote before testing.
+- **Rule-bypass attempt (`prompt injection`):** input that tries to make the tool ignore a boundary, such as “ignore the no-send rule.” The expected result is a stop or handoff, not a reply.
+- **Minimal run record (`trace`):** a local note of the case ID, version, outcome and reason. It leaves out the original question and any personal data.
+
+### What has to work around the build
+
+- Drafting is deliberately separated from sending to a customer; a human reviewer retains authority over the real action.
+- The project uses synthetic or public material only. Its stated scope, permission checks, failure records and GitHub README let a reviewer see what was and was not tested.
+- This is a local learning reference, not a claim of a connected support workflow, business impact or safe autonomous handling of sensitive cases.
+
+## An AI tool can write code; it cannot own your decision
+
+You can use a coding agent, chatbot or low-code app to make a small tool. It may help decompose a requirement, write a form, connect data or propose an initial workflow. The product name is secondary. Whether you use Codex, Grok or another tool, the transferable skill is turning a vague wish into work that can be accepted or rejected.
+
+“Automate customer support” is too broad. “Turn approved FAQ text into a reply draft for one human reviewer” is a safe starting scope. The first phrase pushes you toward identity, data, sending and refund actions that are hard to reverse. The second can be tested with synthetic or approved public material.
+
+## The minimum six capabilities
+
+- **State the input and output:** what arrives, which format is expected and which fields must not be viewed or retained.
+- **State what the system must not do:** no sending, deletion, financial/right-changing action or unauthorised data use.
+- **Provide expected examples:** not “looks good,” but 10–20 inputs with the expected classification, citation, abstention or handoff.
+- **Compare a baseline:** start with manual work, a spreadsheet rule or search so you can see whether AI changed anything useful.
+- **Recognise a failure:** classify incomplete input, wrong citation, unauthorised scope, bad format or a decision that needs a person.
+- **Keep a human gate:** any external send, write, payment, account change or high-risk decision must be confirmed outside the model.
+
+This does not turn you into a full-stack developer. It prevents a fluent demo from becoming your proof, and it gives you a way to discuss real acceptance criteria with developers.
+
+## A safe first build: an FAQ triage assistant that drafts only
+
+Use entirely fictional or publicly approved FAQ text. A user pastes a question and gets a proposed category, cited FAQ passage, reply draft and a “hand to a person” label. It does not read real customer accounts, send messages, or connect to payment or order systems.
+
+### 1. Write an action contract first
+
+Put this in the project brief instead of only telling a tool to “build an app.”
+
+```text
+User: colleague handling common questions
+Input: public or synthetic question text
+Output: category, traceable FAQ citation, reply draft, handoff reason
+Prohibited: sending, account changes, private-data use, invented citations
+Human decision: use of draft, customer contact, exception handling
+```
+
+An `action contract` turns permissions and responsibility into a testable specification instead of trusting the model to share your common sense. Picture it: draw the game rules before giving the toy to a child.
+
+### 2. Write examples as the smallest evaluation set
+
+Prepare at least twelve cases: four ordinary FAQ questions, two no-answer cases, two contradictions, two with insufficient information, one prompt-injection attempt and one request for a prohibited action. Write the expected behaviour before testing: “cite FAQ-03, produce a draft, never send,” or “do not answer; hand off only.”
+
+These examples do not need to be a data-science benchmark. They are a repeatable acceptance contract between you and the tool. Picture it: do not make someone guess what you want; write the answer sheet first.
+
+### 3. Ask the tool for the smallest design
+
+Ask the coding agent to propose a local prototype with the fewest parts and explain the responsibility of each part. A useful request is not “build an enterprise agent.” It is “build a read-only, locally rerunnable draft generator with twelve test cases; do not add sign-in, payments, external sending or connectors that I did not request.”
+
+Read the proposal by asking four questions. Where does the data come from? Can output return to its source? Can it write anything? What does a user see on failure? If those answers are unclear, narrow scope rather than immediately choosing a stronger model.
+
+### 4. Test in a sandbox, not a real workflow
+
+Start with fake FAQs and non-sensitive inputs. Run every evaluation case and record expected result, actual result and failure class. An output that looks “mostly right” but cites incorrectly, misses an abstention or tries to exceed scope is not a minor bug. It means the acceptance rule needs to become clearer.
+
+Your record can be simple: case ID, version, citation correctness, output format, required handoff and human decision. You do not need a dashboard before learning observability.
+
+### 5. Add a human gate before discussing automation
+
+The first version should only create drafts. If it later needs to write to another system, add a separate review screen where a person checks target, content, citations, data scope and action before confirming. This gate must be enforced by code and permissions, not only by a “do not do this” prompt.
+
+Picture it: a helper may write the note, but an adult checks the address and message before it goes into the postbox.
+
+## When to stop
+
+Return to the requirement rather than layering on more tools if any of these is true: you cannot write expected output; you need real personal data to test; one mistake can cause payment, legal, medical, safety or rights harm; nobody owns the final decision; or you are making a demo that anyone can copy in five minutes.
+
+Low-code is not low standards. The most valuable first project is often small enough to show refusal, evaluation, traces and human handoff.
+
+Related reading: [review a coding-agent demo step by step](/en/articles/review-a-coding-agent-build-without-being-a-developer), [from vague request to accepted feature](/en/articles/from-vague-request-to-accepted-feature), [how PolicyPilot uses a keyword baseline, cited drafts, and human handoff](/en/articles/enterprise-ai-portfolio-policy-pilot), and [how to explain tool permissions and evaluation in an interview](/en/articles/ai-engineer-interview-learning-map).

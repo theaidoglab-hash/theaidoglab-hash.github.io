@@ -1,0 +1,33 @@
+当 training run 突然出现 `NaN`、loss curve 平得不动，或 prediction 永远一样时，先增加 layers 通常只是猜测。先沿着一个 labelled example 走到一次 parameter update。Gradient 与 backpropagation 在这条路上，才会从课本名词变成实际的 engineering 工具。
+
+## 跟着一个 prediction 倒推一次
+
+想象一个虚构的 triage model，看到一笔 case 后估计它有 0.80 概率需要人工复核。记录的 target 是 1，因为过去 reviewer 将它升级。Loss function 把这个差异转成数值信号。**Gradient** 问的是一个局部问题：若某个 parameter 微小变动，往哪个方向能减少这个信号？
+
+**Backpropagation** 把 chain rule 套用在 calculation graph。它从 loss 开始，倒推过最后 output 与前面的 layers，计算每个可学习 parameter 对错误的贡献。Optimizer 再根据 gradients 与 learning rate 决定 update。Backpropagation 不是另一种“智能”；它只是有效地计算当前这次运算如何影响 loss。
+
+这也说明一个限制：它能降低指定 objective，却仍可能学到错误的运营行为。若 label 记录的是不一致的旧 routing，gradient 只会忠实优化那份不一致。
+
+## 先 debug 最小 case，再跑全套
+
+使用受控顺序，不要一次改五个 setting：
+
+1. 打印一个 input、它的 target、raw model output 和计算出的 loss，确认 shape、unit 与顺序一致。
+2. 核对 output 与 loss 的配对。预期 raw logits 的 loss，和预期 probabilities 的 loss，行为不同。
+3. 用一小批固定数据 train 到 model 故意 overfit。若做不到，检查 data pipeline、被冻结的 parameter、gradient flow 与 optimiser 接线。
+4. 为几层记录 gradient norm 与 parameter change。全部为零、爆升或非有限值都是诊断线索，不是该隐藏的 run。
+5. 到这一步才每次改一个因素，例如 learning rate、batch size 或 feature representation，并与同一 baseline 比较。
+
+Tiny-batch test 不是 generalisation 证据。它只检查 learning machinery 能不能运作。
+
+## 留下他人能检查的 debugging trail
+
+每一次 run 都保留 run ID、code 与 data revision、seed、input schema、target 定义、loss configuration、optimiser setting 与简短观察。变更前先写一个假设，例如“loss 预期 logits，但现在收到 probabilities”。记下预期信号、实际结果与该变更是否保留或 rollback。
+
+这也是非技术证据。Reviewer 能看出你管理不确定性、一次只改一个变量，也没有把一条幸运 curve 包装成结论。记录中加入两个 failure example：一个 model 很有信心却错，另一个连 label 本身都需要人重新判断。
+
+## 常见但不够的修补
+
+Gradient clipping 可阻止爆炸，却不能证明 architecture 或 target 正确。降低 learning rate 能让 curve 看起来平静，也可能慢到根本还没学到。Missing value 的 default 可能形成太容易的捷径。低 loss 也无法回答：这个 queue threshold 对收到结果的人是否可以接受。
+
+下一步是让 run 可重现且稳定，同时不要把 training convenience 误认成 release gate。延伸阅读：[training stability、dropout 和 normalisation](/zh-Hans/articles/training-stability-dropout-normalisation) 和 [从模糊 AI 需求到可验收的改动](/zh-Hans/articles/from-vague-request-to-accepted-feature)。

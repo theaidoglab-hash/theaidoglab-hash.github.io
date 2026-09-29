@@ -1,0 +1,38 @@
+“loss 下降了”不是 product result。它只表示 model 在某一批 example 上，更能完成你提供的数学 objective。真正的工作，是判断这个 objective 是否代表有用的决定，以及改进能否在新数据上延续。
+
+## 先为你在意的错误定价
+
+想象一个虚构团队，预测有多少预约申请会错过 service window。Loss function 把 prediction error 压缩成 optimiser 可最小化的数字。Squared error 会让大错误特别重；absolute error 对每多错一笔的处理更平均。没有一个永远正确。如果团队是在安排人力，用 case 数表达误差可能比抽象分数更有意义；如果低估的代价远高于高估，也要写明这个不对称，而不是希望 default loss 自己理解。
+
+Training loss 和 evaluation metric 可以有意不同。你可以用更平滑的 objective 来 train，再用运营指标，例如误差是否落在可接受的人力范围，来评估。关键是清楚交代两者各自存在的原因。
+
+## Generalisation 是 notebook 之外的考验
+
+当 model 在未看过、且与未来决定相关的数据上仍合理运作，我们说它具有 **generalisation**。最后的 test period 要保留；用 validation period 比较 model setting，只有准备好做决定后才看最后 test。对时间相关工作，较晚时段通常比随机洗牌更真实。
+
+要理解落差。Training loss 很低而 validation loss 变差，可能是 model 记住偶然 feature。Training 与 validation 接近也不等于好：两个切分都可能漏掉重要 group、季节或 failure mode。保留简单 baseline，才知道“更好”的意思。
+
+## Regularisation 是限制，不是万能药
+
+**Regularisation** 是 training 时加入的一种偏好，让 parameter 不要太复杂。L2 regularisation 会抑制很大的 weight；L1 regularisation 可把部分 weight 推到零。用白话说，它使 model 不容易过度依赖脆弱细节。它能减少 overfitting，但不能修复有歧义的 label、未来信息 leakage、未取得 consent 的数据，或选错的决定。
+
+不要把 penalty value 当成神奇 setting。比较少量数值、记录 data split，再看两条 error curve。Penalty 太弱可能改变不了脆弱 fit；太强则可能 underfit，连有用 pattern 都看不到。
+
+## 留下可以复核的实验记录
+
+每个 candidate 都应有一张 **experiment card**：
+
+- exact target 和 loss 定义；
+- data version、observation cutoff 和 split rule；
+- baseline 和 model configuration；
+- training、validation、final-test 结果，并用运营单位表达；
+- error slice 和几个已复核 miss；
+- 下一个决定：进行有人复核的有限试行、修改数据，或停止。
+
+把 final test 当作 receipt，不要当 tuning dashboard。看完后不断修改 setting，等于把它也变成 validation set，最后报出的结果会过度乐观。
+
+## Regularisation 不会保证什么
+
+Regularisation 不会让 model 自动公平、隐私安全、因果正确或可部署。一条平滑 validation curve 仍可能配上有害 action threshold。若 model 改变队列，请和 rule 或 human baseline 比较后果，并给人推翻它的权力。若没有方案在真正重要的决定上胜过 baseline，诚实结论就是保留 baseline。
+
+延伸阅读：[gradient 和 backpropagation 如何让 objective 移动](/zh-Hans/articles/gradient-backprop-and-loss-debugging) 和 [调参前先理解 neural learning loop](/zh-Hans/articles/understand-neural-learning-before-you-tune)。

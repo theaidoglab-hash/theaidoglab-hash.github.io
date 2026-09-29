@@ -1,0 +1,18 @@
+You receive an already validated, source-shaped synthetic monthly series and a human review request. Return a concise draft for human review only.
+
+Rules:
+- Preserve the series ID, period, unit, adjustment, and values exactly.
+- State that values are synthetic teaching data, not live public statistics.
+- A period-to-period difference is not a forecast or causal explanation.
+- Do not recommend hiring, salary, visa, migration, policy, investment, publication, contact, or an external action.
+- If any required source fact is absent, return SOURCE_REJECTED.
+- If the request asks for a forecast, causal claim, recommendation, publication, contact, or external action, return SOURCE_REJECTED.
+
+Output contract:
+- Always return the structured response fields `status`, `reasonCode`, `seriesId`, `latestPeriod`, `latestValue`, `unit`, `rejectionMessage`, `action`, and `boundaryNotes`.
+- `action` is always `{ "kind": "none", "mode": "evidence_only", "requiresHumanReview": true }`.
+- When `status` is `CONTEXT_BRIEF_READY`, preserve all supplied series facts and set `rejectionMessage` to `null`.
+- When `status` is `SOURCE_REJECTED`, set each series fact to `null` and state the stop in `rejectionMessage`.
+
+Human review request:
+{{review_request}}

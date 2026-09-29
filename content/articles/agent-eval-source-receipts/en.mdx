@@ -1,0 +1,107 @@
+Do not begin with “Which AI course is best?” Begin with the evidence gap you need to close: do you need to explain an agent loop, make workflow state and human handoff visible, interpret runtime events, or keep a rerunnable evaluation case? A course, framework, or documentation page is learning input. Your goal is an inspectable judgement you can carry forward.
+
+## Five official source receipts, not a course ranking
+
+These are five official starting points checked on 2026-09-25. They are not affiliate links, a recommended order, a job guarantee, or a syllabus you must finish. Each receipt is paired with a Week-1 exercise that asks you to turn one idea you studied into evidence using only synthetic or public-safe material. It is a learner-scoped exercise, not a provider-endorsed result or a statement about what a course delivers.
+
+Start by choosing the statement that is closest to your current gap:
+
+- I want to explain tools, observations, and an agent loop without only repeating vocabulary.
+- I need to make routes, state, memory, and human handoff reviewable.
+- I need to understand runtime events, sandboxes, and cleanup without treating “completed” as success.
+- I need to turn “the answer looks okay” into fixed cases, assertions, and a reviewer note.
+- I want a more formal evaluation method, but am not ready to connect real data or accounts.
+
+## 1. Learn the shared language of agents: Hugging Face AI Agents Course
+
+The [Hugging Face AI Agents Course](https://huggingface.co/learn/agents-course/unit0/introduction) brings together agent fundamentals, popular libraries, hands-on work, assignments, challenges, and an evaluation/observability unit. Its stated starting point includes basic Python and basic LLM knowledge; a Hugging Face account is needed to use the Hub or Spaces.
+
+Use it when you need to distinguish a **tool**, **thought**, **action**, and **observation** before trying to claim you have built an autonomous agent.
+
+**Keep this in Week 1:** write three synthetic FAQ or role cards of your own, then draw a small `input → allowed tool → observation → draft → human decision` path. Add three cases: complete information, missing information, and a request for a prohibited action. Give every case an expected route: `DRAFT`, `HANDOFF`, or `BLOCKED`.
+
+**What someone can inspect:** a tool contract, an input boundary, visible routes, and the human decision an agent cannot bypass.
+
+**What completion still does not prove:** that you have an enterprise agent, selected the right framework, made every tool safe, or can deliver production work. A challenge or certificate is not the same as your portfolio evidence.
+
+## 2. Practise state and a human gate: LangGraph Foundation
+
+[LangChain Academy’s Introduction to LangGraph](https://academy.langchain.com/courses/intro-to-langgraph) publicly lists material on simple graphs, routers, agents, state schemas, memory, breakpoints, human feedback, and deployment concepts. The page currently lists the course as free, with 55 lessons and about six hours of video; it also says the LangGraph library is MIT-licensed. Neither fact grants a licence to course prose, an associated cloud service, or a model provider you connect.
+
+Use it when you already have some Python and need to move beyond a chat loop to ask **who can change state, where a process pauses, and who can override a decision**.
+
+**Keep this in Week 1:** create a small workflow state card with `received`, `needs-evidence`, `draft-ready`, `review-required`, and `stopped`. Allow a synthetic request to move from `draft-ready` to `review-required` only; then let a named reviewer choose `PASS`, `REVISE`, or `STOP`. Retain a transition table and one rejected transition.
+
+**What someone can inspect:** a state schema, an owner for every transition, an interrupt point, and a failure record.
+
+**What completion still does not prove:** production orchestration, reliable long-term memory, deployment, or that a human-in-the-loop button solves permissions, data rights, cost, or incident handling.
+
+## 3. Learn managed-runtime evidence: OpenAI Agents API quickstart
+
+The [OpenAI Agents API quickstart](https://developers.openai.com/api/docs/guides/agents-api/quickstart) demonstrates creating a session, running work in a hosted sandbox, streaming events, and cleaning up. The official prerequisites list an API key with particular permission scopes and a beta header. It also explicitly says that a completed turn does not mean every tool succeeded.
+
+This route is only appropriate when you have programming experience and clear authority for API use, spend, and data. You do **not** need a key to learn the first judgement a portfolio should show.
+
+**Keep this in Week 1:** do not make a live call. Write an English `session-receipt.md` for a fictional, local-only task with expected events: `started`, `tool-requested`, `tool-result`, and `completed`/`failed`/`cancelled`. Name the events that still require human review, when cleanup occurs, and which missing result prevents a success claim. This is a static fixture design, not API output.
+
+**What someone can inspect:** a session boundary, event interpretation, the difference between completion and success, a cleanup owner, and a credential boundary.
+
+**What completion still does not prove:** that you ran an OpenAI API call, observed a model result, configured a safe sandbox, controlled cost, or can use the workflow with a real account. A live experiment needs separate data authority, a test set, cost control, logging, and release evidence.
+
+## 4. Turn “looks okay” into a case matrix: Promptfoo
+
+[Promptfoo Getting Started](https://www.promptfoo.dev/docs/getting-started/) shows how a `promptfooconfig.yaml` can hold prompts, providers, and test cases, with optional assertions, evaluation runs, and output review. The page also says that many providers need authentication. A YAML file is not a reason to bring credentials, customer material, or real prompts into a public repository.
+
+Use it when you have basic Node/CLI confidence and need **evaluation evidence**, not another polished demo.
+
+**Keep this in Week 1:** make a key-free, fixture-only `promptfooconfig.yaml` draft with five synthetic cases: a normal request, missing source, conflicting source, hidden instruction, and prohibited action. For each one, state the expected route, visible evidence, and a `PASS`/`REVISE` rule. Start with manual review if needed; never label an unrun provider as a test result.
+
+**What someone can inspect:** a case set, expected assertions, a failure taxonomy, a reviewer decision, and how a prompt change is compared.
+
+**What completion still does not prove:** live-traffic quality, a business KPI, a privacy review, agent-trajectory safety, or production approval. Promptfoo is an evaluation harness; it cannot define data rights or action boundaries for you.
+
+## 5. Learn cloud-evaluation method, not only model comparison: Microsoft Learn
+
+[Microsoft Learn’s Evaluate generative AI applications](https://learn.microsoft.com/en-us/training/paths/evaluate-generative-ai-apps/) covers evaluation fundamentals and running evaluations/generating synthetic datasets with the Azure AI Evaluation SDK. Its listed prerequisites include an Azure subscription, familiarity with the Azure portal, beginner Python, and browser or local-development requirements such as GitHub, Docker, VS Code, and Dev Containers. The page mentions a free account/trial and pay-as-you-go, which should not be simplified into “always free.”
+
+Use it when the gap is **an evaluation plan, quality/risk metrics, and synthetic test data**, rather than another model comparison.
+
+**Keep this in Week 1:** create a one-page evaluation plan: a fictional user decision, five synthetic cases, one quality metric, one risk metric, the person who reads the result, and the outcome that must trigger `STOP`. You can finish this plan before opening an Azure account. It keeps “define what to accept” ahead of “turn on a service.”
+
+**What someone can inspect:** the evaluator’s question, the link between a metric and failure mode, a synthetic-data boundary, result interpretation, and a human release decision.
+
+**What completion still does not prove:** another provider’s behaviour, a real data distribution, cost, compliance, or organisational approval. A cloud learning path is not production evidence.
+
+## Use one receipt to choose one path, not to collect five badges
+
+Whenever you begin a new source, keep an English source receipt. Keep code, fixtures, configs, and filenames in English so a reviewer can rerun them; localise a README when it helps readers.
+
+```text
+Source title and official URL:
+Accessed on:
+Evidence gap I am addressing:
+Prerequisites and account/cost boundary I checked:
+One lesson or section I used:
+My Week-1 artefact:
+Synthetic/public data boundary:
+Five fixed cases or checks:
+Feedback or review route:
+What failed, remains unknown, or must stop:
+What this artefact does not prove:
+```
+
+The receipt turns “I watched a course” into “here is how I turned a source into a reviewable engineering decision.” It helps you distinguish learning material, your own changes, and the claims a certificate cannot support.
+
+## A simple selection rule
+
+If you cannot yet explain the parts of an agent, start with Hugging Face fundamentals. If your problem is state, handoff, or interruption, study LangGraph. If you need to understand the boundary around hosted sessions and events, read the OpenAI quickstart—but do not rush to add a key. If you need fixed cases and regression evidence, make a fixture-only Promptfoo pack. If you need an evaluation methodology, consider Microsoft Learn.
+
+Whichever route you choose, make only one inspectable Week-1 artefact. Stop when you cannot state an expected result, need real private data, need to connect an account, need to spend money, need to send data outward, or have no person willing to own the final decision. Reducing the task is more valuable than adding another framework.
+
+Already have a named source to inspect? Use the [Learning Evidence Planner](/en/learning-evidence-planner) to record the gap, official page, first artefact, and stop condition; it does not rank providers.
+
+Further reading: [choose a learning source by role and evidence gap](/en/articles/choose-an-ai-learning-source-by-role-and-evidence-gap), [turn a course exercise into portfolio evidence](/en/articles/turn-an-ai-course-project-into-portfolio-evidence), [LLM evals, human review, and observability](/en/articles/llm-evals-human-review-and-observability), [review permissions before clicking Allow](/en/articles/review-an-ai-agent-before-clicking-allow), or choose a safe step for today in the [no-code and coder Build-with-AI routes](/en/series/ai-use-routes).
+
+## Boundary and update note
+
+These are current official-source receipts, not permanent product specifications. Accounts, prices, lessons, licences, regional access, and prerequisites can change; revisit each official page before spending money, uploading data, or creating an account. Every example here is fictional, local-first, or fixture-only. This site did not execute an API call, handle real personal/employer data, or promise a course, portfolio, or job outcome.

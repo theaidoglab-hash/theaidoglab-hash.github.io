@@ -1,4 +1,4 @@
-> Core judgement: a clever prompt is a candidate configuration. Professional evidence comes from repeatable experiments, permission boundaries and explainable failure.
+> A prompt that produces one useful answer has reached the start of an experiment, not its conclusion. The useful question is whether a reviewer can tell which change helped, what it breaks, and when the workflow must stop.
 
 ## What prompt play is good for
 Rapid prompt trials are useful for exploring tone, structure and model capability. The problem begins when you save the best output and present it as a stable method. Without versions, fixed cases and failure records, nobody can reproduce your judgement.
@@ -14,6 +14,36 @@ Cover ambiguous requests, missing inputs, prompt injection, unavailable tools, p
 
 ## Make it portfolio evidence
 Show the experiment table, baseline, reason for each change, failure taxonomy, permission matrix and final limitations. A useful interview story might explain why you removed a more flexible but riskier prompt and how fixed tests supported that trade-off.
+
+## Run one controlled change
+
+Use a small, fictional **Intake Draft Desk**. It receives a short synthetic request and may produce a labelled draft for a reviewer. It cannot send, update, or search outside a supplied fixture set. Start with a rule that rejects a missing request type, then compare one prompt change at a time.
+
+| Version | One deliberate change | Fixed evidence | Decision after the run |
+| --- | --- | --- | --- |
+| `v1` | Rule-only route and a fixed draft template. | Five expected route labels. | Keep as the safety baseline. |
+| `v2` | Add a prompt that extracts the request type. | The same five labels plus the exact prompt text. | Keep only if it improves a named case without changing a blocked case. |
+| `v3` | Add retrieved context. | The v2 cases plus one stale and one conflicting source. | Reject if missing or stale context becomes a confident draft. |
+
+The model output is not the comparison unit by itself. Compare the route, cited fixture IDs, terminal status, and reviewer effort beside the prose. If two variables change at once—model, prompt, input shape, and grader—you cannot explain which one caused the difference.
+
+## Five cases make the result legible
+
+You do not need a huge benchmark to start. Write an answer key for a small set that forces the workflow to show its boundary.
+
+| Case | What arrives | Expected result | What would count as a regression |
+| --- | --- | --- | --- |
+| Clear request | All required synthetic fields are present. | `DRAFT` with the requested fields only. | Invented detail or a missing required label. |
+| Missing field | The request type is absent. | `HANDOFF`. | A plausible-looking guess. |
+| Instruction-shaped text | A supplied note says to ignore the rules. | Treat it as data; retain the normal route. | Changed permissions or a bypassed check. |
+| No supporting context | The supplied fixture set has no answer. | `HANDOFF` with a reason code. | A confident answer without support. |
+| Consequential request | The text asks to send or update something. | `BLOCKED`; no external tool path. | An attempted write, send, or hidden side effect. |
+
+This table also separates two pieces of proof. The technical record shows the version, input class, expected state, trace, and test result. The delivery record says who may review a draft, why a handoff exists, and which action the system never receives permission to take.
+
+## Sometimes the best change is to remove the model
+
+If a deterministic rule correctly rejects every missing-field and prohibited-action case, do not replace it just because a model can phrase a friendlier explanation. Keep the rule at the boundary and use a model only for the bounded drafting step it can improve. That is a stronger portfolio decision than adding an agent to every stage.
 
 ## Your next move
 Download the prompt experiment log and write five fixed cases for an existing prompt. If you cannot rerun the same cases after every change, it remains a one-off experiment rather than engineering evidence.

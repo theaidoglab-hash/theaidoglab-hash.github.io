@@ -1,0 +1,52 @@
+有人看著 model catalogue 說：「這個有超大 context window，又是 Mixture-of-Experts，一定比我們的 assistant 快。」這個結論跳過了 workload。長 reviewer request、短 batch classification jobs，以及 peak load 下的 streaming draft，壓力都落在 serving system 的不同位置。Modern architecture terms 只有連到可觀察 workload、quality rule 與 user-facing budget，才有用。
+
+## 這是一個工程決定
+
+你應該能比較 small dense model、sparse expert model 與更簡單 workflow，而不是把 parameter count 當成 product metric。實際要交出的，是一份 serving decision note：量了什麼、還有什麼未知、什麼時候要 stop 或 handoff。
+
+## Long context 為何改變 serving work
+
+在 standard full attention 中，每個位置可以和 allowed context 內很多其他位置比較。Input 越長，與這些比較相關的 work 與 memory 可能越大。較新的 attention patterns 和 implementation techniques 可以改變確實的 cost profile，但仍有取捨：哪些位置可互動、保留多少 state、有什麼 hardware path，以及 task 是否真的需要那麼多 input。
+
+Autoregressive model 的 serving 有兩個看得見的 phases：
+
+- **Prefill** 在第一個 generated token 前處理 prompt 與 retrieved context；long input 會拉長 time to first result。
+- **Decode** 一個 token 一個 token 產生 output，並重用如 **KV cache** 的已存 token state；long answer 會拉長 completion time 與 memory pressure。
+
+因此「模型慢」是不完整的 diagnosis。高 tail latency 可能來自 queueing、long context assembly、cache pressure、output length、batch scheduling 或 service overloaded，不一定只是 model 算得慢。
+
+## Mixture-of-Experts 改變了什麼
+
+Dense model 每個 token 都會用到很大部分 parameters。**Mixture-of-Experts（MoE）** layer 有多個 specialised sub-networks，加上一個 router，為每個 token 只選部分 experts。原則上，較大的 total parameter pool 不需要每次把所有 experts 都跑完。
+
+但「sparse」不等於免費。Router 可以讓 demand 不平均；expert capacity 可以成為 bottleneck；tokens 可能要在 devices 之間移動；一個紙面很有效率的 batch，若太多 tokens 選同一 expert，P99 可能很差。Quality 也會隨 task 與 input distribution 改變。應把 MoE 當成有 routing 與 capacity 問題的 systems design，不是一個保證更快或更好的徽章。
+
+## 測 workload，不要測 brochure
+
+為虛構、只產生 draft 的 evidence desk，先定三種 synthetic workload shapes：
+
+| Workload | User need | Measurements | Safety check |
+| --- | --- | --- | --- |
+| short route | 快速 standard classification | queue delay、route quality、P50/P95/P99 | unknown category 必須 handoff |
+| evidence draft | 用有限 evidence package 寫有 citation 的回應 | time to first result、total time、source grounding | 無 source 就無 draft |
+| long review packet | 一個嚴格有上限的長 input | context size、cache memory、completion time、review usefulness | conflict 或 budget stop 就 handoff |
+
+每個 candidate 都記下 exact prompt/context version、batch setting、cache state、quantisation 或 runtime setting、output cap、quality checks，以及如知道的 hardware 或 hosted-service environment。用同一套 fixed cases 比較。Cost proxy 只在你的 measurement 支持時報告；不要把一次 local run 說成 provider-capacity claim。
+
+## Serving levers 需要成對 guardrails
+
+Dynamic batching 可以改善 throughput，卻可能讓 urgent request 排在大 batch 後面。Prefix cache 能減少重複的 stable prompt work，但 policy text 改變就必須 invalidate。KV cache 避免 decode 時重算已見 token states，代價是吃 memory 與限制 batch size。Quantisation 可降低 memory demand，但改前改後都要跑同一套 quality 與 safety cases。
+
+第一個有用 optimisation 往往更簡單：少放不相關 context、回傳 compact schema、cap 掉沒有根據的 retries，或把不確定工作交給 reviewer。這些 control 可以同時改善 cost 與 correctness，不必一開始就押注複雜 serving stack。
+
+## 一份 portfolio-quality serving receipt
+
+保留 `serving-decision.md`：workload assumptions、P50/P95/P99 targets、latency slices、quality 與 handoff criteria、runtime settings、observed failures，以及 rollback 或 stop rule。再加 trace fields：request class、context version、cache condition、batch condition、output size、terminal state 與安全的 reviewer destination。私人文字與 secrets 要在設計上排除。
+
+可重跑的 benchmark shape，加上你對 prefill、decode、cache、batching 與 expert routing 的解釋，會說清楚模型與 serving work 做到什麼。交給 reviewer 前，要訂清楚等待上限，也要確保 source conflict 不會變成流暢答案；time budget 用盡時，handoff 要看得到，不能暗中 loop。
+
+延伸閱讀：[可停止 agent 與 serving budget](/zh-TW/articles/build-stoppable-ai-agents-with-serving-budgets)、[long context、retrieval 與 evidence coverage](/zh-TW/articles/long-context-retrieval-and-lost-middle)，以及[workflow-level agent evaluation](/zh-TW/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)。
+
+## 邊界
+
+這是 AI.DOG 教學，使用 synthetic workloads。它沒有 benchmark 任何 named model、沒有建立 hardware performance，也不承諾 latency、cost 或 quality outcome。真實 serving choice 需要 approved workload data、provider documentation、security review、capacity testing 與可問責的 owner。

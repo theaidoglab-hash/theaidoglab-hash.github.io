@@ -1,0 +1,141 @@
+> 续订分流 portfolio 不是一场预测竞赛。它的价值在于审查者能否看清哪个合成案例需要优先查看、当时有哪些可用证据、系统拒绝替人做哪些决定，以及每次变更如何先经过测试。
+
+## 这个 demo 明确展示什么
+
+### Code 里看得到的东西
+
+- point-in-time data contract、feature availability／leakage test、可解释 rule baseline 与候选 risk-only ranking。
+- 固定 review capacity 下的 queue metric、release gate、monitoring 与 rollback，不把一个分数当成完整系统。
+
+### Code 以外要交代的事
+
+- 问题是帮人工审查者排序合成案例，不是替机构联络客户、出 offer 或决定 retention。
+- model metric、workflow proxy、owner 与可声称的结果分开记录；数据、结果与影响全部是合成。
+- 人工可忽略 queue，数据不安全或 regression 时应停止或退回 baseline。
+
+## 这是一个只读、完全虚构的学习 Lab
+
+**Renewal Triage MLOps Lab** 是一个刻意采用合成数据的订阅续订人工审查队列。假设一个运营团队在审查会议前需要先整理案例；Lab 只接收学习者自行编写或生成的字段：虚构账户 segment、带日期的产品使用 snapshot、support status flag，以及之后才生成的虚构 outcome label。它只会提出一个队列分组：**优先审查**、**一般审查**，或 **证据不足，交由人工处理**。
+
+系统**不会**联系客户、不会定价、不会提出 retention offer、不会修改 subscription、不会批准取消，也不会替任何人决定是否介入。它不包含真实客户数据，也不声称转化、续订、收入或因果效益。这些边界正是项目重点：model score 从来不是改动他人账户的权限。
+
+## 先写清决定，而不是先说“我要预测续订”
+
+“预测谁会续订”听起来很厉害，却掩盖了系统是否可检查的真正工作。先写一页 decision brief：
+
+- **使用者与决定：**人工 reviewer 决定哪个*合成*案例先看，或把资料不全的案例退回补充。
+- **决定时间点：**每一个 feature 都只能在明确的 `INFORMATION_DATE` 前取得；任何 invented label 都只会在较后的 `OUTCOME_DATE` 才出现。
+- **错误代价：**在证据不足时排优先、把过期资料当成当前资料，或漏掉必须交给人工的案例。
+- **Non-goal：**不接触客户、不调价、不提供 offer、不执行续订／取消、不更新账户，也不做自动 business decision。
+- **Human owner：**每一项后续行动由 reviewer 决定；他也可以完全不采用这个队列。
+
+这份 brief 比一张 dashboard screenshot 更有价值，因为它揭露了真正的决定边界。想象：小工具只能帮大人整理一叠假卡片，绝对不能打电话给人或改别人的玩具。
+
+## 把 model metric 与 workflow evidence 分开
+
+很多 portfolio 展示 accuracy 或 AUC，接着称为“business impact”。它们实际上回答不同问题。
+
+**Model-quality measures** 问的是：在一组未参与开发的合成 test set 上，建议的分组是否在技术上有用。可以度量 bucket precision／recall、calibration、正确 abstain、资料新鲜度规则合规率，以及按虚构 segment 切分后的错误。使用 confusion matrix 和小型 error taxonomy，不要只留下一个好看的数字。
+
+**Workflow proxies** 问的是：在模拟条件下，这个队列是否帮助 reviewer 完成已定义的工作。可以记录带有可解释理由的案例比例、正确交接人工的比例、reviewer 对建议分组的同意率，以及整理一份审查资料包所需时间。它们不是收入、续订或客户 outcome 指标，而是虚构 workflow 的受控学习度量。
+
+请把两类定义和限制放在一起。很高的 bucket precision 不能证明 pricing strategy 有效；较快的模拟审查也不能证明真实团队会节省时间。正是这个区别，让你的项目更可信。
+
+## 先建立遵守时间的 data contract
+
+最容易做出漂亮却无效 model 的方式，就是让它偷看未来。不要只看 `last_status` 这种字段名称来判断 feature 是否安全；要看该值在哪个时间点才完整并可用。
+
+先做一张 synthetic data card，schema 可以很小：
+
+```text
+case_id              虚构、不可识别的 ID
+information_date     队列在这个日期可知事实的时间点
+usage_30d            严格只统计至 information_date 的生成活动
+support_open_flag    带 source timestamp 的虚构当前状态 flag
+plan_segment         虚构分类，绝不来自真实客户字段
+outcome_date         只用来建立学习 label 的较后日期
+synthetic_label      outcome_date 后才生成；scoring 时不提供
+```
+
+然后让 pipeline fail closed：feature timestamp 晚于 `information_date`、label date 没有晚于它、必填字段缺失，或 snapshot version 不明时，任何一项都拒绝该行。一个简单的 `assert` 加 test fixture，通常比没人能重跑的 elaborate feature store 更有意义。
+
+想象：如果你要猜故事下一页，就不能先偷看最后一页。
+
+## 先做不使用 ML 的 baseline
+
+先写三条透明规则，例如：
+
+1. 虚构 record 过期、资料不足或彼此矛盾时，返回 **证据不足，交由人工处理**。
+2. record 符合已公布的 synthetic rule 时，放入 **优先审查**，并显示 rule ID 和 snapshot date。
+3. 其他 record 放入 **一般审查**。
+
+这不是可以随手丢掉的 prototype。它会告诉你 model 必须额外换来哪些价值。若 gradient-boosted model 或 LLM classifier 无法改善一个已定义的合成 metric，又削弱了 handoff guardrail，就保留 rule baseline。好的工程判断也包括不加入 model。
+
+## 建一条最小但可追溯的 end-to-end pipeline
+
+你不必假装拥有某家公司的 private platform。一条本地、可版本化的流程已经足以展示重要思考：
+
+```text
+合成 source snapshots
+  -> schema 与 availability checks
+  -> point-in-time feature table + versioned label build
+  -> rule baseline 和候选 risk-only ranking
+  -> score，附带 reason codes 或 abstention
+  -> 只读的人工 review queue
+  -> redacted run record + evaluation gate
+  -> 保留、拒绝，或 rollback 一个 offline candidate
+```
+
+每个箭头都需要 owner 和 test。source generator 负责可重跑的合成 records；feature job 负责 `information_date` 规则；scorer 没有 business action 权限，只输出 candidate bucket、confidence 和 reasons；queue screen 让 handoff 清楚可见，而不是藏在 prompt 里；release gate 只判断一个*本地 candidate* 是否可以进入下一次模拟 run。
+
+如果想加入 LLM explanation layer，限制它把已批准的 reason code 改写成易读语言。不要让它从隐藏文字推断新理由、编造 outcome，或建议联系与 offer。deterministic decision path 必须可以独立测试。
+
+## 先验 failure，再美化 demo
+
+建立一个固定的 synthetic evaluation set，至少包含：
+
+- 每个 review bucket 各一个正常、fresh 的 record；
+- source timestamp 晚于 `information_date` 的 record；
+- 缺失或格式错误的字段；
+- 被偷偷混进 feature table 的 label；
+- confidence 太低而必须 abstain 的案例；
+- 候选 risk-only ranking 相对 rule baseline 退步的一个 segment slice；
+- 重复 case ID 或已改变的 schema version；以及
+- 一段试图让 explanation layer 忽略既定边界的 instruction-like text。
+
+报告分四类。**Data quality** 记录哪些行被拒绝以及原因；**model quality** 记录每个 bucket 的 precision／recall、calibration 和 abstention；**workflow safety** 记录未授权动作的尝试（应为零，因为 app 根本没有这种能力）和正确 handoff；**operations** 记录可重跑 run ID、data/model version、duration、error count 和简单 cost proxy。
+
+不要只挑好看的 screenshot。每个固定 case 都保留 expected output、actual output 和 failure category。若 candidate 在 high-risk case 退步，正确结果是阻止本地 release，而不是在看到答案后重选 threshold。
+
+## 用轻量 MLOps artefact 回答真正问题
+
+portfolio 里的“MLOps”可以很小，仍然可以很认真。包括：
+
+- data card 和 source-generation seed；
+- point-in-time availability test 和 leakage test；
+- 有版本的 baseline、model configuration 和 evaluation fixture；
+- metric contract，写清每个 metric、denominator、owner 和限制；
+- model card，说明预期学习用途、non-goal 和已知 failure modes；
+- redacted run log，只保留虚构 ID、versions、scores、reasons 和 handoff status；
+- change log，记录改了什么、重跑了什么 test、为何接受或拒绝 candidate；以及
+- rollback note：回到前一个本地 configuration 或 rule baseline，然后离线 investigate。
+
+这些不表示你已经 production-ready。它们让面试官可以检查你是否理解 data lineage、release gate 和 decision ownership。
+
+## 把它变成 portfolio 与面试证据包
+
+README 开头先放虚构 problem 和 non-goal，接着先画 point-in-time diagram，再画 model diagram。加入一张表，每个决定配一项 model-quality measure 和一项 workflow proxy，最后放入 failure gallery。三分钟 walkthrough 可以展示：一笔可用的 fresh record、一笔被拒绝的 stale record、一次 baseline 和 candidate 的比较，以及 local gate 阻止 regression。
+
+当面试官问：“你怎样衡量 business value？”严谨的回答是：“我没有声称 business outcome。我定义了模拟 workflow proxies，把它们和 model metrics 分开，并记录真实环境仍需要哪些证据。”这比编造 retention number 强得多。
+
+## 自己跑一次
+
+如果你不只想看概念，而是真的想做一次可重跑的练习，下载 [Renewal Triage starter](/templates/renewal-triage-starter/v1/renewal-triage-starter-v1.zip)。解压后，先运行 `npm test`，再运行 `npm run demo`。它只使用虚构 records，让你对照 raw risk 与 capacity-aware priority 排序后，哪些 case 会先交给人工 review。
+
+这是缩小版、由读者自行持有的 starter，不是本文所讲的完整 reference package。没有 API key、network 或 model call；它不是 retention system，也不等于真实 business outcome。开始前可先看 [简体中文 README](/templates/renewal-triage-starter/v1/README.zh-Hans.md)。
+
+## 让 claim 保持诚实
+
+这个学习案例只使用合成资料，且只限本机 fixture 练习。它不是 renewal system、pricing tool、customer-contact workflow，也不是任何真实机构应采取行动的证据。它希望让人看见的是你的工程判断：定义决定、尊重资料可用时间、比较 baseline、验证 failure、保留 human ownership，并记录每次变更。
+
+延伸阅读：[PolicyPilot 如何把 deterministic 政策支持 baseline 和 RAG extension 分开](/zh-Hans/articles/enterprise-ai-portfolio-policy-pilot)、[非工程师也能验收的 AI 自动化流程](/zh-Hans/articles/build-a-low-code-ai-automation)、[选 AI 课程前如何先选能力证据](/zh-Hans/articles/choose-ai-learning-sources-by-evidence)，以及 [AI Engineer 面试练习](/zh-Hans/interview-lab)。

@@ -1,0 +1,142 @@
+> 多加 worker 不等於可靠。AI batch job 需要受限的 queue、每次可能產生影響的身分、可 resume 的位置，以及系統無法安全知道結果時願意停止的規則。
+
+## 面試官問
+
+想像一個完全虛構的 document-enrichment job。它有一組受限的合成 record、固定的合成成本上限、模擬的 `429` 結果、timeout、重複 delivery，以及一些在進行任何 model work 前就不合法的 input。它只能產生 draft-only enrichment record；不能聯絡客戶或修改帳戶。
+
+> 「你會如何讓這個 job 可以 resume，又不會重複處理或失控花錢？」
+
+**答對一半的答案：**「我會增加 worker，所有 failure 都 retry。」
+
+更多 worker 可能讓 rate-limit 問題更嚴重。所有 failure 都 retry，可能重複一個結果不明的 write、在 provider 不可用時繼續花錢，或讓 malformed record 累積很長的 retry history。一個可靠答案要先區分哪些 failure 可以 retry、哪些必須交人，以及什麼 state 證明一筆 record 已被處理。
+
+## Reviewer 可以在這裡檢查什麼
+
+### Code 裡看得到的東西
+
+- 受限且 **serial** 的 queue、deterministic fixture、retry 分類與 cost／attempt stop。這個 project 解釋 concurrency 和 rate cap 的差別，並沒有假裝已經實作 production control。
+- idempotency key、run ID、穩定的 job-level correlation ID、attempt ID、checkpoint／resume state、dead-letter route，以及永不連線的 draft-only `gpt-5-mini` Responses API-shaped fixture。
+- success、`429`、timeout、pending 與 terminal duplicate delivery、invalid input、queue capacity、budget stop 與 dead-letter review 的固定 acceptance cases。
+
+### Code 以外要交代的事
+
+- 一個很窄的虛構決策：這份合成 document 是否取得 draft enrichment record、稍後 retry，或放入 human review queue？
+- 沒有真實 API key、客戶文件、帳戶權限、外送訊息或 production claim；一位具名 owner 仍要決定日後是否應有經授權的 pilot。
+- cost ceiling、retention boundary、具名 review owner 與 stop condition，而不是一句「自動化一定會完成」。
+
+## 先讓 state 看得見
+
+把 batch worker 當成一個小型 state machine，而不是 model call 外面的一個 loop：
+
+```text
+incoming -> queued -> completed
+                  -> retry_scheduled -> queued
+                  -> dead_letter（需要人工 review）
+                  -> cost_stop（job 留在 checkpoint）
+incoming -> terminal_duplicate_suppressed
+```
+
+名稱可以不同，重點是後來的 operator 要分得出：record 在 queue、可安全 retry、已完成、等待人查，或被 budget guardrail 暫停。timeout 不代表沒有發生 work。若 effect 可能已發生但 confirmation 消失，先查 idempotency key，再由 owner 決定怎樣修復；不要盲目再跑一次。
+
+每筆 record 只保留虛構且最少必要的 trace fields，例如 `run_id`、`document_id`、`source_version`、`idempotency_key`、`attempt`、`route`、`reason_code`、`fixture_kind` 與 cost proxy。run ID 標示一次 invocation；穩定的 job-level correlation ID 把同一 logical record 的 retry 連起來；attempt ID 則分開每次嘗試。它們都不是永久保存原始 document 的理由。
+
+## 「全部 retry」其實略過哪些決定
+
+### Concurrency limit 與 rate limit
+
+**Concurrency limit** 限制同一刻有多少 task 正在處理；**rate limit** 限制一段時間內可開始多少 request。它們解決不同問題：十個慢 request 可能沒有超過 provider rate，卻已超過 worker capacity；十個快 request 很快完成，仍可能超過 provider 的每分鐘上限。
+
+想像一張美術桌：concurrency 是同時可以坐幾個小朋友；rate 是每分鐘可以打開幾盒顏料。多放椅子不會變出更多顏料。
+
+先從低 limit 開始，記錄 queue delay 與 retry rate；固定 cases 都安全才調整。面試時不要捏造萬用數字，因為它取決於 provider limit、下游 capacity、latency 與 error cost。
+
+配套 code 刻意維持 serial，讓 checkpoint decision 可以重跑和檢查。真正 production version 要等 provider 與下游 evidence 顯示需要，才另外加入受測的 concurrency control 與 time-window rate control。
+
+### Retryable error 與 permanent error
+
+`429` 或短暫 timeout 可能是 **retryable**。invalid document shape、missing required field 或 policy block，通常在有人修正 input 前是 **permanent**。因此 retry policy 需要 error taxonomy、maximum attempts 與 terminal route。
+
+**Exponential backoff** 讓每次 retry 等得更久；**jitter** 加上一點受控差異，避免所有 worker 同時重試，又造成新的 traffic spike。
+
+想像圖書館櫃檯關了：等一下可能有用。借書卡沒有名字則要修好，應該放進 review tray，不是丟回 retry loop。
+
+### Idempotency 與 duplicate delivery
+
+當一個 operation 重複執行也不會產生第二次 effect，它就是 **idempotent**。每個假想 enrichment operation 用虛構 record 與 source version 得出穩定 key。執行前先查 checkpoint：同一 key 已有 completed 或 terminal dead-letter record，便 suppress redelivery，不再產生一次 effect 或 cost。
+
+想像寄放衣物票：兩次出示 27 號票，仍然只對應同一件外套，不會變出第二件。
+
+在這個學習 project，effect 只有本地 draft record。這個 pattern 重要，是因為真實 retry 否則可能發出兩封訊息、建立兩張 ticket 或收兩次款。不要宣稱本地 duplicate test 已證明任何真實外部系統 idempotent。
+
+### Checkpoint、resume 與 dead-letter queue
+
+**Checkpoint** 留下足夠 state，讓 process 停止後可安全繼續：completed key、目前 attempt、下一個可 retry 時間、route 與 version。重新啟動的 worker 讀 checkpoint，不是從頭處理每筆 record。
+
+**Dead-letter queue** 是放置耗盡允許 retry 或有 permanent error 的 record 的明確位置，不是遺忘箱。它需要 reason code、具名 owner 與決策：修正 input、改 policy、經批准後 retry，或在沒有 draft 下關閉 record。
+
+想像 bookmark 與修理盤：前者告訴你從哪裡繼續；後者讓破損的書頁在有人決定怎麼處理前，不會再塞回閱讀堆。
+
+### Budget 叫你停的時候
+
+在 happy path 前先寫 maximum attempt count 與 local cost proxy。這個 reference 會在 synthetic attempt 跨過 cost cap 前發出 `cost_stop`，並把 job 留在 checkpoint。它沒有聲稱有固定的 `BLOCKED_COST` 或 `HANDOFF` state。之後要不要經授權 repair 或用新 source version 建立新 identity，由人工 owner 決定。
+
+想像你只有三枚遊戲代幣：第三局失敗後，下一步該交給管理 budget 的人決定，不是再自動試一次。
+
+## 建立最小而可檢查的 workflow
+
+配套的 **AI Batch Worker** reference 只用 deterministic synthetic fixture。它的 end-to-end 順序刻意樸素：
+
+1. 寫 brief：虛構 user、draft-only output、data boundary、owner、budget 與 non-goal。
+2. 在 implementation 前寫固定 acceptance cases，包括一筆正常 record 與上面七個負面或不明 case。
+3. 本地 validate input；invalid input 到 `dead_letter` 等人工 review，永遠不進 model-shaped adapter。
+4. 算出 idempotency key，處理 record 前先查 checkpoint。
+5. 只 call deterministic fixture。它的 `gpt-5-mini` Responses API shape 是 design seam，不是 SDK integration、credential check 或觀察到的 model result。
+6. 遇到 retryable fixture，安排有上限的 backoff 加 deterministic test jitter；permanent fixture 記錄 reason 後停止。
+7. 每個 route decision 後保存最小 checkpoint，再連同 checked-in deterministic run report 與 dead-letter fixture 看 tests。runtime 並沒有聲稱自己會寫 production report file。
+8. 人工 review `dead_letter` record 與任何日後接入真實 data 或 provider 的提案。
+
+這個順序讓面試官有路可以追：source record、身分、可允許 attempt、final state、trace 與 owner。它比長 prompt 加一張成功 screenshot 更有說服力。
+
+## 衡量流程，但不要把本機測試當成商業成果
+
+另做一張簡短的量測表，避免一個通過的本機執行被誤當成業務成效。四件事要分開寫：
+
+- **程式規格檢查：** 在固定合成案例中，預期路徑、最後狀態、最多重試次數、checkpoint 與 `no_external_action` check 都要相符。這只證明本機規格有被遵守。
+- **流程替代指標：** 在任何 pilot 前，先定一個範圍清楚的模擬量測。例如在同意的 attempt 與 cost limit 內，有多少合資格的合成紀錄到達可交給覆核者看的草稿、組裝覆核紀錄的中位時間，以及需要改寫或交給人處理的比例。每個量測都要寫清分母、基準做法、負責人與覆核時段。
+- **一票否決的界線：** 重複執行造成影響、timeout 後結果不明、trace 留下原始文件、超出 attempt 或 cost limit、dead-letter item 沒有負責人，或固定負面案例退步，任何一項都足以否決候選做法。更快的正常流程無法抵銷這些問題。
+- **尚未量測的結果：** 節省成本、處理量提升、客戶影響與真實服務的可靠性，要等有授權的 pilot 釐清資料、供應商、容量與人工覆核路徑後才可量測；目前一律標示為 `not measured`。
+
+把這張表放在 `acceptance-cases.md` 與 `run-report.json` 旁，寫明基準、分母、停止條件、負責人，以及刻意未量測的項目。這樣 reviewer 會看見 batch design 為何要停止，而不只看到它如何 retry。
+
+## 怎麼請 AI coding partner 做事
+
+先要 plan，後要 diff。一個有用的 request 可以很窄：
+
+> 「在這個 local-only batch worker 加一個 deterministic timeout fixture。不要改 action boundary。加入一個 acceptance case，證明 timeout 最多只有兩次 attempt、兩次都有同一條 stable job trace、保存 retry checkpoint，且永遠不產生 external action。請展示 plan、tests 與 diff。」
+
+接著檢查 agent 是否只改了允許的 files、negative test 在沒有 code change 時是否真的會 fail，以及 run report 是否露出不安全 route。綠色 test suite 只是指定 fixtures 的證據，不是 deploy 或把真實 data 發給 model 的許可。
+
+## 應保留的 portfolio evidence
+
+把下列 artefact 放在 code 旁；source 與 test files 用英文，reader-facing README translation 另放：
+
+- `brief.md`：虛構決策、owner、data boundary、cost stop 與 non-goal。
+- `acceptance-cases.md`：每個 fixture 的 expected state、attempt count、reason code 與 forbidden effect。
+- `retry-policy.md`：retryable／permanent taxonomy、backoff、jitter、maximum attempts 與 handoff rule。
+- `run-report.json`：本地 route count，沒有 raw document、沒有 external result。
+- `dead-letter-fixture.json`：可重跑的 invalid 或 exhausted record 與其 review reason。
+- `decision-log.md`：為何 limit 與 stop rule 存在、什麼仍未知、誰能批准日後 pilot。
+
+queue、tests、keys 與 traces 讓人可以檢查本地 workflow 的行為。相似 job 要處理真實 record 前，要寫清楚 owner、data boundary、cost stop、review capacity 與 non-claim。
+
+## 一個精簡面試答案
+
+「我會先建立受限 queue，並把 concurrency 與 provider rate limit 分開。每筆虛構 record 都有穩定 idempotency key、correlation ID 與 checkpointed terminal state。我會區分 retryable 與 permanent error，只對前者執行有上限的 backoff 加 jitter，把 exhausted 或 invalid record 放進 dead-letter review queue。我會在預先同意的 attempt 或 cost threshold 停止，保留 draft-only action boundary，並由人手 owner 決定任何日後 external integration。我會用 deterministic fixture 測 success、`429`、timeout、duplicate、invalid input 與 budget exhaustion。」
+
+## 延伸閱讀
+
+先練習精簡版的 [coding-and-data-structures 面試卡](/zh-TW/interview-lab/coding-and-data-structures)，再比較 batch job evidence 與 [workflow-level agent evaluation](/zh-TW/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)。接受 AI-generated diff 前，跟 [coding-partner review loop](/zh-TW/articles/use-ai-as-a-coding-partner-with-proof) 走一次。另一個 end-to-end portfolio pattern 可看 [PolicyPilot](/zh-TW/articles/enterprise-ai-portfolio-policy-pilot)。
+
+## 邊界與來源說明
+
+這是由公開能力題型啟發的 AI.DOG 教學，不是翻譯或重製任何公司面試題。scenario、record、limit、fixture behaviour、artefact 與 result 都是虛構。公開 compilation 本身也指出，題目會因 team、role、level 與 region 而不同。`gpt-5-mini` 只是一個不執行的 request-shape fixture；任何真正 integration 前，請查看官方 [GPT-5 mini model documentation](https://developers.openai.com/api/docs/models/gpt-5-mini) 與 [Responses create reference](https://developers.openai.com/api/reference/cli/resources/responses/methods/create)。本文不宣稱真實 key、API call、provider limit、cost、business result、reliability result、deployment 或求職結果。

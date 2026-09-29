@@ -1,0 +1,63 @@
+> A clear document photo, a voice message, and a plausible answer can make a multimodal demo look finished. The delivery question is different: may the system read this input, what exactly did it extract, where must it stop, and who is allowed to turn the result into an action?
+
+## Reduce the demo to one reviewable job
+
+Practise with an **entirely fictional** case. An operations teammate receives an appointment-change form as an image, PDF, or voice message. The system's only job is to organise checkable details into a draft for a staff member. It does not change an appointment, send a message, or create a customer record.
+
+The smallest flow is:
+
+`input → type and quality check → candidate-field extraction → rule check → DRAFT / REVIEW / BLOCKED → staff decision`
+
+That line matters more than “I used a vision model.” Every node has an acceptance responsibility: whether the input is permitted, whether each field has evidence, whether the result is complete, and when the work must be handed to a person. A model is only one replaceable component.
+
+## Images, documents, and speech are not the same input
+
+An **image** can be affected by lighting, glare, cropping, rotation, and handwriting. It may contain text, or it may only show a scene. Seeing a box on an image does not establish that its contents are legible or usable. Preserve a page or region pointer so a reviewer can locate the source of a candidate field.
+
+A **document** adds layout. A scanned PDF can have multiple pages, headers, tables, version numbers, and attachments. OCR or vision extraction can turn marks into candidate text, but it cannot know which page is the current form. Filename, file type, and document version belong in input metadata; they should not be guessed afterwards.
+
+**Speech** is not already-clean text. It arrives with audio quality, language, speaking pace, background noise, timing, and transcription. The system may turn “Tuesday afternoon” into a candidate with a timestamp. It should not infer identity, emotion, ability, or another attribute that is outside the task from a voice.
+
+All three inputs can eventually produce one schema, such as `requested_date`, `reference_id`, `evidence_pointer`, and `route`. Their evidence is different, so one overall “accuracy” number cannot cover every failure.
+
+## Measure quality, latency, and routing separately
+
+Start with synthetic fixtures, not real documents or recordings. Include a clear typed form, a rotated or blurry page, an attachment without a required field, noisy speech, and an input that is not allowed for the task. Each fixture needs an expected route and evidence a reviewer can check.
+
+Track at least three quality lines:
+
+- **Field correctness:** Does the date, reference number, or name match the fixture, rather than merely making the summary sound plausible?
+- **Route correctness:** Do missing information, unreadable input, and the wrong document type reach `REVIEW` or `BLOCKED`?
+- **Evidence completeness:** Can every consequential field be traced to a page, region, or speech timestamp?
+
+Latency also has parts. Upload, image preparation, transcription, model request, and the reviewer screen each consume time. State an acceptable waiting budget before measuring p50 and p95. An unmeasured number remains an assumption; a demo that feels fast is not performance evidence. If a transcript is incomplete, the flow may say “still processing” or hand the case over instead of forcing a guessed answer.
+
+## Privacy begins before an input reaches a model
+
+Photos, scanned documents, and recordings often expose more than plain text: people in the background, an address, a signature, an account number, or a speaker's voice. Begin with data minimisation. Which page, audio span, and fields are necessary for this decision? Do not collect, retain, or place anything else into the prompt.
+
+Use only synthetic material, or public material that may lawfully be reused, in a portfolio. The README should state forbidden inputs, who may see raw files, a retention rule, what a trace may record, and that the demo is not connected to a real account. Redaction and encryption can be useful controls; they do not justify collecting an input that should never have been requested.
+
+## A fallback preserves a decision; it does not pretend to automate one
+
+“Retry on low confidence” is not enough. A useful fallback states which judgement cannot be made and what the next person receives. For example, `reference_id` is obscured, one page contains two dates, noise makes a spoken key term unclear, or a file type is outside the allow-list. The system should return `REVIEW` or `BLOCKED` with a page, crop, or timestamp; its candidate values; and the reason for uncertainty.
+
+A reviewer can confirm, correct, or reject the draft. Preserve the case ID, input version, workflow version, and route reason so the team can locate the problem in the input, extraction rule, or work definition. Do not automatically treat every human correction as training data. Consent, purpose, and data governance come first.
+
+## What a portfolio should show instead of one polished output
+
+A credible multimodal evidence pack can include:
+
+- an input taxonomy covering supported and refused image, document, and speech types;
+- versioned synthetic fixtures with expected fields, evidence pointers, and routes;
+- an acceptance matrix that separates field correctness, routing, evidence, and a latency budget;
+- a privacy note covering minimisation, retention, and access boundaries; and
+- a human-handoff screen or trace sample that shows how a person understands and finishes an unresolved case.
+
+A reviewer can inspect the schemas, fixtures, checks, and traces. Reducing manual re-keying still does not authorize an automatic record change; the data owner and reviewer need to decide when an unresolved case stays with a person. That is much stronger public portfolio evidence than a flashy demo built on private inputs.
+
+## Boundary
+
+This is a learning-only synthetic flow, not advice for healthcare, identity verification, surveillance, recruitment, or a real company workflow. Without real inputs, model calls, voices, or deployment results, do not claim a specific accuracy, latency, privacy posture, or business outcome. Make the case inspectable first; then decide whether more model capability is justified.
+
+Continue with [turning a RAG demo into reproducible portfolio evidence](/en/articles/rag-chatbot-to-portfolio-evidence), [turning a model score into a workflow decision](/en/articles/model-score-to-workflow-decision), and [reviewing an AI agent's permissions before Allow](/en/articles/review-an-ai-agent-before-clicking-allow).

@@ -1,4 +1,4 @@
-> Core judgement: a professional workflow is not valuable because AI writes more code. It is valuable because requirements, acceptance, failure and decisions become inspectable.
+> A workflow earns trust when a reviewer can follow the requirement, the test, the failure, and the decision—not when it merely generates more code.
 
 ## Start with the vague request
 Suppose someone asks for “an AI feature that drafts customer replies.” Do not begin with a model choice. Establish where inputs come from, who may read them, whether the output is a draft or can be sent, when a human must take over, how quality will be judged and what damage a wrong response could cause.
@@ -14,6 +14,29 @@ Establish deterministic rules and fixed cases before judging model output. Cover
 
 ## Debug and review the system
 For a failure, preserve input type, version, rule outcome, model state and human decision without retaining unnecessary personal content. After a fix, rerun the same case set rather than testing only the example that failed. Code review must inspect permissions, error paths, logging, rollback and whether the UI makes human-review status obvious.
+
+## Put the acceptance contract on one page
+
+For the fictional reply-drafting feature, the following table is enough to stop a coding task drifting into a vague “AI assistant” build.
+
+| Part of the work | Decision before code | Check someone can run | Deliberate limit |
+| --- | --- | --- | --- |
+| Input | Read a supplied synthetic ticket only. | Reject an empty ticket or unknown category. | No real inbox, CRM, or attachment access. |
+| Draft | Suggest a response with a visible `DRAFT` label. | Required fields are present; unsupported facts trigger `HANDOFF`. | No send button and no background delivery. |
+| Record | Retain a case ID, version, route, and reviewer result. | A failed case can be replayed from fixture IDs. | Do not store the ticket body or personal details. |
+| Release | A named reviewer accepts a local demonstration. | All hard-gate cases pass and ordinary cases do not regress. | No production or customer claim. |
+
+Write the acceptance test before asking a coding agent to build. A useful request is: “Add the schema validator and the five listed cases. Do not add login, network calls, databases, or an external-send path.” It gives a reviewer a finite diff to inspect and a concrete reason to reject scope expansion.
+
+## A first review can correctly end in STOP
+
+Imagine that the agent proposes a convenience feature: it silently retries a failed send and stores the full ticket so a draft can be recreated. Both changes violate the stated boundary. The correct review result is `STOP`, not “merge it and fix it later.” Keep the rejected diff or a short decision note. It demonstrates that you can recognise a requirement change before it becomes a system behaviour.
+
+The same rule applies to a successful demo. If the only evidence is a happy-path screen recording, mark the work `REVISE` and ask for the fixed cases, failure route, and permission review. A team does not need every ticket to pass on the first attempt; it needs a clear state for work that should not proceed.
+
+## Put the artefacts in the order a reviewer needs them
+
+Start with `problem-brief.md`, then the small spec and test matrix. Add the implementation diff, a trace or error record for one failed case, and a one-paragraph decision note. A reviewer should be able to follow the decision without reading every source file. That is also the order that makes a portfolio easy to explain in an interview.
 
 ## Turn the workflow into portfolio evidence
 Show the specification, ticket breakdown, test matrix, one concrete failure, the before/after fix and a short architecture decision record. Do not claim “production-ready.” State exactly what is tested, what still uses a mock and which actions are deliberately prohibited.

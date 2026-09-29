@@ -1,0 +1,68 @@
+> A paper, model release, or benchmark chart can make it feel as though you are keeping up with the frontier. If you cannot say what it was compared with, under which conditions the result was produced, and which limitation remains unresolved, though, it is not yet enough to support an engineering decision.
+
+## Turn news into a question that can change a next step
+
+Do not begin with “Is this model impressive?” Ask a question that can alter a decision instead:
+
+> For a fictional document-organising workflow that only produces drafts for human review, is there a reason for this new method to replace the current baseline?
+
+That sentence forces the task, the current approach, and the decision boundary into the open. If you are learning a concept, the decision might be “do not adopt it yet; retain a testable hypothesis.” If you are preparing a portfolio, it might be “add a fixed set of synthetic evaluation cases,” not “change the model name.”
+
+## A source receipt is the record you leave after reading
+
+For every paper, technical report, model card, or official release note, retain a short receipt. It is not a bookmark. It is the smallest record that lets someone else retrace your reasoning:
+
+- **Source:** direct URL, author or organisation, publication or update date, and your access date.
+- **Source type:** paper, model card, release note, documentation, or independent test.
+- **Claim:** your own words for exactly what the source says improved; never use the title as the conclusion.
+- **Baseline:** what is it compared with—an earlier model, a workflow without retrieval, a manual step, or no credible comparison at all?
+- **Method and evidence:** task, input, dataset or fixture, metric, sample, configuration, and result.
+- **Limits and unknowns:** data scope, unreported cost, access terms, privacy, licence, failure cases, or assumptions that may not transfer.
+- **Next decision:** what you will test, deliberately not do, or need to ask next.
+
+Mark a claim as `ATTRIBUTED` when the source makes it. Mark it `VERIFIED` only when you have inspected the method and evidence and they support the sentence. A work recommendation inferred from those facts is `INFERENCE`. Keep a required missing fact as `UNKNOWN`. Those labels prevent “the vendor reported an improvement” from quietly becoming “we proved it is better.”
+
+## Read a paper for its comparison before its new vocabulary
+
+An abstract is useful for finding a direction. It does not make a result portable. A practical reading order is:
+
+1. Which concrete failure is this work trying to address?
+2. What baseline did the researchers use, and is it relevant to your task?
+3. Did the method change the input, architecture, training, decoding, or evaluation?
+4. What did it measure, and do the sample, data, and metric support its claim?
+5. Which limitations did the authors name, and which real-world conditions remain unreported?
+6. If you could run only one small check, which hypothesis is worth retaining?
+
+This lets you say, “I do not yet understand every derivation, but I can identify a testable implication for this workflow.” Reciting architecture names rarely explains why the baseline matters.
+
+## Separate ‘available’ from ‘shown to fit’ in a model release
+
+An official release, model card, or documentation page is useful for establishing how a feature is described, what an interface requires, which limits are stated, and how the provider defines its own testing. It does not automatically establish that the model fits your data, cost, latency, permissions, or tolerance for failure.
+
+Imagine a release describes support for document and speech understanding. Your receipt should not say, “It reliably handles our documents.” A defensible note says: the official material claims support for these input types; the workflow baseline is rules plus human review; and we do not yet know its behaviour on blurry pages, mixed-language speech, missing reference IDs, or inputs that must be rejected. The next step is fixed fixtures, not a release screenshot in a portfolio.
+
+## Replace hype with one small comparison
+
+You can make a decision note with **no real data and no API key**. Use entirely synthetic appointment-change material. The current baseline is “create a draft only when fields are complete; otherwise send it to a reviewer.” The candidate may be a multimodal extraction approach, but do not assume it is better.
+
+Give both approaches the same cases: a clear form, a rotated scan, two conflicting dates, noisy speech, and an input outside the allow-list. Do not judge only whether a summary sounds fluent. Compare field correctness, route correctness, evidence pointers, a waiting budget, and cases needing a person. If the candidate does not beat the baseline on a consequential failure family, “keep the baseline and investigate one specific gap next” is a sound decision.
+
+That exercise does not reproduce the original research or disprove a release benchmark. It produces one inspectable engineering observation that relates to your task.
+
+## Frontier reading belongs in a portfolio only with a decision trail
+
+A public, safe evidence pack can contain:
+
+- `source-receipt.md`: one source, one claim, one baseline, one limitation, and one decision;
+- `decision-record.md`: the method you chose to test, defer, or reject and why;
+- versioned synthetic fixtures and acceptance cases so another person can see the comparison inputs;
+- a result table that separates source claim, expectation, observed result, and unknown; and
+- a README scope statement: no real company data, no live API call, and no tutorial output or vendor benchmark presented as your own result.
+
+A reviewer can see that you read a method, created a baseline, designed an evaluation, and retained versions. They can also see the cost, risk, privacy, and unresolved questions behind an adoption decision. That is a more credible job signal than “I read every new paper.”
+
+## Boundary
+
+The frontier is not a fixed list. Papers, releases, and documentation can change. A source receipt needs a date and version; if later evidence changes the decision, add a new receipt or revision rather than silently rewriting the old conclusion. Do not package reading notes as an experiment result, business impact, model-safety guarantee, or forecast of future capability. When evidence is insufficient, `UNKNOWN` or `NOT YET` can be the most professional decision.
+
+Continue with [choosing AI learning sources by the evidence gap](/en/articles/choose-ai-learning-sources-by-evidence), [turning a course project into portfolio evidence](/en/articles/turn-an-ai-course-project-into-portfolio-evidence), and [evaluating an agent workflow rather than only its final answer](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer).

@@ -1,0 +1,28 @@
+name: Local KEV Review Packet Checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  local-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run deterministic local tests
+        run: npm test
+      - name: Validate the fixed fixture route
+        run: npm run fixture:validate
+      - name: Print the local demonstration report
+        run: npm run demo
+      - name: Compare the checked-in fixture reports
+        run: npm run eval:diff
+
+# This workflow deliberately does not install or run Promptfoo, contact CISA,
+# call an LLM, read a credential, scan an asset, patch a system, or create a ticket.

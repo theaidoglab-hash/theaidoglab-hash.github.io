@@ -1,0 +1,68 @@
+> 一篇论文、一次 model release，或一张 benchmark 图，很容易让人觉得自己已经“跟上 frontier”。但如果你说不出比较的是什么、结果在哪些条件下得出、哪个限制还没解决，这些信息不足以支持工程决定。
+
+## 先把新闻变成一个可回答的问题
+
+不要从“这个 model 很厉害吗？”开始。改问一条会改变下一步的问题，例如：
+
+> 对一个只产生 draft、由人复核的虚构文件整理流程，这个新方法是否有理由取代现有 baseline？
+
+这句话已经迫使你交代任务、现有做法和决定边界。若你只是想学概念，决定可以是“暂不采用，先记录一个可验证假设”。若你在准备作品集，决定可以是“增加一组 synthetic evaluation cases，而不是换一个 model 名”。
+
+## source receipt 是读完后留下的收据
+
+每次读论文、technical report、model card 或官方 release note，都留一张短 receipt。它不是收藏链接，而是让另一个人可以重做你判断的最小记录：
+
+- **来源**：原始 URL、作者或机构、发布／更新日，以及你的访问日期；
+- **来源类型**：paper、model card、release note、documentation 或独立测试；
+- **声称内容**：用自己的话写出来源实际说改善什么，避免把标题当成结论；
+- **baseline**：它和什么比较？是旧 model、没有 retrieval 的流程、人工步骤，还是根本没有可信比较；
+- **方法与证据**：task、input、dataset 或 fixture、metric、sample、设置和结果各是什么；
+- **限制与未知**：资料范围、未报告的成本、访问条件、隐私、licence、失败 case 或无法转移的假设；以及
+- **下一个决定**：你因此要测什么、暂时不做什么，或还要问谁。
+
+把 claim 写成 `ATTRIBUTED`，代表“来源这样说”；只有你看过方法和证据，而且它支持这句话，才写成 `VERIFIED`。由两者推出的工作建议是 `INFERENCE`。尚未看到所需资料就保留 `UNKNOWN`。这些标记不是官话，它们阻止“vendor 说有提升”悄悄变成“我们证实它更好”。
+
+## 读 paper 时，先找比较，再找新名词
+
+论文 abstract 可以帮你找到方向，却不表示结果可以直接搬走。实际阅读顺序可以是：
+
+1. 这份工作想解决哪一个明确失败？
+2. 研究者用什么 baseline 比较，baseline 是否适合你的任务？
+3. 方法改了 input、architecture、training、decoding 还是 evaluation？
+4. 结果衡量什么，sample、资料和 metric 是否足以支持声称？
+5. 哪些 limitations 是作者列出，哪些现实条件没有报告？
+6. 如果只能做一个小测试，哪一个假设值得保留？
+
+这样读的好处，是你可以承认“我还没懂全部数学”，但仍指出 paper 对你的工作是否有可测的 implication。相反，背一串 architecture 名字，通常答不出 baseline 为什么存在。
+
+## model release 要分开“可用”和“已证明适合”
+
+官方 release、model card 或 documentation 最适合确认：功能如何被描述、接口要求什么、有哪些明示限制，以及供应方如何定义自己的测试。它不自动证明这个 model 适合你的资料、cost、latency、permission 或 failure tolerance。
+
+假设一份 release 表示新 model 支持“文件和语音理解”。你的 receipt 不该写“它能可靠处理我们的文件”。较诚实的写法是：官方材料声称支持这类 input；现有 workflow 的 baseline 是规则加人工复核；我们仍不知道它在模糊页面、普通话夹杂英文、缺少 reference ID 和拒绝不合资格 input 时的表现。下一步是设计固定 fixtures，而不是把 release screenshot 放进 portfolio。
+
+## 用一个小比较取代 hype
+
+可以做一张**不连接真实资料或 API key**的 decision note。以完全合成的预约变更资料为例：现有 baseline 是“字段完整才产生 draft，否则交 reviewer”。候选方法可以是某个多模态 extraction，但先不要假设它更好。
+
+为两边写同一组 cases：清楚表格、旋转扫描、两个冲突日期、噪音语音，以及不被允许的 input。不要只看摘要是否流畅。比较字段正确性、route 是否正确、能否附 evidence pointer、等待预算和需要人工处理的 case。若 candidate 没有在关键 failure family 胜过 baseline，合理决定可以是“保留 baseline，下一轮只研究一个明确缺口”。
+
+这个过程不会证明你重现原始研究，也不会证明 release 的 benchmark 错。它只会产生一个和你的任务有关、可追问的 engineering observation。
+
+## 作品集中的 frontier 阅读，要留下 decision trail
+
+一个公开、安全的 evidence pack 可以有：
+
+- `source-receipt.md`：一条来源、一个 claim、一个 baseline、一个限制和一个决定；
+- `decision-record.md`：你选择测试、延后或拒绝的方法，以及原因；
+- versioned synthetic fixtures 和 acceptance cases，让别人知道比较的 input；
+- 一张 result table，清楚分开 source claim、预期、observed result 和 unknown；以及
+- README 的 scope：没有使用真实公司资料、没有 live API call、没有把 tutorial output 或 vendor benchmark 当成自己的成果。
+
+技术上，这显示你可以读方法、建立 baseline、设计 evaluation 和记录版本。非技术上，它显示你能为 adoption decision 说明成本、风险、隐私和未解问题。这比“我读了所有新 paper”更可信的职场信号。
+
+## 边界
+
+frontier 不是固定清单，paper、release 和 documentation 都可能更新。source receipt 要保留日期和版本；后来资料若改变判断，应新增一张 receipt 或 revision，不要偷偷修改旧结论。不要把阅读笔记包装成实验结果、商业成效、模型安全保证或对未来能力的预测。当证据不足，最专业的 decision 可以是 `UNKNOWN` 或 `NOT YET`。
+
+延伸阅读：[用证据缺口选择 AI 学习来源](/zh-Hans/articles/choose-ai-learning-sources-by-evidence)、[把 course project 变成 portfolio evidence](/zh-Hans/articles/turn-an-ai-course-project-into-portfolio-evidence) 和 [如何评估 agent workflow，而不只看最后答案](/zh-Hans/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)。

@@ -1,25 +1,52 @@
-> Core judgement: do not begin with “Which AI title has the best future?” Begin with what the role must deliver each week and what evidence lets an employer inspect that ability.
+> If one portfolio is trying to apply for four entirely different jobs, the problem is rarely that you built too little. It is that a reviewer cannot see whose decision you helped make.
 
-## One title can hide four different jobs
-AI Engineer is not a standardised job in Australia. One team may expect model experimentation. Another needs product integration. A third needs deployment, permissions and monitoring. A forward-deployed role may combine discovery, implementation and adoption with a customer team. Learning from the title alone produces a long tool list but weak role evidence.
+## Read the deliverable before the title
+When you read an AI or data role description, `AI Engineer`, `ML Engineer`, `Applied AI`, and even `Forward Deployed Engineer` are search entries—not job specifications. The same title can mean a model experiment, an internal-tool workflow, a dependable platform capability, or a jointly scoped and handed-over piece of work.
 
-Circle the verbs in the job description. `train`, `experiment` and `benchmark` usually point toward Data/ML. `build`, `integrate` and `ship` suggest AI Application work. `deploy`, `operate`, `secure` and `monitor` point toward Platform/Ops. `discover`, `scope`, `implement` and `adopt` are common in FDE-shaped work. This is a reading aid, not a rigid taxonomy.
+Do not begin by listing another framework. Read a job description as “what must be handed to whom each week, so that they can make which decision?” Circle the verbs in responsibility statements, then ask whether the deliverable could be rerun, reviewed, or rejected by somebody else.
 
-## Classify the deliverable
-- Data/ML evidence: data decisions, baselines, experiment design, metrics and error analysis.
-- AI Application evidence: APIs, product flows, retrieval, tests, latency and failure handling.
-- Platform/Ops evidence: CI/CD, permissions, observability, cost, reliability and incident response.
-- FDE evidence: discovery, technical scope, prototyping, production handoff and adoption.
+| Common JD verbs | Likely primary deliverable | The minimum visible portfolio evidence |
+|---|---|---|
+| `train`, `experiment`, `benchmark` | A comparable model or data decision | baseline, split method, metric, error analysis |
+| `build`, `integrate`, `ship` | An application flow a user will touch | input contract, tests, failure handling, handoff |
+| `deploy`, `operate`, `secure`, `monitor` | A service capability that can be maintained | release gate, permissions, trace, rollback plan |
+| `discover`, `scope`, `implement`, `adopt` | A customer or internal problem that is scoped and handed over | problem brief, trade-off, acceptance, owner |
 
-A role can span two groups. Find the dominant output and the risk an interviewer is most likely to probe. A JD mentioning both RAG and Kubernetes does not mean you must master two ecosystems first. If the responsibility is shipping an internal capability, application evidence may be more useful than another model-training notebook.
+These are reading aids, not a market taxonomy. A role can span two columns. Your task is to identify the deliverable most likely to be probed and one failure risk attached to it.
 
-## Work backwards from three real JDs
-Choose three roles for which you meet the basic eligibility conditions. For each responsibility, record three things: what you have done, what an interviewer can inspect, and the smallest verifiable project that could close the gap. Select one gap that recurs across all three descriptions.
+## Build an evidence map from three JDs
+Choose three jobs you genuinely want and meet the basic eligibility conditions for. You do not need to put employer names, recruiter details, or whole adverts into a public notebook; retain the responsibility line and your own interpretation. For every responsibility, write four fields:
 
-If evaluation and deployment recur, deepen an existing chatbot. Add a fixed test set, failure taxonomy, permission boundary and reproducible deployment. That creates stronger role evidence than building a fourth chatbot with a different framework.
+1. **What decision must the other person make?** For example: “The support lead must choose which cases receive human review first.”
+2. **What evidence do I already have?** Not “I know Python,” but “I have a fixed test set and a failure taxonomy.”
+3. **What is the largest missing link?** For example: a response is visible, but no permission boundary or queue capacity is shown.
+4. **What could I retain in ten days?** A brief, a baseline, fixed cases, a reviewer decision, or a documented reason to stop.
 
-## Boundaries
-A job ad is not the full job. Seniority, work rights, location and team maturity still require separate checks. A portfolio cannot remove a visa or experience requirement. Its job is to provide inspectable material—not guarantee an interview.
+When evaluation and deployment recur across all three JDs, do not open a fourth chatbot. Strengthen an existing demo into an inspectable evidence chain: fixed tests, failure categories, a data/action boundary, rerun steps, and a release or rollback decision. That is usually closer to the work being assessed than a more fashionable UI.
 
-## Your next move
-Download the role comparison worksheet and map three current JDs. If you still have more than five “highest-priority” gaps, the target is too broad. Narrow the role before beginning another project.
+## Let the project follow the work risk
+Imagine the responsibility statements are not chiefly “build RAG,” but “enable an internal team to use RAG safely.” The centre of the project should not be a polished answer screen. It could instead be a fully synthetic policy-support workflow that makes these things clear:
+
+- which documents may be read and which data must not enter the flow;
+- why a fast keyword baseline still exists;
+- which answers must stop at `DRAFT` and go to a named reviewer;
+- which fixed cases must block release; and
+- who owns rollback or the next step after a failure.
+
+That does not pretend you have operated a production system. It gives an interviewer concrete material to inspect: the system behaviour, the boundary around its use, and who takes the next decision. To compare six fully synthetic reference cases, start with the [Portfolio Evidence Planner](/en/portfolio-evidence-planner).
+
+## Replace an endless project with a ten-day contract
+Write the next project as a short contract, not “build an AI app”:
+
+- **Day 1:** Name the owner, decision, non-goal, and privacy boundary.
+- **Days 2–4:** Create an explainable baseline and a small fixed set of synthetic cases.
+- **Days 5–7:** Add one technical choice you intend to prove, such as retrieval, queue routing, or an evaluation gate.
+- **Days 8–9:** Keep a failure record, trace, or reviewer decision instead of only recording a demo.
+- **Day 10:** Write the README: how to rerun it, what it cannot claim, and the next decision a person must make.
+
+If you still cannot write `pass`, `revise`, or `stop` after ten days, reduce the scope. The value of a portfolio is not its feature count; it is whether another person can understand how you made trade-offs.
+
+## Some questions cannot be answered by a portfolio
+A JD is not the whole job. Seniority, location, hiring eligibility, team maturity, and the real proportion of each responsibility still need separate checking. A portfolio cannot erase experience or eligibility requirements. Its role is to give someone concrete material to assess—not to guarantee an interview or an offer.
+
+Next, use the [Learning Evidence Planner](/en/learning-evidence-planner) to choose one way to close the gap, then use the [GitHub Portfolio Proof Pack](/en/articles/build-a-github-portfolio-proof-pack) to organise public-safe evidence. To turn the same route into interview practice, start with [one standalone question](/en/interview-lab) and rehearse the trade-off.

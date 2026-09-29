@@ -1,22 +1,52 @@
-> 核心判断：不要先问“哪个 AI 职位最有前途”，先问这份工作每周需要交付什么，以及招聘方会用什么证据判断你能否做到。
+> 同一个作品集想投四种完全不同的工作，问题通常不是你做得太少；而是对方看不出你替谁处理过哪个决策。
 
-## 同一个职位名称，可能是四份不同的工作
-澳洲招聘广告中的 AI Engineer 没有统一含义。有人主要做模型实验，有人把模型接入产品，有人负责部署、权限和监控，也有人直接与客户定义问题并交付方案。只按职位名称学习，很容易积累很多工具，却没有补上目标岗位需要的证据。
+## 先读交付物，不要先读职位名称
+阅读 AI／data 职位描述时，`AI Engineer`、`ML Engineer`、`Applied AI` 甚至 `Forward Deployed Engineer` 都只是搜索入口，不是一份工作规格。同一个职位可能是一项 model experiment、一条内部工具 workflow、一个可靠平台能力，或一次与使用者共同界定问题再交付的工作。
 
-先圈出 JD 里的动词。`train、experiment、benchmark` 通常偏 Data／ML；`build、integrate、ship` 偏 AI Application；`deploy、operate、secure、monitor` 偏 Platform／Ops；`discover、scope、implement、adopt` 更接近 FDE。这不是固定的职业分类，而是帮助你找出主要交付物。
+第一步不是列出下一个 framework；而是把一份 JD 读成“每周要交给哪个人看、用来做什么决策”。圈出责任句里的动词，再问：这项交付能不能被其他人重跑、review 或否决？
 
-## 按工作产出分类
-- Data／ML：数据、baseline、实验设计、指标和错误分析。
-- AI Application：API、产品流程、retrieval、测试、延迟和失败处理。
-- Platform／Ops：CI/CD、权限、可观测性、成本和可靠性。
-- FDE：问题发现、技术范围、原型、生产交接和采用。
+| JD 常见动词 | 较可能的主要交付 | 作品集至少要看见 |
+|---|---|---|
+| `train`、`experiment`、`benchmark` | 可比较的模型／数据决策 | baseline、切分方法、metric、error analysis |
+| `build`、`integrate`、`ship` | 使用者会接触的 application flow | input contract、测试、失败处理、handoff |
+| `deploy`、`operate`、`secure`、`monitor` | 可维护的服务能力 | release gate、权限、trace、rollback plan |
+| `discover`、`scope`、`implement`、`adopt` | 被界定并交接的客户／内部问题 | problem brief、trade-off、acceptance、owner |
 
-一份工作可能覆盖两类。重点是主要产出和面试最可能追问的风险。如果 JD 同时写 RAG 和 Kubernetes，不代表要先学完两套工具；若职责集中在给内部团队交付功能，application evidence 可能比重新训练模型更重要。
+这四格是阅读工具，不是市场分类。一份工作可以跨两格；你要找的是最常被追问的一项交付和一个失败风险。
 
-## 从 JD 反推一个作品
-选择三份你确实符合基本资格的职位，把职责放进 worksheet。每项职责只问：我做过什么；有什么可以展示；若没做过，最小可验证项目是什么。最后只选择一个重复出现的缺口。
+## 用三份 JD 做一张 evidence map
+挑三份你有意、也符合基本资格的职位。不必把公司名称、招聘人资料或整份 JD 放进公开笔记；只留下责任句和自己的判断。每项责任填四栏：
 
-若三份职位都要求 evaluation 和 deployment，可以把现有 chatbot 改造成有固定测试集、失败分类、权限边界和可重跑部署的服务。这比再做第四个不同框架的 chatbot 更接近职位证据。
+1. **对方要做什么决策？** 例如“support lead 要决定哪些 case 先由人工看”。
+2. **我现在有什么证据？** 不是“会 Python”，而是“有固定 test set 和失败分类”。
+3. **最大的缺口是什么？** 例如只展示了回答，没有展示 permission boundary 或 queue capacity。
+4. **十天内能留下什么？** 一份 brief、一个 baseline、一组固定 case、一次 reviewer decision，或一条停止理由。
 
-## 边界与下一步
-招聘广告不是完整工作真相，seniority、工作权、地点和团队成熟度仍需单独核实。作品不能消除签证或经验限制。下载职位比较 worksheet，填写三份真实 JD；如果仍有五个以上“最重要缺口”，先缩小目标岗位，不要马上开始项目。
+当三份 JD 都出现 evaluation 和 deployment，不要再开第四个 chatbot。把现有 demo 补成可检查的证据链：固定 test set、失败分类、data／action boundary、重跑步骤，以及 release 或 rollback 决策。这比一个更流行的 UI 更接近真正会被追问的工作。
+
+## 作品的方向，要跟工作风险走
+假设你发现最多责任句不是“做 RAG”，而是“让内部 team 安全使用 RAG”。作品的中心就不该是一个漂亮回答画面。可以改成完全合成的 policy-support workflow，清楚写出：
+
+- 哪些文件可读取，哪些数据不能进入流程；
+- 为什么快速 keyword baseline 仍然存在；
+- 哪些答案必须停在 `DRAFT`，交给有名字的 reviewer；
+- 哪些固定 cases 会让 release 被拒绝；
+- 失败后谁拥有 rollback 或下一步。
+
+这不会假装你已经运营 production 系统；它会让面试官有材料追问你的工程与非工程判断。想用六个完全合成的 reference case 对照，可以从[作品集证据规划器](/zh-Hans/portfolio-evidence-planner)开始。
+
+## 用十天合约取代无限 project
+把下一个 project 写成一张短合约，而不是“做一个 AI app”：
+
+- **第 1 天：** 写出 owner、决策、non-goal 和隐私边界。
+- **第 2–4 天：** 先做可解释 baseline，固定少量 synthetic cases。
+- **第 5–7 天：** 加上一个你要证明的技术选择，例如 retrieval、queue routing 或 evaluation gate。
+- **第 8–9 天：** 留下失败记录、trace 或 reviewer decision，而不只录一段 demo。
+- **第 10 天：** 写 README：怎样重跑、不能声称什么、下一个需要人做的决策。
+
+十天后仍不能写出“pass／revise／stop”其中一个决策，就缩小 scope。作品集的价值不是功能数量，而是别人能否理解你如何取舍。
+
+## 有些问题，作品无法替你回答
+JD 不是完整的工作真相。seniority、地点、聘用资格、团队成熟度和职责实际比例仍要逐项确认；作品也不会消除经验或资格要求。它的作用是让人有具体材料判断你，不是保证面试或录取。
+
+下一步，先用[按证据缺口比较学习来源](/zh-Hans/learning-evidence-planner)选择一种补法，再用[GitHub Portfolio Proof Pack](/zh-Hans/articles/build-a-github-portfolio-proof-pack)整理可公开的证据。若要把这条路变成面试练习，从[一条独立面试题](/zh-Hans/interview-lab)开始，练习解释同一个 trade-off。

@@ -1,0 +1,239 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "openai-agent-evals",
+      "officialUrl": "https://developers.openai.com/api/docs/guides/agent-evals",
+      "lastChecked": "2026-09-25",
+      "fit": {
+        "gapIds": ["evaluation", "review"],
+        "routeIds": ["no-code", "coder"]
+      },
+      "copy": {
+        "zh-HK": {
+          "title": "OpenAI：檢查 AI 助手點樣處理工作",
+          "whatToInspect": "先分清處理紀錄、判斷規則、測試資料同每次檢查結果各自答緊乜；揀一個想睇清楚嘅處理方式，例如應否交畀人，而唔係先追一個總分。",
+          "firstWeekArtefact": "整一張只放本地嘅五個練習情境表：預期處理方式、實際觀察、判斷準則同一個要修改或停止嘅原因。",
+          "nonClaim": "呢張表唔證明你嘅 AI 助手穩定、可上線，亦唔等於你有 API 或評估平台經驗。",
+          "caveat": "官方例子可以假設你已有帳戶或工具；唔需要為咗完成練習而開存取金鑰、上傳資料，或者執行外部操作。"
+        },
+        "zh-TW": {
+          "title": "OpenAI：檢查 AI 助手怎麼處理工作",
+          "whatToInspect": "先分清處理紀錄、判斷規則、測試資料與每次檢查結果各自回答什麼；選一個想釐清的處理方式，例如是否該交給人，而不是先追一個總分。",
+          "firstWeekArtefact": "建立一張只放在本機的五個練習情境表：預期處理方式、實際觀察、判斷準則，以及一個要修改或停止的原因。",
+          "nonClaim": "這張表不證明你的 AI 助手穩定、可上線，也不等於你有 API 或評估平台經驗。",
+          "caveat": "官方例子可能假設你已有帳戶或工具；不需要為了完成練習而建立存取金鑰、上傳資料，或執行外部操作。"
+        },
+        "zh-Hans": {
+          "title": "OpenAI：检查 AI 助手怎样处理工作",
+          "whatToInspect": "先分清处理记录、判断规则、测试资料与每次检查结果各自回答什么；选一个想厘清的处理方式，例如是否该交给人，而不是先追一个总分。",
+          "firstWeekArtefact": "建立一张只放在本机的五个练习情境表：预期处理方式、实际观察、判断准则，以及一个要修改或停止的原因。",
+          "nonClaim": "这张表不证明你的 AI 助手稳定、可上线，也不等于你有 API 或评估平台经验。",
+          "caveat": "官方例子可能假设你已有账户或工具；不需要为了完成练习而创建存取密钥、上传数据，或执行外部操作。"
+        },
+        "en": {
+          "title": "OpenAI: evaluate agent workflows",
+          "whatToInspect": "Separate what traces, graders, datasets, and eval runs answer. Choose one route you want to make visible—such as whether a HANDOFF happened—instead of chasing one aggregate score.",
+          "firstWeekArtefact": "Keep a local five-case synthetic table with the expected route, observed result, criterion, and one REVISE or STOP reason.",
+          "nonClaim": "That table does not show an agent is reliable or ready to launch, and it is not evidence of API or evaluation-platform experience.",
+          "caveat": "Official examples can assume an account or tooling. Do not create a key, upload data, or take an external action just to complete this rehearsal."
+        }
+      }
+    },
+    {
+      "id": "google-rules-of-ml",
+      "officialUrl": "https://developers.google.com/machine-learning/guides/rules-of-ml",
+      "lastChecked": "2026-09-25",
+      "fit": {
+        "gapIds": ["delivery", "evaluation", "business-decision"],
+        "routeIds": ["coder"]
+      },
+      "copy": {
+        "zh-HK": {
+          "title": "Google：Rules of ML",
+          "whatToInspect": "睇簡單對照做法、目標、量度方法同可靠流程點樣排喺複雜模型之前；揀一條規則，寫低它會影響邊個決定。",
+          "firstWeekArtefact": "整一張決策對照表：目標、簡單規則或人手做法、一個業務量度同一項安全界線、三個練習情境，以及下一個改動要跨過嘅門檻。",
+          "nonClaim": "做咗呢張表唔代表模型有效、指標已改善，或者你已經做過正式環境嘅機器學習工作。",
+          "caveat": "文件假設你已有基本機器學習概念；唔好將通用量度當成真實業務量度，亦唔好跳過資料來源同負責人。"
+        },
+        "zh-TW": {
+          "title": "Google：Rules of ML",
+          "whatToInspect": "看簡單對照做法、目標、量度方法與可靠流程如何放在複雜模型之前；選一條規則，寫下它會影響哪一個決策。",
+          "firstWeekArtefact": "建立一張決策對照表：目標、簡單規則或人工做法、一個業務量度與一條安全界線、三個練習情境，以及下一次改動必須超過的門檻。",
+          "nonClaim": "完成這張表不代表模型有效、指標已改善，或你已經做過正式環境的機器學習工作。",
+          "caveat": "文件假設你已有基本機器學習概念；不要把通用量度當成真實業務量度，也不要跳過資料來源與負責人。"
+        },
+        "zh-Hans": {
+          "title": "Google：Rules of ML",
+          "whatToInspect": "看简单对照做法、目标、量度方法与可靠流程如何放在复杂模型之前；选一条规则，写下它会影响哪一个决策。",
+          "firstWeekArtefact": "建立一张决策对照表：目标、简单规则或人工做法、一个业务量度与一条安全界线、三个练习情境，以及下一次改动必须超过的门槛。",
+          "nonClaim": "完成这张表不代表模型有效、指标已改善，或你已经做过正式上线的机器学习工作。",
+          "caveat": "文件假设你已有基本机器学习概念；不要把通用量度当成真实业务量度，也不要跳过数据来源与负责人。"
+        },
+        "en": {
+          "title": "Google: Rules of ML",
+          "whatToInspect": "See how a simple baseline, objective, metric, and dependable pipeline come before a complex model. Pick one rule and name the decision it would change.",
+          "firstWeekArtefact": "Make a baseline decision sheet: objective, simple rule or human baseline, one business measure and guardrail, three synthetic cases, and the threshold a next change must clear.",
+          "nonClaim": "The sheet does not establish that a model works, that a metric improved, or that you have operated production ML.",
+          "caveat": "The guide assumes basic ML knowledge. Do not turn a generic metric into a real business measure or skip the data source and owner."
+        }
+      }
+    },
+    {
+      "id": "google-deployment-testing",
+      "officialUrl": "https://developers.google.com/machine-learning/crash-course/production-ml-systems/deployment-testing",
+      "lastChecked": "2026-09-25",
+      "fit": {
+        "gapIds": ["delivery", "evaluation", "review"],
+        "routeIds": ["coder"]
+      },
+      "copy": {
+        "zh-HK": {
+          "title": "Google：機器學習系統嘅部署測試",
+          "whatToInspect": "睇資料、特徵、模型版本、提供服務嘅基建同整合應點樣分開驗；揀一個會出問題嘅情境，先寫預期結果。",
+          "firstWeekArtefact": "整一張上線前檢查表：練習資料、要檢查嘅條件、預期繼續／修改／停止、實際結果同交接負責人。",
+          "nonClaim": "有上線前檢查表唔代表做咗部署、持續整合、監察，亦唔代表有放行批准。",
+          "caveat": "例子係機器學習流程；只借用驗收邏輯。冇明確授權就唔好連正式環境嘅基建或模擬真實部署。"
+        },
+        "zh-TW": {
+          "title": "Google：機器學習系統的部署測試",
+          "whatToInspect": "看資料、特徵、模型版本、提供服務的基建與整合應如何分開驗；先挑一個會出問題的情境，寫下預期結果。",
+          "firstWeekArtefact": "建立一張上線前檢查表：練習資料、要檢查的條件、預期繼續／修改／停止、實際結果與交接負責人。",
+          "nonClaim": "有上線前檢查表不代表做過部署、持續整合、監察，也不代表已有放行批准。",
+          "caveat": "例子是機器學習流程；只借用驗收邏輯。沒有明確授權，不要連接正式環境的基建或模擬真實部署。"
+        },
+        "zh-Hans": {
+          "title": "Google：机器学习系统的部署测试",
+          "whatToInspect": "看数据、特征、模型版本、提供服务的基建与整合应如何分开验；先挑一个会出问题的情境，写下预期结果。",
+          "firstWeekArtefact": "建立一张上线前检查表：练习资料、要检查的条件、预期继续／修改／停止、实际结果与交接负责人。",
+          "nonClaim": "有上线前检查表不代表做过部署、持续整合、监测，也不代表已有放行批准。",
+          "caveat": "例子是机器学习流程；只借用验收逻辑。没有明确授权，不要连接正式上线环境的基建或模拟真实部署。"
+        },
+        "en": {
+          "title": "Google: production ML deployment testing",
+          "whatToInspect": "See how data, features, model versions, serving infrastructure, and integration are validated separately. Choose one failure and write the expected result before testing.",
+          "firstWeekArtefact": "Make a release-check table: synthetic input, condition to inspect, expected PASS/REVISE/BLOCKED route, observed result, and handoff owner.",
+          "nonClaim": "A release-check table is not a deployment, CI system, monitoring setup, or release approval.",
+          "caveat": "The examples are ML pipelines; borrow only the acceptance logic. Do not connect production infrastructure or simulate a real deployment without authority."
+        }
+      }
+    },
+    {
+      "id": "nist-ai-rmf-playbook",
+      "officialUrl": "https://www.nist.gov/itl/ai-risk-management-framework/nist-ai-rmf-playbook",
+      "lastChecked": "2026-09-25",
+      "fit": {
+        "gapIds": ["delivery", "data-boundary", "business-decision", "review"],
+        "routeIds": ["no-code", "coder"]
+      },
+      "copy": {
+        "zh-HK": {
+          "title": "NIST AI RMF Playbook",
+          "whatToInspect": "睇 Govern、Map、Measure、Manage 四項工作，揀一個最貼近你虛構情境嘅建議，搵出要由邊位負責人回應邊個風險。",
+          "firstWeekArtefact": "整一頁風險與決策摘要：目標決定、容許同禁止輸入、受影響嘅人、量度方法、負責人，同一個出錯後嘅停止或回應。",
+          "nonClaim": "自願採用呢份指引唔代表合規、已獲批准、做完風險評估，或者可以安全上線。",
+          "caveat": "呢份係可按情境採用嘅框架，唔會代你定工具設定、法律責任或真實業務門檻。"
+        },
+        "zh-TW": {
+          "title": "NIST AI RMF Playbook",
+          "whatToInspect": "看 Govern、Map、Measure、Manage 四項工作，選一個最貼近你虛構情境的建議，找出由哪一位負責人回應哪一個風險。",
+          "firstWeekArtefact": "建立一頁風險與決策摘要：目標決策、允許與禁止輸入、受影響的人、量度方法、負責人，以及一個出錯後的停止或回應。",
+          "nonClaim": "自願採用這份指引不代表合規、已獲核准、完成風險評估，或可以安全上線。",
+          "caveat": "這是一份可依情境採用的框架，不會替你決定工具設定、法律責任或真實業務門檻。"
+        },
+        "zh-Hans": {
+          "title": "NIST AI RMF Playbook",
+          "whatToInspect": "看 Govern、Map、Measure、Manage 四项工作，选一个最贴近你虚构情境的建议，找出由哪一位负责人回应哪一个风险。",
+          "firstWeekArtefact": "建立一页风险与决策摘要：目标决策、允许与禁止输入、受影响的人、量度方法、负责人，以及一个出错后的停止或回应。",
+          "nonClaim": "自愿采用这份指引不代表合规、已获批准、完成风险评估，或可以安全上线。",
+          "caveat": "这是一份可依情境采用的框架，不会替你决定工具设置、法律责任或真实业务门槛。"
+        },
+        "en": {
+          "title": "NIST AI RMF Playbook",
+          "whatToInspect": "Inspect the Govern, Map, Measure, and Manage functions. Choose one suggestion that fits a fictional scenario and identify the owner who must respond to one risk.",
+          "firstWeekArtefact": "Make a one-page risk-and-decision map: intended decision, allowed and prohibited input, affected people, measurement, owner, and one stop or response after a failure.",
+          "nonClaim": "Following a voluntary playbook does not establish compliance, approval, a completed risk assessment, or a safe launch.",
+          "caveat": "This framework can be tailored to context; it does not choose tool settings, legal responsibility, or a real business threshold for you."
+        }
+      }
+    },
+    {
+      "id": "owasp-llm-top-10",
+      "officialUrl": "https://owasp.org/projects/top-10-for-large-language-model-applications",
+      "lastChecked": "2026-09-25",
+      "fit": {
+        "gapIds": ["data-boundary", "evaluation", "review"],
+        "routeIds": ["no-code", "coder"]
+      },
+      "copy": {
+        "zh-HK": {
+          "title": "OWASP Top 10 for LLM Applications",
+          "whatToInspect": "睇最新風險分類，揀一項真係可能出現喺你虛構流程嘅風險；由輸入一路追到應該拒絕處理定交畀人。",
+          "firstWeekArtefact": "整一張不安全情境記錄：輸入、可能出現嘅不良操作、預期拒絕或交接、負責人同原因。",
+          "nonClaim": "讀完 Top 10 或寫一個情境，唔代表做過安全檢查、滲透測試或合規確認。",
+          "caveat": "Top 10 會更新，而且唔會解釋你使用緊嗰個工具嘅實際設定；仍要逐項核對資料、權限同操作。"
+        },
+        "zh-TW": {
+          "title": "OWASP Top 10 for LLM Applications",
+          "whatToInspect": "看最新風險分類，選一項真的可能出現在你虛構流程的風險；從輸入一路追到應該拒絕處理還是交給人。",
+          "firstWeekArtefact": "建立一張不安全情境記錄：輸入、可能出現的不良操作、預期拒絕或交接、負責人與原因。",
+          "nonClaim": "讀完 Top 10 或寫一個情境，不代表做過安全檢查、滲透測試或合規確認。",
+          "caveat": "Top 10 會更新，而且不會說明你正在使用工具的實際設定；仍要逐項確認資料、權限與操作。"
+        },
+        "zh-Hans": {
+          "title": "OWASP Top 10 for LLM Applications",
+          "whatToInspect": "看最新风险分类，选一项真的可能出现在你虚构流程的风险；从输入一路追到应该拒绝处理还是交给人。",
+          "firstWeekArtefact": "建立一张不安全情境记录：输入、可能出现的不良操作、预期拒绝或交接、负责人与原因。",
+          "nonClaim": "读完 Top 10 或写一个情境，不代表做过安全检查、渗透测试或合规确认。",
+          "caveat": "Top 10 会更新，而且不会说明你正在使用工具的实际设置；仍要逐项确认数据、权限与操作。"
+        },
+        "en": {
+          "title": "OWASP Top 10 for LLM Applications",
+          "whatToInspect": "Inspect the current risk categories and choose one that could genuinely occur in a fictional workflow. Trace it from input to the required BLOCKED or HANDOFF route.",
+          "firstWeekArtefact": "Make one unsafe-case record: input, unwanted action, expected block or handoff, responsible person, and reason.",
+          "nonClaim": "Reading the Top 10 or writing one case is not a security review, penetration test, or compliance confirmation.",
+          "caveat": "The Top 10 changes and does not describe your tool's actual configuration. Check the data, permissions, and actions one by one."
+        }
+      }
+    },
+    {
+      "id": "github-readme-guidance",
+      "officialUrl": "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes",
+      "lastChecked": "2026-09-25",
+      "fit": {
+        "gapIds": ["delivery", "business-decision", "review"],
+        "routeIds": ["no-code", "coder"]
+      },
+      "copy": {
+        "zh-HK": {
+          "title": "GitHub Docs：README 應交代乜",
+          "whatToInspect": "睇 README 點樣交代專案做乜、點樣開始、邊度搵幫助，同邊個維護；對照你嘅作品有冇講清決定同限制。",
+          "firstWeekArtefact": "寫一份本地 README 草稿：使用者要作嘅決定、練習資料、預期情況同反向情境、覆核人點樣檢查、限制同來源收據。",
+          "nonClaim": "有 README 唔代表程式正確、作品公開，或者任何人已經覆核過。",
+          "caveat": "本地 README 已經可以當練習；未做使用權、授權同私隱檢查前，唔好將僱主或不明來源嘅內容放上公開儲存庫。"
+        },
+        "zh-TW": {
+          "title": "GitHub Docs：README 應交代什麼",
+          "whatToInspect": "看 README 如何交代專案做什麼、如何開始、在哪裡找幫助，以及誰維護；對照你的作品有沒有說清決策與限制。",
+          "firstWeekArtefact": "寫一份本機 README 草稿：使用者要作的決策、練習資料、預期情況與反向情境、覆核者如何檢查、限制與來源收據。",
+          "nonClaim": "有 README 不代表程式正確、作品公開，或任何人已經覆核過。",
+          "caveat": "本機 README 已可作為練習；未完成使用權、授權與隱私檢查前，不要把雇主或來源不明的內容放到公開儲存庫。"
+        },
+        "zh-Hans": {
+          "title": "GitHub Docs：README 应交代什么",
+          "whatToInspect": "看 README 如何交代项目做什么、如何开始、在哪里找帮助，以及谁维护；对照你的作品有没有说清决策与限制。",
+          "firstWeekArtefact": "写一份本机 README 草稿：使用者要作的决策、练习资料、预期情境与反向情境、评审者如何检查、限制与来源收据。",
+          "nonClaim": "有 README 不代表程序正确、作品公开，或任何人已经评审过。",
+          "caveat": "本机 README 已可作为练习；未完成使用权、授权与隐私检查前，不要把雇主或来源不明的内容放到公开储存库。"
+        },
+        "en": {
+          "title": "GitHub Docs: what a README should explain",
+          "whatToInspect": "See how a README can explain what a project does, how to start, where to get help, and who maintains it. Compare that with whether your work makes its decision and limit clear.",
+          "firstWeekArtefact": "Draft a local README: user decision, synthetic input, expected and negative case, how a reviewer can inspect it, limit, and source receipt.",
+          "nonClaim": "A README does not show that code is correct, that work is public, or that anyone reviewed it.",
+          "caveat": "A local README is enough for practice. Do not put employer material or unknown-source content in a public repository before ownership, licence, and privacy checks."
+        }
+      }
+    }
+  ]
+}

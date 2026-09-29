@@ -1,0 +1,70 @@
+> A model that can describe an image is not automatically a dependable document workflow. It may read the wrong field, invent a visual detail, follow text hidden in the image, or turn an uncertain signal into a confident action.
+
+## Give multimodal work a narrow job
+
+Imagine a fictional **Accessibility Review Desk**. A reviewer supplies a synthetic event poster and an approved text transcription. The desk may flag whether the poster's visible date, venue line, and contact instruction agree with the transcription, then prepare a draft review packet. It cannot publish an event, contact anyone, infer a person's identity, or treat the image as evidence of accessibility compliance.
+
+This is a useful portfolio problem because it has a baseline: compare the supplied transcription against a structured form manually. A multimodal model is optional. It may help locate a line in a complex layout or describe an ambiguity, but it must be measured against the simpler OCR-plus-review route.
+
+## The smallest accurate architecture map
+
+Multimodal systems combine information from more than one kind of input: text, images, audio, video, or structured data. A common architecture has four jobs:
+
+```text
+image or audio -> modality encoder -> shared representation / fusion
+                -> language or task decoder -> structured output
+```
+
+An image encoder turns pixels into representations. An audio encoder does the equivalent for sound. A projector or fusion layer maps those representations into a space a language model or task head can use. The decoder then produces a caption, answer, classification, or structured fields. Some systems are trained end-to-end; others connect specialised OCR, speech recognition, retrieval, and language components.
+
+The map explains a crucial limit: a fluent answer is generated from representations, not copied directly from reality. The system may miss tiny text, confuse layout order, fail on unusual lighting, or overstate a weak visual cue.
+
+## Separate understanding from generation
+
+The Accessibility Review Desk has two different tasks. **Understanding** asks whether supplied inputs contain a supported visible fact. **Generation** turns that fact and its uncertainty into a readable review packet. Evaluate them separately.
+
+For understanding, define exact fields such as `event_date`, `venue_line`, `contact_instruction`, `confidence`, and `evidence_region`. For generation, require a schema-valid explanation that cites the field and says when a reviewer must inspect the original. Never allow the generation layer to replace a missing visual observation with polished prose.
+
+The simplest baseline is valuable: fixed OCR extraction plus human field comparison. If a multimodal model does not improve a named problem—such as a layout where OCR loses reading order—do not add it. Its cost, latency, privacy exposure, and evaluation burden may outweigh its benefit.
+
+## Build an evaluation set with mismatches, not only pretty images
+
+Use synthetic or licensed public-safe pairs. Each example should include the source fixture, permitted fields, expected structured result, and the reason a case is difficult. Include:
+
+- a clear poster where text and transcription agree;
+- a transposed date or venue line;
+- small or low-contrast text;
+- a cropped image with a missing field;
+- multilingual text where the language route is declared;
+- a prompt-injection phrase embedded in the image;
+- an image where the requested claim cannot be observed;
+- a generated or edited image whose provenance is marked unknown.
+
+Measure field-level precision and recall only when the ground truth is defined. Record abstention and handoff rate, not just success rate. A model that says “cannot verify the venue line” can be safer than one that guesses. Compare it with the OCR-plus-review baseline on the same fixed set.
+
+## Visual evidence needs provenance and human review
+
+Images and audio may contain personal data, copyrighted material, hidden instructions, or context that a model cannot interpret responsibly. Keep fixture provenance, licence or permission, processing purpose, excluded fields, and retention rule beside the data. Do not use an uploaded photo as a reason to infer identity, location, health, emotion, or protected characteristics.
+
+The reviewer packet should include the fixture ID, declared modality, model and prompt versions if used, structured fields, evidence region or timestamp when available, uncertainty, and terminal route. A screenshot alone is weak evidence because another person cannot reproduce the exact input, system version, and acceptance rule.
+
+## Portfolio artefacts that tell a complete story
+
+```text
+fixtures/manifest.json       source, licence, allowed fields, exclusions
+schemas/review-packet.json   structured output and uncertainty contract
+baseline/ocr-compare.mjs     deterministic comparison route
+evals/multimodal-v1.json     fixed normal and adversarial cases
+rubric.md                    field accuracy, abstention, review criteria
+traces/schema.md             safe evidence references and terminal routes
+CHANGE-003.md                one-variable comparison and rollback target
+README.md                    scope, non-goals, reproduction, limitations
+```
+
+A reviewer can inspect modality boundaries, structured output, baselines, fixture design, field-level evaluation, and traceability. Before any output is used, the work still needs data stewardship, a reason for human review, a decision owner, provenance awareness, and a refusal to convert uncertain media into an automated action.
+
+For next reading, contrast this with [making a multimodal demo reviewable](/en/articles/make-a-multimodal-demo-reviewable), [workflow-level agent evaluation](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer), and [safety, governance, privacy, and incident response](/en/articles/safety-governance-privacy-and-incident-response).
+
+## Boundary
+
+This is local-draft teaching material. The desk, images, transcripts, fields, model behaviour, and evaluation plan are illustrative. It does not claim visual accuracy, accessibility expertise, safe biometric inference, copyright clearance, a deployed workflow, or any real-world outcome. Real multimodal systems need authorised data, domain review, representative testing, and release approval.

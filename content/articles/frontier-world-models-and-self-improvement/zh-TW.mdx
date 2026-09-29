@@ -1,0 +1,64 @@
+「每次答得不好，agent 能不能自己改進？」聽起來很有效率，但先要問：什麼可以改、誰判定它答得不好、一次錯誤 update 的後果由誰承擔？放進作品集，更安全也更有說服力的做法，是建一個虛構的 case-triage simulator。它只接收 invented case state，為 reviewer 建議下一步，並且只在 offline evaluation 中被檢查。它不會聯絡任何人、不會改 production system，也不會批准自己的 release。
+
+## World model 是對 state 與改變的假設
+
+在這裡，**world model** 不代表 system 理解真實世界。它是一個 model 或明確的 simulation：在有限的 state 下，某個被允許 action 之後，狀態可能如何改變。State 可以包括 evidence 是否完整、有沒有 conflict、time budget、reviewer-capacity band 和 unresolved-question count。Allowed actions 可以是 `request-more-evidence`、`prepare-draft`、`handoff` 和 `stop`。Transition rule 則預測下一步可能發生什麼：補充資料可減少 unresolved count；handoff 可結束 automated work；就算 draft 未完成，time budget 也可能到期。
+
+真正有用的問題不是「它能不能想像」，而是：system 能否表示這個決定所需的資訊、清楚說出不知道什麼，並在 state 太不確定時不選 action？如果 state 很小、規則已知，而 false prediction 的代價很高，一張普通 decision table 可能比 learned neural network 更適合作為 world model。
+
+## Planning 要有候選方案，也要有獨立評判
+
+把 loop 拆成幾個小部分：
+
+1. **Observer** 把 invented case 轉成 allowed state schema。
+2. **Transition model** 或 rule simulator 為每個 permitted action 預測可能的 next state。
+3. **Planner** 在 time 和 action budget 內提出一個或多個 action sequence。
+4. **Evaluator** 用固定 cases 檢查 evidence coverage、policy compliance、stop behaviour 和 reviewer usefulness。
+5. **Human owner** 決定任何 proposed change 是否可取代 baseline。
+
+Evaluator 必須獨立，原因很實際：如果同一個 prompt 既提出 action 又宣布自己安全，它很容易獎勵自己的說法，而不是你真正需要的 outcome。好的 evaluator 必須有應該 fail 的 case：missing evidence 必須 stop、policy conflict 必須 handoff、budget 用盡不能再 retry、兩條 route 都說得通時要顯示 uncertainty，不能偷偷選一條。
+
+## 這裡的 controlled self-improvement 是什麼
+
+在只供 draft 的 portfolio exercise 中，「self-improvement」應該是受控的 offline change loop，不是 autonomous self-modification。先 freeze baseline prompt、routing rule 和 evaluator version。只允許一小列 change，例如 planner instruction、action-ranking threshold，或 synthetic notes 的 retrieval ordering。每個 candidate change 都要：
+
+- 在 run 前記下 hypothesis；
+- 用同一套 fixed evaluation suite 跑 baseline 和 candidate；
+- 檢查 case-level diff，包括新增 failure 與改變過的 handoff；
+- 任何 hard safety 或 evidence rule regression 就 reject；
+- 後續 test run 若要使用它，先要有具名的人批准。
+
+不要讓 system 改自己的 evaluator、擴大 allowed actions、覆寫自己的 history、自選 success metric，或把 change 搬進 live environment。這些自由會讓「學習」變成沒有邊界的 governance 問題。
+
+## 做一份可檢查的 simulation packet
+
+先做十二到二十條 invented trajectory，不用急著追求很大的 dataset。每條 trajectory 有 initial state、permitted actions 的 sequence、simulator 提供的 resulting state，以及 terminal reviewer outcome。刻意加入難看的例子：conflicting evidence、capacity unavailable、一份高分卻誤導的 draft，以及資訊太少、根本無法 plan 的 state。
+
+把以下檔案放在一起：
+
+- `state-schema.json`：定義 known、unknown 與 prohibited fields；
+- `transition-notes.md`：說明每條 rule 或 learned approximation，以及它的限制；
+- `synthetic-trajectories.jsonl`：可重跑的 cases；
+- `eval-cases.yaml`：包含預期的 stop 與 handoff behaviour；
+- `change-001.md`：比較 candidate configuration 與 frozen baseline；
+- `decision-log.md`：記錄誰接受、拒絕或延後一個 change，以及原因。
+
+重點 output 不是一個戲劇化的 success score，而是一張 change receipt，能分得出 easy case 的表面進步，和通過難題後仍成立的改進。如果 candidate 改善了 format compliance，卻讓一個 conflict case 繼續自動往下做，receipt 必須讓這個 regression 無法被忽略。
+
+## 技術作品證據
+
+展示 state schema、action contract、transition mechanism、planner budget、evaluator cases、reproducible command，以及 case-level evaluation diff。要示範 unknown field 是 first-class value，而不是空白後被默默當成安全。若使用 LLM 做 planning，保留 static fixture 或 recorded mock response，讓另一個讀者不用 API key 或付費 call 也能看懂 control flow。
+
+## 非技術作品證據
+
+展示哪個決策仍然屬於 human、對 reviewer 來說什麼才算「更好」、哪一類 change 被禁止，以及 regression 怎麼 escalated。一個強的 project 會把 ownership 擺出來：system 只提出，person 批准，release gate 可以說不。這才是能被負責任運作的設計，不是吸睛的 autonomous story。
+
+## 這個想法在哪裡會失效
+
+Simulator 只表示你放進去的 assumptions。從狹窄或 invented data 學到的 transition，環境一變就可能不準。優化 proxy score 可能產生流暢卻無用的 plan。Feedback 可能延遲、有偏，或根本不存在；在小 offline set 看到的 improvement 未必具有因果關係。如果工作其實不需要 multi-step state prediction，一張更簡單的 checklist、decision table 或 retrieval-backed playbook 會是更好的選擇。
+
+延伸閱讀：[agent protocol 與 orchestration boundary](/zh-TW/articles/agent-protocols-orchestration-and-computer-use)、[AI harness 的 definition of done](/zh-TW/articles/harness-definition-of-done-and-framework-choice)，以及[evaluation、human review 與 observability](/zh-TW/articles/llm-evals-human-review-and-observability)。
+
+## 邊界
+
+這是 AI.DOG 教學。所有 case、state、trajectory 和 change result 都是 synthetic，只留作 local draft。它沒有展示 general intelligence claim、self-training、live optimisation、autonomous release 或真實世界 planning performance。任何超出 controlled simulation 的使用，都需要 approved data、清楚的 action authority、independent evaluation、security 和 privacy review、rollback owner，以及 human accountability。

@@ -1,0 +1,15 @@
+{
+  "name": "policy-pilot-reference",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Synthetic, local-only PolicyPilot portfolio reference",
+  "license": "MIT",
+  "scripts": {
+    "demo": "node demo.mjs",
+    "test": "node --test test/policy-pilot.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

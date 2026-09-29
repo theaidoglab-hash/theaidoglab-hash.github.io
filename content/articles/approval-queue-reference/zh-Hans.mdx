@@ -1,0 +1,149 @@
+对不写 Code 的人，一个可放进 portfolio 的 AI reference 可以是本地 approval queue：它清楚列出允许的工作、失败会走到哪里和最后由谁决定，而不是一个可以随便 send 东西的 bot。
+
+## Approval Queue 是用来检查的 reference，不是要你相信的产品
+
+Approval Queue 是一个完全本地、read-only 的 reference implementation。它接收一条合成 FAQ 问题，判断能否产生一份有引用、只供人工审阅的 **draft**，而且永远不会做外部 action。它没有 live model call、API key、网络连接、客户账户、付款系统、email service 或 ticketing system。
+
+这个限制是刻意的。一个很流畅的 demo，常常掩盖最重要的问题：谁拥有决策？哪一份来源支持答案？遇到不安全要求怎么办？工具会不会意外 send、refund、create、delete 或 update 什么？这个 reference 把那些问题放进 workflow 里，不是只在 prompt 写几句让人放心的话。
+
+它很适合 low-code learner，因为你可以检查设计、判断 coding agent 的第一版，不必假装自己看得懂每一行 code。你要审阅的是 contract、route、固定 case 和 evidence，不是看到吸引的画面就按 approve。
+
+## 一个完全虚构的 business case
+
+想象一个完全虚构的 learning-kit service 的 operations desk。团队经常收到重复问题，例如未开封的练习材料能否退回。他们想有人先帮忙准备回复，但人工仍要判断答案是否合适，以及任何真实 action 是否应该发生。
+
+这个 reference 使用的 FAQ、request ID 和 local trace 全部都是虚构。它不读真实 policy、account、order 或 customer message；也不声称团队减少工作量、提升质量、省了钱或得到任何 business result。
+
+它要处理的有限决策是：**系统能否从一条 current、approved 的合成 FAQ 产生有引用的 draft，还是必须交给人？** 它永远不决定是否 refund、联系任何人或 update record。
+
+## 这个 reference 明确展示什么
+
+### Code 里看得到的东西
+
+- 一个 read-only **action contract**：`allowedActions` 永远是空 list，必须 human review，send message、issue refund、read account 或 update order 等 action 都被禁止。
+- 在 retrieval 前先做 input validation 和 safety routing。明确的 action request 会被 blocked；instruction override 或 prompt injection 会 handoff。
+- Current-source control：retrieval 只考虑标为 `approved`、并在指定日期仍然 current 的虚构 FAQ。它用透明的 keyword overlap 和稳定 tie-break，不是 semantic search 或看不到的 ranking。
+- 一个 deterministic local draft generator。同一条有支持的合成 input 会得到有 citation 的 local mock draft；结果记录 `network: "disabled"` 和 `apiCallMade: false`。
+- 固定的 synthetic regression checks，涵盖正常 case、没有支持的问题、prompt injection、模拟 mock failure 和禁止的 external action。
+- 一条做了数据最小化的 trace：它只留 question 的 truncated SHA-256 fingerprint，不留 raw question text，同时记下 route、source selection 和 reason code。
+
+### Code 以外要交代的事
+
+- 每条 route 最后都由 human reviewer 拥有决策；工具只会准备 draft 或停下来。
+- 有支持的答案必须显示 FAQ ID 和 version，让 reviewer 能核对合成 source，而不是相信一段写得好看的文字。
+- 不支持、不安全或失败的 case 不会乱编答案；它们会连同 reason 返回 `handoff` 或 `blocked`。
+- Local package 可用 `npm test` 和 `npm run demo` 在 Node.js 20 重复检查，不需要 dependency、environment variable 或外部 side effect。
+- README、demonstration map、tests 和 deliberate limitations 让 reviewer 有 evidence 可看；它们不会让 reference 变成已部署服务。
+
+想象：小帮手可以在一本假规则书找到正确的一页，再替大人写张便条。如果找不到那一页、有人叫它破坏规则，或铅笔坏了，它会举手。它不会自己寄便条、打开钱包或改规则书。
+
+## 把商业价值和 stop rule 写成可检查的内容
+
+不要把 local pass 包装成“团队省了时间”或“答案更好”的假结果。应先写清楚：日后若有另行授权的 pilot，要量度的是什么，例如在预先同意的 review window 内、经 reviewer 批准而且有 source support 的 draft 比率，并和观察开始前已定好的人工 baseline 比较。
+
+接着写下即使文字看起来顺畅，也足以否决 candidate 的条件：可以执行 external action、citation 来自过期或未批准 source、绕过 reviewer、raw question 进入 trace，或 fixture 加入 key、network call 或私人材料。这个 companion reference 每一条 route 都会返回一份小型 `decisionReceipt`，让 reviewer 核对 contract version、synthetic source receipt、citation reference、no-action check、人工下一步，以及 `not_measured_in_this_fixture` 这个明确状态。
+
+这不是 dashboard，也不是 impact result；它是一种让商业价值、technical guardrail、data evidence、release decision 和 rollback 一起被讨论的方法。你可以先用 [portfolio evidence planner](/zh-Hans/portfolio-evidence-planner) 写自己的第一周 receipt，再用 [portfolio evidence rubric](/zh-Hans/articles/score-an-ai-portfolio-by-evidence-not-fluency) 检查后才加入更多工具。
+
+## 先看 action contract，才看顺利的答案
+
+最重要的不是 draft text，而是 contract。它写明 reference 是 `read_only`、`allowedActions` 永远是空的，而且必须有 reviewer。禁止 list 包括 create ticket、delete record、issue refund、read customer account、send external message 和 update order。
+
+Action contract 是把 workflow 可以做什么、不能做什么写成可测试边界。它比在 instruction 里写“请不要 send”更有力：prompt 可能被忽略或误解；code-level contract 可以被 test。当然，它仍然不会在真实系统自动给你法律、组织或技术权限。
+
+当你作为 non-coder review coding agent 的作品，未接受任何 feature 前，先问四个简单问题：
+
+- 允许的是什么 input？是 synthetic 还是已授权？
+- 这个版本有哪些外部 action 在技术上做不到？
+- 真实决策前，哪一个人必须 review？
+- 没有 source support 或有人要求过多时，预期是哪一条 route？
+
+如果答案需要真实 account、secret、connector、customer record 或 write permission，这个 reference 已经越过学习边界。停下来缩小要求，不要靠加更多 prompt 掩饰。
+
+## 沿着 end-to-end 路径走，也要看清它在哪里停
+
+Reference 的流程刻意很短：
+
+1. 先验证 synthetic request 里是否有 non-empty question。
+2. 在 lookup FAQ 前做 safety classification。
+3. Requested 或 embedded external action 会变成 `blocked`；不会 retrieval，也不会 action。
+4. Instruction override 或 prompt injection 在 retrieval 前就变成 `handoff`。
+5. 正常问题只会 lookup 有足够 keyword support、仍然 current 而且 approved 的 synthetic FAQ。
+6. 有支持的结果成为 `draft_for_human_approval`，有 source citation，而且 `action.kind: "none"`。
+7. 找不到 source support 或模拟 local mock failure 时，会变成 `handoff`，不会把 draft 当答案交出去。
+8. 所有 route 最后都留给 human reviewer 判断。
+
+这三个 route name 是很有用的 portfolio 语言。`draft_for_human_approval` 只代表这个 synthetic exercise 里满足了一个狭窄条件；`handoff` 代表它拒绝猜测或无法完成 local step；`blocked` 代表有人要求了 contract 外的行为。三个都不代表真实 customer 已获服务。
+
+## 还没谈 LLM 前，先懂 deterministic baseline
+
+Retrieval 方法刻意简单：它在很小的虚构 FAQ set 里找 overlapping keywords，只接受 approved 和 current 的 entry，再用稳定方法处理同分。这比一句看不到怎么得出的“最佳答案”更容易重跑和审阅。
+
+Draft 由 `src/mock-response.mjs` 的 deterministic local mock 产生。它不懂语言，也不是 model 的替代品。它的价值是，同一个 test 能在没有 key、cost、network variation 或隐藏 provider behaviour 下重跑。
+
+想象：它是一张食谱卡，不是一位厨师。看到合适的假材料，它写出同一张假便条；材料不够，就不应该自己想象有晚餐。
+
+这个 baseline 让未来一个另外获批准的 experiment 有公平问题可答：candidate model 是否在保住 citations、safe routing 和 human review 的情况下，改善了某种已定义的 failure mode？这个 reference 没有回答这题；它没有 production metric，也没有 live comparison。
+
+## `gpt-5-mini` fixture 是标签，不是连接
+
+Package 里有 `data/responses-api-gpt-5-mini.fixture.json`。它展示一个 illustrative Responses API request 的形状：名叫 `gpt-5-mini`、要求输出有引用的 draft，并在 support 缺失或出现 external action 时 handoff。它刻意是一份 **non-executing fixture**：
+
+- 没有 credential 或 secret；
+- `network` 字段是 `disabled`；
+- 本地 runtime 不会 read、import 或 send 它；regression test 只会读它以检查这条边界；以及
+- runtime 永远使用 deterministic local mock。
+
+不要把它叫作 model integration。它不证明 API compatibility、使用 model 的 permission、model quality、cost、safety performance，也不代表未来可以连接。它只是一份 discussion artefact：让 reviewer 在未来另行做 technical、privacy、security 和 release review 后，看见 request 需要写清楚什么。
+
+## 先测 failure case，才接受最漂亮的答案
+
+Package 有九个 deterministic、synthetic regression checks。Non-coder 不必亲自修改它们，也可以检查它们要求什么：
+
+| Check | 预期结果 | 为什么 reviewer 要在意 |
+| --- | --- | --- |
+| Read-only contract | 没有 allowed action；refund 被禁止。 | 边界有被 test，不只是写下来。 |
+| Supported FAQ | 有 citation 的 draft、没有 API call、pending human approval。 | 即使顺利 case 也有 human gate。 |
+| Unsupported question | `handoff`、没有 draft、没有 citation。 | 它不会用流畅文字填补数据缺口。 |
+| Prompt injection | Retrieval 前 `handoff`。 | 不安全的 instruction override 到不了 source lookup。 |
+| Mock failure | `handoff`、没有 draft、没有 action。 | Local draft step 不可用时，workflow fail closed。 |
+| Forbidden action | Retrieval 或 execution 前 `blocked`。 | 类似 refund 的要求不会意外变 automation。 |
+| Expired source | `handoff`、没有 draft、没有 citation。 | 原本有 support 的 source 过了 effective date 后不能成为 current answer。 |
+| Decision receipt | Synthetic data receipt、会阻止 release 的 guardrail 和 `not_measured_in_this_fixture`。 | 商业量度与交付边界保持可见，不必编造结果。 |
+| Responses fixture boundary | `gpt-5-mini` request fixture 无 key、无 network，runtime 不读取。 | 把可讨论的 request shape 与实际 model integration 分开。 |
+
+Evaluation case 其实就是一条预先写好答题卡的问题。想象：玩 board game 前，在每个 move 旁边放张卡，写好应该发生什么；比自己喜欢的玩家输了才改规则更好。
+
+改 implementation 前先跑 test 和 demo。输出只是这些很小的虚构 case 的 local behaviour evidence，不是 production scorecard。若 coding agent 提议改动，请它先说明哪一个固定 case 可能 regression，再交出改动后的结果。
+
+## Trace、reviewer gate 和 rollback 是三件不同的事
+
+Trace 帮 reviewer 重组 local route，但不保存 raw question。它记下 request ID、truncated question fingerprint、effective date、retrieval 发生时的 source-selection details，以及最后的 reason code。这是本地例子中的 data minimisation，不是一套完整 privacy programme。
+
+Reviewer gate 是 human decision point。成功 route 的 reviewer status 是 `pending_human_approval`；停止的 route 是 `handoff_required`。两个 state 都没有 external action 可做。Reviewer 可看 draft、citation 和 reason，但没有暗藏的“send”按钮。
+
+这个 reference 的 rollback **不是**现实 production rollback system。它没有 deployment、monitoring、incident process 或 release approval configuration。这里合理的 rollback 是一条 local delivery rule：若 proposed change 未通过 fixed test 或削弱了 boundary，就 reject 那个 change，保留上一个已知可 pass 的 revision。把原因记进 decision log，再用同一批 case 测下一个小改动。
+
+## Portfolio README 要让人可以检查什么
+
+把这个 reference 当成自己 project 的形状，不要把它变成夸大结果的来源。Reviewer 应能找到：
+
+- 虚构使用者、有限决策、non-goal 和 action contract；
+- synthetic data boundary，以及为什么不用真实内容；
+- deterministic baseline，以及 optional model fixture 明确不是什么；
+- fixed cases、expected routes、test command 和实际 local results；
+- trace fields、human reviewer decision，以及 failed candidate 怎么在本地被拒绝；
+- coding agent 改过的 files、它的 assumptions 和它没有测到的地方；以及
+- 关于 production、business outcome、security、privacy compliance 和 model quality 的 explicit nonclaims。
+
+Source code、test name 和 command 应保持英文，让另一位 reviewer 能检查或重跑；README 可以用多语言说明学习目的。不要放入真实 workplace FAQ、customer screenshot、account data、secret、private repository material 或虚构的 impact number。
+
+## 它证明什么，也刻意不证明什么
+
+这个 reference 证明你可以思考一个有边界的 AI workflow：source support、safe route、deterministic check、trace minimisation、human approval 和诚实 delivery documentation。即使你不是写每一行 code 的 developer，它也给你一个具体方法 review AI 帮你做出的 build。
+
+它不证明真实答案正确、LLM 安全、retrieval 做得好、team 会省时间、customer 会得到帮助，或系统已可部署。它也不给你使用真实数据或 `gpt-5-mini` 的 permission。那些是另外的问题，需要有权责的 evaluation、governance 和 operational review。
+
+这就是 portfolio 的重点：一个可信的 learner 会展示边界、failure 和下一份需要的 evidence，不只是展示最好看的 output。
+
+延伸阅读：[从 action contract 开始做低代码 AI workflow](/zh-Hans/articles/build-a-low-code-ai-automation)、[不是 developer 也能 review coding agent 的 build](/zh-Hans/articles/review-a-coding-agent-build-without-being-a-developer)、[先走 non-coder 路线](/zh-Hans/articles/use-ai-without-writing-code)、[有证据地走 coder 路线](/zh-Hans/articles/use-ai-as-a-coding-partner-with-proof)、[PolicyPilot 的有边界 enterprise AI reference](/zh-Hans/articles/enterprise-ai-portfolio-policy-pilot)、[用 evidence 而非 demo fluency 评分 portfolio](/zh-Hans/articles/score-an-ai-portfolio-by-evidence-not-fluency)，以及 [把课程转成八周 evidence sprint](/zh-Hans/articles/turn-an-ai-course-into-an-eight-week-evidence-sprint)。

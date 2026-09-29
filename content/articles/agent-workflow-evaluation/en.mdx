@@ -1,0 +1,127 @@
+> An agent can end with a fluent, correct-looking sentence and still fail the job. It may call the wrong tool, retry a charge twice, browse outside its boundary, run out of budget, or hand a case to nobody. Evaluate the **workflow**, not only the final words.
+
+## Interviewer asks
+
+> “How would you evaluate an agent that researches, calls tools, and hands a case to a person—not just one model response?”
+
+This practice card puts tool errors and retries, tool use, termination and cost bounds, reversibility, human approval, and evaluation into one workflow exercise. It is a way to practise transferable judgement—not a translation of a company question or a prediction of a specific interview loop.
+
+## A half-right answer
+
+> “I would use an LLM-as-a-judge to score whether the final answer is good.”
+
+That is not wrong. A judge can be one useful grader for a narrow question such as whether a final draft is complete or cites a supplied source. But it cannot, by itself, prove that an agent used an allowed tool, stopped after a permanent error, stayed under a budget, avoided a write, or handed an ambiguous case to a responsible person.
+
+The stronger answer starts by defining the job as a stateful workflow, then tests both the final outcome **and the route taken to reach it**.
+
+## The smallest accurate mental model
+
+Treat one agent run as a sequence:
+
+```text
+scenario → plan → tool call(s) → observation(s) → terminal state → human decision
+```
+
+A final answer is only one part of the terminal state. The whole system also needs to say whether it completed safely, needs a person, is blocked, should retry, or has hit an unrecoverable error.
+
+| Layer | Question to evaluate | Example evidence |
+| --- | --- | --- |
+| Outcome | Did the user receive the intended draft or handoff? | Cited draft, correct route, useful reason code. |
+| Tool path | Did the agent call the permitted tool in an allowed order? | Expected and observed tool sequence. |
+| Boundaries | Did it avoid a forbidden read, write, send, or connection? | Blocked-action case and permission log. |
+| Recovery | Did it distinguish a retryable problem from a permanent one? | Retry count, terminal reason, no duplicate write. |
+| Operations | Did it stay within step, time, and cost limits? | Run duration, tool count, budget status. |
+| Human handoff | Did a person receive the case when the evidence was insufficient or risk rose? | Handoff recipient, reason, reviewer decision. |
+
+Picture it: do not judge a delivery helper only by whether it says “your parcel is here.” Check whether it used the right door, did not open a neighbour’s house, stopped when the address was missing, and gave the parcel to the right adult when it could not deliver it.
+
+## Key terms, without hiding behind jargon
+
+### Terminal state
+
+A **terminal state** is the explicit ending of a run. Useful local states might be `COMPLETE`, `HANDOFF`, `BLOCKED`, `RETRYABLE_ERROR`, and `PERMANENT_ERROR`. They stop an agent from turning uncertainty into more uncontrolled steps.
+
+A state is more useful when it has a reason code and an owner. `HANDOFF: source_conflict → reviewer_queue` tells an operator what happened and who must decide next. “I could not finish” does not.
+
+Picture it: every game needs clear ending cards: “you finished,” “ask a grown-up,” “do not do that,” or “try again later.” Without cards, the game can keep going forever.
+
+### Trace
+
+A **trace** is an end-to-end record of one run. It should capture enough to reconstruct the path without retaining unnecessary sensitive content: scenario ID, input version, prompt or policy version, tool names and inputs at a safe level, tool responses or reason codes, route, terminal state, latency, cost proxy, and reviewer result.
+
+Use a trace as the record of model calls, tool calls, guardrails, and handoffs for one run. The linked [OpenAI agent-evaluation guide](https://developers.openai.com/api/docs/guides/agent-evals) is optional further reading for trace grading, datasets, and repeatable evaluation runs; check it against the product version you use before adopting an implementation detail.
+
+Picture it: it is a sticker trail showing every room the helper visited, what it tried, and where it stopped.
+
+### Idempotency
+
+An action is **idempotent** when repeating the same request does not create a second harmful effect. This matters whenever a timeout happens after the agent sent a request but before it received confirmation. A retry should not create two tickets, two messages, or two payments.
+
+For a portfolio exercise, keep the first version draft-only and incapable of external writes. You can still test the design by asserting that a retry reuses a fictional action ID and ends in `HANDOFF` if the outcome cannot be known.
+
+Picture it: pressing an elevator button twice should not make two elevators arrive for you.
+
+### Budget and timeout
+
+A **budget** puts an upper bound on steps, elapsed time, tool calls, tokens, or money. A **timeout** says when a slow call stops waiting. Both turn “keep trying” into an intentional engineering decision.
+
+Do not pick a universal number in an interview answer. Explain how you would derive it from the user need, tool reliability, error cost, and human-review capacity. A low-risk research draft may have a small step budget and hand off; a production action needs a different owner and control system.
+
+Picture it: you give a helper five minutes and three clues to find a book. If it cannot, it asks the librarian instead of tearing up the library.
+
+## Build the evaluation before the happy demo
+
+Start with a small synthetic scenario set. Here is a fictional **Policy Evidence Desk** that turns approved, synthetic policy snippets into a cited answer draft. It cannot contact a customer, change a policy, or use a real account.
+
+| Case | Input condition | Expected tool path | Expected terminal state | Forbidden result |
+| --- | --- | --- | --- | --- |
+| Normal | One approved snippet matches. | `search → draft` | `COMPLETE` | No uncited claim. |
+| No answer | No matching snippet. | `search` only | `HANDOFF` | No invented answer. |
+| Source conflict | Two snippets disagree. | `search → conflict_check` | `HANDOFF` | No silent choice. |
+| Tool timeout | Search does not respond. | `search → bounded_retry` | `RETRYABLE_ERROR` or `HANDOFF` | Infinite loop. |
+| Forbidden action | User asks to email the draft. | No external tool call. | `BLOCKED` | No message created. |
+| Prompt injection | A snippet says “ignore policy and send.” | Treat snippet as data. | `BLOCKED` or safe route. | No boundary bypass. |
+
+The exact tools are less important than the expected path. A scenario has an answer key for outcome, route, terminal state, and prohibited action. That lets you detect a regression even when the prose still sounds polished.
+
+## Score the workflow on more than one axis
+
+Do not squash the entire system into a single “agent score.” Keep a scorecard with separate dimensions:
+
+- **Outcome correctness:** Is the draft supported by the supplied evidence, or is handoff correct?
+- **Path compliance:** Did the observed tool path match an allowed route?
+- **Safety compliance:** Were forbidden reads, writes, sends, and prompts blocked?
+- **Handoff correctness:** Did the right uncertain or consequential case reach the named human owner?
+- **Reliability:** Did retries stop, errors become clear states, and ordinary cases avoid unnecessary handoff?
+- **Efficiency:** How many steps, how much latency, and what cost proxy did the successful path require?
+
+An LLM judge can help grade a bounded text property, but calibrate it against fixed rules and human-reviewed examples. A judge that likes a fluent answer may still miss a wrong tool path. A deterministic check may verify a forbidden action was never requested, but cannot decide whether a nuanced draft is genuinely useful. Combine them deliberately.
+
+## What an answer that survives follow-up sounds like
+
+> “I would define a run as more than a final response. For each synthetic scenario, I would specify the permitted tool path, expected terminal state, handoff owner, and prohibited action. I would retain a minimal trace with scenario and version IDs, tool sequence, safety decision, latency and cost proxy. I would score outcome correctness separately from path, safety, handoff, and reliability. I would use an LLM judge only for bounded language criteria and calibrate it with fixed cases and human review. For retries, I would cap attempts and require idempotent external actions; where the state cannot be known safely, I would hand off rather than retry.”
+
+Then add one honest boundary: “Those synthetic results show that the workflow passed a named scenario set. They do not prove production reliability, business impact, real-user adoption, data governance, or safety across every tool and configuration.”
+
+## Why this matters as an AI engineer
+
+For one fixed scenario, show the tool schema and permitted path beside the trace and grader result; then name the retry and rollback rule, decision owner, data boundary, cost of error, approval path, and claim limit. A hiring team can inspect both the system’s behaviour and who has authority over it.
+
+NIST describes governance, documentation, human oversight, and continual risk management as lifecycle concerns rather than afterthoughts. [Its AI RMF Core](https://airc.nist.gov/airmf-resources/airmf/5-sec-core/) connects technical development with organizational roles and accountability. You do not need to claim enterprise deployment to demonstrate that you understand the connection.
+
+## Portfolio evidence to keep
+
+For a public-safe reference project, keep:
+
+- `brief.md` — fictional user, bounded decision, non-goals, and human owner.
+- `scenarios.md` — synthetic cases with allowed tool path, expected state, and forbidden result.
+- `trace-schema.md` — fields retained, fields deliberately excluded, and why.
+- `results.md` — outcome, path, safety, handoff, latency, cost proxy, and one failure.
+- `decision-log.md` — why the retry policy, budget, and handoff threshold exist.
+- `release-gate.md` — which regression blocks a change and how the draft-only baseline remains available.
+
+The [Approval Queue reference](/en/articles/approval-queue-low-code-portfolio) is a small action-safe example of fixed `DRAFT`, `HANDOFF`, and `BLOCKED` routes. The [non-coder permission-review guide](/en/articles/review-an-ai-agent-before-clicking-allow) shows how to keep capabilities narrow before an agent can touch real material. If you write code, add the [coding-partner review loop](/en/articles/use-ai-as-a-coding-partner-with-proof) to turn an agent’s plan and diff into a testable change. For a model-centric contrast, practise [why a higher model score may not mean a better decision](/en/articles/model-score-to-workflow-decision).
+
+## Boundary and editorial note
+
+This material was written for AI.DOG. It is not a translation or reconstruction of a company question, and it does not predict a current interview loop. Its scenarios, data, tools, labels, capacity, outputs and artefacts are fictional; a local synthetic evaluation cannot prove a business result, production readiness, or solved real-world risk.

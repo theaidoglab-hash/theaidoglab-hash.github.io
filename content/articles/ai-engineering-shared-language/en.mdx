@@ -1,0 +1,40 @@
+One `model.generate()` call can produce text. It does not explain how an AI system helps a person, when it stops, or who owns an error. In an interview, collapsing every component into “I would add an agent” usually shows that capability, data, and authority have not been separated.
+
+## Build a shared language around one small flow
+
+Imagine an internal reviewer drafting a reply from **approved, entirely fictional** policy documents. The smallest flow is:
+
+`question → eligible documents → relevant passages → model draft → rule check → reviewer decision`
+
+An **LLM** predicts the next tokens from its input. It may write fluent text, but it does not automatically know which documents are current, and it does not gain permission to send an email or change a record.
+
+A **token** is a small unit the model reads or writes. **Context** is the set of tokens visible for this request: instructions, question, retrieved passages, and conversation. More context is not automatically better understanding. It increases cost and latency and can bury decisive material in noise.
+
+## What RAG, MCP, and an agent each solve
+
+**RAG** (retrieval-augmented generation) retrieves candidate material and supplies a small set of citable passages to the model. It answers “what material may this response use?” It does not guarantee a correct answer. Metadata filters, document versions, citations, and an insufficient-evidence handoff still need deliberate design.
+
+**MCP** (Model Context Protocol) gives a host a standard way to discover a tool or resource description and input schema. It is a connection interface, not authorization. A tool named `send_reply` still needs host policy to decide who may call it, which data may leave, and when a human approval is mandatory.
+
+An **agent** is an optional loop: the model observes state, proposes a next step, may use a constrained tool, and checks the result. When the work is always “search → draft → reviewer,” a fixed workflow is usually easier to test. Add a loop only when the task truly needs to choose a route from intermediate results.
+
+## Quantization is not free acceleration
+
+**Quantization** represents some model weights or activations at lower precision, often to reduce memory use or improve deployability and throughput. It is not automatically faster or cheaper. Compare hardware, batch size, context length, quality regression, and fallback. A lower-cost serving path is not a better decision if it degrades high-risk cases.
+
+## Turn the vocabulary into an interview answer
+
+Do not begin with a model name. State the reviewer’s decision and the data boundary: which documents are allowed, when the system must decline, and why the output remains a draft. Then draw the six nodes above and attach one inspectable question to each:
+
+- Did retrieval select current, eligible documents?
+- Does the model output meet a schema and carry citations, or require handoff?
+- Does the tool have read-only scope, with any external action stopped before the reviewer?
+- Can a request be reproduced from its version, trace, and case ID?
+
+This small map is more useful than ten disconnected definitions. It shows what a model does, what the application adds, and which decisions people must not surrender.
+
+## Boundary
+
+This is a learning-only synthetic flow, not a real company corpus, MCP server, or production authorization claim. A tool description, a model guardrail, or “we use RAG” is not access control. Permissions and external actions need enforceable policy outside the model.
+
+Continue with [a prompt contract and acceptance test](/en/interview-lab/prompt-contracts-need-an-acceptance-test), [separating retrieval, generation, and permission](/en/interview-lab/rag-retrieval-generation-or-permission), and [reviewing an agent before Allow](/en/articles/review-an-ai-agent-before-clicking-allow).

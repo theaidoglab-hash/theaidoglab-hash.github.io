@@ -1,0 +1,496 @@
+{
+  "shared-language": {
+    "criteria": {
+      "zh-HK": [
+        "Choice card 要逐項寫到邊個作決定、資料界線、AI 可以做乜，同埋邊個動作一定留畀人；任何一項空白都未算完成。",
+        "揀兩個容易混淆嘅詞，例如 agent 同 workflow，逐一講清佢哋會點樣改變今次決定，而唔係只背定義。"
+      ],
+      "zh-TW": [
+        "Choice card 要逐項寫出誰作決策、資料邊界、AI 可以做什麼，以及哪個動作一定保留給人；任何一項空白都不算完成。",
+        "選兩個容易混淆的詞，例如 agent 與 workflow，逐一說明它們會如何改變這次決策，而不只是背定義。"
+      ],
+      "zh-Hans": [
+        "Choice card 要逐项写出谁作决策、数据边界、AI 可以做什么，以及哪个动作一定保留给人；任何一项空白都不算完成。",
+        "选两个容易混淆的词，例如 agent 与 workflow，逐一说明它们会如何改变这次决策，而不只是背定义。"
+      ],
+      "en": [
+        "Complete every field on the choice card: decision owner, data boundary, permitted AI role, and the action that remains human; an empty field means the stage is not complete.",
+        "Choose two easily confused terms, such as agent and workflow, and explain how each would change this decision rather than only reciting definitions."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果你仍然只講到「想加 AI」，但講唔出邊個要作乜決定同今次唔做乜，就停低重寫 choice card，唔好進入第 01 站。",
+      "zh-TW": "如果你仍只說得出「想加 AI」，卻說不出誰要作什麼決策與這次不做什麼，就停下來重寫 choice card，不要進入第 01 站。",
+      "zh-Hans": "如果你仍只说得出“想加 AI”，却说不出谁要作什么决策与这次不做什么，就停下来重写 choice card，不要进入第 01 站。",
+      "en": "If you can only say “add AI” but cannot name the decision owner and explicit non-goal, stop and rewrite the choice card before moving to stage 01."
+    }
+  },
+  "ml-decisions": {
+    "criteria": {
+      "zh-HK": [
+        "Decision table 要用同一份固定資料列出 baseline 同至少兩個 threshold，並為每個 threshold 記低 queue volume、review workload 同兩類 error cost。",
+        "用一個 false positive 同一個 false negative 個案解釋最後 threshold 點解符合現有 review capacity，而唔係只揀最高分。"
+      ],
+      "zh-TW": [
+        "Decision table 要用同一份固定資料列出 baseline 與至少兩個 threshold，並為每個 threshold 記下 queue volume、review workload 與兩類 error cost。",
+        "用一個 false positive 與一個 false negative 案例解釋最後 threshold 為何符合現有 review capacity，而不只是選最高分。"
+      ],
+      "zh-Hans": [
+        "Decision table 要用同一份固定数据列出 baseline 与至少两个 threshold，并为每个 threshold 记下 queue volume、review workload 与两类 error cost。",
+        "用一个 false positive 与一个 false negative 案例解释最终 threshold 为什么符合现有 review capacity，而不只是选最高分。"
+      ],
+      "en": [
+        "Use one fixed dataset to compare a baseline and at least two thresholds, recording queue volume, review workload, and both error costs for each threshold.",
+        "Use one false-positive and one false-negative case to explain why the chosen threshold fits the available review capacity instead of simply selecting the highest score."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果 label timing、decision owner 或 review capacity 其中一項未定，就返第 00 站補 decision boundary；未補好前唔好用 accuracy 宣稱方案可行。",
+      "zh-TW": "如果 label timing、decision owner 或 review capacity 其中一項未定，就回到第 00 站補 decision boundary；補好前不要用 accuracy 宣稱方案可行。",
+      "zh-Hans": "如果 label timing、decision owner 或 review capacity 其中一项未定，就回到第 00 站补 decision boundary；补好前不要用 accuracy 声称方案可行。",
+      "en": "If label timing, the decision owner, or review capacity is undefined, return to stage 00 and repair the decision boundary; do not use accuracy to claim viability yet."
+    }
+  },
+  "neural-learning": {
+    "criteria": {
+      "zh-HK": [
+        "Training note 要固定 input、target、seed 同 train/validation split，畫出 loss 走勢，並標示一次 parameter update 前後嘅變化。",
+        "分別指出一個 underfitting 或 overfitting 訊號，再寫低下一個只改一項因素嘅檢查。"
+      ],
+      "zh-TW": [
+        "Training note 要固定 input、target、seed 與 train/validation split，畫出 loss 走勢，並標示一次 parameter update 前後的變化。",
+        "分別指出一個 underfitting 或 overfitting 訊號，再寫下下一個只改一項因素的檢查。"
+      ],
+      "zh-Hans": [
+        "Training note 要固定 input、target、seed 与 train/validation split，画出 loss 走势，并标示一次 parameter update 前后的变化。",
+        "分别指出一个 underfitting 或 overfitting 信号，再写下下一个只改一项因素的检查。"
+      ],
+      "en": [
+        "Fix the input, target, seed, and train/validation split in the training note, plot the loss trajectory, and mark the change before and after one parameter update.",
+        "Identify an underfitting or overfitting signal and write the next check that changes only one factor."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果你連 loss 改變同 parameter update 嘅關係都追唔到，或者冇 held-out signal，就留喺第 02 站，用更細嘅 toy example 重跑，唔好跳去 model architecture。",
+      "zh-TW": "如果你無法追出 loss 變化與 parameter update 的關係，或沒有 held-out signal，就留在第 02 站，用更小的 toy example 重跑，不要跳到 model architecture。",
+      "zh-Hans": "如果你无法追出 loss 变化与 parameter update 的关系，或没有 held-out signal，就留在第 02 站，用更小的 toy example 重跑，不要跳到 model architecture。",
+      "en": "If you cannot trace a loss change to a parameter update, or have no held-out signal, stay at stage 02 and rerun a smaller toy example before moving to model architecture."
+    }
+  },
+  "transformer-mental-model": {
+    "criteria": {
+      "zh-HK": [
+        "Data-flow sketch 要由 tokenization 畫到 embedding、Q/K/V、attention、mask、position 同 output，箭嘴要顯示資料實際點樣流。",
+        "揀一個 token 逐步 trace，標出 context 增長會增加成本嘅位置，同一個 mask 或 position 出錯會造成嘅具體 failure。"
+      ],
+      "zh-TW": [
+        "Data-flow sketch 要從 tokenization 畫到 embedding、Q/K/V、attention、mask、position 與 output，箭頭要顯示資料實際如何流動。",
+        "選一個 token 逐步 trace，標出 context 增長會增加成本的位置，以及一個 mask 或 position 錯誤造成的具體 failure。"
+      ],
+      "zh-Hans": [
+        "Data-flow sketch 要从 tokenization 画到 embedding、Q/K/V、attention、mask、position 与 output，箭头要显示数据实际怎样流动。",
+        "选一个 token 逐步 trace，标出 context 增长会增加成本的位置，以及一个 mask 或 position 错误造成的具体 failure。"
+      ],
+      "en": [
+        "Draw the data flow from tokenization through embeddings, Q/K/V, attention, masking, position, and output, using arrows to show how information actually moves.",
+        "Trace one token step by step, marking where a larger context adds cost and one concrete failure caused by an incorrect mask or position."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果張圖仍將 attention 當成資料庫搜尋，或者講唔到 mask 同 position 影響邊一步，就留喺第 03 站重畫，唔好用個圖解釋 production 行為。",
+      "zh-TW": "如果圖仍把 attention 當成資料庫搜尋，或說不出 mask 與 position 影響哪一步，就留在第 03 站重畫，不要用這張圖解釋 production 行為。",
+      "zh-Hans": "如果图仍把 attention 当成数据库搜索，或说不出 mask 与 position 影响哪一步，就留在第 03 站重画，不要用这张图解释 production 行为。",
+      "en": "If the diagram still treats attention as database search, or you cannot show where masking and position matter, stay at stage 03 and redraw it before using it to explain production behaviour."
+    }
+  },
+  "generation-control": {
+    "criteria": {
+      "zh-HK": [
+        "固定 model、prompt 同 input，只改一個 sampling setting；保存 raw output、setting、latency 同 token count，令另一個人可以重播比較。",
+        "由結果指出邊部分只係 output variation，邊部分先可能影響 user decision；唔可以將較順口嘅答案當成 product quality。"
+      ],
+      "zh-TW": [
+        "固定 model、prompt 與 input，只改一個 sampling setting；保存 raw output、setting、latency 與 token count，讓另一個人可以重播比較。",
+        "從結果指出哪部分只是 output variation，哪部分才可能影響 user decision；不能把較流暢的答案當成 product quality。"
+      ],
+      "zh-Hans": [
+        "固定 model、prompt 与 input，只改一个 sampling setting；保存 raw output、setting、latency 与 token count，让另一个人可以重播比较。",
+        "从结果指出哪部分只是 output variation，哪部分才可能影响 user decision；不能把更流畅的答案当成 product quality。"
+      ],
+      "en": [
+        "Hold the model, prompt, and input constant while changing one sampling setting; preserve the raw outputs, setting, latency, and token count so another person can replay the comparison.",
+        "Identify which differences are only output variation and which could affect the user decision; do not treat a more fluent answer as product quality."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果一次過改咗多個變數、冇保存 raw output，或者比較用咗唔同 input，就作廢今次結論，留喺第 04 站重跑固定比較。",
+      "zh-TW": "如果一次改了多個變數、沒有保存 raw output，或比較使用不同 input，就作廢這次結論，留在第 04 站重跑固定比較。",
+      "zh-Hans": "如果一次改了多个变量、没有保存 raw output，或比较使用不同 input，就作废这次结论，留在第 04 站重跑固定比较。",
+      "en": "If multiple variables changed, raw outputs were not retained, or the inputs differ, discard the conclusion and rerun the fixed comparison at stage 04."
+    }
+  },
+  "architecture-tradeoffs": {
+    "criteria": {
+      "zh-HK": [
+        "Selection memo 要寫明 workload shape、latency target、memory limit、現有 baseline，同埋候選 architecture 會改善邊個 constraint。",
+        "明確 reject 至少一個熱門 architecture，引用今次 workload evidence 解釋點解額外 complexity 唔值得。"
+      ],
+      "zh-TW": [
+        "Selection memo 要寫明 workload shape、latency target、memory limit、現有 baseline，以及候選 architecture 會改善哪個 constraint。",
+        "明確 reject 至少一個熱門 architecture，引用這次 workload evidence 解釋為何額外 complexity 不值得。"
+      ],
+      "zh-Hans": [
+        "Selection memo 要写明 workload shape、latency target、memory limit、现有 baseline，以及候选 architecture 会改善哪个 constraint。",
+        "明确 reject 至少一个热门 architecture，引用这次 workload evidence 解释为什么额外 complexity 不值得。"
+      ],
+      "en": [
+        "State the workload shape, latency target, memory limit, current baseline, and the exact constraint each candidate architecture is intended to improve.",
+        "Explicitly reject at least one fashionable architecture, using evidence from this workload to explain why its additional complexity is not justified."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果選擇只係跟 benchmark 排名或熱門 model 名，而冇 workload trace 支持，就返第 04 站補固定 generation trace，再做 architecture 比較。",
+      "zh-TW": "如果選擇只跟 benchmark 排名或熱門 model 名稱，卻沒有 workload trace 支持，就回到第 04 站補固定 generation trace，再做 architecture 比較。",
+      "zh-Hans": "如果选择只跟 benchmark 排名或热门 model 名称，却没有 workload trace 支持，就回到第 04 站补固定 generation trace，再做 architecture 比较。",
+      "en": "If the choice follows a benchmark rank or popular model name without a workload trace, return to stage 04, capture a fixed generation trace, and then repeat the architecture comparison."
+    }
+  },
+  "model-family-choice": {
+    "criteria": {
+      "zh-HK": [
+        "用同一組 acceptance cases 比較一個 baseline 同兩個候選 model，逐個記 accuracy signal、latency、cost、control 同資料限制。",
+        "為每個冇揀嘅 model 寫一個 rejection reason，並分開標示已觀察結果同仍未證實嘅 vendor 或 benchmark claim。"
+      ],
+      "zh-TW": [
+        "用同一組 acceptance cases 比較一個 baseline 與兩個候選 model，逐一記錄 accuracy signal、latency、cost、control 與資料限制。",
+        "為每個未選的 model 寫一個 rejection reason，並分開標示已觀察結果與仍未證實的 vendor 或 benchmark claim。"
+      ],
+      "zh-Hans": [
+        "用同一组 acceptance cases 比较一个 baseline 与两个候选 model，逐一记录 accuracy signal、latency、cost、control 与数据限制。",
+        "为每个未选的 model 写一个 rejection reason，并分开标示已观察结果与仍未证实的 vendor 或 benchmark claim。"
+      ],
+      "en": [
+        "Compare one baseline and two candidate models on the same acceptance cases, recording an accuracy signal, latency, cost, control, and data constraints for each.",
+        "Write a rejection reason for every unselected model and separate observed results from vendor or benchmark claims that remain unproven."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果候選 model 用咗唔同 prompt、case 或量度方法，或者 baseline 被刪走，就返第 04 站固定比較 contract，唔好作 model 選擇。",
+      "zh-TW": "如果候選 model 使用不同 prompt、case 或量測方法，或 baseline 被刪除，就回到第 04 站固定比較 contract，不要作 model 選擇。",
+      "zh-Hans": "如果候选 model 使用不同 prompt、case 或测量方法，或 baseline 被删除，就回到第 04 站固定比较 contract，不要作 model 选择。",
+      "en": "If candidate models use different prompts, cases, or measurements, or the baseline has been removed, return to stage 04 and fix the comparison contract before choosing a model."
+    }
+  },
+  "adaptation-choice": {
+    "criteria": {
+      "zh-HK": [
+        "將固定案例按 failure pattern 分組，逐組比較 prompt、retrieval、tool、model change 同 fine-tuning 邊個係最平而可驗收嘅修正。",
+        "Adaptation record 要寫到 training data 權利同質量、eval gate、rollback owner，同一個達唔到就停止嘅數值或案例條件。"
+      ],
+      "zh-TW": [
+        "把固定案例依 failure pattern 分組，逐組比較 prompt、retrieval、tool、model change 與 fine-tuning 哪個是成本最低且可驗收的修正。",
+        "Adaptation record 要寫出 training data 權利與品質、eval gate、rollback owner，以及一個未達到就停止的數值或案例條件。"
+      ],
+      "zh-Hans": [
+        "把固定案例按 failure pattern 分组，逐组比较 prompt、retrieval、tool、model change 与 fine-tuning 哪个是成本最低且可验收的修正。",
+        "Adaptation record 要写出 training data 权利与质量、eval gate、rollback owner，以及一个未达到就停止的数值或案例条件。"
+      ],
+      "en": [
+        "Group fixed cases by failure pattern and compare prompt, retrieval, tool, model-change, and fine-tuning options to find the cheapest testable correction for each group.",
+        "Record training-data rights and quality, the evaluation gate, rollback owner, and one numeric or case-based condition that stops the adaptation."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果 failure 未重複出現、training data 權利唔清楚，或者平啲嘅 baseline 未試過，就唔好 fine-tune；返第 06 站重新確認 model 同 system choice。",
+      "zh-TW": "如果 failure 尚未重複出現、training data 權利不清楚，或較便宜的 baseline 尚未測試，就不要 fine-tune；回到第 06 站重新確認 model 與 system choice。",
+      "zh-Hans": "如果 failure 尚未重复出现、training data 权利不清楚，或更便宜的 baseline 尚未测试，就不要 fine-tune；回到第 06 站重新确认 model 与 system choice。",
+      "en": "If the failure does not repeat, training-data rights are unclear, or a cheaper baseline has not been tested, do not fine-tune; return to stage 06 and revisit the model and system choice."
+    }
+  },
+  "prompt-context-interface": {
+    "criteria": {
+      "zh-HK": [
+        "Versioned prompt contract 要列出 input、可用 context、output schema 同禁止內容，並至少包括 normal、missing-input 同 adversarial 三個固定案例。",
+        "每個案例要並排保存 expected output、actual output 同 PASS／REVISE／STOP reviewer decision，唔可以只留最好嗰次答案。"
+      ],
+      "zh-TW": [
+        "Versioned prompt contract 要列出 input、可用 context、output schema 與禁止內容，並至少包括 normal、missing-input 與 adversarial 三個固定案例。",
+        "每個案例要並排保存 expected output、actual output 與 PASS／REVISE／STOP reviewer decision，不能只留最好的一次答案。"
+      ],
+      "zh-Hans": [
+        "Versioned prompt contract 要列出 input、可用 context、output schema 与禁止内容，并至少包括 normal、missing-input 与 adversarial 三个固定案例。",
+        "每个案例要并排保存 expected output、actual output 与 PASS／REVISE／STOP reviewer decision，不能只留最好的一次答案。"
+      ],
+      "en": [
+        "Version the prompt contract and state its input, permitted context, output schema, and prohibited content, with at least normal, missing-input, and adversarial fixed cases.",
+        "Keep the expected output, actual output, and PASS, REVISE, or STOP reviewer decision side by side for every case rather than retaining only the best answer."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果個案重播唔到、expected output 事後先改，或者 reviewer 只憑『睇落幾好』判斷，就留喺第 08 站重寫 contract 同 fixed cases。",
+      "zh-TW": "如果案例無法重播、expected output 是事後才修改，或 reviewer 只憑「看起來不錯」判斷，就留在第 08 站重寫 contract 與 fixed cases。",
+      "zh-Hans": "如果案例无法重播、expected output 是事后才修改，或 reviewer 只凭“看起来不错”判断，就留在第 08 站重写 contract 与 fixed cases。",
+      "en": "If a case cannot be replayed, the expected output was changed after seeing the result, or review is based only on “looks good,” stay at stage 08 and rewrite the contract and fixed cases."
+    }
+  },
+  "retrieval-rag": {
+    "criteria": {
+      "zh-HK": [
+        "RAG failure map 要將每個 answer claim 連返 source ID 或 chunk，並記錄 permission、freshness 同 baseline 無 retrieval 時嘅結果。",
+        "至少跑 no-answer、conflicting-source 同 stale-source 三個固定案例，逐個寫明 answer、abstain 或 handoff 嘅預期 route 同 owner。"
+      ],
+      "zh-TW": [
+        "RAG failure map 要把每個 answer claim 連回 source ID 或 chunk，並記錄 permission、freshness 與 baseline 無 retrieval 時的結果。",
+        "至少執行 no-answer、conflicting-source 與 stale-source 三個固定案例，逐一寫明 answer、abstain 或 handoff 的預期 route 與 owner。"
+      ],
+      "zh-Hans": [
+        "RAG failure map 要把每个 answer claim 连回 source ID 或 chunk，并记录 permission、freshness 与 baseline 无 retrieval 时的结果。",
+        "至少运行 no-answer、conflicting-source 与 stale-source 三个固定案例，逐一写明 answer、abstain 或 handoff 的预期 route 与 owner。"
+      ],
+      "en": [
+        "Link every answer claim in the RAG failure map to a source ID or chunk, recording permission, freshness, and the no-retrieval baseline result.",
+        "Run fixed no-answer, conflicting-source, and stale-source cases, naming the expected answer, abstain, or handoff route and owner for each."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果冇權威 source of truth、access control 未定，或者 citation 指唔返原文，就停用 retrieval；返第 08 站將 context 同 output contract 收窄。",
+      "zh-TW": "如果沒有權威 source of truth、access control 尚未定義，或 citation 指不回原文，就停用 retrieval；回到第 08 站收窄 context 與 output contract。",
+      "zh-Hans": "如果没有权威 source of truth、access control 尚未定义，或 citation 指不回原文，就停用 retrieval；回到第 08 站收窄 context 与 output contract。",
+      "en": "If there is no authoritative source of truth, access control is undefined, or a citation cannot resolve to the source text, disable retrieval and return to stage 08 to narrow the context and output contract."
+    }
+  },
+  "agents-tools": {
+    "criteria": {
+      "zh-HK": [
+        "Tool contract 要列出 input schema、allowed action、denied action、timeout、terminal state 同每個 consequential action 嘅 human approver。",
+        "實際送入一個 malformed input 同一個 denied-action request，保留 trace 證明工具冇執行副作用，而且 route 到指定 reviewer。"
+      ],
+      "zh-TW": [
+        "Tool contract 要列出 input schema、allowed action、denied action、timeout、terminal state，以及每個 consequential action 的 human approver。",
+        "實際送入一個 malformed input 與一個 denied-action request，保留 trace 證明工具未執行副作用，而且 route 到指定 reviewer。"
+      ],
+      "zh-Hans": [
+        "Tool contract 要列出 input schema、allowed action、denied action、timeout、terminal state，以及每个 consequential action 的 human approver。",
+        "实际送入一个 malformed input 与一个 denied-action request，保留 trace 证明工具未执行副作用，而且 route 到指定 reviewer。"
+      ],
+      "en": [
+        "Define the input schema, allowed action, denied action, timeout, terminal state, and human approver for every consequential action in the tool contract.",
+        "Submit one malformed input and one denied-action request, retaining a trace that proves no side effect occurred and that the request reached the named reviewer."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果 action 冇辦法 rollback、approval owner 不明，或者 denied case 仍可執行，就將工具降做 read-only，返第 08 站補 input／output contract。",
+      "zh-TW": "如果 action 無法 rollback、approval owner 不明，或 denied case 仍可執行，就把工具降為 read-only，回到第 08 站補 input／output contract。",
+      "zh-Hans": "如果 action 无法 rollback、approval owner 不明，或 denied case 仍可执行，就把工具降为 read-only，回到第 08 站补 input／output contract。",
+      "en": "If the action cannot be rolled back, the approval owner is unclear, or a denied case can still execute, reduce the tool to read-only and return to stage 08 to repair the input and output contract."
+    }
+  },
+  "agentic-engineering": {
+    "criteria": {
+      "zh-HK": [
+        "Workflow state diagram 要畫出每個 state、transition、retry limit、time 或 cost budget、terminal state，同 trace 入面追返每一步嘅 ID。",
+        "用固定 fixture 各跑一次 success、tool failure 同 recovery path，逐個 terminal state 保存結果同 human handoff record。"
+      ],
+      "zh-TW": [
+        "Workflow state diagram 要畫出每個 state、transition、retry limit、time 或 cost budget、terminal state，以及 trace 中追溯每一步的 ID。",
+        "用固定 fixture 各執行一次 success、tool failure 與 recovery path，逐一為 terminal state 保存結果與 human handoff record。"
+      ],
+      "zh-Hans": [
+        "Workflow state diagram 要画出每个 state、transition、retry limit、time 或 cost budget、terminal state，以及 trace 中追溯每一步的 ID。",
+        "用固定 fixture 各运行一次 success、tool failure 与 recovery path，逐一为 terminal state 保存结果与 human handoff record。"
+      ],
+      "en": [
+        "Draw every state, transition, retry limit, time or cost budget, and terminal state, with trace IDs that let a reviewer recover each workflow step.",
+        "Run fixed success, tool-failure, and recovery paths, preserving the result and human-handoff record for every terminal state."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果 workflow 可以無限 retry、任何 state 冇 owner，或者 terminal state 冇 handoff，就停止 agent loop，返第 10 站收窄 tool permission 同 stop condition。",
+      "zh-TW": "如果 workflow 可以無限 retry、任何 state 沒有 owner，或 terminal state 沒有 handoff，就停止 agent loop，回到第 10 站收窄 tool permission 與 stop condition。",
+      "zh-Hans": "如果 workflow 可以无限 retry、任何 state 没有 owner，或 terminal state 没有 handoff，就停止 agent loop，回到第 10 站收窄 tool permission 与 stop condition。",
+      "en": "If the workflow can retry indefinitely, any state has no owner, or a terminal state has no handoff, stop the agent loop and return to stage 10 to narrow tool permissions and stop conditions."
+    }
+  },
+  "inference-budget": {
+    "criteria": {
+      "zh-HK": [
+        "用固定 workload 保存 baseline trace，至少列出 P50、P99、input／output token、slowest step 同每次 request 嘅成本估算。",
+        "只改 batching、cache、model 或 context 其中一項再重跑，證明改善邊個 budget，同時記低 regression 同 fallback。"
+      ],
+      "zh-TW": [
+        "用固定 workload 保存 baseline trace，至少列出 P50、P99、input／output token、slowest step 與每次 request 的成本估算。",
+        "只改 batching、cache、model 或 context 其中一項再重跑，證明改善哪個 budget，同時記下 regression 與 fallback。"
+      ],
+      "zh-Hans": [
+        "用固定 workload 保存 baseline trace，至少列出 P50、P99、input／output token、slowest step 与每次 request 的成本估算。",
+        "只改 batching、cache、model 或 context 其中一项再重跑，证明改善哪个 budget，同时记下 regression 与 fallback。"
+      ],
+      "en": [
+        "Capture a baseline trace on a fixed workload with at least P50, P99, input and output tokens, the slowest step, and estimated cost per request.",
+        "Change only one of batching, cache, model, or context and rerun, showing which budget improved while recording the regression and fallback."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果前後測試唔係同一 workload、冇 trace，或者 latency 改善令 acceptance case 失敗，就撤回結論；缺 acceptance case 時先返第 08 站補。",
+      "zh-TW": "如果前後測試不是同一 workload、沒有 trace，或 latency 改善使 acceptance case 失敗，就撤回結論；缺 acceptance case 時先回到第 08 站補齊。",
+      "zh-Hans": "如果前后测试不是同一 workload、没有 trace，或 latency 改善使 acceptance case 失败，就撤回结论；缺 acceptance case 时先回到第 08 站补齐。",
+      "en": "If the before and after tests use different workloads, have no trace, or the latency change breaks an acceptance case, withdraw the conclusion; return to stage 08 first if acceptance cases are missing."
+    }
+  },
+  "evaluation-observability": {
+    "criteria": {
+      "zh-HK": [
+        "Versioned eval set 要包括 normal、missing、adversarial 同 regression case，每個 case 都有預先寫定 expected route 同 failure severity。",
+        "Shipping record 要保存 model／prompt／data version、結果、release threshold、false-positive／false-negative review、owner 同 rollback trigger。"
+      ],
+      "zh-TW": [
+        "Versioned eval set 要包括 normal、missing、adversarial 與 regression case，每個 case 都有預先寫定的 expected route 與 failure severity。",
+        "Shipping record 要保存 model／prompt／data version、結果、release threshold、false-positive／false-negative review、owner 與 rollback trigger。"
+      ],
+      "zh-Hans": [
+        "Versioned eval set 要包括 normal、missing、adversarial 与 regression case，每个 case 都有预先写定的 expected route 与 failure severity。",
+        "Shipping record 要保存 model／prompt／data version、结果、release threshold、false-positive／false-negative review、owner 与 rollback trigger。"
+      ],
+      "en": [
+        "Version an evaluation set containing normal, missing, adversarial, and regression cases, with a prewritten expected route and failure severity for every case.",
+        "Preserve model, prompt, and data versions, results, release threshold, false-positive and false-negative review, owner, and rollback trigger in the shipping record."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果 expected result 睇完 output 先改、release threshold 冇 owner，或者 regression 無法 replay，就記 STOP；返第 08 站修正 output contract，再重跑 eval。",
+      "zh-TW": "如果 expected result 是看過 output 後才修改、release threshold 沒有 owner，或 regression 無法 replay，就記為 STOP；回到第 08 站修正 output contract，再重跑 eval。",
+      "zh-Hans": "如果 expected result 是看过 output 后才修改、release threshold 没有 owner，或 regression 无法 replay，就记为 STOP；回到第 08 站修正 output contract，再重跑 eval。",
+      "en": "If expected results were changed after seeing outputs, the release threshold has no owner, or a regression cannot be replayed, record STOP, return to stage 08, repair the output contract, and rerun the evaluation."
+    }
+  },
+  "safety-security": {
+    "criteria": {
+      "zh-HK": [
+        "Threat-and-handoff table 要逐項列出 data／asset、可能 actor、attack surface、prevent／detect control、owner 同 stop condition。",
+        "實際跑 prompt-injection、PII 同 unauthorised-action 固定案例，保存 blocked route、audit record 同 reviewer decision。"
+      ],
+      "zh-TW": [
+        "Threat-and-handoff table 要逐項列出 data／asset、可能 actor、attack surface、prevent／detect control、owner 與 stop condition。",
+        "實際執行 prompt-injection、PII 與 unauthorised-action 固定案例，保存 blocked route、audit record 與 reviewer decision。"
+      ],
+      "zh-Hans": [
+        "Threat-and-handoff table 要逐项列出 data／asset、可能 actor、attack surface、prevent／detect control、owner 与 stop condition。",
+        "实际运行 prompt-injection、PII 与 unauthorised-action 固定案例，保存 blocked route、audit record 与 reviewer decision。"
+      ],
+      "en": [
+        "List each data asset, possible actor, attack surface, preventive or detective control, owner, and stop condition in the threat-and-handoff table.",
+        "Run fixed prompt-injection, PII, and unauthorised-action cases, preserving the blocked route, audit record, and reviewer decision."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果敏感資料用途未獲批准、action 不可逆、audit trail 缺失，或者 injection 可以越權，就即時停止試行，返第 10 同第 13 站收窄權限與 release gate。",
+      "zh-TW": "如果敏感資料用途未獲批准、action 不可逆、audit trail 缺失，或 injection 可以越權，就立即停止試行，回到第 10 與第 13 站收窄權限與 release gate。",
+      "zh-Hans": "如果敏感数据用途未获批准、action 不可逆、audit trail 缺失，或 injection 可以越权，就立即停止试行，回到第 10 与第 13 站收窄权限与 release gate。",
+      "en": "If sensitive-data use is unauthorised, an action is irreversible, the audit trail is missing, or injection can cross a permission boundary, stop the trial and return to stages 10 and 13 to narrow permissions and the release gate."
+    }
+  },
+  "multimodal": {
+    "criteria": {
+      "zh-HK": [
+        "為每種 modality 寫 use case、raw input receipt、latency／cost budget、privacy boundary、fallback 同可觀察 acceptance signal。",
+        "用 missing、noisy 或 conflicting modality 固定案例重跑，證明 output 指返 raw evidence region，失敗時會 abstain 或 handoff。"
+      ],
+      "zh-TW": [
+        "為每種 modality 寫出 use case、raw input receipt、latency／cost budget、privacy boundary、fallback 與可觀察 acceptance signal。",
+        "用 missing、noisy 或 conflicting modality 固定案例重跑，證明 output 指回 raw evidence region，失敗時會 abstain 或 handoff。"
+      ],
+      "zh-Hans": [
+        "为每种 modality 写出 use case、raw input receipt、latency／cost budget、privacy boundary、fallback 与可观察 acceptance signal。",
+        "用 missing、noisy 或 conflicting modality 固定案例重跑，证明 output 指回 raw evidence region，失败时会 abstain 或 handoff。"
+      ],
+      "en": [
+        "For every modality, record the use case, raw-input receipt, latency and cost budget, privacy boundary, fallback, and observable acceptance signal.",
+        "Rerun a fixed missing, noisy, or conflicting-modality case, proving that output resolves to a raw evidence region and failures abstain or hand off."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果 derived image／audio 追唔返 raw asset、缺乏 consent 或 privacy boundary，或者冇非 multimodal fallback，就停用該 modality，返第 13、14 站補證據同控制。",
+      "zh-TW": "如果 derived image／audio 追不回 raw asset、缺乏 consent 或 privacy boundary，或沒有非 multimodal fallback，就停用該 modality，回到第 13、14 站補證據與控制。",
+      "zh-Hans": "如果 derived image／audio 追不回 raw asset、缺乏 consent 或 privacy boundary，或没有非 multimodal fallback，就停用该 modality，回到第 13、14 站补证据与控制。",
+      "en": "If a derived image or audio item cannot be traced to the raw asset, consent or the privacy boundary is missing, or there is no non-multimodal fallback, disable that modality and return to stages 13 and 14."
+    }
+  },
+  "system-delivery": {
+    "criteria": {
+      "zh-HK": [
+        "Architecture brief 要將 user decision、non-goal、service／data boundary、capacity、failure route、human owner、pilot gate 同 rollback 串成一張可追查圖。",
+        "用 normal、over-capacity 同 dependency-failure 三條 path 做 walkthrough，逐條指出 trace、handoff、release decision 同恢復步驟。"
+      ],
+      "zh-TW": [
+        "Architecture brief 要把 user decision、non-goal、service／data boundary、capacity、failure route、human owner、pilot gate 與 rollback 串成一張可追查圖。",
+        "用 normal、over-capacity 與 dependency-failure 三條 path 做 walkthrough，逐一指出 trace、handoff、release decision 與恢復步驟。"
+      ],
+      "zh-Hans": [
+        "Architecture brief 要把 user decision、non-goal、service／data boundary、capacity、failure route、human owner、pilot gate 与 rollback 串成一张可追查图。",
+        "用 normal、over-capacity 与 dependency-failure 三条 path 做 walkthrough，逐一指出 trace、handoff、release decision 与恢复步骤。"
+      ],
+      "en": [
+        "Connect the user decision, non-goal, service and data boundaries, capacity, failure route, human owner, pilot gate, and rollback in one traceable architecture view.",
+        "Walk through normal, over-capacity, and dependency-failure paths, identifying the trace, handoff, release decision, and recovery step for each."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果冇 human owner、rollback trigger、capacity limit 或 release gate，就唔可以叫做 pilot-ready；返第 13、14 站補驗收同安全界線。",
+      "zh-TW": "如果沒有 human owner、rollback trigger、capacity limit 或 release gate，就不能稱為 pilot-ready；回到第 13、14 站補驗收與安全邊界。",
+      "zh-Hans": "如果没有 human owner、rollback trigger、capacity limit 或 release gate，就不能称为 pilot-ready；回到第 13、14 站补验收与安全边界。",
+      "en": "If there is no human owner, rollback trigger, capacity limit, or release gate, the design is not pilot-ready; return to stages 13 and 14 to repair acceptance and safety boundaries."
+    }
+  },
+  "frontier-filter": {
+    "criteria": {
+      "zh-HK": [
+        "Source receipt 要保存 primary source、日期／version、原始 claim、比較 baseline、method、限制，同埋作者其實冇證明乜。",
+        "將個 claim 對照自己一個現有 workload 或 acceptance case，寫低 ADOPT／TEST／REJECT 決定同下一個可逆步驟。"
+      ],
+      "zh-TW": [
+        "Source receipt 要保存 primary source、日期／version、原始 claim、比較 baseline、method、限制，以及作者其實沒有證明什麼。",
+        "把 claim 對照自己一個現有 workload 或 acceptance case，寫下 ADOPT／TEST／REJECT 決策與下一個可逆步驟。"
+      ],
+      "zh-Hans": [
+        "Source receipt 要保存 primary source、日期／version、原始 claim、比较 baseline、method、限制，以及作者其实没有证明什么。",
+        "把 claim 对照自己一个现有 workload 或 acceptance case，写下 ADOPT／TEST／REJECT 决策与下一个可逆步骤。"
+      ],
+      "en": [
+        "Preserve the primary source, date or version, original claim, comparison baseline, method, limitations, and what the authors did not establish in the source receipt.",
+        "Compare the claim with one existing workload or acceptance case and record an ADOPT, TEST, or REJECT decision plus the next reversible step."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果只搵到 secondary summary、benchmark 同自己 workload 唔同，或者限制被省略，就唔改技術選擇；返第 06 或第 13 站用自己 case 驗證。",
+      "zh-TW": "如果只找到 secondary summary、benchmark 與自己的 workload 不同，或限制被省略，就不改技術選擇；回到第 06 或第 13 站用自己的 case 驗證。",
+      "zh-Hans": "如果只找到 secondary summary、benchmark 与自己的 workload 不同，或限制被省略，就不改技术选择；回到第 06 或第 13 站用自己的 case 验证。",
+      "en": "If only a secondary summary is available, the benchmark does not match your workload, or limitations are omitted, do not change the technical choice; return to stage 06 or 13 and test your own case."
+    }
+  },
+  "interview-evidence": {
+    "criteria": {
+      "zh-HK": [
+        "90 秒回答要順序講 decision、mechanism、trade-off、failure boundary，同埋一份 reviewer 可以即時打開嘅 README、case 或 decision record。",
+        "叫另一個人由回答揀一句追問，必須喺五分鐘內指到 artefact 入面嘅原始證據同一個反例，而唔係補作經驗。"
+      ],
+      "zh-TW": [
+        "90 秒回答要依序說明 decision、mechanism、trade-off、failure boundary，以及一份 reviewer 可以立即開啟的 README、case 或 decision record。",
+        "請另一個人從回答中選一句追問，必須在五分鐘內指出 artefact 中的原始證據與一個反例，而不是補作經驗。"
+      ],
+      "zh-Hans": [
+        "90 秒回答要依序说明 decision、mechanism、trade-off、failure boundary，以及一份 reviewer 可以立即打开的 README、case 或 decision record。",
+        "请另一个人从回答中选一句追问，必须在五分钟内指出 artefact 中的原始证据与一个反例，而不是补作经验。"
+      ],
+      "en": [
+        "Structure the 90-second answer around the decision, mechanism, trade-off, failure boundary, and a README, case, or decision record the reviewer can open immediately.",
+        "Ask another person to probe one sentence; within five minutes, point to its original evidence and one counterexample in the artefact rather than inventing experience."
+      ]
+    },
+    "returnCondition": {
+      "zh-HK": "如果任何一句指唔返可檢查紀錄、claim 超出本機 fixture，或者講唔出失敗邊界，就刪走嗰句，返相關技術站補 artefact，再錄回答。",
+      "zh-TW": "如果任何一句指不回可檢查紀錄、claim 超出本機 fixture，或說不出失敗邊界，就刪除那一句，回到相關技術站補 artefact，再重新錄製回答。",
+      "zh-Hans": "如果任何一句指不回可检查记录、claim 超出本地 fixture，或说不出失败边界，就删除那一句，回到相关技术站补 artefact，再重新录制回答。",
+      "en": "If any sentence cannot resolve to an inspectable record, exceeds the local fixture evidence, or lacks a failure boundary, remove it, return to the relevant technical stage, repair the artefact, and record the answer again."
+    }
+  }
+}

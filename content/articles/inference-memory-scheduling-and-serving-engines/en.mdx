@@ -1,0 +1,73 @@
+> “The model is slow” is usually not a diagnosis. A user may be waiting on a queue, a large prompt, a long output, a cache miss, a memory limit, or a retry loop that the model never saw.
+
+## A service scenario with a real decision boundary
+
+Imagine a fictional **Research Draft Desk**. It turns a sanitised set of approved notes into a short internal research draft. It cannot browse, contact people, write to a shared system, or use customer data. The only product is a structured draft or a handoff when sources are incomplete.
+
+The user-facing question is simple: can the desk return a validated draft within its agreed wait budget? That question introduces **inference**, **memory**, **scheduling**, and **serving** without pretending to benchmark a real production fleet.
+
+Inference is the work of producing output from a trained model. A serving engine packages that work into requests, batches, queues, caches, validates, and reports it. The first engineering move is to split one vague latency number into observable slices.
+
+## Measure the journey, not just the final duration
+
+```text
+arrival -> admission -> queue -> context assembly -> prefill
+       -> first structured event -> decode -> validation -> terminal route
+```
+
+**Prefill** processes the input context. Long notes, repeated instructions, and excessive retrieved text can make this stage expensive before the first output appears. **Decode** produces output tokens step by step. A request can therefore have a quick first event but a slow completion when it asks for a long draft.
+
+Record queue delay, context length, time to first event, total completion time, output length, validation time, route, and cost proxy. Inspect P50, P95, and P99 separately. A lower average is not enough if a small number of long requests repeatedly miss the user's deadline.
+
+The budget is not a provider promise. In this reference project, it is a synthetic acceptance rule. If the budget is spent, the correct result can be `HANDOFF` with a reason code rather than an unvalidated partial answer.
+
+## Memory is several different constraints
+
+People often say “the model ran out of memory” as though there were one bucket. A useful mental model separates at least three:
+
+- **Weights:** the learned model parameters kept available for inference.
+- **KV cache:** attention keys and values from previous tokens, retained so decoding does not recompute the entire prefix every time.
+- **Host and queue memory:** requests, retrieved context, logs, buffers, and batches waiting around the model.
+
+More simultaneous requests and longer contexts can grow KV-cache pressure. A larger batch may raise throughput, yet increase queue wait for a short urgent request. A cache can improve repeated stable prefixes, yet reuse a stale policy if versions are not part of the key. Quantisation can reduce model-memory pressure, but needs the same safety and quality cases because an efficiency change may alter rare outputs or compatibility.
+
+None of these claims says which setting is best for every model or machine. They are hypotheses to test against one declared workload.
+
+## Scheduling is a product policy
+
+Batching decides which requests share model work. A scheduler decides which request may wait, for how long, and when a batch is full enough to run. The policy has consequences:
+
+- Throughput-oriented batching can improve utilisation but worsen tail latency.
+- Priority queues can protect a short review task but starve background work.
+- Prefix caching can reduce repeated instructions but needs versioned keys and a cache-miss route.
+- Streaming may make early progress visible, but only if that event is safe to reveal before final validation.
+
+For the Research Draft Desk, keep two synthetic traffic classes: a short reviewer request and a long background draft. Define a maximum queue wait for each. If a class exceeds its budget, do not let it silently displace the other; route it to a visible `BUDGET_STOPPED` state. That is a more honest design than reporting only the fastest completed runs.
+
+## Serving engines should be selected by the test, not the logo
+
+One serving engine may expose continuous batching, another may make structured output or metrics integration easier, and a hosted endpoint may remove infrastructure work. The right choice depends on the workload, data boundary, operational owner, and ability to measure the required behaviour. For a portfolio project, a local simulator or deterministic fixture is enough to demonstrate the reasoning without running a GPU fleet.
+
+Build a small workload model instead of inventing performance numbers. Define request shapes: context tokens, expected output tokens, traffic class, cache condition, validation rule, and terminal route. Then use a synthetic table to show what you would compare:
+
+| Case | Condition | Expected observation | Failure boundary |
+| --- | --- | --- | --- |
+| Short draft | warm stable prefix | low queue delay, valid output | cache version mismatch blocks reuse |
+| Long draft | large approved context | higher prefill cost | context exceeds budget -> handoff |
+| Burst | several arrivals together | batching trade-off visible | P99 queue breach is recorded |
+| Cache miss | changed policy version | recompute safely | stale prefix must not be used |
+| Invalid output | parser rejection | no final draft | reject or hand off |
+
+The table is an evaluation design, not a measured benchmark.
+
+## Portfolio evidence that hiring teams can inspect
+
+Keep `latency-budget.md`, `workload-fixtures.json`, `traffic-policy.md`, `metrics-schema.md`, `cache-key-contract.md`, `results-template.md`, and `decision-log.md`. A reviewer should be able to inspect prefill/decode separation, cache semantics, memory pressure, queue policy, schema validation, and failure routing. They should also find what the user is waiting for, what happens when the target is missed, who owns exceptions, and why the project does not trade safety checks for a prettier latency graph.
+
+Use a simple baseline first: shorter approved context, smaller structured response, and a single traffic class. Add batching, caching, or a different serving engine only after a named limitation appears in the fixed cases.
+
+For related reading, continue with [stoppable agents and serving budgets](/en/articles/build-stoppable-ai-agents-with-serving-budgets), [Transformer generation and adaptation trade-offs](/en/articles/choose-transformer-generation-and-adaptation-tradeoffs), and [a harness that makes an AI change reviewable](/en/articles/harness-definition-of-done-and-framework-choice).
+
+## Boundary
+
+This is local-draft material using a fictional desk and synthetic workload plan. It contains no provider benchmark, capacity claim, cost estimate, live traffic measurement, or production architecture guarantee. A real service needs authorised infrastructure, representative measurement, privacy review, incident ownership, and release approval before it serves real users.

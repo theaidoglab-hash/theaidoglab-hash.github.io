@@ -1,0 +1,51 @@
+有人说：“这个 routing assistant 好像不懂我们的产品名称。”最常见的反应是换模型。更值得先做的是，确认文字怎样变成 token。像 `CX-17/Blue` 这样的产品代码，进入模型时不一定是一个完整单位；政策例外前后的标点与空格，也会改变它占用多少 context。这是可以验证的假设，不需要用更大的模型来掩盖。
+
+## 这一课要带走的能力
+
+读完后，你应该能为一个任务做小型 token audit：记录模型实际收到的文字、使用的 context、哪些领域术语需要明确表示，以及哪些错误还要从别处追查。它比在作品集写“模型懂行业术语”更能让人检查。
+
+## Token 不是一个字或一个词
+
+Tokenizer 会把文字转成一串称为 **token** 的编号片段。常见方法先建立常见片段的 vocabulary，再依规则切分新文字。一个英文单词可能是一个 token，也可能是多个；空格、标点、产品代码、emoji、中文字符或拼写错误，都可能形成不同组合。这些片段之后才转成 vector，交给 Transformer 处理。
+
+因此要记得三件事：
+
+- Context limit、输入成本与 latency 取决于 token 数量，不是文件字数。
+- 人觉得熟悉的术语，对模型可能是一串少见的片段。
+- 切分整齐不代表模型理解；切成多段也不表示模型一定无法使用。
+
+可以把 tokenizer 想成仓储标签机。它把一句话转成机器可读的 barcode segments。切分方式会影响标签空间与代码在哪里中断，但不会让机器因此理解退款、安全警示或客户承诺。
+
+## 从一个狭窄的领域案例开始
+
+假设有一个虚构、只产生 draft 的设备退货 desk。允许的 input 只有 category、去识别化 item code、简短 symptom 与 policy version。团队常用 `RMA-204`、`M12-connector`、`not safety-critical`。模型有时把 `M12` 和 `M120` 混在一起；有时在很长的 copied note 里漏掉 `not`，把应该 review 的案件当成可以处理。
+
+不要立刻认定是 tokenisation 的问题。先让证据可见。建立 `token-audit.csv`：
+
+| Input 类型 | 处理后例子 | Token 数 | 必须区分的意思 | 观察到的行为 | 下一步 |
+| --- | --- | ---: | --- | --- | --- |
+| product code | `RMA-204` | 记录 | 不可和 `RMA-240` 混淆 | route 对调 | contrast pair test |
+| connector term | `M12-connector` | 记录 | 不可当成 `M120` | 不稳定 | 加入 approved glossary field |
+| risk phrase | `not safety-critical` | 记录 | 必须 handoff，不能直接批准 | 长 note 中漏掉 | 检查 context assembly |
+
+案例要有真实感，但必须合法、去识别。请纳入会影响判断的变化：连字符与空格、单复数、version suffix、中英混合 label，以及相近代码。也要保存 tokenizer version 与 model configuration，否则之后无法公平比较。
+
+## 改善的顺序比炫技重要
+
+如果某个 domain term 会改变决定，第一个安全改善通常不是自己训练 tokenizer。应该把 authoritative identifier 放入 structured field、用 approved catalogue 验证，并按 identifier 取得正确 policy。字段缺失或有歧义时，就 handoff。这是把系统从“猜这段文字是什么”改成“使用已提供、可核对的 reference”。
+
+你也可以比较：移除无关 copied context、在任务旁提供 glossary、比较 structured input 与 free text。这些实验能协助区分问题是在 token budget、retrieval、prompt，还是 workflow assembly。
+
+重训 tokenizer、fine-tune model，或把所有术语塞进 prompt，都有成本。新 tokenizer 未必与已有模型兼容；过长 glossary 会占用 context，反而遮住重要 instruction；fine-tuning 不会让 catalogue 自动更新，更不会授权 action。如果 structured validation 已经修正错误，“不改模型”就是值得留下的工程决定。
+
+## 可以放进作品集的证据
+
+保留 token audit、少量 contrast cases、input schema 和一页 decision note。用非技术语言说明风险：错误的 code 会让 reviewer 看错 policy；无法识别的 code 必须 handoff，不能制造看似合理的匹配。再补上技术边界：token count 是 diagnostic signal，不是理解能力或 quality 的证明。
+
+这些材料能让人看见你识别了 input representation 的风险、用近似案例检验假设，并选择了有明确 owner 的 control。
+
+延伸阅读：[Transformer generation 与 model choice](/zh-Hans/articles/choose-transformer-generation-and-adaptation-tradeoffs)、[similarity 高仍可能取错文件](/zh-Hans/interview-lab/high-similarity-is-not-relevance)，以及[如何把 model score 转成 workflow 决定](/zh-Hans/articles/model-score-to-workflow-decision)。
+
+## 边界
+
+这是 AI.DOG 教学，使用虚构且已处理的例子。它不是 production tokenizer evaluation、供应商价格资料，也不代表 token 数能预测客户结果。真实系统仍需自己的 data approval、task evaluation、security review 与可问责的 owner。

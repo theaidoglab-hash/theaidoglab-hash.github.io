@@ -1,4 +1,4 @@
-> 核心判斷：能回答問題只證明 demo 可以執行；完整作品要讓人看見你如何定義問題、驗證結果、處理失敗並交接系統。
+> 一段 RAG 答案寫得像樣，不代表可以採用。讀者應該看得到哪份 source 進入、哪份被排除，以及不確定時 workflow 交回給誰。
 
 ## 先寫 business problem
 不要從「我要用某個 vector database」開始。先寫使用者要完成什麼、資料從哪裡來、答錯的代價，以及什麼時候應該拒答。例子可以是合成的產品文件助理：只回答已核准文件，找不到根據時顯示缺口，任何人都不能看見未獲授權的文件。
@@ -11,6 +11,36 @@
 
 ## Failure handling 與 deployment
 定義 timeout、空 retrieval、模型拒絕、工具失敗和成本上限的處理方式。加入 request ID、版本、latency、retrieved document IDs 和結果狀態，但不要記錄敏感全文。部署不必模仿企業平台；一個可重跑、設定清楚並具有 health check 的小型服務，已足以呈現你的思考。
+
+## 跟一條 request 走完整個決策
+
+想像一個完全虛構的產品文件 desk，裡面只有四份已核准合成文件：退貨政策、寄貨例外、一份舊退貨政策，以及一份讀者沒有權限看的 note。有人問「45 天後可不可以退貨？」；要留下的不只是最後一段答案。
+
+| 步驟 | 系統要檢查什麼 | 要保留的證據 | 失敗時安全怎麼走 |
+| --- | --- | --- | --- |
+| Admission | 這個 requester 能不能用這組文件？ | Role、document scope、policy version。 | `HANDOFF` 或 `BLOCKED`。 |
+| Retrieval | Candidate chunk 是否來自目前、合資格文件？ | Document ID、effective date、chunk ID、ranking input。 | `HANDOFF`；不要放寬 access。 |
+| Grounding | 選到的 passage 是否真的支持擬寫答案？ | Citation ID 與 support check。 | 顯示證據缺口，不要編造規則。 |
+| Output | Draft 有沒有遵守 schema，且交代不確定？ | Output version、validation result、terminal state。 | `HANDOFF` 或有界限的 error。 |
+
+刻意放入舊政策很有用：它證明 retrieval 需要 freshness rule，不是 similarity 高就可以。沒有權限看的 note 則證明 permission filter 必須在 model 看見文字前執行。即使答案寫得流暢，只要引用其中一份，就已經是錯誤路徑。
+
+## 用同一個 baseline 公平比較
+
+先用透明 baseline，例如只在已核准、未過期文件做 exact keyword matching，再加入 no-answer route。接著才以同一批 fixed case 比較一項 retrieval 改動。
+
+| Case 類型 | Baseline 會怎麼做 | Candidate 要回答的問題 | 可以作的決定 |
+| --- | --- | --- | --- |
+| 準確且目前的政策 | 找到正確條款。 | Candidate 有沒有保留同一個 citation？ | 有就保留較簡單的路徑。 |
+| 相似但錯誤的政策 | 沒有答案或安全 handoff。 | Candidate 會不會選到看似吸引但錯誤的條款？ | 若自信作答就拒絕。 |
+| 舊文件 | 因日期被排除。 | Chunking 或 reranking 會不會又放回來？ | 先修 admission，不要急著調 relevance。 |
+| 未授權文件 | 永遠不會進 candidate set。 | Prompt 或 tool path 有沒有繞過 filter？ | Block 這條路，不要叫 model 自己隱藏。 |
+
+這個比較讓面試官有具體內容可追問：為什麼保留 baseline、哪個失敗讓你加多一層元件，以及什麼 regression 會讓你回到它。
+
+## Trace 不要變成另一個資料外洩點
+
+做公開 portfolio 時，留下合成 document ID、version identifier、route、latency、error class 與短 reason code 就足夠。不要留下 raw user text、完整文件、secret、account identifier 或未核准 source。能重組失敗經過、卻不重現讀者私人 request 的 trace，比一大段 log 更有用。
 
 ## README 應回答什麼
 - 解決什麼問題，為誰而做。

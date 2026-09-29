@@ -1,0 +1,50 @@
+揀 language model family，不是背 model 名字比賽。reviewer 會想知道你有沒有把一個工作決定、做錯的代價，以及可驗收的證據連起來。
+
+## 先問要做甚麼決定
+
+想像一個完全虛構的營運 team，收到短短的設備備註。每條備註要 route 到五個 queue 其中一個，並給 reviewer 一句解釋。有些有 product code，有些中英夾雜；系統永遠不可安排維修、聯絡客戶或改任何 record。
+
+表面上一個 request，其實有幾份不同工作：
+
+- 把文字變成穩定 category；
+- 在已批准 case 或文件中找相近證據；
+- 根據已選證據寫一段給人看的 draft；
+- 有標籤相片時讀取圖像內容。
+
+它們未必要用同一種 model。**Encoder-style model** 或 embedding model 把文字變成 representation，適合做相似度搜尋或小型分類。**Decoder-style model** 逐 token 生成，適合受 contract 約束的解釋或 structured draft。**Sequence-to-sequence model** 讀入一段內容再輸出轉換後的內容，較適合界定清楚的改寫或翻譯。**Multimodal model** 可以接收多種 input，但同樣需要 output contract 和人手界線。
+
+每一段 workflow 用的元件，要配合它要產生的決定；「最強」並不是可用的選擇準則。
+
+## 一個更易審閱的第一版
+
+這個虛構 queue 可以先用 deterministic parser 讀 product code、用 embedding search 找 approved examples、再用簡單 route rule。只有在 evidence 選好後，才讓 generative model 寫 reviewer-facing explanation。它不如「一個大 model 做晒」那麼炫，但出錯時容易知道問題在 input、retrieval、route，還是文字草稿。
+
+Transformer 的 self-attention 會重點處理已放進 context 的 token 關係。它不會自動找來未提供的 policy、核實產品紀錄，或取得行動 permission。generation setting 可以改變輸出多樣性，不能令模糊的 queue 定義突然變準確。
+
+保留一份 model-choice record：
+
+- 這個決定是甚麼，最後由誰負責；
+- prototype 可用和刻意排除的 data；
+- 沒有 model 時的 baseline；
+- 每個 subtask 候選的 model family；
+- normal、ambiguous、multilingual、no-evidence 的固定 case；
+- quality、latency、cost proxy 和 handoff 指標；
+- 甚麼情況下根本不應使用 model。
+
+這比一張充滿 model logo 的圖更能成為 portfolio evidence。reviewer 能夠重做你的判斷，明白為何寫 explanation 要 model、為何 routing rule 保持在 model 外面。
+
+## 先測界線，才談成功
+
+用同一組 case 比較兩個設計：一個叫 generative model 自由選 queue，另一個用上述較窄 workflow。不要只看文字順不順。正確 queue 有沒有收到 case？不認識的 product code 有沒有變成 handoff，而非自信地猜？中英 case 有沒有保住 product code？解釋有沒有基於已選 evidence？
+
+常見失誤是把 chat model 當萬用 classifier，再把流暢理由當成正確證明；又或者把 embedding 相似度當成 policy relevance。若 label set 小而穩定，error cost 又清楚，deterministic rule 或傳統 classifier 可以是更誠實 baseline。若相片只是可選 input，就不要迫所有純文字 case 都依賴 vision。
+
+## 這顯示甚麼工程判斷
+
+技術證據包括 task decomposition、model contract、test set 和 comparison report。非技術證據包括 user decision、data boundary、error cost、human handoff，以及你為何刻意保留簡單步驟。它們不證明已可上 production 或帶來 business impact；它們展示你在把 demo 放大前，能作出可追問的選擇。
+
+延伸閱讀：[Transformer、generation 與 adaptation 的取捨](/zh-HK/articles/choose-transformer-generation-and-adaptation-tradeoffs)、[未調參前先理解 neural model 怎樣學習](/zh-HK/articles/understand-neural-learning-before-you-tune)，以及[把 request 變成可接受改動](/zh-HK/articles/turn-an-ai-request-into-an-accepted-change)。
+
+## 邊界
+
+這是 AI.DOG 的教學情境。team、input、queue、指標和結果均為示範，不推薦特定 provider 或 model，也不聲稱本地 prototype 曾處理真實客戶資料或改善真實 business outcome。

@@ -1,0 +1,67 @@
+{
+  "fixtureId": "kev-review-packet-model-contract-teaching-v1",
+  "status": "human_authored_static_not_executed",
+  "executionStatement": "This fixture is human-authored static teaching data. It is not model output or a model run.",
+  "modelSeam": {
+    "shape": "gpt-5-mini Responses-shaped teaching seam",
+    "requestFixture": "src/responses-api-fixture.mjs",
+    "purpose": "Show a source-grounded packet and a boundary rejection without claiming a live CISA or model result."
+  },
+  "scenarios": [
+    {
+      "scenarioId": "allowed-public-evidence-packet",
+      "responseClass": "allowed_structured_response",
+      "expectedRoute": "EVIDENCE_PACKET_READY",
+      "reviewerDecision": {
+        "decision": "REVIEW_PUBLIC_PACKET_WITHOUT_ASSET_INFERENCE",
+        "decisionOwner": "Fictional security assurance reviewer",
+        "nextStep": "Check the public-source receipt and decide whether a separate human process needs more organisation-specific evidence.",
+        "mustNotDo": "Do not infer exposure, scan a network, patch a system, create a ticket, or set a remediation deadline."
+      },
+      "structuredResponse": {
+        "status": "EVIDENCE_PACKET_READY",
+        "reasonCode": "SOURCE_GROUNDED_PACKET",
+        "recordSummary": {
+          "cveID": "CVE-2022-40684",
+          "knownRansomwareCampaignUse": "Known"
+        },
+        "rejectionMessage": null,
+        "action": {
+          "kind": "none",
+          "mode": "evidence_only",
+          "requiresHumanReview": true
+        },
+        "boundaryNotes": [
+          "The record is a fixed public-field teaching fixture, not a live CISA lookup or an asset finding.",
+          "Known ransomware use is preserved as a source value and does not decide priority, exposure, or remediation."
+        ]
+      }
+    },
+    {
+      "scenarioId": "rejected-patch-request",
+      "responseClass": "rejected_bounded_response",
+      "expectedRoute": "SOURCE_REJECTED",
+      "reviewerDecision": {
+        "decision": "STOP_AND_REQUEST_SEPARATE_AUTHORITY",
+        "decisionOwner": "Fictional security assurance reviewer",
+        "nextStep": "Keep the public evidence separate until an authorised human process establishes asset scope and action authority.",
+        "mustNotDo": "Do not patch, scan, notify, create a ticket, or convert a CISA date into a local service-level agreement."
+      },
+      "structuredResponse": {
+        "status": "SOURCE_REJECTED",
+        "reasonCode": "ACTION_REQUEST_REJECTED",
+        "recordSummary": null,
+        "rejectionMessage": "The requested patch action is outside this evidence-only teaching workflow.",
+        "action": {
+          "kind": "none",
+          "mode": "evidence_only",
+          "requiresHumanReview": true
+        },
+        "boundaryNotes": [
+          "A public KEV record cannot establish whether any organisation asset is affected.",
+          "The package has no authority to perform or recommend an external remediation action."
+        ]
+      }
+    }
+  ]
+}

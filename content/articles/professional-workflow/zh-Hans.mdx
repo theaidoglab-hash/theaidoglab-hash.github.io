@@ -1,4 +1,4 @@
-> 核心判断：Professional workflow 的价值不是让 AI 写更多代码，而是让需求、验收、失败和决定都有清晰证据。
+> 一个 workflow 值不值得信，取决于 reviewer 能否跟到需求、测试、失败与决策；不是 AI 写了多少 code。
 
 ## 从模糊要求开始
 假设有人说：“加一个 AI 功能，帮助用户起草客户回复。”先不要讨论模型。先明确输入来源、谁可以读取、输出只是 draft 还是允许发送、什么情况必须交给人工、如何判断可接受，以及错误可能带来什么后果。
@@ -11,6 +11,29 @@
 
 ## Tests 是反馈循环
 先建立 deterministic rules 和固定 cases，再测试模型输出。除了正常场景，还要覆盖缺字段、恶意指令、timeout、重复请求和 retry。涉及付款或外部写入时还要验证 idempotency；本例明确保持 draft-only。
+
+## 把 acceptance contract 写成一页
+
+用前面完全虚构的 reply-drafting feature 做例子，下面表格已足够，不必让 coding task 漂成一句“做一个 AI assistant”。
+
+| 工作部分 | 写 code 前要定的决策 | 别人可以执行的检查 | 刻意不做什么 |
+| --- | --- | --- | --- |
+| Input | 只读提供的 synthetic ticket。 | 空 ticket 或未知 category 要 reject。 | 不碰真实 inbox、CRM 或 attachment。 |
+| Draft | 提议一段清楚标记 `DRAFT` 的回复。 | 必填字段要齐；没有根据就 `HANDOFF`。 | 没有 send button，也没有后台发送。 |
+| Record | 留下 case ID、version、route 与 reviewer result。 | 用 fixture ID 可以重跑一个失败 case。 | 不保存 ticket body 或个人资料。 |
+| Release | 有名字的 reviewer 接受一个本地 demo。 | Hard-gate case 全过，普通 case 也没有 regression。 | 不声称 production 或客户成果。 |
+
+在请 coding agent 开始 build 前，先写 acceptance test。一个好的 request 会是：“加入 schema validator 与列明的五个 case；不要加入 login、network call、database 或 external-send path。”这样 reviewer 才有一个有限的 diff 可以查看，也有实际理由拒绝 scope expansion。
+
+## 第一次 review 可以正确停在 STOP
+
+假设 agent 提议一个“方便”功能：send 失败就悄悄 retry，同时储存完整 ticket 方便重建 draft。两项都超出原本边界。正确 review result 是 `STOP`，不是“先 merge，之后再修”。保留被拒的 diff 或短 decision note；它证明你能在需求改变前辨认出来。
+
+成功 demo 也一样。如果只有一段 happy-path screen recording，就标记 `REVISE`，要求补 fixed case、failure route 与 permission review。团队不需要每张 ticket 第一次就 pass；需要的是清楚说出哪些工作不应该继续。
+
+## 按 reviewer 要看的次序放 artefact
+
+从 `problem-brief.md` 开始，接着是小型 spec 与 test matrix。再放 implementation diff、一个失败 case 的 trace 或 error record，以及一段 decision note。Reviewer 应能不读完每个 source file 也跟到决策。这个次序也让你在面试解释 portfolio 时清楚许多。
 
 ## Debugging、review 与作品证据
 失败时保存输入类型、版本、规则结果、模型状态和人工决定，不保存不必要的个人原始数据。修复后重跑同一组 cases。Code review 同时检查权限、错误路径、日志、回滚，以及用户是否清楚输出仍待审核。

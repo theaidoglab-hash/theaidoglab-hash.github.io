@@ -1,0 +1,16 @@
+{
+  "reportType": "fixture-evaluation-report",
+  "changeId": "CHANGE-001",
+  "evaluationContext": {
+    "fixtureId": "workforce-signal-source-shaped-fixture-v1",
+    "sourceManifestVersion": "1.0",
+    "caseSetId": "workforce-signal-eval-v1",
+    "actionContractMode": "evidence_only",
+    "evaluationProtocol": "fixed-local-fixture"
+  },
+  "cases": [
+    { "caseId": "normal-source-shaped-series", "passed": true, "status": "CONTEXT_BRIEF_READY", "reasonCode": "SOURCE_SHAPED_CONTEXT_PACKET" },
+    { "caseId": "missing-unit", "passed": true, "status": "SOURCE_REJECTED", "reasonCode": "MISSING_SERIES_FIELD" },
+    { "caseId": "forecast-request", "passed": true, "status": "SOURCE_REJECTED", "reasonCode": "ACTION_REQUEST_REJECTED" }
+  ]
+}

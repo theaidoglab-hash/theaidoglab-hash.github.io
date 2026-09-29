@@ -1,0 +1,138 @@
+Before buying or beginning another learning source, name the one artefact you will leave behind in eight weeks and the question it must let a reviewer ask. A course can supply rhythm, feedback or a mechanism; it cannot stand in for data rights, a baseline, failure cases or a reproducible delivery.
+
+## Choose the evidence gap before you choose the next popular course
+
+A completion record can show that you invested time. It cannot automatically answer the questions an interviewer or reviewer will ask: Whose decision are you supporting? May you use the data? How did a simpler method perform? When should the system stop? Can another person reproduce the result?
+
+Start with an evidence-gap card. Choose one artefact that you currently lack:
+
+- **Problem and trade-off gap:** You can write code but cannot explain the user decision, cost of error, or non-goal. Produce a one-page problem brief.
+- **Data and accountability gap:** You have a notebook but cannot explain the source, version, consent, or prohibited fields. Produce a data card and action boundary.
+- **Comparison and evaluation gap:** You have a happy-path screen but no baseline, fixed test cases, or failure analysis. Produce an evaluation pack.
+- **Delivery and rerun gap:** You have built a prototype but a stranger cannot obtain the same result from the README. Produce rerun instructions, configuration, tests, and a decision log.
+
+Only then choose a learning source. An official tutorial may be the right way to learn one clear technical mechanism. A course with assignments may give you deadlines and feedback. A bootcamp may help if you need code review or project critique. A bigger brand, higher price, or prettier certificate does not prove that the source will close your gap. Choose the smallest source that lets you create the first inspectable artefact in week one or two.
+
+Before starting, write a SOURCE_RECEIPT.md. Record the source URL, date or version, licence or terms, the ideas you will use, material you will not copy, and the problem framing, data, evaluation, and documentation you will create yourself. If the terms are unclear, do not upload course handouts, answer keys, screenshots, or datasets to a public repository.
+
+## A fictional eight-week case: not “build a model,” but help a person work through a limited queue
+
+Imagine a completely fictional subscription-learning service called Harbour Classroom. Each week, one customer-success reviewer can inspect only twenty accounts. They want to look first at accounts that may need a human follow-up. They do not want a model score to become an automatic message, discount, cancellation, or customer decision.
+
+The sprint's project brief could say:
+
+- **User and decision:** The reviewer decides which twenty synthetic accounts to inspect this week, and which records should not be ranked because the data is insufficient.
+- **Input:** A synthetic account summary that you created. Every field is described in the schema and data card.
+- **Output:** A draft review queue, a readable reason for each item, data-quality warnings, and a human-handoff marker.
+- **What it cannot do:** It does not read real accounts, send messages, change plans, make pricing or entitlement decisions, or treat a prediction as a customer's real intention.
+- **Success proxy:** On controlled synthetic cases, compare a simple rule with one candidate method taught by the course. Check how each ranks records under a fixed reviewer capacity, handles missing data, and hands off the right cases.
+
+Every name, account, result, and metric in this example is fictional. It does not claim retention uplift, time savings, or representation of a real company. Its value is that it makes both technical work and delivery judgement visible.
+
+## A good portfolio leaves two kinds of record
+
+Many portfolios show only system mechanics: data arrives, a model runs, and a screen appears. They also need to show why the work exists, who remains accountable, what it must not do, and when to stop.
+
+**What someone can check in the build**
+
+- A clear schema, data version, and synthetic-data generator.
+- A simple, explainable baseline.
+- One candidate change learned from the course or tutorial, aimed at one named failure mode.
+- Fixed evaluation cases, expected behaviours, and an error taxonomy.
+- A rerunnable command, configuration, tests, run identifier, and result report.
+- A release gate or minimal rollback path when a change regresses.
+
+**What the work needs to explain beyond the build**
+
+- The user's limited decision, rather than a vague “AI feature.”
+- Reviewer capacity, the cost of error, and actions that should not be automated.
+- Data rights, privacy, non-public material, and what must not enter a trace.
+- Which proxy is useful and which real-world KPI has not been measured.
+- Who reviews, who owns the final decision, and how the work stops when something goes wrong.
+- A clear separation between local tests, synthetic results, course completion, and production readiness.
+
+Both records matter. One shows how the system works. The other shows why it is shaped that way and what a system must not decide alone.
+
+## Eight weeks: leave one inspectable record each week
+
+### Week 1: name the missing evidence and acceptance question
+
+Choose one gap from a target role or your own skills inventory. For example: “I can make a classification demo, but I cannot yet show that I can turn a model result into a review queue with a capacity limit.” Convert it into an acceptance question: under a limit of twenty review slots, does the candidate preserve more cases that should reach a person than the simple rule?
+
+Choose a course module or tutorial that only addresses that gap. Produce the problem brief, SOURCE_RECEIPT.md, and an explicit non-goal list. If week one requires three models, login, payments, or real data, the scope is already too large.
+
+### Week 2: write the data, decision, and permission contract
+
+Create a synthetic schema: account state, permitted usage signals, when a field became available, and missing-field flags. For every field, ask: Why does the reviewer need this? Could it create an unfair, private, or misleading inference? Can a synthetic value safely stand in for it?
+
+Write an action contract at the same time. The system may generate a queue draft; a person must decide whether to accept, ignore, or escalate it. Test that boundary: any case that asks the system to send a message, change a price, or change account state must be blocked or handed off.
+
+### Week 3: build the baseline you can explain
+
+The baseline does not need to be impressive. Harbour Classroom could start with a rule based on “recent activity decreased” and “data is complete,” or with a reviewer using a simple spreadsheet queue. Record how it handles twenty slots, missing data, and tied records.
+
+This week's technical receipt is the baseline code, configuration, and first cases. Its delivery receipt is why you started with that method and which cases it cannot handle. Without a baseline, a later model score cannot become a credible trade-off.
+
+### Week 4: add one candidate for a stated reason
+
+Put one technique from the course into the same contract. If the course teaches a supervised classifier, let it make only a priority suggestion. If it teaches an LLM workflow, let it turn structured synthetic notes into a reviewer-readable reason; it must not replace the ranking rule or execute an action.
+
+Do not change the data, features, model, prompt, UI, and metric together. Write one hypothesis: “This candidate is intended to improve case type X. If it does not, retain the baseline.” A failed result can then become useful portfolio evidence instead of something you hide.
+
+### Week 5: evaluate the workflow, not only a model metric
+
+Build an evaluation set that you do not casually rewrite. Include ordinary records, missing data, conflicting signals, edge cases, inputs that request an unauthorised action, and a counterexample where the candidate is worse than the baseline. Each case has an expected queue or handoff behaviour.
+
+Read results at four levels:
+
+- **Model or ranking quality:** for example, precision, recall, or calibration against fixed synthetic labels, but only when the data and definition justify them.
+- **Workflow utility:** within twenty slots, how many cases a reviewer should see are retained, and whether a bad queue displaces cases that should be handed off.
+- **Safety and boundaries:** whether prohibited fields were used, insufficient data was presented as high confidence, or an out-of-scope action was attempted.
+- **Operational feasibility:** how long one run takes, whether the output is readable, how a failure is recorded, and whether a reviewer can understand the reason.
+
+These are not ready-made KPIs or a promise of business impact. First write them as measurement hypotheses. Then use synthetic cases to check whether the system follows the expected behaviour.
+
+### Week 6: add lightweight MLOps and reproducibility
+
+MLOps does not mean renting an expensive cloud platform before you have a decision worth operating. The minimum sprint version can be: versioned data and configuration; a record of data version, code revision, parameters, and timestamp for each run; a fixed test command that reruns cases; a report with passes, failures, and handoffs; and a path back to the previous configuration when a change fails the gate.
+
+Minimise the raw case material. A trace can keep only the case ID, version, result category, and reason code. If you use a coding agent, ask it first to list files it will change, tests it will add, and how it will prove acceptance. Do not accept a polished screen as the only evidence.
+
+### Week 7: ask a reviewer to work backwards through it
+
+Ask a classmate, mentor, or your own sceptical reviewer persona to follow the README. Can they tell that the data is synthetic? Can they identify the one difference between baseline and candidate? Can they find a failure case and the disable path? Would they mistakenly believe that the system connects to real customers?
+
+Put those questions in the decision log. If the reviewer cannot rerun the work, understand the metric, or identify the final decision owner, do not cover the gap with more features. Repair the brief, README, trace, or tests.
+
+### Week 8: turn the GitHub README into an evidence entry point
+
+A GitHub README is not a marketing page. In two minutes, a reader should be able to find:
+
+1. The problem, user, limited decision, and non-goal.
+2. The synthetic or authorised data boundary and SOURCE_RECEIPT.
+3. The baseline, candidate, and failure mode each is trying to address.
+4. Evaluation cases, metric definitions, known failures, and conclusions the project does not support.
+5. How to install, run tests, produce the report, and return to a prior configuration.
+6. What the build does, and what still needs explaining before anyone uses it for work.
+7. Your actual contribution, the boundary around course or teammate material, and what remains unverified.
+
+Keep source code, data fields, test names, and commands in English so a wider audience can rerun the repository. You can provide reading guides in multiple languages in the README. Show only commands and outputs you actually ran; never invent dashboards, customer KPIs, or production screenshots.
+
+## When to stop, narrow the scope, or change the source
+
+Stop conditions are not an appendix to failure management. They are part of the sprint. Pause and redefine the work if:
+
+- by week two, you still cannot state the user decision, data rights, or expected output;
+- the course material can only be copied, or its terms do not permit a public adaptation;
+- you need real personal, employer, or customer data for the demo to work;
+- by week five, the candidate is not better than the baseline, or it only looks better because you changed the test answers;
+- an error could affect money, rights, safety, health, legal standing, or an important account, but no accountable human gate exists; or
+- the README can only show a successful screen and cannot show a limitation, failure, or handoff.
+
+You can return to the baseline, reduce the project to draft-only, use synthetic data, or abandon that course module. That shows more judgement than dressing an unsuitable tutorial up as a bigger project.
+
+At the end of eight weeks, you do not have a certificate substitute that proves you will be hired. You have an honest, bounded set of records another person can inspect. It shows how you turn learning material into problem framing, technical comparison, evaluation, delivery boundaries, and a clear next step.
+
+Week eight does not end with a “ready to publish” button. Use the [GitHub Proof Pack](/en/articles/build-a-github-portfolio-proof-pack) to organise the source receipt, rerun command, failure record and nonclaims, then use the [portfolio evidence rubric](/en/articles/score-an-ai-portfolio-by-evidence-not-fluency) to find the next unanswered point. Return to the relevant week to close it; do not write a local result as a production claim.
+
+Related reading: [choose an AI learning source by the evidence gap](/en/articles/choose-ai-learning-sources-by-evidence), [turn a course exercise into inspectable portfolio evidence](/en/articles/turn-an-ai-course-project-into-portfolio-evidence), [connect model metrics to reviewer capacity in Renewal Triage](/en/articles/renewal-triage-mlops), [turn a vague request into an accepted workflow](/en/articles/from-vague-request-to-accepted-feature), and [review an AI automation as a non-developer](/en/articles/build-a-low-code-ai-automation).

@@ -1,0 +1,56 @@
+作品集裡寫了 GPU、container、queue 和好幾個 model，不代表讀者已經看得出你會做系統。更難的是：同一批 request 進來時，為什麼這一筆走 text route、那一筆必須停下，另一筆又要交給 reviewer？想像一個虛構的公開資料 review desk：短文字通知、以影像為主的表格和很長的 evidence packet 同時到達。它只能替 reviewer 準備 draft，不能替人做真實決策，而且每一筆 request 都要留下可追溯的去向。
+
+## 先從 request 開始，不要先挑硬體
+
+第一個設計決定，是寫一份小而清楚的 request contract。在選 accelerator 或 hosting pattern 前，先記錄 input modality、大小區間、允許的 handling route、deadline class、policy version，以及是否需要 human handoff。Route 不是單純的「快 model」和「慢 model」；而是明確說明：短而 structured 的文字能進入受限的 drafting route；以影像為主的項目要先 extract，再做 evidence check；缺 required fields 的項目根本不可以呼叫 model。
+
+這樣 routing 才能被測試。真正 deterministic 的規則應交給 deterministic rule，例如 file type、缺欄位、已知 policy exclusion、output size cap 與過期 deadline。只有 contract 允許時，model 才能協助處理模糊分類。每一條 route 都要有可見的終點：`draft-ready`、`needs-review`、`rejected-input` 或 `budget-stopped`。
+
+## Hardware 會改變什麼，又不會改變什麼
+
+Hardware 只是 serving system 的一部分，不是 quality 保證。CPU 常適合 parsing、schema check、hashing、queue coordination 和小型 deterministic transform。Accelerator 對 model inference 裡的大量 tensor work 可能有用，但效果取決於 model、batch shape、可用 memory、input/output 長度、runtime，以及同時抵達的工作量。Memory 放 active data 與 model state；durable storage 放已批准的 artefact；network 讓 service 之間傳遞資料與 request。每一個邊界都會增加等待時間、failure mode 與 security decision。
+
+Autoregressive model 的 input-processing phase 與 token-generation phase，可能會壓到不同資源。Long context 可能在第一個 output 前就佔掉很多 memory；long completion 會持有 token state 更久；batching 可能提高 accelerator 的有效工作量，卻讓 urgent item 等在隊伍裡。這些是用 fixed synthetic cases 驗證的假設，不是看一張 dashboard 截圖就能宣布的結論。
+
+## 把 routing、deployment 與 transport 分開討論
+
+三個問題不要混在一起：
+
+- **Routing** 決定 request 能進哪一條 workflow，以及何時一定要 handoff。
+- **Deployment** 決定 workflow 跑在哪裡：local development process、受限的 batch worker，或有清楚 availability expectation 的 online service。
+- **Transport** 決定哪些資料跨越邊界、用什麼 format、使用誰的 identity、怎麼驗 integrity、怎麼 retry，以及保存多久。
+
+在這個虛構 desk 裡，把小型 request envelope 與內容本身拆開。Envelope 可以包含 random request ID、route class、content manifest、policy version、allowed deadline 與 checksum。Data payload 只應送到真正需要它的 component。Trace 可以記錄 content version 或 fingerprint，而不是複製原始私密文字。Retry 必須帶 idempotency key，避免延遲的 worker 為同一筆 request 產出兩份 reviewer packet。
+
+## 做一份只供草稿使用的 routing receipt
+
+讓 portfolio artefact 小到可以被檢查。建立 `synthetic-cases.jsonl`，放入約十二筆完全虛構的 request：有效短文字、以影像為主的項目、缺欄位的項目、超過 budget 的項目、route conflict 與刻意模糊的 case。再搭配 `route-contract.md` 和 `routing-receipt.jsonl`。
+
+每個 case 至少記錄：
+
+- execution 前預期走哪條 route；
+- 實際 terminal state；
+- model 是否被允許使用；
+- input/output 的 size band，而不是私密 payload；
+- 如果做了 local measurement，分別記 queue、processing 與 total elapsed time；
+- evidence check 和 reviewer handoff 的結果。
+
+接著只改一個因素，例如降低 output cap 或換一個 batch window，再重跑相同 cases。寫一張 change note，說明預期收益、可能 regression 的 case 和 rollback condition。就算結果只是「四個 case 在 inference 前被停下」，只要 case 與 stopping rule 可檢查，已經是有價值的 evidence；比起無條件宣稱 system 很有效率更可信。
+
+## 技術作品證據
+
+展示 versioned request schema、deterministic routing rules、synthetic workload manifest、trace-field definition、idempotency behaviour，以及可重跑的 local test command。加入一張圖，區分 control information 與 data payload。如果示範 accelerator-backed path，要交代 local environment，並把量測寫成該環境中的 observation，而非普遍性的 hardware 比較。
+
+## 非技術作品證據
+
+展示 decision owner、request 為什麼不能用 model、reviewer 從哪裡接手、time 或 cost budget，以及什麼時候停止工作。讀者應能回答：route 出錯時誰受到保護、trace 刻意排除了哪些資料、誰有權批准 route 變更？這是 operational judgement 的證據，不是 code 旁邊的裝飾。
+
+## 較簡單的選項與 failure boundary
+
+對小型、低 volume workflow，一條 queue 加上一個有上限的 text route，可能比 multimodal routing 或 specialised hardware 更安全。只有當某個已命名的 workload failure 真正需要時，才增加複雜度。Route classifier 可能分錯；queue 可能 duplicate work；network boundary 可能 timeout；accelerator 也可能閒置，因為 request 卡在 parsing 或 review。不要用一句「retry」遮住這些路徑；failed state、alert owner 和 rollback route 都應該可見。
+
+延伸閱讀：[attention 與 expert 的 serving 取捨](/zh-TW/articles/modern-attention-moe-and-serving-tradeoffs)、[inference scheduling 與 serving engine](/zh-TW/articles/inference-memory-scheduling-and-serving-engines)，以及[含 human review 的 workflow evaluation](/zh-TW/articles/llm-evals-human-review-and-observability)。
+
+## 邊界
+
+這是 AI.DOG 教學。Desk、request、timing 與 artefact 都是 synthetic，只供 draft 使用。它沒有 deploy service、處理真實 records、benchmark named hardware，也沒有建立任何 production latency、cost、security 或 quality outcome。真實 deployment 需要已核准的 data handling、security review、capacity test、incident owner，以及可問責的 release decision。

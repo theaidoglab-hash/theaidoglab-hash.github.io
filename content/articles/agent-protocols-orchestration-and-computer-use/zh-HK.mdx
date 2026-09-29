@@ -1,0 +1,62 @@
+> computer-use demo 看起來很厲害，未必代表它能安全地替人做事。較值得問的是：它獲准做甚麼、實際做過甚麼、遇到不確定時在哪裡停下，能不能讓人查得到。
+
+## 先揀一個有安全終點的工作
+
+設想一個完全虛構的「採購證據桌」。審閱者上載一份已去識別化的供應商報價，要求按三項已批准準則做一份比較草稿。系統可以讀取本地 fixture、計算比較結果、整理 review packet；不能聯絡供應商、下訂單、改動紀錄，也不能碰真實瀏覽器 session。
+
+這個範圍讓三個容易混淆的概念分開。**Protocol** 是元件交換 request 和 result 的共同規格。**Orchestrator** 決定下一步是否被准許。**Computer use** 只是操作可見介面的其中一種 capability；它不是 permission system，也不會自動比 API 安全。
+
+先做 deterministic baseline：讀 fixture、驗證準則、產出比較草稿。只有在措辭、模稜兩可的資料、或受限的計劃確實有幫助時，才把 LLM 放進流程。
+
+## Protocol 令交接可以驗證
+
+一份 protocol 要講清楚 message 的形狀、身份、錯誤與 version。對採購證據桌而言，它最少要回答：哪些 input field 可入 run、哪些刻意排除；哪個元件負責 validation、資料查找、計算與 route；timeout、schema rejection、unknown result 分別長甚麼樣；輸出是由哪個 contract version 產生。
+
+例如 `compare_quote` request 可只包括 fixture ID、approved criteria version 和 `draft_only: true`。response 包含有引用的 facts、missing fields、比較表、terminal route 和 reason code。它沒有 `send_email` 或 `place_order` 欄位。Model 可以建議下一步，但 runtime 必須按 contract 檢查建議，才可轉 state。
+
+這種設計未必有自由 agent loop 那麼吸睛，卻讓人能測試。Malformed request 應在 model 之前被拒絕。Result 缺 source citation 時，應走 `HANDOFF`，而不是靜靜變成 recommendation。
+
+## Orchestrator 是交通燈，不是 model 的性格
+
+Orchestrator 持有一個小型 state machine：
+
+```text
+received -> validated -> evidence_ready -> draft_ready -> reviewer_handoff
+                         |                  |
+                         v                  v
+                      blocked            budget_stopped
+```
+
+每一條箭嘴都有規則。通過 validation 才可用 read-only quote parser；parser 回傳 schema-valid result 才可組裝 draft。資料互相矛盾、缺準則、用盡 budget、或有人要求 external action，都要去 `reviewer_handoff` 或 `blocked`。
+
+多元件 workflow 還需要 durable run ID、allowed-step list、每步 timeout、retry class、terminal reason。最重要是知道甚麼時候不可 retry。若一個未來 write action 在 timeout 前可能已發生，結果是 unknown，重試可能重複產生效果。這個教學 project 把 external write 排除，所以只模擬 handoff，不做真實 action。
+
+## Computer use 是高不確定性的工具
+
+當獲授權的流程沒有可靠 API、而人通常要在可見介面完成固定步驟時，computer use 才可能有位置。它觀察的是會變動的畫面，不是穩定的 business contract：按鈕可移位、confirmation 可不完整、session 可過期、兩個視窗可很相似。
+
+所以它應比 read-only API 更嚴格：窄 target、已批准環境、screenshot 或 structured checkpoint、明確 stop rule，還有狀態不明時的 human owner。不要只憑像素推斷不可逆 action 已經成功。一張看似送出訂單的畫面，不等於 audit record。
+
+Portfolio 中可用 local fixture 模擬介面。測試可以證明 selector 改了、account marker 不對、confirmation 無法驗證時 worker 會停。它不能證明真實供應商網站可以安全自動化。
+
+## 寫 code 前先把證據包裝好
+
+Framework 名稱本身很弱。一個細小 custom runner、agent SDK 或 workflow product 都可展示同一種工程判斷。較有說服力的 repository 包括：
+
+- `contracts/`：versioned request / response schema；
+- `capability-matrix.md`：read-only、draft-only、prohibited 與 approval-required；
+- `state-machine.md`：合法轉換、terminal state、retry 和 budget；
+- `fixtures/`：普通、缺資料、衝突資料、畫面改動、timeout 的安全例子；
+- `traces/`：安全 run ID、state transition、version ID、reason code；
+- `evals/`：expected tool path 和 forbidden action；
+- `decision-log.md` 與 `release-gate.md`：為何選這個設計，以及為何仍停留在 local draft。
+
+程式部分會顯示 contract validation、route test、fixture-driven trace，以及失敗時會停喺正確位置；而使用前要講清 decision owner、點解有呢條資料界線、錯誤 action 的代價，同埋草稿唔可以假裝成外部改動。
+
+一個 deterministic parser 加 review form 已能完成工作時，不需要 multi-agent coordination。可用 read-only export 時，不要控制畫面。只有某個明確 failure 需要新元件，而且它的 test 和 owner 同樣清楚，才值得加上去。
+
+延伸閱讀：[評估整條 agent workflow](/zh-HK/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)、[可停止的 agent 與 serving budget](/zh-HK/articles/build-stoppable-ai-agents-with-serving-budgets)、[讓 agent 取得 access 前的 permission review](/zh-HK/articles/review-an-ai-agent-before-clicking-allow)。
+
+## 邊界
+
+本文是本地草稿教學材料。採購桌、資料、protocol、畫面、state label 和 artefact 都是示意；它沒有展示已部署 integration、真實 browser automation、供應商 access、採購合規或 business outcome。真實系統要有獲授權 owner、安全與私隱審查、可驗證環境和本身的測試，才可影響外部系統。

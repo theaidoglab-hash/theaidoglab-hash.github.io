@@ -1,0 +1,51 @@
+An operations analyst says a routing assistant “does not understand our product names.” The first instinct is to replace the model. Before doing that, inspect how the input becomes tokens. A product code such as `CX-17/Blue` may be split differently from a familiar phrase, and a policy exception may be separated from the punctuation that gives it meaning. That is a diagnosis you can test, not a mystery to explain away with a larger model.
+
+## The useful outcome
+
+After this lesson, you should be able to make a small token audit for a real task: show what text reaches the model, how much context it consumes, which domain terms need an unambiguous representation, and which failures still need another explanation. It is a better portfolio artefact than saying a model “handles domain language.”
+
+## A token is a model input unit, not a word
+
+A tokenizer converts text into numbered pieces called **tokens**. A common tokenizer builds a vocabulary of frequent fragments and applies rules for breaking new text into pieces. One English word can be one token or several. A space, punctuation mark, code, emoji, Chinese character, or misspelt identifier can each become its own pattern of pieces. The result is mapped to vectors before the Transformer processes it.
+
+That has three practical consequences:
+
+- Context limits, input cost, and latency depend on token count, not the number of words in a document.
+- A term can be visually familiar to a person while arriving as an unusual sequence of fragments to a model.
+- Token boundaries are not semantic truth. The model may still learn useful relationships across fragments, and a neat single token does not guarantee correct behaviour.
+
+Think of a warehouse label printer. It turns a sentence into barcode segments so the next machine can read it. The segmenting rule changes how much label space is used and where a code is split. It does not tell the machine what a refund, safety warning, or customer promise means.
+
+## Start with a narrow domain example
+
+Imagine a draft-only assistant for a fictional equipment-return desk. The approved input contains a category, an anonymised item code, a short symptom, and a policy version. The team keeps using `RMA-204`, `M12-connector`, and `not safety-critical` in examples. A model sometimes confuses `M12` with the item family `M120`, and sometimes misses the word `not` when a long copied note separates it from the risk label.
+
+Do not conclude that tokenisation caused either error. First make the evidence visible. Create a `token-audit.csv` with columns such as:
+
+| Input class | Sanitised example | Token count | Expected distinction | Observed behaviour | Next check |
+| --- | --- | ---: | --- | --- | --- |
+| product code | `RMA-204` | record it | distinct from `RMA-240` | route is swapped | contrast pair test |
+| connector term | `M12-connector` | record it | distinct from `M120` | uncertain | add approved glossary field |
+| risk phrase | `not safety-critical` | record it | must trigger review, never an approval | missed in a long note | test context assembly |
+
+Use realistic but lawful, sanitised examples. Include the variations that a reviewer expects to matter: hyphen versus space, plural versus singular, a version suffix, a Chinese/English mixed label if the product accepts it, and a near-match code. Preserve the exact tokenizer version and model configuration used for the check. That makes a later comparison possible.
+
+## What to change, and what not to claim
+
+If a domain term is important to a decision, the safest first improvement is usually not a custom tokenizer. Put the authoritative identifier in a structured field, validate it against an approved catalogue, and retrieve the matching policy by identifier. Keep a human review route when the field is absent or ambiguous. This changes the system from “guess what this string means” to “use a supplied, checkable reference.”
+
+Other low-risk experiments include shortening irrelevant copied context, presenting a glossary beside the task, and comparing a clean structured input with a free-text version. They help separate a token-budget issue from a retrieval, prompt, or workflow problem.
+
+Training a new tokenizer, fine-tuning a model, or stuffing every term into a prompt has costs. A custom tokenizer changes compatibility with an existing model. A longer glossary consumes context and can hide the important instruction. Fine-tuning cannot make a stale catalogue current or authorise an unsafe action. If structured validation fixes the error, record that as the decision; there is no prize for adding a model change.
+
+## The evidence an AI engineer can show
+
+Keep the token audit, a small contrast-case suite, the input schema, and a one-page decision note. State the business consequence in plain language: a wrong code could send a reviewer to the wrong policy, while an unknown code must produce a handoff rather than an invented match. State the technical boundary too: token counts are a diagnostic signal, not proof of understanding or a quality metric on their own.
+
+That combination gives a reviewer something inspectable: you noticed an input representation risk, formed a smaller hypothesis, tested it against near matches, and selected a control with a named owner.
+
+Continue with [Transformer generation and model-choice trade-offs](/en/articles/choose-transformer-generation-and-adaptation-tradeoffs), [why high similarity can still retrieve the wrong document](/en/interview-lab/high-similarity-is-not-relevance), and [turning a model score into a workflow decision](/en/articles/model-score-to-workflow-decision).
+
+## Boundary
+
+This is an AI.DOG teaching scenario using fictional, sanitised examples. It does not show a production tokenizer evaluation, vendor pricing, or a claim that token counts predict customer outcomes. A real system needs its own data approval, task evaluation, security review, and accountable owner.

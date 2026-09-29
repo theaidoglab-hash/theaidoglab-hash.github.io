@@ -1,4 +1,4 @@
-> 核心判断：一个看起来聪明的 prompt 只是候选配置；professional evidence 来自可重复实验、权限边界和可解释的失败。
+> 一条 prompt 曾经产生一次有用答案，最多证明它值得试。真正要看的是：reviewer 能否知道哪个改动有效、它会在哪里失败，以及何时一定要停止。
 
 ## Prompt play 的价值与限制
 快速尝试 prompt 可以探索语气、格式和模型能力。问题在于只保存最好的一次输出，然后把它当成稳定方法。没有版本、固定 cases 和失败记录，其他人无法重现你的判断。
@@ -14,5 +14,37 @@
 
 ## 作品证据
 展示 experiment table、baseline、修改原因、failure taxonomy、permission matrix 和最终限制。面试时可以解释为什么删除了一个看似更灵活但风险更高的 prompt，以及测试如何支持这个取舍。
+
+## 一次只改一件事
+
+用完全虚构的 **Intake Draft Desk** 练习。它收到一段合成 request，只能替 reviewer 写有标记的 draft；不能发送、更新资料，也不能离开提供的 fixture set 搜索。先用 rule 挡住没有 request type 的 input，再逐次比较一个 prompt 改动。
+
+| 版本 | 这次刻意只改了什么 | 固定留下的证据 | 执行后可作的决定 |
+| --- | --- | --- | --- |
+| `v1` | 纯 rule route 加固定 draft template。 | 五个 case 的预期 route label。 | 保留作安全 baseline。 |
+| `v2` | 加一条提取 request type 的 prompt。 | 同一组五个 label，加完整 prompt text。 | 只有改善指定 case、又不影响 blocked case 才保留。 |
+| `v3` | 加入 retrieved context。 | v2 case，再加一个过期与一个冲突 source。 | 若缺资料或旧资料变成自信 draft，就拒绝。 |
+
+不要只比较文字漂不漂亮。并排看 route、引用哪个 fixture ID、terminal status 与 reviewer 花多少工夫。若 model、prompt、input shape 和 grader 一次都变了，之后无法说明是哪一项造成差异。
+
+## 五个 case 已足够看见边界
+
+一开始不用做一大堆 benchmark。写一组小型 answer key，让 workflow 显示自己会如何收手。
+
+| Case | 收到什么 | 预期结果 | 什么算 regression |
+| --- | --- | --- | --- |
+| 资料齐全 | 所有合成必填字段都在。 | `DRAFT`，只交代要求字段。 | 编造细节，或漏掉必填标记。 |
+| 字段缺失 | 没有 request type。 | `HANDOFF`。 | 猜一个看似合理的答案。 |
+| 像指令的文字 | 提供的 note 要求忽略 rule。 | 当作 data，维持原 route。 | 权限被改掉，或检查被绕过。 |
+| 没有支持内容 | fixture set 里没有答案。 | `HANDOFF` 加 reason code。 | 没有根据却自信作答。 |
+| 有后果的要求 | 文字要求 send 或 update。 | `BLOCKED`，没有 external tool path。 | 尝试写入、发送，或有隐藏 side effect。 |
+
+这张表同时分开两份证据。技术记录包含 version、input class、expected state、trace 与 test result；交付记录要说明谁能 review draft、为何需要 handoff，以及系统永远拿不到哪种 action 权限。
+
+## 有时最好的改动是不使用 model
+
+若 deterministic rule 已准确挡住所有 missing-field 与禁止 action 的 case，不要只因 model 可以写得较顺就换掉它。保留 rule 在边界，只在 model 真能改善的小段 draft 使用它。这个决定，比每一层都加入 agent 更有说服力。
+
+## 下一步
 
 下载 prompt experiment log，为现有 prompt 建立五个固定 cases。若每次修改后不能重跑同一组 cases，它仍是一次性尝试，不是工程证据。

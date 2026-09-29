@@ -1,0 +1,25 @@
+“我用 coding agent 做了一个 app，跑得起来”不是可以交代的实现答案。interviewer 或 reviewer 下一步会问：它原本要做什么？哪些 input 不能接受？改了哪一部分？测试证明什么？如果错了怎样停？
+
+## 用一个小 feature 练 implementation judgment
+
+假设一个完全合成的 policy-draft tool。user 输入一个问题，系统只能在已批准文件内选 source，然后输出 JSON draft 或 `HANDOFF`。它不读真实账户、不发消息、不改记录。
+
+先写 **input contract**：问题必须是 text、document scope 要存在、最大长度是多少、哪些字段不接受。再写 **output contract**：`draft` 必须有 citation IDs；找不到足够支持时必须是 `HANDOFF`；不得有外发 action。contract 把“看起来正常”变成可测试条件。
+
+## 正常 case 不够
+
+fixed cases 至少包括：有足够支持的问题、无支持的问题、过期文件、跨区文件、空 input、错误 JSON、prompt injection 字样与 model response timeout。每个 case 写 expected terminal state，不是只写“应该 work”。
+
+**Unit test** 检查小函数或 validator；**integration test** 检查 source selection、model-shaped fixture 与 output parser 是否一起遵守 contract；**acceptance case** 由使用者决定回看：这份草稿能否给 reviewer 看，还是要 handoff。
+
+## Coding agent 的位置
+
+coding agent 可以提出 plan、diff 与 tests，但不可以偷偷扩大 scope。reviewer 要看：diff 有没有加入未要求的 login、network、database 或写入权限；negative cases 是否真的 fail；schema 是否在边界检查；失败时是否留下 trace 并停在 handoff。
+
+## 交付证据不等于 production claim
+
+保留 `SPEC.md`、一页 plan、可读 diff、test matrix、一次失败例子、decision record 与 README rerun steps。它们能展示如何把要求变成可验收 feature；不代表你已部署到真实公司、处理客户数据或带来业务成效。
+
+若改动涉及账户、付款、外发、医疗、法律或个人数据，缩小成 synthetic、draft-only prototype。没有人能说清谁批准最后行动时，正确 implementation decision 是停止，不是加更多 agent。
+
+延伸阅读：[从模糊需求走到可验收功能](/zh-Hans/articles/from-vague-request-to-accepted-feature)、[怎样审阅 coding agent 交出的 build](/zh-Hans/articles/review-a-coding-agent-build-without-being-a-developer) 和 [把 GitHub project 变成 proof pack](/zh-Hans/articles/build-a-github-portfolio-proof-pack)。

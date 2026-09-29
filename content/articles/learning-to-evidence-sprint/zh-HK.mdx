@@ -1,0 +1,138 @@
+開始另一個學習來源前，先點名八星期後要留下的一件 artefact，以及 reviewer 應可憑它追問的問題。課程可以提供節奏、feedback 或一個技術機制；它代替不了資料權利、baseline、failure cases 或可重跑交付。
+
+## 由證據缺口決定下一門課
+
+課程完成紀錄可以說明你曾投放時間，但它不會自動回答面試官或 reviewer 的問題：你正在替誰解決哪一個決定？資料可否使用？較簡單的方法表現如何？甚麼情況要停？別人怎樣重跑你的結果？
+
+所以先寫一張 evidence-gap card。只選一個目前欠缺的 artefact：
+
+- **問題與取捨欠缺**：你能寫 code，卻未能說清使用者決定、錯誤代價和 non-goal。需要的是一頁 problem brief。
+- **資料與責任欠缺**：你有 notebook，卻未交代資料來源、版本、同意和不可使用的欄位。需要的是 data card 與 action boundary。
+- **比較與評估欠缺**：你有一個成功畫面，卻沒有 baseline、固定 test cases 或 failure analysis。需要的是 evaluation pack。
+- **交付與重跑欠缺**：你做過 prototype，卻不能讓陌生人由 README 得到相同結果。需要的是可重跑指引、config、測試和 decision log。
+
+然後才選學習來源。官方 tutorial 適合補一個清楚的技術機制；有作業的課程可提供 deadline 和 feedback；bootcamp 可能適合需要 code review 或 project critique 的人。不要假定名稱較大、價錢較高或證書較漂亮，就會補到你的缺口。選擇最小、能令你在第一或第二週產出 artefact 的來源。
+
+在開始前寫 SOURCE_RECEIPT.md：來源網址、日期或版本、授權／條款、你會採用的概念、你不會複製的 solution 或資料，以及你會自行加入的問題定義、資料、評估和文件。若條款不清楚，不要把課件、答案、截圖或資料集放上公開 repository。
+
+## 一個完全虛構的八週案例：幫人排一個有限隊列
+
+假設有一間完全虛構的訂閱學習服務「Harbour Classroom」。每星期，一位 customer-success reviewer 只能逐一檢查二十個帳戶。她想先看可能需要人手跟進的帳戶，但不想把一個模型分數直接變成自動訊息、折扣、取消或客戶決定。
+
+這個 sprint 的 project brief 可以寫成：
+
+- **使用者與決定**：reviewer 決定本週先檢查哪二十個合成帳戶，以及哪一些因資料不足而不應排序。
+- **輸入**：你自行建立的合成帳戶摘要；每個欄位都寫在 schema 和 data card。
+- **輸出**：一份 draft review queue、每個項目的可讀理由、資料品質警告和 human handoff 標記。
+- **不可做的事**：不讀真實帳戶、不寄訊息、不修改計劃、不提供價格或權益決定，也不把預測當作客戶的真實意圖。
+- **成功 proxy**：在控制好的合成 cases 裡，比較一個簡單規則與一個課程教的 candidate 方法，看看它們在固定 reviewer capacity 下如何排序、如何處理缺資料和何時正確交人。
+
+名稱、帳戶、結果和指標在這個例子全是虛構。它不是在聲稱真的提升 retention、節省時間或代表任何公司。它的價值是讓你同時練習技術工作和交付判斷。
+
+## 你的 sprint 必須有兩條並行的證據線
+
+很多作品集只講系統一邊：資料進來、模型跑了、畫面出來。另一邊同樣要答：為何做、誰承擔、甚麼不可做、怎樣知道要停。
+
+**系統部分要留低甚麼**
+
+- 明確 schema、資料版本和合成資料 generator；
+- 一個足夠簡單、可解釋的 baseline；
+- 一個從課程或 tutorial 學到、只針對一個失敗模式的 candidate 改動；
+- 固定 evaluation cases、預期行為和 error taxonomy；
+- 可重跑 command、config、測試、run ID 和結果 report；
+- 改動後的 release gate 或最小 rollback 方法。
+
+**用喺工作上，要交代甚麼**
+
+- 使用者真正要作的有限決定，而不是「有 AI 功能」；
+- reviewer capacity、錯誤代價和不應自動化的 action；
+- 資料權利、私隱、非公開內容和不可放入 trace 的界線；
+- 哪一個 proxy 有用、哪一個真實 KPI 尚未被量度；
+- 誰會 review、誰擁有最後決定、出了問題怎樣停止；
+- 不把 local test、合成結果或課程完成寫成 production readiness。
+
+兩邊都要有。一邊讓人知道系統怎樣做；另一邊讓人知道為何這樣做、甚麼不應交畀系統自行處理。
+
+## 八星期安排：每週留下一件可檢查的東西
+
+### 第 1 週：鎖定證據缺口和驗收問題
+
+從一個目標職位或你自己的能力盤點中，選一個缺口。例如：「我可寫一個分類 demo，但未能證明我會把模型結果變成有容量限制的 review queue。」把它改成一條驗收問題：在二十個名額的限制下，candidate 是否比簡單規則更容易把應交人處理的 case 留出來？
+
+選定一個只補這個缺口的課程單元或 tutorial。產出 problem brief、SOURCE_RECEIPT.md 和一張明確的 non-goal 清單。若第一週已經需要三種模型、登入、付款或真實資料，範圍太大。
+
+### 第 2 週：寫出資料、決定和權限 contract
+
+建立 synthetic schema，例如帳戶狀態、已知使用訊號、資料可用日期和缺失欄位。每一欄都問：為何 reviewer 需要它？它會不會造成不公平、私隱或錯誤推斷？它能否安全地用合成資料替代？
+
+同時寫 action contract：系統只會產生 queue draft；人手必須決定採用、忽略還是升級處理。用 test 驗證呢個邊界：任何要求系統發送、改價或改變帳戶狀態嘅 case 都必須被阻擋或 handoff。
+
+### 第 3 週：先完成能解釋的 baseline
+
+baseline 不必漂亮。Harbour Classroom 可以先按「最近活躍度下降」和「資料完整度」寫一條規則，或者由 reviewer 用簡單 spreadsheet 排隊。記錄它怎樣處理二十個名額、資料缺失和同分項目。
+
+這週的技術收據是 baseline code、config 和初步 cases；交付收據是你為何先用這個方法，以及它不足以處理哪一類 case。沒有 baseline，後來的模型分數很難轉成可信的取捨。
+
+### 第 4 週：只加入一個有理由的 candidate
+
+把課程教的一個技術放進同一個 contract。例如它教 supervised classifier，就讓它只產生 priority suggestion；若它教 LLM workflow，就讓它只把結構化合成 notes 轉成 reviewer-readable reason，不能替代排序規則或執行 action。
+
+不要同時換資料、feature、model、prompt、UI 和 metric。寫一條假設：「加入這個 candidate，是為了改善 X 類 case；若沒有改善，就保留 baseline。」這讓失敗也能成為作品證據。
+
+### 第 5 週：評估 workflow，不只看 model metric
+
+建立不隨意改寫的 evaluation set，至少包括正常個案、資料缺失、矛盾訊號、邊界情況、要求越權的輸入，以及 candidate 比 baseline 差的反例。每個 case 有 expected queue 或 handoff 行為。
+
+把結果分四層看：
+
+- **模型／排序品質**：例如固定合成 labels 上的 precision、recall 或 calibration；只在資料與定義清楚時才使用。
+- **workflow utility**：二十個名額內有多少應被 reviewer 看見的 case 被保留，錯誤 queue 是否會擠走必須 handoff 的 case。
+- **安全與邊界**：有沒有使用禁止欄位、把資料不足個案假裝成高信心結果，或試圖執行不在 scope 的 action。
+- **操作可行性**：一次 run 要多久、輸出是否可讀、失敗如何記錄、reviewer 是否可理解理由。
+
+這些不是現成 KPI，也不是保證 business impact。你要先把它們寫成 measurement hypothesis，再用合成 cases 驗證系統有沒有遵守預期。
+
+### 第 6 週：補最小的 MLOps 與可重跑性
+
+MLOps 不等於先租一套昂貴雲端平台。這個 sprint 的最低版本可以是：資料和 config 有版本；每次 run 記錄 data version、code revision、parameters 和 timestamp；固定 test command 會重跑 cases；report 保留成功、失敗和 handoff；改動不通過 gate 時可以回到上一個 config。
+
+把原始個案最小化，trace 只保留必要的 case ID、版本、結果類別和理由代碼。若你用 coding agent，請它先列出會改的檔案、要新增的 test 和如何驗收；不要只接受一張漂亮畫面。
+
+### 第 7 週：找一位 reviewer 做反向檢查
+
+請同學、mentor 或自己扮演陌生 reviewer，按照 README 走一次：他能否分清資料是 synthetic？他能否看出 baseline 與 candidate 的唯一差別？他能否找到一個失敗 case 和停用方式？他會不會誤以為系統已連接真實客戶？
+
+把問題放入 decision log。若 reviewer 不能重跑、看不懂 metric 或不知道誰作最後決定，不要用更多 feature 掩蓋；先修 brief、README、trace 或 test。
+
+### 第 8 週：把 GitHub README 變成可核對的證據入口
+
+GitHub repository 的 README 不是 marketing page。它應讓讀者在兩分鐘內找到：
+
+1. 問題、使用者、有限決定和 non-goal；
+2. synthetic／已授權資料邊界與 SOURCE_RECEIPT；
+3. baseline、candidate 和它們各自要解的失敗模式；
+4. evaluation cases、metric definitions、已知 failure 和不應作的推論；
+5. 如何安裝、跑 tests、生成 report 和回退設定；
+6. 系統部分做了甚麼，以及用喺工作上仍要交代甚麼；
+7. 你的實際貢獻、課程／隊友材料的邊界，和未經驗證的地方。
+
+保留 source code、資料欄位、test names 和 commands 的英文，讓 repository 可被更廣泛地重跑；可在 README 提供不同語言的閱讀導覽。只展示你確實跑過的 command 和 output，不要貼造假的 dashboard、客戶 KPI 或 production 截圖。
+
+## 何時應該停、縮小或換來源
+
+停止條件寫進 sprint 本身。出現以下情況就停下來重新界定：
+
+- 到第 2 週仍講不清使用者決定、資料權利或 expected output；
+- 課程材料只能照抄答案，或條款不容許你公開改作；
+- 你需要真實個人、僱主或客戶資料才可做出 demo；
+- 到第 5 週 candidate 沒有比 baseline 更好，或只靠換測試答案才變好；
+- 任何錯誤可能改變金錢、權益、安全、醫療、法律或重要帳戶狀態，卻沒有負責的人手 gate；
+- README 只能顯示成功畫面，不能展示一個限制、failure 或 handoff。
+
+可選擇回到 baseline、縮小到 draft-only、改用合成資料，或放棄這個課程單元。這比硬把一個不合適的 tutorial 包裝成 enterprise project 更能顯示判斷力。
+
+完成八星期後，你會有一套誠實、有限又可檢查的作品紀錄。它讓別人看見你怎樣把學習材料轉成問題定義、技術比較、評估、交付邊界和清楚的下一步，並不構成獲聘證明。
+
+第八週要留下 source receipt、rerun command、failure record 和 non-claims。用 [GitHub Proof Pack](/zh-HK/articles/build-a-github-portfolio-proof-pack) 整理它們，再用 [portfolio evidence rubric](/zh-HK/articles/score-an-ai-portfolio-by-evidence-not-fluency) 找出下一個仍答不出的地方；回到對應週補，不要把 local result 寫成 production claim。
+
+延伸閱讀：[先按能力證據選 AI 學習來源](/zh-HK/articles/choose-ai-learning-sources-by-evidence)、[把課程作業改成可檢查 portfolio evidence](/zh-HK/articles/turn-an-ai-course-project-into-portfolio-evidence)、[Renewal Triage 怎樣把 model metric 連回 reviewer capacity](/zh-HK/articles/renewal-triage-mlops)、[由模糊要求寫成可驗收 workflow](/zh-HK/articles/from-vague-request-to-accepted-feature)，以及 [非工程師如何審核 AI automation](/zh-HK/articles/build-a-low-code-ai-automation)。

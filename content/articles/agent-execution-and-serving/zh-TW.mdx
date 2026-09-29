@@ -1,0 +1,174 @@
+> 一個看起來反應很快的 agent，不一定可靠。它如果不會停止、不會交代使用了什麼工具、不會在結果不明時避免重複 effect，也沒有留給人決定的位置，低 latency 只會讓它更快做錯事。
+
+## 下午四點四十七分，才看見兩套系統
+
+想像一個完全虛構的 **退貨證據 Desk**。Support reviewer 貼入已去識別的 order summary，要求系統根據已核准的 policy 片段，產生一份有引用、建議內部 route 的草稿；它永遠不能聯絡客戶、修改退貨或讀取帳戶。
+
+Demo 很順：agent search 一小組 policy，寫 draft，幾秒後完成。到了下午四點四十七分，queue 變長，一次 retrieval timeout，而 timeout 前可能已記錄了一張 review task；同時一段很長的歷史內容讓第一個字遲遲沒有出現。這時已不是「model 會不會寫」的問題，而是：
+
+> 「你會怎麼設計，讓 agent 可以安全停止，同時 serving layer 仍守得住 user-facing P99 latency budget？」
+
+這題把兩件通常分開說的事拉在一起。**Agent execution** 決定下一步能不能發生；**model serving** 決定工作怎麼到達 model、要等多久。可靠的設計要用同一份 budget、穩定的 state 和有名字的人員 authority 把它們連起來。
+
+## 只解決一半的答案
+
+> 「我會加 retry、多開 replicas，然後開 streaming。」
+
+這些可以是工具，但不是 recovery plan。
+
+多開 replicas 不會告訴 agent 什麼時候該停止。Streaming 可以讓第一段字早些出現，但不會讓不安全的 tool call 變成可逆。若一個 write 的結果不明，retry 可能建立兩張相同的 review task。就算 model 更快，queue 在 model 開始前已耗盡 P99 budget，使用者一樣會覺得慢。
+
+先界定 job，再讓每個 state transition 都可以被檢查。
+
+## 一次 run 是 state machine，不是 model 外面的一個 loop
+
+這個 Desk 沒有 send、modify 或 account access 的 permission；唯一 output 是交給 reviewer 的 draft。小型 state machine 已經足以讓界線清楚：
+
+```text
+received
+  -> validated
+  -> planned
+  -> tool_requested
+  -> observed
+  -> draft_ready
+  -> handoff
+  -> blocked
+  -> retry_scheduled
+  -> budget_stopped
+```
+
+不是每條箭頭都合法。找不到 policy source，要從 `observed` 去 `handoff`，不是編一段看似合理的文字。time budget 用完，要去 `budget_stopped`，不是回到 `planned`。Tool timeout 不代表什麼都沒有發生；它應進到一個能先查 stable action identity、再決定是否可 retry 的 state。
+
+這就是「可以停止」的實際意思：agent 有明確的 terminal state、reason code 和下一位 decision owner。它不會因為不確定，就不斷產生新的 plan。
+
+### Tool contract：model 提議，runtime 決定
+
+Model 可以提議 tool call，但 runtime 才決定提議能不能執行。一份有用的 **tool contract** 會寫清楚：
+
+- tool 名稱和目的；
+- input schema 和可接受值；
+- effect 是 read-only、draft-only，還是有後果的 action；
+- caller identity 和 permission boundary；
+- timeout、retry class、idempotency requirement 和 expected output schema；
+- success、failure 或 ambiguity 之後可到哪一個 state。
+
+例如 `find_policy_evidence` 只能接收 case category 和 approved document version，回傳 citation，而且是 read-only。`create_review_task` 則需要 stable `action_id`、要拒絕 duplicate creation，並且只能回傳 confirmed task reference 或明確的 unknown state。Prompt 不是 permission system；contract 才是。
+
+可以把它想成一位願意幫忙的 intern 拿著 request form。他可以建議打開哪一個抽屜，但實際可以打開哪些抽屜，由有標籤的 key cabinet 和 supervisor 決定。
+
+### Trace 是營運收據，不是秘密對話逐字稿
+
+保留足夠資料，讓日後能回答：「這個 case 為什麼走這條 route？」最小 trace 可以包括：
+
+```text
+run_id、case_version、policy_version、state transitions、
+tool name、安全的 input summary、action_id、tool result class、
+latency slices、token/cost proxy、terminal reason、reviewer outcome
+```
+
+不要預設儲存完整客戶文字、raw secret，或每一句 model 想法。目標是在 data minimisation 下重建 decision 和找 regression。一條 `tool_requested → unknown_after_timeout → handoff` 的 trace，比一大段掩蓋了外部 effect 是否完成的 chat transcript 更有用。
+
+## P99 是對使用者的承諾，不是 benchmark trophy
+
+P50 表示一般 latency；P99 描述 slow tail：那一小部分讓 reviewer 等到離開 workflow 或一直按 refresh 的 request。目標應由 user decision 推導，不是由 model leaderboard 決定。
+
+先為這個虛構 Desk 同意一份 synthetic user-facing budget，才調整任何 serving knob：
+
+| Budget slice | 包含什麼 | 要收集的證據 |
+| --- | --- | --- |
+| Admission | validation、policy check、queue wait | queue timestamp 和 rejection reason |
+| Context | retrieval、prompt assembly | retrieved count、context size、cache decision |
+| First visible result | model prefill 加 first decode step | time to first token 或 first structured event |
+| Completion | 其餘 decoding 和 output validation | total latency、output size、schema result |
+| Recovery | retry lookup、route 或 handoff creation | reason、attempt、terminal state |
+
+Budget 是 design constraint，不是偷偷刪除 safety check 的藉口。如果 case 無法及時產生有 evidence 支持的 draft，清楚的 `HANDOFF` 可以比快速但沒有引用的答案好。Latency 旁邊要量 handoff rate，否則「更快」可能只是「我們更常放棄」。
+
+## Prefill 和 decode 為什麼造成不同 bottleneck
+
+Autoregressive language model 先處理既有 prompt，這段叫 **prefill**。它通常受 input context 影響：過長的 history、太多 retrieved passages，或重複加入的 policy instruction，都會拖慢第一個 output。之後 **decode** 才逐 token 產生文字；一份長 draft 因此可能 first token 還可以，total completion 卻很慢。
+
+這個差別會改變診斷：
+
+- first response 慢，先看 queueing、context length、retrieval fan-out、prompt reuse 和 prefill capacity；
+- first response 快但完成慢，先看 expected output length、structured-output repair loop、decoding capacity 和 streaming；
+- 只有 load 高才兩邊都慢，先看 admission control 和 batch scheduling，不要急著怪 model。
+
+Streaming 適合在 final validated draft 前，讓 user 看得到安全的進度。它不代表可以 stream 未驗證 policy advice 或未完成的 write action；產品要先決定哪一個 event 能被看見。
+
+## Serving levers，各有代價
+
+Batching、caching、quantisation、scaling 常被當成一套「加速按鈕」，其實每樣解決的 constraint 不同。
+
+| Lever | 可能改善 | 可能變差 | 留下前要檢查 |
+| --- | --- | --- | --- |
+| Dynamic batching | throughput、hardware utilisation | 單一但緊急 request 的 queue wait 和 P99 | 依 traffic class 比較 P50、P95、P99、queue delay |
+| Prefix / prompt cache | 重複的穩定 instruction 和 context prefix | prefix 一變，hit rate 下降；舊 policy 可能被重用 | version policy prefix，記錄 hit/miss |
+| Response cache | 重複、安全且 deterministic 的問法 | 錯誤 reuse、privacy leak、stale answer | 只 cache 有界 key，連 source/version validity 一起驗證 |
+| KV cache | decode 時不重算已見 token state | memory pressure 限制 batch size 和 context | 記錄 cache memory、output length、eviction behaviour |
+| Quantisation | memory footprint，有時也改善 throughput | task quality、numerical compatibility 或少見 case behaviour | 前後跑同一組 quality 和 safety cases |
+
+這些都不能取代較簡單的 baseline：縮短 approved context、回傳精簡 structured draft，或把低 evidence case 交給 reviewer。Optimization 是有 error budget 的 product decision，不是一堆聰明的 switches。
+
+## Retry 前先有 identity，不是先求快
+
+Failure 要按「知道了什麼」分類：
+
+- input schema 被拒，通常要修正 input 才能再做；
+- rate limit 可以是有上限 delay 的 retryable case；
+- read-only search timeout，在 contract 允許下可 retry；
+- 有後果 action timeout，屬於 **unknown outcome**，不是自動 retry。
+
+對有後果的 tool，call 前要產生 stable idempotency key。出現 ambiguity 時，先向 tool 或 durable state store 查這個 key 有沒有產生 effect。如果安全地仍然無法知道，就 handoff。這比樂觀 retry 慢，但避免 duplicate ticket、message 或 refund。
+
+Execution budget 不只 token：還要有最大 state transition、tool attempt、wall-clock time 和 cost proxy。用完 budget，要留下 reviewer 能行動的 reason；不要把 loop 藏在 progress spinner 後面。
+
+## 人員在架構中的位置
+
+Human handoff 要寫進 contract。這個虛構 Desk 會在以下情況 handoff：
+
+- policy source 矛盾，或不足以支持 proposed answer；
+- 一個可能造成 effect 的 tool timeout 後 state 不明；
+- case 超出已聲明 category；
+- latency、cost 或 retry budget 已用完；
+- action 會改變外部 record 或 message。
+
+Handoff packet 要有已有的 draft、supporting evidence、terminal reason、安全 trace reference 和一位有名字的 owner。「已升級給人」但沒有目的地，只是另一種 terminal error。
+
+## 在 claim 改善 serving 前，先建立 evidence
+
+先用 synthetic case 和 deterministic tool fixture。小型 evaluation table 至少有：normal short context、normal long context、cache hit、cache miss、retrieval timeout、rate limit、duplicate action ID、unknown write result、policy conflict 和 budget exhaustion。
+
+每個 case 都要記錄：
+
+- expected terminal state 和 forbidden state transition；
+- allowed tool path 和 action identity；
+- time to first event、total latency、queue delay 和 output size；
+- cache / batching condition；
+- draft quality rule、citation rule 和 reviewer route；
+- 這個 test **沒有** 證明什麼。
+
+把 state diagram、contract schema、trace field、load fixture 和 latency report 放進同一個 review pack，再連同 user decision、data boundary、error cost、handoff owner 和 stop condition。reviewer 就可以同時核對系統怎麼跑，以及應該在哪裡停。
+
+## 一段能接受追問的回答
+
+> 「我會先以 bounded state machine 和 tool contract 起步，不會做 open-ended loop。每個 tool 都有 input/output schema、permission level、timeout、retry class 和 idempotency rule。我會 trace state transition、安全的 tool evidence、latency slices 和 terminal reason，同時 minimising sensitive data。Serving 方面，我會把 user-facing P99 拆成 queueing、context/prefill、decode、validation 和 recovery 的 budget。我會用同一組固定 quality 和 safety case 檢查 batching、caching、KV-cache memory 和 quantisation，而不是只看 latency。若有後果的 tool timeout，我會查 stable action identity；effect 不明就 handoff。第一版保持 draft-only，並有 named reviewer 負責 conflict、budget stop 和不可逆 action。」
+
+這段回答顯示你知道 model behaviour、runtime control、operations 和真正 owner 如何放在同一個系統。
+
+## Repository 應保留的 artefacts
+
+- `brief.md`：虛構 decision、user、data boundary、non-goal 和 reviewer owner。
+- `state-machine.md`：合法 state、transition、terminal reason，以及永遠不能發生的事。
+- `tool-contracts/`：schema、permission、timeout、retry class、action ID 和 output validator。
+- `trace-schema.md`：保留和刻意排除的 field，以及 retention rationale。
+- `latency-budget.md`：P99 slices、traffic assumption、queue policy 和 miss budget 後的 decision。
+- `synthetic-evals/`：normal、slow、ambiguous、duplicate 和 blocked case 的固定 fixture。
+- `results.md`：quality、handoff、route、latency、cache 和 cost-proxy result，包括一個 failure。
+- `decision-log.md`：為什麼選這個 cache、batch rule 或 handoff threshold，以及仍未證明什麼。
+
+延伸閱讀可先看 [workflow-level agent evaluation](/zh-TW/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)，再實作更窄的 [可 resume batch worker](/zh-TW/articles/build-a-resumable-ai-batch-worker)。配合 [agent 取得 permission 前的 review](/zh-TW/articles/review-an-ai-agent-before-clicking-allow)，以及 [Transformer、generation 和 serving 的取捨](/zh-TW/articles/choose-transformer-generation-and-adaptation-tradeoffs)。
+
+## 邊界與來源說明
+
+這是 AI.DOG 教學，以 synthetic、draft-only scenario 解釋。它不是 production architecture、benchmark result、provider capacity claim，也不承諾任何 latency、reliability、business outcome 或 interview result。本文的 tool、data、budget、state label 和 artefact 都是示範。真實系統需要自己的 security review、privacy assessment、provider documentation、workload measurement、incident process 和已授權 owner，才可以影響客戶或外部 record。

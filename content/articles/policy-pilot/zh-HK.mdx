@@ -1,0 +1,104 @@
+> PolicyPilot 把「可否按政策草擬回覆」當成一個要留下紀錄的決定：邊份文件當日可用、查唔到或有例外時交畀邊個、同一個結果點樣重跑。模型叫咩名，喺呢個例子裡幫唔到手。
+
+## 做完之後，別人可以核對乜
+
+### 實作會留低嘅嘢
+
+- 有版本嘅合成政策紀錄、按關鍵字找資料呢個基準做法、只會引述已批准紀錄嘅草稿、交人手嘅路徑，同埋唔保留原問句嘅處理紀錄。
+- 一組固定嘅正確與安全情境、內容刪走時嘅處理紀錄、本地只可作參考嘅推出判斷同回到舊版嘅方法；README、tests 同本地 demo 都可以重跑。
+
+### 交畀人覆核時要講清楚嘅事
+
+- 先寫清楚客服查資料時實際要決定乜、答錯會有咩後果，同埋邊啲事根本唔會做；RAG（根據找回的文件起草）只係可能的技術選擇。
+- 資料只限虛構文件。最後點回覆、例外點處理、任何影響金錢或權利嘅行動，仍然由人手拍板。
+- 所謂「成功」只可以喺合成流程裡用暫代指標記錄，唔可以把本地跑出來的結果當成真實節省、採用率或可以上線嘅證明。
+
+## 這是一個完全虛構的案例
+
+**PolicyPilot** 用虛構材料做一個政策回覆草稿練習。情境是假設一間中型網店的客服，常常要在退貨、保養和例外規則之間找答案；答錯會帶來重工和信任問題。而家已實作嘅本地可重跑參考程式，只會替已批准、已有版本嘅虛構政策紀錄按關鍵字計分，交出有引用嘅回覆草稿，或者明確叫人手接手。
+
+呢份本地 code 沒有運行 RAG、語意搜尋、文件 index 或 model。下文講嘅 retrieval／RAG 架構，是日後可另行設計的實驗，不是已在本地 code 裡運行的功能。
+
+退款、改訂單、讀真實客戶帳戶、自動發訊息，都不在這份 code 裡。呢個界線要寫明，因為這幾種行動涉及金錢、權利或客戶資料，最後一定要由人決定。
+
+## 第一步：先把要幫人作嘅決定寫清楚
+
+開 project 時，唔好只寫「我要做一個 RAG chatbot」。先用一頁 brief 寫清楚：
+
+- **邊個人、要決定乜**：客服人員要判斷可否按政策草擬回覆，還是必須交高一級處理。
+- **錯咗會點**：答得冇根據、用咗過期政策、把例外當成常規，或者明明不確定卻冇交接。
+- **合成練習裡記乜**：在控制好的合成任務中，搵到合適政策要幾耐、有引用支持嘅答案比例、正確交接比例，同 reviewer 接納草稿嘅比例。
+- **呢份練習唔做乜**：不直接執行客戶操作；不把真實個人資料或僱主資料放進文件集（corpus）、處理紀錄（trace）或示範（demo）。
+- **最後由邊個拍板**：例外、最後發送，以及任何影響資產／權益嘅動作，仍由人手決定。
+
+以上係量度計劃，唔係成效聲稱。唔好替虛構系統填上「節省 40% 時間」一類數字；真係要估算，就寫出公式、假設和限制。
+
+## 第二步：有基準做法，先判斷 LLM 值唔值得放進來
+
+寫一小套自己編的虛構政策文件，例如標準退貨、保養例外、會員優惠和已撤回版本。每份文件都要有 policy ID、version、生效日期和狀態，再配合合成問題和預期處理方式。
+
+第一個基準做法（baseline）可以很樸素：按關鍵字找資料，加人手模板。它未必好睇，但會迫使人答清楚：RAG 帶來了甚麼可量度的改變——資料覆蓋、找資料時間、引用能力，還是只令回覆聽起來自然？冇 baseline，demo 跑得出都冇比較對象。
+
+## 第三步：現有流程保持細小；RAG 留待下一個決定
+
+唔使照抄任何公司的內部平台。眼前呢份可重跑的 local reference，只做以下流程：
+
+```text
+寫好嘅虛構政策紀錄（有 `version`、`status` 和生效日期）
+  -> 輸入安全檢查
+  -> 可重複嘅關鍵字計分
+  -> 用固定 as-of date（作判斷當日）檢查紀錄是否仍然有效並已獲批准
+  -> 有引用嘅草稿，或者交畀人手
+  -> 不留原問句嘅 trace（處理紀錄）+ 固定本地品質／安全檢查
+```
+
+這裡嘅 `version` 只係讓 reviewer 知道草稿引用了哪份合成紀錄；trace 裡的 SHA-256 值只會把問句變成短碼作對照。現有 code 不會 parse 或 hash 文件、拆 chunk、建 index、按 region 或 role filter、rerank candidate、call model，也不會做 external action。
+
+如果固定案例已經顯示 keyword baseline 不夠用，才另行設計和批准 retrieval／RAG 實驗；不要把它當成已完成：
+
+```text
+有授權可用嘅 source intake（資料來源輸入流程）
+  -> parse、validate、version；需要時為文件做 fingerprint
+  -> 按寫明嘅 metadata（篩選欄位）規則 chunk，再做 indexed retrieval
+  -> 可選嘅 reranking 和 model-assisted cited draft
+  -> human handoff、evaluation 和 release decision
+```
+
+每支新箭嘴都要寫出理由和 owner。metadata rule 可以阻止不適用資料進入草稿；citation 讓 reviewer 回到來源；handoff 接住低信心、衝突和例外。這些是日後 extension 要補的要求，不是現有本地程式已做到的事。
+
+## 第四步：評估分開看，唔好只盯住一個分數
+
+而家嘅本地參考程式只檢查固定嘅合成情境處理路徑、citation、有冇做外部動作，同 trace 有冇留下原問句。日後真係加入 retrieval 或 model，先需要擴展 evaluation；現有本地檢查不能當成 RAG 的成效。
+
+**日後加 retrieval／model 才要看的 Quality**：retrieval recall@k（應該找得到的資料，有沒有出現在前 k 個結果）、citation-supported answer rate（引用有沒有真正支持答案的比例）、按人手評分準則（rubric）判斷的正確性、以及該拒答時有沒有正確停下來（abstain）。不是每題都要生成長文；有些結果應直接說「找不到足夠根據」。
+
+**Safety**：未授權動作率必須是零；也要測冇根據的政策主張、來源本身不適用於這條問題、問題裡試圖推翻既定指令（prompt injection），以及有冇繞過交人手。未測到，就只可以說這是待驗證風險，不能說系統安全。
+
+**日後加 retrieval／model 才要看的 Operations**：p95 latency（最慢嗰 5% request 要等幾耐）、每次 request 的成本、error rate（出錯比例）、文件集（corpus）版本是否覆蓋所有被測案例，以及 retry 情況。它們讓設計可以講清楚容量和故障，唔係用來扮有大量流量。
+
+**合成 workflow 的暫代指標**：在相同的合成任務中，記錄完成一次政策查找所需時間、reviewer 是否接受草稿、以及有幾多情況被正確交接。這些是模擬指標，不是企業 KPI。
+
+測試集最少要有：正常問題、文件沒有答案、兩份文件互相矛盾、過期政策、source scope 不符、需要例外處理和 prompt injection。每次只動一個主要變數，保留 baseline 和 error taxonomy（把錯誤分類的規則）。否則分數變了，也不知道是哪裏造成。
+
+## 第五步：把日後運作要留底的事也放進作品集
+
+作品集可以讓人看到：資料從哪裡來、測過甚麼、誰負責、甚麼情況要停。雲端架構不會自動補齊這些問題。以下文件和紀錄足夠讓人追問：
+
+- **資料說明（data card）**：哪些資料是自行編寫、哪些欄位不會進 trace、政策如何更新。
+- **日後 RAG extension 的決策記錄（decision log）**：為何用 retrieval 而不是 fine-tuning；甚麼證據會令這個決定改變。
+- **評估紀錄（evaluation report）**：baseline、test cases、metric definitions、failure examples 和限制。
+- **為 extension 預留的 redacted trace schema**：刪走敏感內容後，保留 request ID、版本、latency、retrieved policy IDs、handoff status 等欄位。
+- **重跑指引（reproducibility）**：`README`、環境設定、random seed（隨機起點）／版本、tests、Docker 或同等可重跑方法。
+- **推出紀錄（release note）**：甚麼條件下可以 shadow test、何時停用、怎樣 rollback、誰擁有最後決定。
+
+自動檢查（CI）不需要很複雜。日後改 prompt、index 或模型設定時，可以讓它跑固定 evaluation；高風險案例退步或引用不支持率超標，就阻擋改動。這是建議中的推出控制方法，不是聲稱已在營運服務。
+
+## 第六步：把 project 整成面試時打得開的證據包
+
+README 開首應寫 problem、user、non-goal 和 data boundary；之後放架構圖、baseline 和 evaluation 結果；最後列出三件刻意沒有做的事及原因。Demo 影片只要走一個正常 case、一個拒答或 handoff case，以及一個 version change。面試時可以直接拿著實際文件和結果解釋：為何用 RAG、怎樣量度、幾時不讓系統做事、出事時怎樣停。
+
+## 這個案例留下甚麼，也留不下甚麼
+
+這是一個用合成資料和模擬情境做的學習案例，不能證明真實客戶採用、成本節省、保安合規或可以上線。它讓人看到這個 project 有沒有把問題、baseline、資料界線、evaluation、決定權、觀測和 rollback 排好次序；真實業務結果不在這份證據裡。
+
+延伸閱讀：[RAG chatbot 為何不足以成為完整 portfolio](/zh-HK/articles/rag-chatbot-to-portfolio-evidence)、[用公開 KEV 資料做一個可 review 的證據包](/zh-HK/articles/build-a-public-data-kev-review-packet)、[面試中如何解釋 evaluation 與 system design](/zh-HK/articles/ai-engineer-interview-learning-map)、[非工程師也可驗收的 AI 自動化流程](/zh-HK/articles/build-a-low-code-ai-automation)。

@@ -1,0 +1,406 @@
+{
+  "receipts": [
+    {
+      "exampleId": "policy-pilot",
+      "articleSlug": "enterprise-ai-portfolio-policy-pilot",
+      "localCommands": ["npm test", "npm run demo"],
+      "readerStarter": {
+        "downloadHref": "/templates/policy-pilot-starter/v1/policy-pilot-starter-v1.zip",
+        "readmeHref": {
+          "zh-HK": "/templates/policy-pilot-starter/v1/README.zh-HK.md",
+          "zh-TW": "/templates/policy-pilot-starter/v1/README.zh-TW.md",
+          "zh-Hans": "/templates/policy-pilot-starter/v1/README.zh-Hans.md",
+          "en": "/templates/policy-pilot-starter/v1/README.md"
+        },
+        "commands": ["npm test", "npm run demo"],
+        "copy": {
+          "zh-HK": {
+            "title": "自己跑一次：PolicyPilot starter",
+            "text": "呢份可下載練習只用虛構政策資料。佢只按目前仍有效嘅內容準備附引用草稿；規則過期、資料不足、有人想改指示或要求真正動作時，就交返畀人。",
+            "download": "下載可執行 English starter (.zip)",
+            "readme": "先睇繁中（香港）README",
+            "boundary": "解壓後先跑指令。全程唔使 API key、網絡或模型呼叫；只會產生附來源嘅草稿或交人處理，唔代表真實政策、檢索質素、安全批准或業務成果。"
+          },
+          "zh-TW": {
+            "title": "自己執行一次：PolicyPilot starter",
+            "text": "這份可下載練習只使用虛構政策資料。它只按目前仍有效的內容準備附引用草稿；規則過期、資料不足、有人想改寫指示或要求真正動作時，就交回人工處理。",
+            "download": "下載可執行 English starter (.zip)",
+            "readme": "先看繁中（台灣）README",
+            "boundary": "請先解壓再執行指令。全程不需要 API key、網路或模型呼叫；只會產生附來源草稿或交人處理，不代表真實政策、檢索品質、安全核准或業務成果。"
+          },
+          "zh-Hans": {
+            "title": "自己运行一次：PolicyPilot starter",
+            "text": "这份可下载练习只使用虚构政策资料。它只按目前仍有效的内容准备带引用草稿；规则过期、资料不足、有人想改写指令或要求真正动作时，就交回人工处理。",
+            "download": "下载可运行 English starter (.zip)",
+            "readme": "先看简体中文 README",
+            "boundary": "请先解压再运行指令。全程不需要 API key、网络或模型调用；只会产生带来源草稿或交人处理，不代表真实政策、检索质量、安全批准或业务成果。"
+          },
+          "en": {
+            "title": "Run it yourself: PolicyPilot starter",
+            "text": "This downloadable exercise uses invented policy material only. It prepares a cited draft from content that is still current; a stale rule, missing support, an instruction override, or a request for a real action returns to a person.",
+            "download": "Download the runnable English starter (.zip)",
+            "readme": "Read the English README first",
+            "boundary": "Extract it before running the commands. It has no API key, network, or model call; it produces only a cited draft or a human handoff, not evidence about real policies, retrieval quality, security approval, or a business outcome."
+          }
+        }
+      },
+      "copy": {
+        "zh-HK": {
+          "decision": "根據已批准嘅虛構政策文件，交出一份有引用嘅草稿；資料不足或有例外時，交返畀人手處理。",
+          "dataAndModel": "只用合成政策資料。gpt-5-mini Responses request 係教學用嘅離線 fixture；冇 key、冇網絡 call，亦冇 model output。",
+          "doesNotProve": "唔證明真實政策文件嘅 retrieval 質素、live model 表現、production reliability 或任何 business outcome。"
+        },
+        "zh-TW": {
+          "decision": "根據已核准的虛構政策文件，交出一份附引用的草稿；資料不足或有例外時，交回人工處理。",
+          "dataAndModel": "只使用合成政策資料。gpt-5-mini Responses request 是教學用的離線 fixture；沒有 key、沒有網路呼叫，也沒有 model output。",
+          "doesNotProve": "不證明真實政策文件的 retrieval 品質、live model 表現、production reliability 或任何 business outcome。"
+        },
+        "zh-Hans": {
+          "decision": "根据已批准的虚构政策文件，交出一份带引用的草稿；资料不足或有例外时，交回人工处理。",
+          "dataAndModel": "只使用合成政策资料。gpt-5-mini Responses request 是教学用的离线 fixture；没有 key、没有网络调用，也没有 model output。",
+          "doesNotProve": "不证明真实政策文件的 retrieval 质量、live model 表现、production reliability 或任何 business outcome。"
+        },
+        "en": {
+          "decision": "Produce a cited draft from approved fictional policy documents, or hand an incomplete or exceptional case back to a person.",
+          "dataAndModel": "Uses synthetic policy material only. The gpt-5-mini Responses request is an offline fixture that shows the request contract: no key, network call, or model output.",
+          "doesNotProve": "It does not establish retrieval quality on real policy documents, live-model behaviour, production reliability, or a business outcome."
+        }
+      }
+    },
+    {
+      "exampleId": "renewal-triage",
+      "articleSlug": "renewal-triage-mlops",
+      "localCommands": ["npm test", "npm run demo"],
+      "readerStarter": {
+        "downloadHref": "/templates/renewal-triage-starter/v1/renewal-triage-starter-v1.zip",
+        "readmeHref": {
+          "zh-HK": "/templates/renewal-triage-starter/v1/README.zh-HK.md",
+          "zh-TW": "/templates/renewal-triage-starter/v1/README.zh-TW.md",
+          "zh-Hans": "/templates/renewal-triage-starter/v1/README.zh-Hans.md",
+          "en": "/templates/renewal-triage-starter/v1/README.md"
+        },
+        "commands": ["npm test", "npm run demo"],
+        "copy": {
+          "zh-HK": {
+            "title": "由讀者自己跑：Renewal Triage starter",
+            "text": "呢份係可下載、縮細咗嘅合成資料練習。佢會將 raw risk 同 capacity-aware priority 排成兩條不同 draft queue，畀你先睇到排序點樣改變一個人手決定。",
+            "download": "下載可執行 English starter (.zip)",
+            "readme": "先睇繁中（香港）README",
+            "boundary": "解壓後先跑指令。全程冇 API key、network 或 model call；只會產生畀人手檢查嘅 draft queue，唔係完整 reference、留存系統或真實結果。"
+          },
+          "zh-TW": {
+            "title": "由讀者自己執行：Renewal Triage starter",
+            "text": "這是一份可下載、縮小版的合成資料練習。它會把 raw risk 與 capacity-aware priority 排成兩條不同 draft queue，讓你先看見排序如何改變一個人工決策。",
+            "download": "下載可執行 English starter (.zip)",
+            "readme": "先看繁中（台灣）README",
+            "boundary": "請先解壓再執行指令。全程沒有 API key、network 或 model call；它只會產生供人工檢查的 draft queue，不是完整 reference、續約系統或真實結果。"
+          },
+          "zh-Hans": {
+            "title": "由读者自己运行：Renewal Triage starter",
+            "text": "这是一份可下载、缩小版的合成数据练习。它会把 raw risk 与 capacity-aware priority 排成两条不同 draft queue，让你先看见排序如何改变一个人工决策。",
+            "download": "下载可运行 English starter (.zip)",
+            "readme": "先看简体中文 README",
+            "boundary": "请先解压再运行指令。全程没有 API key、network 或 model call；它只会产生供人工检查的 draft queue，不是完整 reference、续约系统或真实结果。"
+          },
+          "en": {
+            "title": "Run it yourself: Renewal Triage starter",
+            "text": "This is a smaller downloadable exercise with synthetic records. It puts raw risk and capacity-aware priority into two different draft queues so you can inspect how ranking changes a human review decision.",
+            "download": "Download the runnable English starter (.zip)",
+            "readme": "Read the English README first",
+            "boundary": "Extract it before running the commands. It has no API key, network, or model call; it produces only a draft queue for human review and is not the full reference, a retention system, or evidence of a real outcome."
+          }
+        }
+      },
+      "copy": {
+        "zh-HK": {
+          "decision": "將固定容量嘅人手 review queue 排序；唔聯絡客戶，亦唔作 retention decision。",
+          "dataAndModel": "只用帶 point-in-time rule 嘅合成 snapshot，同 rule baseline 比較 candidate ranking。呢個 case 冇 LLM layer。",
+          "doesNotProve": "唔證明模型會喺真實客戶身上泛化、可以提升 retention，或者可以取代人手 review。"
+        },
+        "zh-TW": {
+          "decision": "為固定容量的人工 review queue 排序；不聯絡客戶，也不做 retention decision。",
+          "dataAndModel": "只使用帶有 point-in-time rule 的合成 snapshot，並以 rule baseline 比較 candidate ranking。這個 case 沒有 LLM layer。",
+          "doesNotProve": "不證明模型會在真實客戶上泛化、能提升 retention，或可取代人工 review。"
+        },
+        "zh-Hans": {
+          "decision": "为固定容量的人工 review queue 排序；不联系客户，也不做 retention decision。",
+          "dataAndModel": "只使用带有 point-in-time rule 的合成 snapshot，并以 rule baseline 比较 candidate ranking。这个 case 没有 LLM layer。",
+          "doesNotProve": "不证明模型会在真实客户上泛化、能提升 retention，或可取代人工 review。"
+        },
+        "en": {
+          "decision": "Rank a fixed-capacity human review queue; do not contact customers or make a retention decision.",
+          "dataAndModel": "Uses a synthetic snapshot with a point-in-time rule and compares a candidate ranking with a rule baseline. There is no LLM layer in this case.",
+          "doesNotProve": "It does not establish generalisation to real customers, improved retention, or a replacement for human review."
+        }
+      }
+    },
+    {
+      "exampleId": "approval-queue",
+      "articleSlug": "approval-queue-low-code-portfolio",
+      "localCommands": ["npm test", "npm run demo"],
+      "readerStarter": {
+        "downloadHref": "/templates/approval-queue-starter/v1/approval-queue-starter-v1.zip",
+        "readmeHref": {
+          "zh-HK": "/templates/approval-queue-starter/v1/README.zh-HK.md",
+          "zh-TW": "/templates/approval-queue-starter/v1/README.zh-TW.md",
+          "zh-Hans": "/templates/approval-queue-starter/v1/README.zh-Hans.md",
+          "en": "/templates/approval-queue-starter/v1/README.md"
+        },
+        "commands": ["npm test", "npm run demo"],
+        "copy": {
+          "zh-HK": {
+            "title": "自己跑一次：Approval Queue starter",
+            "text": "呢份可下載練習只用虛構 FAQ。佢只準備附來源嘅回覆草稿；冇根據、有人想改指示，或者要求發送、退款等真正動作時，就停低畀人處理。",
+            "download": "下載可執行 English starter (.zip)",
+            "readme": "先睇繁中（香港）README",
+            "boundary": "解壓後先跑指令。全程唔使 API key、網絡或模型呼叫，亦唔會連帳戶、發送訊息或作決定；呢份練習只證明固定虛構情境可以重跑，唔代表真實支援質素、安全批准或業務成果。"
+          },
+          "zh-TW": {
+            "title": "自己執行一次：Approval Queue starter",
+            "text": "這份可下載練習只使用虛構 FAQ。它只準備附來源的回覆草稿；沒有根據、有人想改寫指示，或要求發送、退款等真正動作時，就停止並交給人處理。",
+            "download": "下載可執行 English starter (.zip)",
+            "readme": "先看繁中（台灣）README",
+            "boundary": "請先解壓再執行指令。全程不需要 API key、網路或模型呼叫，也不會連帳戶、發送訊息或作決定；它只證明固定虛構情境可以重跑，不代表真實支援品質、安全核准或業務成果。"
+          },
+          "zh-Hans": {
+            "title": "自己运行一次：Approval Queue starter",
+            "text": "这份可下载练习只使用虚构 FAQ。它只准备带来源的回复草稿；没有根据、有人想改写指令，或要求发送、退款等真正动作时，就停止并交给人处理。",
+            "download": "下载可运行 English starter (.zip)",
+            "readme": "先看简体中文 README",
+            "boundary": "请先解压再运行指令。全程不需要 API key、网络或模型调用，也不会连账户、发送信息或作决定；它只证明固定虚构情境可以重跑，不代表真实支持质量、安全批准或业务成果。"
+          },
+          "en": {
+            "title": "Run it yourself: Approval Queue starter",
+            "text": "This downloadable exercise uses an invented FAQ only. It prepares a source-cited reply draft; missing support, an instruction override, or a request to send, refund, or take another real action stops for a person.",
+            "download": "Download the runnable English starter (.zip)",
+            "readme": "Read the English README first",
+            "boundary": "Extract it before running the commands. It has no API key, network, or model call, and cannot connect to an account, send a message, or make a decision; it only shows that fixed fictional cases can be repeated, not real support quality, security approval, or a business outcome."
+          }
+        }
+      },
+      "copy": {
+        "zh-HK": {
+          "decision": "由合成 FAQ 準備有引用嘅 reply draft；冇 source、遇到 injection 或要求真正 action 時，要停低交人。",
+          "dataAndModel": "只用合成 FAQ 同 deterministic mock。gpt-5-mini Responses shape 係教學用嘅離線 fixture，唔會連接帳戶或發訊息。",
+          "doesNotProve": "唔證明真實 integration、安全 approval、live model output，或者任何支援效率同 customer impact。"
+        },
+        "zh-TW": {
+          "decision": "從合成 FAQ 準備附引用的 reply draft；沒有 source、遇到 injection 或要求真正 action 時，必須停止並交給人處理。",
+          "dataAndModel": "只使用合成 FAQ 與 deterministic mock。gpt-5-mini Responses shape 是教學用的離線 fixture，不會連接帳戶或發送訊息。",
+          "doesNotProve": "不證明真實 integration、安全 approval、live model output，或任何支援效率與 customer impact。"
+        },
+        "zh-Hans": {
+          "decision": "从合成 FAQ 准备带引用的 reply draft；没有 source、遇到 injection 或要求真正 action 时，必须停止并交给人处理。",
+          "dataAndModel": "只使用合成 FAQ 与 deterministic mock。gpt-5-mini Responses shape 是教学用的离线 fixture，不会连接账户或发送消息。",
+          "doesNotProve": "不证明真实 integration、安全 approval、live model output，或任何支持效率与 customer impact。"
+        },
+        "en": {
+          "decision": "Prepare a cited reply draft from a synthetic FAQ; stop for a person when there is no source, an injection attempt, or a request for a real action.",
+          "dataAndModel": "Uses a synthetic FAQ and deterministic mock. The gpt-5-mini Responses shape is an offline fixture for the request contract; it cannot connect to an account or send a message.",
+          "doesNotProve": "It does not establish a real integration, security approval, live-model output, support efficiency, or customer impact."
+        }
+      }
+    },
+    {
+      "exampleId": "ai-batch-worker",
+      "articleSlug": "build-a-resumable-ai-batch-worker",
+      "localCommands": ["npm test", "npm run demo"],
+      "readerStarter": {
+        "downloadHref": "/templates/ai-batch-worker-starter/v1/ai-batch-worker-starter-v1.zip",
+        "readmeHref": {
+          "zh-HK": "/templates/ai-batch-worker-starter/v1/README.zh-HK.md",
+          "zh-TW": "/templates/ai-batch-worker-starter/v1/README.zh-TW.md",
+          "zh-Hans": "/templates/ai-batch-worker-starter/v1/README.zh-Hans.md",
+          "en": "/templates/ai-batch-worker-starter/v1/README.md"
+        },
+        "commands": ["npm test", "npm run demo"],
+        "copy": {
+          "zh-HK": {
+            "title": "自己跑一次：Batch Worker starter",
+            "text": "呢份可下載練習只用虛構工作項目。佢會練批次工作遇到重複送入、逾時、限流或預算不足時，點樣續跑、停低，同留低畀人覆核嘅紀錄。",
+            "download": "下載可執行 English starter (.zip)",
+            "readme": "先睇繁中（香港）README",
+            "boundary": "解壓後先跑指令。全程冇 API key、網絡或模型呼叫，唔會處理文件或觸發外部動作；呢份練習只證明固定虛構情境可以重跑，唔代表真實流量、供應商穩定性、成本或營運成果。"
+          },
+          "zh-TW": {
+            "title": "自己執行一次：Batch Worker starter",
+            "text": "這份可下載練習只使用虛構工作項目。它練習批次工作遇到重複送入、逾時、限流或預算不足時，如何續跑、停止，並留下可供人覆核的紀錄。",
+            "download": "下載可執行 English starter (.zip)",
+            "readme": "先看繁中（台灣）README",
+            "boundary": "請先解壓再執行指令。全程沒有 API key、網路或模型呼叫，不會處理文件或觸發外部動作；它只證明固定虛構情境可以重跑，不代表真實流量、供應商穩定性、成本或營運成果。"
+          },
+          "zh-Hans": {
+            "title": "自己运行一次：Batch Worker starter",
+            "text": "这份可下载练习只使用虚构工作项目。它练习批处理工作遇到重复送入、超时、限流或预算不足时，怎样续跑、停止，并留下可供人复核的记录。",
+            "download": "下载可运行 English starter (.zip)",
+            "readme": "先看简体中文 README",
+            "boundary": "请先解压再运行指令。全程没有 API key、网络或模型调用，不会处理文件或触发外部动作；它只证明固定虚构情境可以重跑，不代表真实流量、供应商稳定性、成本或运营成果。"
+          },
+          "en": {
+            "title": "Run it yourself: Batch Worker starter",
+            "text": "This downloadable exercise uses invented work items only. It practises how a batch job resumes, stops, and leaves a review record when it sees duplicates, timeouts, rate limits, or a budget limit.",
+            "download": "Download the runnable English starter (.zip)",
+            "readme": "Read the English README first",
+            "boundary": "Extract it before running the commands. It has no API key, network, or model call, and cannot process a document or trigger an external action; it only shows that fixed fictional cases can be repeated, not real traffic, provider stability, cost, or operational results."
+          }
+        }
+      },
+      "copy": {
+        "zh-HK": {
+          "decision": "只建立畀人 review 嘅 document-enrichment record；duplicate、timeout、rate limit 或 budget stop 都要留低可追嘅狀態。",
+          "dataAndModel": "只用合成 work item 同 deterministic worker logic。gpt-5-mini request 係靜態 fixture，冇 provider call。",
+          "doesNotProve": "唔證明真實 document action、真實 load 下嘅 throughput、provider reliability 或 production operation。"
+        },
+        "zh-TW": {
+          "decision": "只建立供人 review 的 document-enrichment record；duplicate、timeout、rate limit 或 budget stop 都要留下可追查的狀態。",
+          "dataAndModel": "只使用合成 work item 與 deterministic worker logic。gpt-5-mini request 是靜態 fixture，沒有 provider call。",
+          "doesNotProve": "不證明真實 document action、真實 load 下的 throughput、provider reliability 或 production operation。"
+        },
+        "zh-Hans": {
+          "decision": "只建立供人 review 的 document-enrichment record；duplicate、timeout、rate limit 或 budget stop 都要留下可追查的状态。",
+          "dataAndModel": "只使用合成 work item 与 deterministic worker logic。gpt-5-mini request 是静态 fixture，没有 provider call。",
+          "doesNotProve": "不证明真实 document action、真实 load 下的 throughput、provider reliability 或 production operation。"
+        },
+        "en": {
+          "decision": "Create human-review-only document-enrichment records; leave an inspectable state for duplicates, timeouts, rate limits, and budget stops.",
+          "dataAndModel": "Uses synthetic work items and deterministic worker logic. The gpt-5-mini request is a static fixture with no provider call.",
+          "doesNotProve": "It does not establish real document actions, throughput under real load, provider reliability, or production operation."
+        }
+      }
+    },
+    {
+      "exampleId": "kev-review-packet",
+      "articleSlug": "build-a-public-data-kev-review-packet",
+      "localCommands": ["npm test", "npm run fixture:validate", "npm run demo", "npm run eval:diff"],
+      "readerStarter": {
+        "downloadHref": "/templates/kev-review-packet-starter/v1/kev-review-packet-starter-v1.zip",
+        "readmeHref": {
+          "zh-HK": "/templates/kev-review-packet-starter/v1/README.zh-HK.md",
+          "zh-TW": "/templates/kev-review-packet-starter/v1/README.zh-TW.md",
+          "zh-Hans": "/templates/kev-review-packet-starter/v1/README.zh-Hans.md",
+          "en": "/templates/kev-review-packet-starter/v1/README.md"
+        },
+        "commands": ["npm test", "npm run fixture:validate", "npm run demo"],
+        "copy": {
+          "zh-HK": {
+            "title": "自己跑一次：KEV Review Packet starter",
+            "text": "呢份可下載練習只用虛構、模仿公開欄位形狀嘅漏洞記錄。佢只砌出畀人覆核嘅資料包；來源欄位唔齊、有私隱資料，或者有人想做真正保安動作時，就拒絕。下載檔另附一張空白 `NOT_ACQUIRED` static-source receipt 範本，畀你日後記低自行保留嘅資料副本；佢唔會將 fixture 變成 public data。",
+            "download": "下載可執行 English starter (.zip)",
+            "readme": "先睇繁中（香港）README",
+            "boundary": "解壓後先跑指令。全程冇 API key、網絡或模型呼叫，亦唔會掃描、修補、開工單或查系統；呢份練習只證明固定虛構情境可以重跑，唔代表任何真實漏洞、受影響資產或保安批准。"
+          },
+          "zh-TW": {
+            "title": "自己執行一次：KEV Review Packet starter",
+            "text": "這份可下載練習只使用虛構、模仿公開欄位形狀的漏洞紀錄。它只組成可供人覆核的資料包；來源欄位不齊、有隱私資料，或有人想做真正資安動作時，就拒絕。下載檔另附一張空白 `NOT_ACQUIRED` static-source receipt 範本，讓你日後記下自行保留的資料副本；它不會將 fixture 變成 public data。",
+            "download": "下載可執行 English starter (.zip)",
+            "readme": "先看繁中（台灣）README",
+            "boundary": "請先解壓再執行指令。全程沒有 API key、網路或模型呼叫，也不會掃描、修補、開工單或查系統；它只證明固定虛構情境可以重跑，不代表任何真實漏洞、受影響資產或資安核准。"
+          },
+          "zh-Hans": {
+            "title": "自己运行一次：KEV Review Packet starter",
+            "text": "这份可下载练习只使用虚构、模仿公开字段形状的漏洞记录。它只组成可供人复核的资料包；来源字段不齐、有隐私资料，或有人想做真正安全动作时，就拒绝。下载文件另附一张空白 `NOT_ACQUIRED` static-source receipt 模板，让你日后记下自行保留的数据副本；它不会将 fixture 变成 public data。",
+            "download": "下载可运行 English starter (.zip)",
+            "readme": "先看简体中文 README",
+            "boundary": "请先解压再运行指令。全程没有 API key、网络或模型调用，也不会扫描、修补、开工单或查系统；它只证明固定虚构情境可以重跑，不代表任何真实漏洞、受影响资产或安全批准。"
+          },
+          "en": {
+            "title": "Run it yourself: KEV Review Packet starter",
+            "text": "This downloadable exercise uses an invented vulnerability record shaped like public fields. It only builds a packet for human review; incomplete source fields, private data, or a request for a real security action are rejected. It includes a blank `NOT_ACQUIRED` static-source receipt template for a copy you later retain yourself; it does not turn the fixture into public data.",
+            "download": "Download the runnable English starter (.zip)",
+            "readme": "Read the English README first",
+            "boundary": "Extract it before running the commands. It has no API key, network, or model call and cannot scan, patch, create a ticket, or inspect a system; it only shows that fixed fictional cases can be repeated, not a real vulnerability, affected asset, or security approval."
+          }
+        }
+      },
+      "copy": {
+        "zh-HK": {
+          "decision": "由一份按來源欄位設計嘅 KEV record fixture，決定交出 evidence packet 定拒絕 source；之後由 security reviewer 判斷，唔會 scan、patch 或開 ticket。",
+          "dataAndModel": "只用 fixture record、source manifest 同固定 cases。Promptfoo 同 gpt-5-mini Responses file 只係預留做教學示範嘅設定檔，冇執行 live evaluation。",
+          "doesNotProve": "唔證明任何組織受影響、漏洞狀態、remediation decision、live model result 或 security approval。"
+        },
+        "zh-TW": {
+          "decision": "從一份依來源欄位設計的 KEV record fixture，決定交出 evidence packet 或拒絕 source；後續由 security reviewer 判斷，不會 scan、patch 或開 ticket。",
+          "dataAndModel": "只使用 fixture record、source manifest 與固定 cases。Promptfoo 與 gpt-5-mini Responses file 只是保留作教學示範的設定檔，沒有執行 live evaluation。",
+          "doesNotProve": "不證明任何組織受影響、漏洞狀態、remediation decision、live model result 或 security approval。"
+        },
+        "zh-Hans": {
+          "decision": "从一份按来源栏位设计的 KEV record fixture，决定交出 evidence packet 或拒绝 source；后续由 security reviewer 判断，不会 scan、patch 或开 ticket。",
+          "dataAndModel": "只使用 fixture record、source manifest 与固定 cases。Promptfoo 与 gpt-5-mini Responses file 只是保留作教学示范的设定档，没有执行 live evaluation。",
+          "doesNotProve": "不证明任何组织受影响、漏洞状态、remediation decision、live model result 或 security approval。"
+        },
+        "en": {
+          "decision": "Choose whether a KEV record fixture with source fields becomes an evidence packet or is rejected; a security reviewer decides what follows, with no scanning, patching, or ticket creation.",
+          "dataAndModel": "Uses a fixture record, source manifest, and fixed cases. The Promptfoo and gpt-5-mini Responses files are optional local teaching configurations; no live evaluation is run.",
+          "doesNotProve": "It does not establish organisational exposure, vulnerability status, a remediation decision, a live-model result, or security approval."
+        }
+      }
+    },
+    {
+      "exampleId": "workforce-signal-brief",
+      "articleSlug": "build-a-source-bound-context-brief",
+      "localCommands": ["npm test", "npm run fixture:validate", "npm run demo", "npm run eval:diff"],
+      "readerStarter": {
+        "downloadHref": "/templates/workforce-signal-brief-starter/v1/workforce-signal-brief-starter-v1.zip",
+        "readmeHref": {
+          "zh-HK": "/templates/workforce-signal-brief-starter/v1/README.zh-HK.md",
+          "zh-TW": "/templates/workforce-signal-brief-starter/v1/README.zh-TW.md",
+          "zh-Hans": "/templates/workforce-signal-brief-starter/v1/README.zh-Hans.md",
+          "en": "/templates/workforce-signal-brief-starter/v1/README.md"
+        },
+        "commands": ["npm test", "npm run demo"],
+        "copy": {
+          "zh-HK": {
+            "title": "自己跑一次：Workforce Signal Brief starter",
+            "text": "呢份可下載練習只用虛構月度數字。佢會檢查一張來源資料紀錄夠唔夠資料畀人寫背景摘要；唔會估職位市場，亦唔會作任何招聘或薪酬決定。",
+            "download": "下載可執行 English starter (.zip)",
+            "readme": "先睇繁中（香港）README",
+            "boundary": "解壓後先跑指令。全程冇 API key、網絡或模型呼叫，亦冇拉取公開數字；呢份練習只證明固定虛構情境可以重跑，唔代表現時統計、預測能力、商業價值或發佈批准。"
+          },
+          "zh-TW": {
+            "title": "自己執行一次：Workforce Signal Brief starter",
+            "text": "這份可下載練習只使用虛構月度數字。它檢查一張來源收據是否有足夠資料讓人寫背景摘要；不會預測職務市場，也不會作任何招聘或薪酬決定。",
+            "download": "下載可執行 English starter (.zip)",
+            "readme": "先看繁中（台灣）README",
+            "boundary": "請先解壓再執行指令。全程沒有 API key、網路或模型呼叫，也沒有擷取公開數字；它只證明固定虛構情境可以重跑，不代表目前統計、預測能力、商業價值或發布核准。"
+          },
+          "zh-Hans": {
+            "title": "自己运行一次：Workforce Signal Brief starter",
+            "text": "这份可下载练习只使用虚构月度数字。它检查一张来源收据是否有足够资料让人写背景摘要；不会预测职位市场，也不会作任何招聘或薪酬决定。",
+            "download": "下载可运行 English starter (.zip)",
+            "readme": "先看简体中文 README",
+            "boundary": "请先解压再运行指令。全程没有 API key、网络或模型调用，也没有获取公开数字；它只证明固定虚构情境可以重跑，不代表当前统计、预测能力、商业价值或发布批准。"
+          },
+          "en": {
+            "title": "Run it yourself: Workforce Signal Brief starter",
+            "text": "This downloadable exercise uses invented monthly numbers only. It checks whether a source receipt is complete enough for a person to write background context; it does not forecast a job market or make a hiring or pay decision.",
+            "download": "Download the runnable English starter (.zip)",
+            "readme": "Read the English README first",
+            "boundary": "Extract it before running the commands. It has no API key, network, or model call and fetches no public numbers; it only shows that fixed fictional cases can be repeated, not a current statistic, forecasting ability, business value, or publication approval."
+          }
+        }
+      },
+      "copy": {
+        "zh-HK": {
+          "decision": "判斷一份按來源欄位設計嘅 monthly-series fixture，夠唔夠交畀人寫 context brief；唔作 hiring、pay、個人工作選擇、forecast 或 publication decision。",
+          "dataAndModel": "只用合成 monthly series、source manifest 同固定 cases。Promptfoo 同 gpt-5-mini Responses file 只係預留做教學示範嘅設定檔，冇拉取 live statistics。",
+          "doesNotProve": "唔證明勞動市場現況、招聘趨勢、薪酬、個人工作結果、預測、live model result 或發佈批准。"
+        },
+        "zh-TW": {
+          "decision": "判斷一份依來源欄位設計的 monthly-series fixture 是否足以交給人撰寫 context brief；不做 hiring、pay、個人職涯、forecast 或 publication decision。",
+          "dataAndModel": "只使用合成 monthly series、source manifest 與固定 cases。Promptfoo 與 gpt-5-mini Responses file 只是保留作教學示範的設定檔，沒有擷取 live statistics。",
+          "doesNotProve": "不證明勞動市場現況、招聘趨勢、薪酬、個人職涯結果、預測、live model result 或發布核准。"
+        },
+        "zh-Hans": {
+          "decision": "判断一份按来源栏位设计的 monthly-series fixture 是否足以交给人撰写 context brief；不做 hiring、pay、个人职业、forecast 或 publication decision。",
+          "dataAndModel": "只使用合成 monthly series、source manifest 与固定 cases。Promptfoo 与 gpt-5-mini Responses file 只是保留作教学示范的设定档，没有拉取 live statistics。",
+          "doesNotProve": "不证明劳动力市场现况、招聘趋势、薪酬、个人职业结果、预测、live model result 或发布批准。"
+        },
+        "en": {
+          "decision": "Decide whether a monthly-series fixture with source fields is sufficient for a person to write a context brief; it cannot determine hiring, pay, an individual's next career move, a forecast, or publication.",
+          "dataAndModel": "Uses a synthetic monthly series, source manifest, and fixed cases. The Promptfoo and gpt-5-mini Responses files are optional local teaching configurations; no live statistics are fetched.",
+          "doesNotProve": "It does not establish labour-market conditions, hiring trends, pay, individual career outcomes, a forecast, a live-model result, or publication approval."
+        }
+      }
+    }
+  ]
+}

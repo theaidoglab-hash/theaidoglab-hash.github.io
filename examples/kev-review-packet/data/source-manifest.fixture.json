@@ -1,0 +1,38 @@
+{
+  "manifestVersion": "1.0",
+  "fixtureId": "cisa-kev-cve-2022-40684-fixture-v1",
+  "acquisitionMode": "fixture_not_live_acquired",
+  "fixturePreparedAt": "2026-09-24",
+  "snapshotAsOf": "2026-09-24",
+  "recordClassification": "public_cisa_kev_fields_only",
+  "sourceReceipt": {
+    "canonicalFeed": {
+      "title": "CISA Known Exploited Vulnerabilities Catalog JSON feed",
+      "catalogUrl": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "feedUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+      "role": "Canonical public data route for a later, separately approved acquisition step. This package does not retrieve it."
+    },
+    "schema": {
+      "title": "CISA KEV JSON schema in the official cisagov repository",
+      "schemaUrl": "https://github.com/cisagov/kev-data/blob/develop/known_exploited_vulnerabilities_schema.json",
+      "role": "Schema reference used to constrain the public KEV field set in this teaching fixture."
+    },
+    "license": {
+      "title": "CISA KEV CC0 license",
+      "licenseUrl": "https://www.cisa.gov/sites/default/files/licenses/kev/license.txt",
+      "license": "CC0 1.0 Universal",
+      "role": "Public-data licensing receipt for the catalog route."
+    },
+    "australianOperationalContext": {
+      "title": "ACSC: Patching applications and operating systems",
+      "guidanceUrl": "https://www.cyber.gov.au/sites/default/files/2025-03/Patching%20applications%20and%20operating%20systems%20%28November%202023%29.pdf",
+      "role": "Australian operational context only. It does not convert a CISA due date into an Australian service-level agreement."
+    }
+  },
+  "nonClaims": [
+    "The fixture was not downloaded during a demo, test, or CI run.",
+    "The fixture is not a current or complete copy of the CISA KEV catalog.",
+    "No organisation, asset, network, contact, ticket, client, or vulnerability-scan data is present.",
+    "A CISA due date is copied source data and is not an Australian service-level agreement."
+  ]
+}

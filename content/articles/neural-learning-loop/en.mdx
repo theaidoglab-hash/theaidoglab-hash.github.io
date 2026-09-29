@@ -1,0 +1,19 @@
+Training is not “feed data and wait for intelligence.” It repeats four inspectable actions: turn input into a prediction, measure the error, update parameters in a direction that can reduce it, then validate on data the model did not see during training.
+
+## See the learning loop with a small classification task
+
+Imagine routing completely synthetic FAQ cases as `supported` or `handoff`. A **representation** turns input into features the model can compute with. The **target** is a pre-defined correct route. After a prediction, **loss** turns the difference from that target into a training signal.
+
+A **gradient** indicates the small direction in which each parameter could move to reduce loss. **Backpropagation** calculates that signal from output back through earlier layers; an optimizer decides the size of each update. It does not prove the model learned a real causal relationship. It only reduces the current training objective.
+
+## Why falling loss may still be unusable
+
+When train loss falls while validation loss worsens, **overfitting** is a common explanation: the model remembered accidental details in the training set instead of a pattern that extends. Other causes include duplicate data, ambiguous targets, a split that leaks future information, or validation cases that do not represent the later decision.
+
+Do not start by choosing a larger network. Inspect inputs and targets, confirm time boundaries, preserve a simple baseline, group errors by failure family in a confusion matrix, then adjust representation, model, or optimisation. If a rule or human review is sufficient, that is also a useful result.
+
+## Evidence worth keeping
+
+Build a one-page training note with synthetic data: data version and split rule, baseline, metric, train/validation curve, two error cases, the next hypothesis, and actions the system will not take. It demonstrates judgement beyond a screenshot of a loss curve.
+
+Continue with [why a higher model score may not be a better decision](/en/articles/model-score-to-workflow-decision) and [moving from Transformer mechanics to model choice](/en/articles/choose-transformer-generation-and-adaptation-tradeoffs).

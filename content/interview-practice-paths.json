@@ -1,0 +1,277 @@
+{
+  "index": {
+    "zh-HK": {
+      "eyebrow": "由一個缺口開始",
+      "title": "唔好由題號開始：由你而家欠緊嘅證據入手",
+      "intro": "每條路只有四題。手上已有作品、模型或示範，就揀最貼近眼前問題嗰條；未有作品，就由「未有作品」開始。每答一題留低一小段記錄，下一題會幫你補足做法同容易出錯嘅位。唔使一次背晒 59 條。",
+      "stepLabel": ["情境", "原理", "最常漏講嘅界線", "用記錄支持答案"],
+      "evidenceTaskLabel": "做完留低",
+      "finalLabel": "由最後一題開始模擬面試"
+    },
+    "zh-TW": {
+      "eyebrow": "從一個缺口開始",
+      "title": "別從題號開始：先補你眼前缺的證據",
+      "intro": "每條路只有四題。已有作品、模型或示範，就選最貼近眼前問題的路；還沒有作品，就從「還沒有作品」開始。每答一題，留下一小段記錄；下一題會帶你補足做法與容易出錯的位置。不需要一次背完 59 題。",
+      "stepLabel": ["情境", "原理", "最常漏掉的邊界", "用記錄支持答案"],
+      "evidenceTaskLabel": "做完留下",
+      "finalLabel": "從最後一題開始模擬面試"
+    },
+    "zh-Hans": {
+      "eyebrow": "从一个缺口开始",
+      "title": "别从题号开始：先补你眼前缺的证据",
+      "intro": "每条路只有四题。已有作品、模型或演示，就选最贴近眼前问题的路；还没有作品，就从“还没有作品”开始。每答一题，留下一小段记录；下一题会带你补足做法与容易出错的位置。不需要一次背完 59 题。",
+      "stepLabel": ["情境", "原理", "最常遗漏的边界", "用记录支持答案"],
+      "evidenceTaskLabel": "做完留下",
+      "finalLabel": "从最后一题开始模拟面试"
+    },
+    "en": {
+      "eyebrow": "START FROM A REAL GAP",
+      "title": "Do not start with a question number. Start with the evidence you are missing.",
+      "intro": "Each route has four questions. If you already have a demo, model, or project, choose the route closest to its gap. If you do not have a project yet, start with the no-project route. Leave a small piece of evidence at each step, then use the next question to make the mechanism and likely failure clearer. The point is not to memorise all 59 questions at once.",
+      "stepLabel": ["Scenario", "Mechanism", "Boundary people miss", "Answer with evidence"],
+      "evidenceTaskLabel": "Keep after this step",
+      "finalLabel": "Start a live rehearsal from the final question"
+    }
+  },
+  "paths": [
+    {
+      "id": "no-project-first-evidence",
+      "topicSlugs": [
+        "a-baseline-is-not-a-benchmark-winner",
+        "prompt-contracts-need-an-acceptance-test",
+        "treat-untrusted-documents-as-data",
+        "a-public-dataset-needs-a-source-receipt"
+      ],
+      "evidenceTasks": [
+        {
+          "zh-HK": "寫低一個虛構、低風險決定，並列出「暫時唔自動化」或一條簡單規則作比較基準，連同一個必須交畀人睇嘅情況。",
+          "zh-TW": "寫下一個虛構、低風險決策，並列出「暫時不自動化」或一條簡單規則作為比較基準，以及一個必須交給人看的情況。",
+          "zh-Hans": "写下一个虚构、低风险决策，并列出“暂时不自动化”或一条简单规则作为比较基准，以及一个必须交给人看的情况。",
+          "en": "Write down one fictional, low-risk decision, then name either “do not automate yet” or one simple rule as the baseline and one case that must go to a person."
+        },
+        {
+          "zh-HK": "用同一個虛構情境寫三行：輸入可以係乜、草稿必須有乜、遇到邊一種情況要停低交畀人。",
+          "zh-TW": "用同一個虛構情境寫三行：輸入可以是什麼、草稿必須有什麼、遇到哪種情況要停下來交給人。",
+          "zh-Hans": "用同一个虚构情境写三行：输入可以是什么、草稿必须有什么、遇到哪种情况要停下来交给人。",
+          "en": "For the same fictional situation, write three lines: what may enter, what a draft must contain, and which condition must stop and go to a person."
+        },
+        {
+          "zh-HK": "寫一段兩句嘅虛構上傳文字，分兩欄標記：邊句只可當資料，邊句絕對唔可以改變工具權限或下一步行動；再寫一個人手交接。",
+          "zh-TW": "寫一段兩句的虛構上傳文字，分兩欄標記：哪句只能當資料，哪句絕不能改變工具權限或下一步行動；再寫一個人工交接。",
+          "zh-Hans": "写一段两句的虚构上传文字，分两栏标记：哪句只能当资料，哪句绝不能改变工具权限或下一步行动；再写一个人工交接。",
+          "en": "Write two fictional uploaded sentences. Mark which is data only and which must never change tool permission or the next action, then name one human handoff."
+        },
+        {
+          "zh-HK": "為一份公開資料寫一張 `source-receipt.md` 小卡：URL、查看日期、你會用嘅欄位、未能核對嘅事，以及未清楚前唔可以作出嘅結論。",
+          "zh-TW": "為一份公開資料寫一張 `source-receipt.md` 小卡：URL、查看日期、你會使用的欄位、尚未能核對的事，以及未釐清前不能作出的結論。",
+          "zh-Hans": "为一份公开资料写一张 `source-receipt.md` 小卡：URL、查看日期、会使用的字段、还不能核对的事，以及未厘清前不能作出的结论。",
+          "en": "Make a small `source-receipt.md` for one public source: URL, access date, fields you would use, what you cannot verify, and a conclusion you must not make yet."
+        }
+      ],
+      "copy": {
+        "zh-HK": {
+          "title": "未有作品：四條題，留下第一份可追問嘅記錄",
+          "description": "適合未有示範或作品集。四個虛構、低風險練習各自留低一份短記錄；唔需要 API 金鑰、真實資料或模型。"
+        },
+        "zh-TW": {
+          "title": "還沒有作品：四題留下第一份可被追問的證據",
+          "description": "適合還沒有示範或作品集。四個虛構、低風險練習各自留下可帶到下一題的短記錄；不需要 API 金鑰、真實資料或模型。"
+        },
+        "zh-Hans": {
+          "title": "还没有作品：四题留下第一份可被追问的证据",
+          "description": "适合还没有演示或作品集。四个虚构、低风险练习各自留下可带到下一题的短记录；不需要 API 密钥、真实数据或模型。"
+        },
+        "en": {
+          "title": "No project yet: leave your first defensible evidence in four questions",
+          "description": "For readers without a demo or portfolio yet. Four fictional, low-risk exercises leave notes you can carry into the next question; no API key, real data, or model is needed."
+        }
+      }
+    },
+    {
+      "id": "rag-demo-to-evidence",
+      "topicSlugs": [
+        "rag-retrieval-generation-or-permission",
+        "high-similarity-is-not-relevance",
+        "a-reranker-cannot-restore-a-missing-permission",
+        "a-project-story-needs-a-counterexample"
+      ],
+      "copy": {
+        "zh-HK": {
+          "title": "RAG／AI 助手示範：將流暢答案變成可追問嘅記錄",
+          "description": "適合已有檢索或 AI 助手示範，卻未講清楚問題出在搵資料、生成回答，定係資料權限。"
+        },
+        "zh-TW": {
+          "title": "RAG／AI 助手示範：從流暢答案走到可被追問的證據",
+          "description": "適合已有檢索或 AI 助手示範，卻尚未說清問題究竟出在找資料、生成回答，還是資料權限。"
+        },
+        "zh-Hans": {
+          "title": "RAG／AI 助手演示：从流畅答案走到可被追问的证据",
+          "description": "适合已有检索或 AI 助手演示，却还没说清问题究竟出在找资料、生成回答，还是资料权限。"
+        },
+        "en": {
+          "title": "A RAG or agent demo: from fluent answer to defensible evidence",
+          "description": "For a retrieval or agent demo where you still cannot say whether the failure belongs to retrieval, generation, or permission."
+        }
+      }
+    },
+    {
+      "id": "ml-score-to-decision",
+      "topicSlugs": [
+        "offline-score-and-human-workflow",
+        "a-model-metric-is-not-a-business-metric",
+        "a-random-split-can-know-the-future",
+        "project-deep-dive-and-role-fit"
+      ],
+      "copy": {
+        "zh-HK": {
+          "title": "機器學習作品：分數以外，仲要講清真人點用",
+          "description": "適合已有分類、預測或排序作品，但只會講模型分數，未講到人手容量、時間界線同實際工作流程嘅人。"
+        },
+        "zh-TW": {
+          "title": "機器學習作品：從離線分數走到人可以使用的決策",
+          "description": "適合已有分類、預測或排序作品，但只會談模型分數，還沒談到人手容量、時間界線與實際工作流程的人。"
+        },
+        "zh-Hans": {
+          "title": "机器学习作品：从离线分数走到人可以使用的决策",
+          "description": "适合已有分类、预测或排序作品，但只会谈模型分数，还没谈到人手容量、时间界线与实际工作流程的人。"
+        },
+        "en": {
+          "title": "An ML project: from offline score to a decision people can use",
+          "description": "For a classifier, forecast, or ranking project that can report a metric but not yet explain capacity, time boundaries, or the human workflow."
+        }
+      }
+    },
+    {
+      "id": "build-to-reliable-release",
+      "topicSlugs": [
+        "trace-p99-latency-before-adding-gpus",
+        "a-retry-is-not-a-recovery-plan",
+        "a-queue-needs-a-dead-letter-path",
+        "a-rollout-needs-a-safe-baseline"
+      ],
+      "copy": {
+        "zh-HK": {
+          "title": "軟件實作：慢、失敗同回退都要有交代",
+          "description": "適合已有功能、批次工作或 AI 助手流程，仲未講清延遲、復原、未能處理嘅訊息同回退方法。"
+        },
+        "zh-TW": {
+          "title": "軟體實作：從「做得到」走到可靠上線",
+          "description": "適合你已有功能、批次工作或 AI 助手流程，但還沒有交代延遲、復原、無法處理的訊息與回退方法。"
+        },
+        "zh-Hans": {
+          "title": "软件实现：从“做得到”走到可靠上线",
+          "description": "适合你已有功能、批量工作或 AI 助手流程，但还没有交代延迟、恢复、无法处理的消息与回退方法。"
+        },
+        "en": {
+          "title": "A software build: from “it works” to a dependable release",
+          "description": "For a feature, batch job, or agent workflow that lacks a story about latency, recovery, dead letters, and rollback."
+        }
+      }
+    },
+    {
+      "id": "portfolio-deep-dive",
+      "topicSlugs": [
+        "project-deep-dive-and-role-fit",
+        "a-project-story-needs-a-counterexample",
+        "a-model-metric-is-not-a-business-metric",
+        "release-or-rollback-with-evidence"
+      ],
+      "copy": {
+        "zh-HK": {
+          "title": "已有作品集：用四題練好 90 秒專案說明",
+          "description": "適合你已有一個專案，但一被追問就只會由技術組合、示範或單一分數講起的人。"
+        },
+        "zh-TW": {
+          "title": "已有作品集：用四題練好 90 秒專案說明",
+          "description": "適合你已有一個專案，但一被追問就只會從技術組合、示範或單一分數開始說的人。"
+        },
+        "zh-Hans": {
+          "title": "已有作品集：用四题练好 90 秒项目说明",
+          "description": "适合你已有一个项目，但一被追问就只会从技术组合、演示或单一分数开始说的人。"
+        },
+        "en": {
+          "title": "An existing portfolio: rehearse a 90-second project deep dive in four questions",
+          "description": "For a project you can show but cannot yet defend beyond its tech stack, demo, or one headline score."
+        }
+      }
+    }
+  ],
+  "afterDemoPaths": [
+    {
+      "id": "rag-after-first-demo",
+      "trackId": "retrieval-rag",
+      "topicSlugs": [
+        "rag-retrieval-generation-or-permission",
+        "a-reranker-cannot-restore-a-missing-permission",
+        "conflicting-sources-need-an-owner",
+        "an-embedding-change-needs-an-index-migration",
+        "metadata-needs-a-backfill-contract",
+        "a-document-deletion-needs-a-retrieval-receipt"
+      ],
+      "copy": {
+        "zh-HK": {
+          "eyebrow": "第一個 RAG demo 做完之後",
+          "title": "沿住同一條 retrieval path，練到文件撤回",
+          "description": "先由同一個錯答分清 retrieval、generation 同 permission；之後順序練 reranking、來源衝突、索引更換、中繼資料回填同文件撤回。",
+          "action": "由診斷呢條問題開始"
+        },
+        "zh-TW": {
+          "eyebrow": "做完第一個 RAG demo 之後",
+          "title": "沿著同一條 retrieval path，練到文件撤回",
+          "description": "先從同一個錯答分清 retrieval、generation 與 permission；接著依序練 reranking、來源衝突、索引更換、中繼資料回填與文件撤回。",
+          "action": "從診斷這題開始"
+        },
+        "zh-Hans": {
+          "eyebrow": "做完第一个 RAG demo 之后",
+          "title": "沿着同一条 retrieval path，练到文档撤回",
+          "description": "先从同一个错答分清 retrieval、generation 与 permission；接着依次练 reranking、来源冲突、索引更换、元数据回填与文档撤回。",
+          "action": "从诊断这题开始"
+        },
+        "en": {
+          "eyebrow": "AFTER YOUR FIRST RAG DEMO",
+          "title": "Follow one retrieval path through document withdrawal",
+          "description": "Start by separating retrieval, generation, and permission in one wrong answer. Then move through reranking, conflicting sources, an index change, metadata backfill, and document withdrawal in order.",
+          "action": "Start with the diagnosis question"
+        }
+      }
+    },
+    {
+      "id": "agent-after-first-demo",
+      "trackId": "agent-systems",
+      "topicSlugs": [
+        "agent-draft-without-consequential-actions",
+        "an-agent-loop-needs-terminal-states",
+        "an-agent-eval-needs-a-route-verdict",
+        "tool-schema-is-not-least-privilege",
+        "mcp-discovery-is-not-an-approval-gate",
+        "memory-must-expire-before-it-becomes-policy"
+      ],
+      "copy": {
+        "zh-HK": {
+          "eyebrow": "第一個 agent demo 做完之後",
+          "title": "由草稿開始，逐步收緊 agent 邊界",
+          "description": "沿住同一個虛構、只可草擬嘅 agent 情境，依序講清停止條件、點樣判斷 run route、工具最小權限、MCP 連接前嘅批准，同埋會過期嘅記憶；唔涉及真實帳戶、資料或自動執行。",
+          "action": "由草稿權限呢題開始"
+        },
+        "zh-TW": {
+          "eyebrow": "做完第一個 agent demo 之後",
+          "title": "從草稿開始，逐步收緊 agent 的邊界",
+          "description": "沿著同一個虛構、只能產生草稿的 agent 情境，依序說明停止條件、如何判斷 run route、工具最小權限、MCP 連線前的核准，以及會到期的記憶；不涉及真實帳戶、資料或自動執行。",
+          "action": "從草稿權限這題開始"
+        },
+        "zh-Hans": {
+          "eyebrow": "做完第一个 agent demo 之后",
+          "title": "从草稿开始，逐步收紧 agent 的边界",
+          "description": "沿着同一个虚构、只能产出草稿的 agent 情境，依次说明停止条件、如何判断 run route、工具最小权限、MCP 连接前的批准，以及会到期的记忆；不涉及真实账户、数据或自动执行。",
+          "action": "从草稿权限这题开始"
+        },
+        "en": {
+          "eyebrow": "AFTER YOUR FIRST AGENT DEMO",
+          "title": "Start with drafts, then tighten each agent boundary",
+          "description": "Follow one fictional, draft-only agent scenario through stop states, route verdicts, least privilege, approval before MCP use, and expiring memory. It uses no real account, data, or automated action.",
+          "action": "Start with the draft-permission question"
+        }
+      }
+    }
+  ]
+}

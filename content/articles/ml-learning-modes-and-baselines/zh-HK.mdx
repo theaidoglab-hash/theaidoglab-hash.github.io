@@ -1,0 +1,36 @@
+揀 model 之前，先答一條更基本的問題：當人或者系統要作決定嗰刻，手上究竟有咩證據？如果有可信的舊結果，可能係 supervised learning；如果只有一堆觀察、想先理解有冇規律，可能係 exploratory work。兩種工作混埋一齊，最後就會變成一個睇落整齊、但講唔清幫到邊個決定的 notebook。
+
+## 由決定開始
+
+想像一個虛構的營運團隊，每朝只夠人手覆核五十宗服務個案。問題要落在決定上：「根據覆核前已經有的資料，哪五十宗應該先交畀人睇？」分群只是一種可能方法。
+
+**Supervised learning** 適合有清楚 target 的情況，例如受過訓練的同事在一套相對穩定的準則下，後來有冇把個案升級處理。決定前的資料變成 feature；舊的處理結果成為 label。Model 可以估計新個案與以往升級個案有幾相似，但唔代表它找到所有高風險個案，更唔代表舊政策本身公平。
+
+**Unsupervised learning** 做的是另一件事：它可以把模式相近的個案放在一起，或者標出很不尋常的紀錄。這對分析員探索一批新資料有用，但一個 cluster 編號不是緊急程度。人仍要判斷這個分組代表甚麼，以及是否值得採取行動。
+
+介乎兩者之間亦很常見：label 可能來自規則、真正結果要幾個月後才出現，或者只有少量個案由人標註。把這些不確定性寫清楚。比起因為某種方法聽起來較高級而選它，作品集更能證明判斷力的是：learning mode 有沒有對應到手上的證據。
+
+## Baseline 是第一個誠實的對手
+
+Training 之前，先寫下團隊不用 model 時可以怎樣做。對這條覆核隊列來說，可能是：
+
+- 明確緊急的個案跟已公布的 rule；
+- 每種 request type 的歷史升級率；
+- 上一段時間的簡單估計；或
+- 依到達次序讓同事看下一批五十宗。
+
+Baseline 不是儀式。它讓你知道 model 的額外複雜度有沒有真的改善決定。如果 request type 的歷史比率已經幾乎一樣準，它可能更容易解釋、監察和修正。如果 model 只在隨機切分裡贏、在較後的時間段卻輸，就未足以改變 workflow。
+
+## 令邊界可以被覆核
+
+做一頁 **learning-mode decision record**：寫下誰擁有這個決定、系統只可以建議甚麼行動、observation cutoff 在哪裡、target 怎樣定義，以及為何這個 target 可不可以信。列一個 non-model baseline，和開始小型試行前必須看到的結果。再加一條 refusal：prototype 不會自動結案、扣分或聯絡任何人。
+
+保留一小段有日期的 evaluation slice，用同一批 case 比較 baseline 和 candidate。除了看單一平均分數，也要按 request type 看 false positive 和 false negative。任何用來比較的 input，都應該能追溯到當初作決定時已經存在的資料。
+
+## 值得如實報告的失敗
+
+歷史 label 常常記錄的是舊流程，不是 ground truth。用過去的升級結果去訓練，可能把人手不足、覆核標準不一致，或已經改掉的規則一併學進去。Unsupervised cluster 也可能很漂亮，但完全沒有改變任何可負責的行動。兩者之中，「我們發現了一個 pattern」都比不上「我們把有限的建議拿去跟一個清楚 baseline 比過」。
+
+對 AI／data 職位來說，判斷本身就是證據：為一個真實決定選對 learning mode、留下較簡單的替代方案、交代 label 的限制，並保留讓人不同意 model 的位置。
+
+延伸閱讀：[用 linear 與 logistic model 連接分數和決定](/zh-HK/articles/linear-logistic-and-feature-decisions) 與 [model 分數升了，workflow 為何未必更好](/zh-HK/articles/model-score-to-workflow-decision)。

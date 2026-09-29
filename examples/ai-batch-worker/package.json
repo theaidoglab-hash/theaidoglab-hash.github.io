@@ -1,0 +1,23 @@
+{
+  "name": "ai-batch-worker-reference",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Synthetic, local-only document-enrichment batch worker reference",
+  "license": "MIT",
+  "keywords": [
+    "batch-worker",
+    "checkpoint",
+    "idempotency",
+    "retry",
+    "synthetic-data",
+    "portfolio"
+  ],
+  "scripts": {
+    "demo": "node demo.mjs",
+    "test": "node --test test/ai-batch-worker.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

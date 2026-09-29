@@ -1,0 +1,38 @@
+“The loss went down” is not a product result. It only says the model became better at the mathematical objective you supplied on a particular set of examples. The work is deciding whether that objective represents a useful decision and whether the improvement survives new data.
+
+## Put a price on the error you actually care about
+
+Consider a fictional team forecasting how many appointment requests will miss a service window. A loss function compresses prediction error into a number the optimiser can minimise. Squared error makes large misses count disproportionately; absolute error treats every additional missed appointment more evenly. Neither is universally right. If the team plans staffing, an error in cases may be more meaningful than an abstract score. If an under-forecast is much more costly than an over-forecast, record that asymmetry instead of hoping the default loss knows it.
+
+Loss and an evaluation metric can differ on purpose. You may train with one smooth objective and evaluate with an operational measure such as errors within an acceptable staffing band. The missing step is an explicit explanation of why each one exists.
+
+## Generalisation is the test outside the notebook
+
+A model **generalises** when it works reasonably on relevant data it did not see while its choices were being tuned. Keep the final test period separate. Use a validation period to compare model settings, then look at the final test only once the decision is ready. For time-dependent work, a later period is often more realistic than a random shuffle.
+
+The gap matters. Very low training loss with worse validation loss suggests that the model may be memorising accidental features. Similar training and validation loss can still be bad if both data slices miss an important group, season or failure mode. A simpler baseline must stay in the comparison so that “better” has a real meaning.
+
+## Regularisation is a constraint, not a cure
+
+**Regularisation** adds a preference for simpler parameter values while training. L2 regularisation discourages very large weights; L1 regularisation can push some weights to zero. In plain terms, it makes it harder for the model to rely too heavily on one fragile detail. It can reduce overfitting, but it cannot repair an ambiguous label, a future-information leak, missing consent or a badly chosen decision.
+
+Do not present the penalty value as a magic setting. Compare a small set of values, record the data split and look at both error curves. A penalty that is too weak may not change the brittle fit; one that is too strong can underfit and miss useful patterns.
+
+## An experiment record that survives review
+
+For every candidate, keep an **experiment card** with:
+
+- the exact target and loss definition;
+- data version, observation cutoff and split rule;
+- baseline and model configuration;
+- training, validation and final-test results in operational units;
+- error slices and a few reviewed misses; and
+- the decision: proceed to a bounded human-review trial, revise the data, or stop.
+
+Treat the final test as a receipt, not a tuning dashboard. Repeatedly changing settings after inspecting it turns it into another validation set and makes the reported result too optimistic.
+
+## What regularisation cannot promise
+
+Regularisation does not make a model fair, private, causal or ready for deployment. A smooth validation curve can coexist with a harmful action threshold. If the model changes a queue, compare the consequences against a rule or human baseline and give someone authority to override it. If no option beats the baseline on the decision that matters, the honest outcome is to keep the baseline.
+
+Continue with [how gradients and backpropagation make the objective move](/en/articles/gradient-backprop-and-loss-debugging) and [the neural learning loop before you tune](/en/articles/understand-neural-learning-before-you-tune).

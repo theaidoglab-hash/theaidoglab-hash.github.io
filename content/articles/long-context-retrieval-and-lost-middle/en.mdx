@@ -1,0 +1,54 @@
+A reviewer pastes a long policy handbook into an assistant and asks one narrow question. The correct exception is on page twelve, between sections that mention the same product family. The response confidently quotes the introduction instead. Increasing the context window may let the model receive more text, but it does not prove that the relevant evidence will be selected, retained, or used in the final route.
+
+## The decision this lesson supports
+
+You should be able to decide whether a failure needs more context, better retrieval, different document structure, or a safe handoff. The artefact is a controlled evidence-coverage test, not a screenshot of a long prompt that happened to work once.
+
+## Context window and retrieval do different jobs
+
+A **context window** is the bounded input the model can process for one request. It can contain instructions, a user request, retrieved passages, prior conversation, structured fields, and output tokens being generated. A larger window can reduce the need to cut a document early, but it also increases input work, cost proxy, and the amount of competing material the model must handle.
+
+**Retrieval** is a separate system step. It looks through an approved collection, uses a query and metadata constraints to identify candidate passages, ranks them, and assembles a limited evidence package for the model. The goal is not to send “as much as possible.” The goal is to send the right, current, permitted evidence in a form a reviewer can inspect.
+
+The phrase “lost in the middle” describes a practical test pattern: a system can handle an answer near the start or end of a long context yet fail to use the same evidence when it sits among distracting text. Treat it as a reason to test position and context assembly, not as a universal claim about every model or every workload.
+
+## Build a document-position evaluation
+
+Use a fictional, versioned policy corpus with no personal data. Make a fixed question whose answer is supported by one named passage. Place that passage at the beginning, middle, and end of otherwise comparable contexts. Add a near-match passage that sounds relevant but is explicitly not the correct policy. Then run these paths:
+
+| Path | What enters the model | What to measure |
+| --- | --- | --- |
+| whole-document baseline | a bounded full handbook | correct source ID, correct route, input size, latency |
+| metadata-first retrieval | only passages from the relevant policy version and category | evidence recall, exclusion of stale versions, route |
+| retrieval plus compact context | top approved passages plus task contract | grounding, missing-evidence handoff, review edit rate |
+
+For every case, record the source version, query, selected passage IDs, discarded candidates, position of the true evidence, output, validator result, and reviewer judgment. A retrieval score alone is not enough. A high-scoring passage may still be outdated, too broad, or wrong for the decision.
+
+## Make the assembly rule inspectable
+
+An evidence package should answer four questions before it reaches the model:
+
+1. Which policy version is allowed for this case?
+2. Which metadata fields can narrow the search: category, jurisdiction, product, effective date, or permission boundary?
+3. How many passages fit the context budget, and how are duplicates or overlaps removed?
+4. What happens when no passage supports the answer, or two approved passages conflict?
+
+The final rule might say: return `HANDOFF` if no single approved source supports the route; cite the source ID and version in every draft; exclude documents outside the request's jurisdiction; never use a retrieved passage to execute an action. That is more useful than a vague claim that the system is “RAG-powered.”
+
+## Long context has real trade-offs
+
+Sending the complete handbook can preserve cross-section detail and reduce retrieval misses. It can also delay the first response, crowd out the task instruction, and make it harder to inspect what influenced the result. Aggressive chunking can improve search precision but split a condition from its exception. A small top-k can miss a necessary qualifier; a large top-k can return a noisy pile of near matches.
+
+There is no universal chunk size or context limit. Use an evaluation set that includes the failure shapes your product could actually encounter: conflicting revisions, a key condition in the middle, a stale but similar policy, an answer that requires two linked sections, and a case where the safest output is “insufficient evidence.”
+
+## Evidence that is useful beyond a demo
+
+Keep `retrieval-coverage.md`, a source manifest, the position-controlled cases, query and metadata rules, the retrieved evidence receipts, and a results table. Include one failure that changed the design. State which version supported a draft and when the system refused to guess. Explain that longer input is not automatically better context; relevance, authority, coverage, and traceability must be tested separately.
+
+That is a credible AI-engineering story: you did not mistake a large context window for a knowledge system. You compared a baseline, set a retrieval contract, and retained the evidence a human needs to challenge the result.
+
+Continue with [why high similarity can still retrieve the wrong document](/en/interview-lab/high-similarity-is-not-relevance), [Transformer generation and model-choice trade-offs](/en/articles/choose-transformer-generation-and-adaptation-tradeoffs), and [workflow-level agent evaluation](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer).
+
+## Boundary
+
+This is AI.DOG teaching material using a fictional, approved corpus. It does not establish performance for a particular model, embedding system, context length, or retrieval method. Real documents require their own permission, versioning, privacy, evaluation, and human-review controls.

@@ -1,0 +1,64 @@
+> Decide from the start which data may enter, which action may leave, who can stop the system, and what happens when the answer is wrong.
+
+## Use a scenario where the limits matter
+
+Imagine a fictional **Vendor Contract Note Desk**. A procurement reviewer uploads a sanitised, public-safe clause excerpt and asks for a draft note that identifies approved terms and missing information. The system cannot give legal advice, accept a contract, contact a vendor, access a shared drive, or retain the original document outside the local fixture.
+
+That boundary creates a practical safety programme. **Governance** assigns decisions, records exceptions, and makes accountability visible. **Privacy** controls what data is collected, retained, and exposed. **Incident response** describes how the team detects, contains, investigates, and learns from a harmful or uncertain event. None of these are achieved by asking a model to “be safe.”
+
+## Start with a small risk register
+
+List the concrete ways the desk could fail:
+
+| Risk | Preventive control | Detection | Safe response |
+| --- | --- | --- | --- |
+| Private clause enters the run | allowlisted fixture fields and local redaction check | input validator | block before generation |
+| Model invents a legal conclusion | source-ID requirement and prohibited-claim validator | output contract test | hand off to reviewer |
+| Document contains injected instructions | treat documents as data, not system instructions | adversarial fixture | isolate text and block route |
+| Wrong person sees a draft | role boundary and local-only storage | access-log check | revoke access and investigate |
+| A draft is mistaken for approval | visible draft status and reviewer gate | release checklist | prevent external action |
+
+A risk register is not proof that every problem is solved. It creates a shared decision about which risks are in scope, how they are measured, and when work must stop.
+
+## Privacy is a design constraint, not a cleanup task
+
+Use data minimisation first. The desk should receive only the clause excerpt, a synthetic document ID, approved taxonomy version, and reviewer route. It should not receive names, signatures, email addresses, prices, raw account identifiers, full contract histories, or hidden system prompts.
+
+Write down retention rules. A portfolio fixture can be committed only if it is synthetic or demonstrably public-safe. Logs should use run IDs, schema versions, and redacted reason codes rather than raw source text. A trace useful for debugging does not need to become a searchable archive of sensitive documents.
+
+Access should follow the same logic. A model prompt is not access control. The runtime, storage, and review queue decide which identity can read a fixture or approve a route. The first version stays draft-only precisely because a language model cannot establish authority to take an external action.
+
+## Design the incident path before an incident
+
+An incident is not limited to a confirmed breach. It can begin with a suspected data exposure, a forbidden action proposal, an unexplained output, a stale source used in a draft, or a missing audit record. A small incident runbook needs four stages:
+
+1. **Detect:** preserve a safe event receipt, alert the named owner, and classify the event without adding unnecessary copies of sensitive data.
+2. **Contain:** stop the affected route, revoke temporary access if relevant, and prevent automatic retries or external writes.
+3. **Investigate:** compare versions, traces, inputs, and evaluator results; distinguish a confirmed effect from an unknown outcome.
+4. **Recover and learn:** decide whether to correct, notify through the authorised process, revise the control, rerun fixed cases, and record the decision.
+
+The portfolio does not need a dramatic security story. It needs a test that a reviewer can run: an injected instruction should be treated as document content, the output should be blocked, the trace should show the terminal route, and the incident log should point to a rollback or control change.
+
+## Governance turns scattered checks into owned decisions
+
+Name roles even in a one-person learning project: builder, reviewer, data owner, release approver, and incident owner can be separate hats with separate decisions. For each material change, record what changed, why it was considered, which cases were run, what was not tested, who accepted the residual risk, and how to revert.
+
+Do not confuse compliance vocabulary with compliance. A template risk register or a framework reference does not make a project compliant with privacy, security, procurement, or legal requirements. It is evidence that you understand the questions a real organisation would need to answer with its own authorised experts.
+
+## What to keep in the repository
+
+- `data-boundary.md` — allowed fields, exclusions, retention, and fixture provenance.
+- `risk-register.md` — scoped risks, controls, detection signals, owners, and stop conditions.
+- `access-matrix.md` — read, draft, approve, and prohibited capabilities.
+- `threat-fixtures/` — synthetic injection, private-field, stale-source, and wrong-route cases.
+- `incident-runbook.md` — detect, contain, investigate, recover, and decision record.
+- `release-gate.md` — hard controls that must pass before any wider pilot is considered.
+- `decision-log.md` — exceptions, rejected options, residual risks, and rollback target.
+
+A reviewer can inspect validation code, adversarial fixtures, trace schema, access rules, and a tested blocked route. Before use, the work still needs a decision owner, a stated data purpose and retention choice, incident responsibility, and honest scope limits. This says more than a model card pasted into a README.
+
+For next reading, use [permission review before an agent receives access](/en/articles/review-an-ai-agent-before-clicking-allow), [an approval queue reference](/en/articles/approval-queue-low-code-portfolio), and [workflow evaluation with human handoff](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer).
+
+## Boundary
+
+This is local-draft teaching material with fictional documents and controls. It is not legal, privacy, security, or compliance advice; it does not establish a compliant system or a real incident programme. A production project needs its own authorised legal, security, privacy, operational, and incident-response owners.

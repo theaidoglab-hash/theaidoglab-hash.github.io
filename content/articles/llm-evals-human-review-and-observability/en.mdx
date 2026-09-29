@@ -1,0 +1,77 @@
+> If an evaluation can only tell you that an answer sounded good, it cannot tell you whether the system used the wrong source, skipped a stop rule, or sent a difficult case to nobody.
+
+## A draft-only workflow is enough to learn the right lesson
+
+Take a fictional **Refund Policy Draft Desk**. A reviewer supplies a sanitised question and a tiny approved policy set. The desk may create a source-linked draft for internal review. It may not promise a refund, access an account, send a message, or change a record.
+
+The evaluation target is therefore not “did the model sound helpful?” It is: did this workflow produce a valid, source-grounded draft or a complete handoff under declared constraints? That change in target creates room for deterministic checks, human review, and observability to work together.
+
+## Build an evaluation stack, not one magic score
+
+Start from the checks that do not need model judgement:
+
+1. **Contract checks:** input allowlist, JSON schema, required source IDs, permitted route, no prohibited fields.
+2. **Scenario checks:** normal match, missing source, conflicting sources, ambiguous wording, injected instruction, malformed output, budget exhaustion, and prohibited action request.
+3. **Quality checks:** whether a human reviewer can understand the draft, verify its citations, and take the next decision without redoing the whole task.
+4. **Regression checks:** baseline and candidate run against the same frozen cases; compare each case, not just an average.
+
+An LLM-based judge can help with a bounded language question such as whether the draft explains a cited policy clearly. It should have a written rubric, fixed examples, and a sample of human calibration. It should not be asked to infer a forbidden tool call from a final paragraph. The trace and deterministic route checks answer that question more directly.
+
+## Human review is part of the system, not a ceremonial final click
+
+Decide what a reviewer does before collecting scores. For each case, name the owner, the evidence they receive, and the action they can take. A good handoff packet includes the input fixture ID, approved source IDs, missing facts, safe trace summary, terminal reason, and a clear choice such as `KEEP_DRAFT`, `EDIT`, `REJECT`, or `ESCALATE`.
+
+Reviewers should see deliberately difficult cases. Ask them to inspect a source conflict, an answer that has valid JSON but weak wording, an answer that is fluent but uncited, and a case correctly blocked for lack of evidence. This prevents a review process from rewarding only polished happy paths.
+
+Human review also produces data, but not automatic truth. Record agreement, correction type, reviewer confidence, and unresolved questions. Never turn a handful of reviewer preferences into a claim that a system is safe or that a business metric improved.
+
+## Observability tells you where a regression happened
+
+An evaluation report gives a result. **Observability** preserves enough signals to investigate why that result changed. A safe trace can include:
+
+```text
+run_id, fixture_id, input_version, source_set_version,
+prompt_version, model_configuration, parser_version,
+state_transitions, allowed_tool_names, terminal_reason,
+schema_result, citation_result, latency_slices, cost_proxy,
+reviewer_verdict
+```
+
+Keep raw sensitive text out of the default trace. Use hashes, version IDs, and redacted summaries where possible. The aim is to reproduce a failure path without quietly creating a second private data store.
+
+When a candidate drops in quality, do not guess that “the model got worse.” Compare the route: was the source set different, did a prompt version change, did parser repair attempts rise, did more cases reach a budget stop, or did a cache serve an old policy version? A trace turns those into inspectable hypotheses.
+
+## A practical release gate
+
+Freeze a small `eval-v1` set and state hard gates in advance. Examples:
+
+- zero invalid structured outputs;
+- zero material claims without an approved source ID;
+- zero forbidden external-action routes;
+- every conflict, unknown, or budget-exhausted case reaches a named handoff;
+- reviewer agreement and correction categories are reported, not hidden;
+- any changed prompt, source projection, parser, or model setting has an Evidence Delta record and rollback target.
+
+Hard gates should override an attractive aggregate score. If one candidate hallucinates a refund decision, a small gain in stylistic rating does not make it releasable. A candidate that correctly hands off more edge cases may have a lower completion rate but a safer result. Show both measures.
+
+## Turn it into portfolio evidence
+
+```text
+evals/eval-v1.json           fixed scenarios and expected routes
+rubrics/draft-quality.md     bounded reviewer rubric
+validators/                  schema, source, route, and safety tests
+traces/schema.md             retained signals and excluded data
+reports/baseline.json        per-case results
+reports/candidate.json       same cases after one change
+CHANGE-002.md                hypothesis, Evidence Delta, decision, rollback
+review-guide.md              who reviews what and how disagreement is recorded
+release-gate.md              hard failures and local-draft boundary
+```
+
+A reviewer should be able to inspect a testable contract, versioned data set, trace design, comparison report, and regression gate. Before the workflow is used, name the user decision, review owner, data-retention choice, failure cost, and what no offline test can prove.
+
+For next reading, combine this with [workflow-level agent evaluation](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer), [a public-data evaluation pack using Promptfoo](/en/articles/build-a-public-data-kev-review-packet), and [portfolio evidence instead of fluency](/en/articles/score-an-ai-portfolio-by-evidence-not-fluency).
+
+## Boundary
+
+The desk, policies, reviewer decisions, scores, and traces are fictional examples. This local-draft material does not prove a real refund workflow, customer outcome, compliance decision, production reliability, or safety under untested inputs. It exists to show how to make a claim inspectable before anyone relies on it.

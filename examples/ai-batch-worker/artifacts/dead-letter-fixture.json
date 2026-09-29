@@ -1,0 +1,41 @@
+{
+  "artifactType": "synthetic_batch_worker_dead_letter_fixture",
+  "version": 1,
+  "scope": "synthetic_local_only",
+  "fixtureId": "retry-exhaustion-v1",
+  "input": {
+    "eventId": "EVT-ARTIFACT-401",
+    "jobId": "JOB-ARTIFACT-401",
+    "documentId": "SYN-DOC-ARTIFACT-401",
+    "documentVersion": "v1",
+    "documentText": "Synthetic document used only to demonstrate a retry-exhaustion dead letter.",
+    "idempotencyKey": "document:SYN-DOC-ARTIFACT-401:v1",
+    "estimatedCostCents": 2,
+    "responsePlan": ["rate_limited"]
+  },
+  "policy": {
+    "maxItemsPerRun": 1,
+    "maxQueuedJobs": 5,
+    "maxAttempts": 1,
+    "maxCostCents": 12,
+    "jitterWindowMs": 250
+  },
+  "expectedTerminal": {
+    "route": "dead_letter",
+    "reasonCode": "RETRY_ATTEMPTS_EXHAUSTED",
+    "category": "rate_limited",
+    "attempts": 1,
+    "requiresHumanReview": true,
+    "spentCents": 2
+  },
+  "expectedRedelivery": {
+    "route": "terminal_duplicate_suppressed",
+    "reasonCode": "TERMINAL_IDEMPOTENCY_KEY_ALREADY_SEEN",
+    "additionalAttempts": 0,
+    "additionalSyntheticCostCents": 0
+  },
+  "nonClaims": [
+    "This does not represent a real provider limit, document, dead-letter service, or operational queue.",
+    "A repaired item must receive an approved new identity or source version before it is eligible for processing."
+  ]
+}

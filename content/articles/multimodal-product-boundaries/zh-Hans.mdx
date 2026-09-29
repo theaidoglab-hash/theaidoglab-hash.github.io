@@ -1,0 +1,63 @@
+> 一张清晰的文件照片、一段语音，再加一个看似正确的回答，很容易让人以为“多模态 AI 已经可以上线”。但真正需要交付的问题不是模型能不能描述 input，而是：它是否可以读、读到的是什么、哪一步要停下来，以及谁有权把结果变成行动。
+
+## 先把 demo 收敛成一个可审查的工作
+
+用一个**完全虚构**的案例练习：运营同事收到一张预约变更表的图片、PDF 或语音留言。系统唯一工作，是把可核对的信息整理成草稿，交给职员复核；它不会自行改预约、发消息或建立客户记录。
+
+最小流程可以写成：
+
+`input → 类型与质量检查 → 提取候选字段 → 规则检查 → DRAFT／REVIEW／BLOCKED → 职员决定`
+
+这条线比“我用了 vision model”重要。每一个节点都有可验收的责任：input 是否允许处理、字段是否有来源、结果是否完整，以及什么情况必须交给人。模型只是其中一个可替换组件。
+
+## 图片、文件和语音不是同一种 input
+
+**图片**会有光线、反光、裁切、旋转和手写字等问题。它可能包含文字，也可能只是现场照片；不要因为看见一个画面就推断资料可读或可用。保留页面或区域位置，让 reviewer 知道某个候选字段来自哪里。
+
+**文件**多了一层 layout：扫描 PDF 可能有多页、页眉、表格、版本号和附件。OCR 或 vision extraction 可以把文字变成候选资料，却不会自动知道哪一页才是最新表格。文件名、文件类型和文件版本都应是 input metadata，不是事后猜测。
+
+**语音**不是一句已经干净的文字。前面还有音频质量、语言、说话速度、背景噪音、时间点和 transcription。系统可以把“星期二下午”转成带 timestamp 的候选内容；它不应从声音推断身份、情绪、能力或其他不属于任务的特征。
+
+三种 input 最终都可以输出同一个 schema，例如 `requested_date`、`reference_id`、`evidence_pointer` 和 `route`。不过得到这些字段的证据不同，所以不能只用一个“整体准确率”遮盖所有错误。
+
+## 把质量、延迟和 route 分开衡量
+
+先建立一组合成 fixtures，不要上传任何真实文件或录音。可以包含清楚的打印表格、旋转或模糊页面、缺少关键字段的附件、背景嘈杂的语音，以及根本不属于任务的 input。每个 fixture 都要写下预期 route 和 reviewer 可以核对的 evidence。
+
+质量至少分成三条线：
+
+- **字段正确性**：日期、参考编号或名称是否符合 fixture，而不是只看整段摘要像不像；
+- **route 正确性**：缺资料、低可读性或错误文件有没有走到 `REVIEW` 或 `BLOCKED`；以及
+- **证据完整性**：每个重要字段能否连回页码、区域或语音 timestamp。
+
+延迟也要拆开。upload、图片预处理、转录、model request 和 reviewer 界面各自花时间。先写下可接受的等待预算，再量 p50 和 p95；没有量到的数字就保留为假设，不要把 demo 感觉很快写成性能证明。若语音 transcript 尚未完成，流程可以显示“仍在处理”或直接交人，不必逼模型猜答案。
+
+## 隐私不是把 input 交给 model 后才补救
+
+照片、扫描文件和录音通常比纯文字更容易带出不必要资料：背景中的人、地址、签名、账号或说话者的声音。设计要从数据最小化开始：任务需要哪一页、哪段语音、哪些字段？不需要的就不要收、不要存，也不要放进 prompt。
+
+作品集只能使用合成或已经公开且可合法重用的素材。README 应说明 input 不可包含什么、谁可以看原始档、保存多久、trace 可以记录什么，以及示范环境没有连接真实账户。redaction 或加密是可加入的控制，但不是用来合理化原本就不该收集的 input。
+
+## fallback 的目标是保留决定，不是假装自动化
+
+好的 fallback 不只是“信心低就重试”。它要说明哪个判断无法成立，以及下一位处理者会拿到什么。像是 `reference_id` 被遮住、同一页有两个日期、语音噪音让关键词不清楚，或文件类型不在允许清单内。系统应输出 `REVIEW` 或 `BLOCKED`，附上页码、crop 或 timestamp、已提取的候选值和不确定原因。
+
+reviewer 可以确认、修正或拒绝草稿。这个决定需要有 case ID、input version、流程版本和 route reason，才能回看问题出在 input、extraction rule 还是工作定义。不要把每次人工修正自动当成可拿去训练的资料；先确认同意、用途和数据治理。
+
+## 作品集要展示的不是一段漂亮输出
+
+一个可信的 multimodal evidence pack 可以包括：
+
+- input taxonomy，列出支持和拒绝的图片、文件及语音种类；
+- 一组 versioned synthetic fixtures，以及每个 fixture 的预期字段、evidence pointer 和 route；
+- acceptance matrix，分开字段正确性、route、证据和 latency budget；
+- privacy note，列出数据最小化、保存和 access boundary；以及
+- 一张 human-handoff screen 或 trace 示例，显示人如何理解并完成尚未完成的 case。
+
+技术上，这证明你能设计 schema、fixtures、checks 和 trace。非技术上，它证明你知道“减少人工重新输入”不等于获得自动修改记录的权限。这比用真实私人 input 做一个华丽 demo 更适合公开作品集。
+
+## 边界
+
+这是学习用的 synthetic flow，不是医疗、身份验证、监控、招聘或任何真实公司的处理建议。没有真实 input、真实 model call、真人声音或部署结果，就不要声称达到某个准确率、延迟、隐私合规或商业成效。先把 case 变得可检查，再决定是否值得加入更多模型能力。
+
+延伸阅读：[把 RAG demo 变成可重复的 portfolio evidence](/zh-Hans/articles/rag-chatbot-to-portfolio-evidence)、[模型分数如何变成 workflow 决定](/zh-Hans/articles/model-score-to-workflow-decision) 和 [审查 AI agent 权限后再按 Allow](/zh-Hans/articles/review-an-ai-agent-before-clicking-allow)。

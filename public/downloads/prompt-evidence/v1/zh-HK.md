@@ -1,24 +1,24 @@
-# Prompt Experiment Log
+# Prompt 實驗紀錄
 
-每次只改一項主要變量，保留成功與失敗。
+每次只改一項主要變數，成功同失敗都留低。
 
 Version: v1.1 · Updated: 2026-09-23
 
 不要加入僱主、客戶或個人機密資料。
 
-## 01 · Problem 與 prompt version
+## 01 · 問題同 prompt 版本
 
 - Notes:
 - Evidence:
 - Boundary / unresolved risk:
 
-## 02 · Model、config 與 input class
+## 02 · 模型、設定同 input 類型
 
 - Notes:
 - Evidence:
 - Boundary / unresolved risk:
 
-## 03 · Expected behaviour
+## 03 · 預期行為
 
 - Notes:
 - Evidence:
@@ -30,13 +30,13 @@ Version: v1.1 · Updated: 2026-09-23
 - Evidence:
 - Boundary / unresolved risk:
 
-## 05 · Tool read／write 權限
+## 05 · 工具讀取／寫入權限
 
 - Notes:
 - Evidence:
 - Boundary / unresolved risk:
 
-## 06 · Result、failure 與 human decision
+## 06 · 結果、失敗同人手決定
 
 - Notes:
 - Evidence:

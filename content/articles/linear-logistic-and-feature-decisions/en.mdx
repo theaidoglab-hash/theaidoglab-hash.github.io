@@ -1,0 +1,35 @@
+An interviewer does not need you to recite an equation to see whether you understand a simple model. They can ask a more useful question: “What information was available, what number did the model produce, and what did a person do differently because of it?” Linear and logistic models make that chain visible.
+
+## Two outputs for two kinds of decision
+
+Use a fictional support operation as a worked example. A team wants to plan tomorrow’s manual-review capacity and decide which incoming cases deserve an early look.
+
+A **linear regression** model predicts a continuous number: perhaps the expected number of cases that will need review tomorrow. It combines features such as day of week, current backlog and request mix into one estimate. The coefficient for a feature describes the direction and size of its contribution within that particular model. It is not automatically a causal explanation. A coefficient can change when correlated features or data definitions change.
+
+A **logistic regression** model is often used when the target is a category, such as `review` or `standard route`. It turns a weighted combination of features into a value between zero and one. Read that value as a modelled likelihood under the training setup, not as a fact about the person or case. The workflow still needs a threshold, a capacity limit and a human owner.
+
+For example, a score of 0.72 could mean “show this case near the top of the review queue.” It should not silently mean “deny the request” or “this case is definitely risky.” The decision rule is a product choice, not an unavoidable property of logistic regression.
+
+## Features are claims about what can be known
+
+A feature is a value deliberately made available to a model. Write a short data dictionary for each one: its meaning, source, refresh time, allowed values, owner and whether it exists before the decision. `Open cases at 09:00` may be permitted; `final reviewer outcome` is not. That one check catches a common form of leakage: using the future to make the past look easy.
+
+Treat categories carefully too. A request channel is not naturally “larger” merely because it was encoded as 3 instead of 1. Use an appropriate representation, then record it. Missing values, new categories and a changed source system must have defined behaviour rather than accidental defaults.
+
+## A small test that is worth showing
+
+Build a comparison table with one rows-per-day baseline, one linear forecast and one logistic queue model. For the forecast, report an error measure in the same unit the planner uses: cases. For the queue, report how many genuinely review-worthy cases appear within the first fifty, how many ordinary cases are sent for review, and the effects on each named request group. Use a later time window, not only a shuffled holdout, if the team will make future-facing decisions.
+
+Save three artefacts beside the code:
+
+- the feature dictionary and observation cutoff;
+- a table of threshold choices with their manual-review volume; and
+- five reviewed examples where the prediction was surprising, wrong or intentionally overridden.
+
+Those artefacts let a reviewer check capacity, consequences, ownership, and what the system is not allowed to decide.
+
+## Where simple models still fail
+
+Interpretability is not immunity. A linear relationship may be too crude, labels may inherit historic bias, and a stable-looking coefficient can hide a broken upstream field. Raising a logistic threshold can make precision look better while leaving too many important cases unseen. A more complex model is not the automatic answer; sometimes a rule, a segment-rate baseline or more reliable data is the next sensible experiment.
+
+The professional skill is to connect a score to a reversible, reviewable action. Continue with [loss, regularisation and generalisation](/en/articles/regularisation-loss-and-generalisation) and [turning a model score into a workflow decision](/en/articles/model-score-to-workflow-decision).

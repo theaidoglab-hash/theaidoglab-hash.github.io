@@ -1,0 +1,19 @@
+模型訓練不是「餵資料，等它變聰明」。它是不斷做四件可檢查的事：把 input 變成 prediction、衡量錯多少、沿著能減少錯誤的方向更新參數，然後在未看過的資料再驗證。
+
+## 用一個小分類任務看 learning loop
+
+假設要把完全合成的 FAQ case 分成 `supported` 或 `handoff`。**Representation** 是 input 變成 model 可計算特徵的方式；**target** 是預先定義的正確 route。model 給出 prediction 後，**loss** 把 prediction 與 target 的差距變成訓練訊號。
+
+**Gradient** 告訴每個參數：往哪個小方向調整，loss 會下降。**Backpropagation** 是把這個訊號由 output 倒傳到前面 layers 的計算程序；optimizer 再決定每次改多少。它不保證學到正確因果，只是讓當前 training objective 變小。
+
+## 為什麼 loss 下降仍未必可用
+
+若 train loss 不斷下降，但 validation loss 變差，常見是 **overfitting**：model 記住 training set 的偶然細節，沒有學到可延伸的 pattern。也可能是資料重複、target 定義有歧義、split 洩漏未來資訊，或 validation case 根本不代表日後決策。
+
+不要先換更大 network。先抽查 input 與 target、確認時間邊界、保留簡單 baseline、按 failure family 分組看 confusion matrix，再調整 representation、model 或 optimisation。若任務其實只需要 rule 或 human review，這也是有效結論。
+
+## 留下能被追問的證據
+
+用 synthetic data 做一頁 training note：資料版本與 split rule、baseline、metric、train／validation curve、兩個錯誤 case、下一個假設，以及系統不會自動做什麼行動。這比只貼 loss chart 更能證明你懂模型以外的決策。
+
+延伸閱讀：[模型分數升了，決策為何未必更好](/zh-TW/articles/model-score-to-workflow-decision) 和 [由 Transformer 機制走到選型](/zh-TW/articles/choose-transformer-generation-and-adaptation-tradeoffs)。

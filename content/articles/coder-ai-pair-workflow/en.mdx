@@ -1,0 +1,140 @@
+Before asking a coding assistant for a diff, leave a feature brief a reviewer can challenge: what changes, what stays out, which cases must fail, and who decides whether anyone may rely on it. An agent saying done does not transfer those engineering decisions.
+
+## A separate practice route for people who write code
+
+This guide is for a developer, analyst, or technically confident learner who already works in a codebase. It is not a lesson in asking an agent to make a whole product from one sentence. The useful skill is narrower: turn one business need into an inspectable change, let an agent propose a plan and implementation, then keep the tests, review and release decision with a human.
+
+The fictional case is **Draft Risk Note**. Imagine a small internal support tool that receives a synthetic support category and a fictional policy flag. It may create a local, read-only risk note for a reviewer. It cannot send a message, update a customer record, issue a credit, call a service, or access a real account. The first change is deliberately modest: add a route that returns `needs-review` when the supplied policy flag conflicts with the proposed draft.
+
+There is no real customer, production dataset, API key, connector, or outcome claim in this exercise. The value is the evidence trail: a defined decision, a bounded diff, fixed cases, a reviewer decision, and a rollback path.
+
+## What this tutorial explicitly demonstrates
+
+### What you can inspect in the build
+
+- A thin, testable feature slice: typed synthetic input, a deterministic conflict check, a draft-only output, and an explicit `needs-review` route.
+- An agent-assisted workflow with a plan before code, a bounded diff, unit and acceptance tests, a local run record, and a versioned rollback target.
+- Separation between a deterministic decision path and any optional language-generation layer. The language layer may explain an approved result; it does not invent a policy state or trigger an action.
+
+### Business, delivery, and risk things demonstrated
+
+- The fictional user is a reviewer deciding whether a *draft* needs more attention, not an AI making a support, financial, legal, medical, or employment decision.
+- Success is a workflow proxy: the correct conflict cases reach `needs-review` without breaking ordinary draft cases. It is not a claim about saved hours, satisfaction, revenue, or adoption.
+- The engineer retains authority over requirements, data boundaries, approval, release, and rollback. The coding assistant is a contributor with a limited task, not the owner of the system.
+
+Picture it: the assistant may help build a toy traffic light. You still choose which colours mean stop, test that red really stops the cars, and decide whether the toy stays on the table.
+
+## Start with an acceptance brief, not a request for "better code"
+
+Before opening a coding assistant, write a brief that a reviewer could disagree with. For this fictional feature, it might be:
+
+```text
+User: a reviewer of synthetic support drafts
+Decision: should this draft be marked needs-review?
+Input: synthetic category, proposed route, synthetic policy flag
+Expected output: draft-only route plus a reason code; no external side effect
+Success proxy: every fixed conflict case is routed to needs-review;
+               ordinary matching cases keep their existing route
+Non-goals: no retrieval, no live model call, no account lookup, no send, no write
+Stop condition: unknown policy flag, missing field, or unexpected route must hand off
+```
+
+This is more useful than “add safety.” It gives the agent a finite problem and gives you a way to reject a clever-looking implementation. It also states what a future portfolio reviewer should be able to verify.
+
+## Ask for a plan before a diff
+
+Your first prompt can require the assistant to return only a plan. Ask for:
+
+1. its reading of the input, output, non-goal, and stop condition;
+2. the exact files it proposes to inspect or change;
+3. the smallest implementation path and the reason each changed file is needed;
+4. tests it will add or update, including a conflict, a normal case, and missing input;
+5. assumptions it needs a human to answer; and
+6. confirmation that it will not read outside the workspace, use secrets, add a dependency, connect a service, or perform a write without a separate instruction.
+
+Read the plan as a product and risk review, not just as a technical checklist. A plan that adds a database, network call, authentication, telemetry, or a new package to solve a three-condition rule is a reason to pause. The agent may have found a possible implementation; it has not proved that the implementation is appropriate.
+
+## Give the agent a narrow implementation contract
+
+Once the plan is accepted, provide constraints that can be checked in a diff:
+
+```text
+Implement only the conflict-routing rule.
+Keep all source data synthetic and local.
+Do not add credentials, outbound requests, persistence, analytics, or dependencies.
+Return a reason code for every needs-review result.
+Preserve current ordinary-case behaviour.
+Add fixed tests before reporting completion.
+If an assumption is missing, stop and ask rather than choosing a policy.
+```
+
+The important phrase is “implement only.” Coding assistants are good at filling gaps, and a gap in a request can become an unrequested architecture. A small contract makes scope creep visible before it becomes hard to undo.
+
+## Make the agent earn a passing test run
+
+Write acceptance cases in ordinary language first, then turn them into tests. The case table for Draft Risk Note can stay tiny:
+
+| Case | Synthetic input | Expected result | Forbidden result |
+| --- | --- | --- | --- |
+| Normal | proposed route and policy flag agree | preserve existing draft route | no invented warning |
+| Conflict | proposed route disagrees with policy flag | `needs-review` with a reason code | no automatic override or send |
+| Missing | category or policy flag is absent | hand off with missing-input reason | no guess |
+| Unknown | policy flag is outside the fixture set | hand off with unknown-policy reason | no default-to-safe-looking answer |
+| Prompt-like text | a text field asks to ignore the contract | treat text as data; keep the deterministic route | no rule bypass |
+
+Run the tests yourself, even when the assistant says they passed. Then inspect the test itself: a test that only asserts a truthy value can let the wrong route through. Your evidence should show the command, exit result, case IDs, and any test that was not run.
+
+## Inspect the diff like a delivery review
+
+You do not need to distrust every generated line to review it well. Start with a few high-value questions:
+
+- Does every changed file belong to the accepted plan?
+- Did a helper quietly create network, file-system, logging, or package-install behaviour?
+- Is the conflict rule explicit and readable enough for another developer to change safely?
+- Do the tests cover the negative path, not only the expected happy path?
+- Is `needs-review` a real route with a reason, or just text added to a fluent response?
+- Could a future language model layer change the decision, or is it kept downstream of the deterministic rule?
+
+An AI-generated commit is not enough on its own. Keep your review record: what the agent proposed, what you accepted, what you revised, and why.
+
+## Keep secrets and real data out of the first build
+
+Never solve a missing fixture by pasting a real ticket, policy document, database export, token, or client detail into a coding assistant. Make a small synthetic fixture instead. If the task truly needs authorised data, an external action, or a production credential, it is no longer the right first portfolio exercise. Stop and obtain the appropriate owner, environment, permissions, and review process outside this tutorial.
+
+An isolated workspace reduces accidental access, but it is not a substitute for judgement. A prompt saying “do not send” is not a permission control. The first version should have no capability to send, write, or call an external system at all.
+
+## Human review decides PASS, REVISE, or STOP
+
+After the local run, write a short reviewer note. It can be plain Markdown:
+
+```text
+Change: add deterministic conflict route for Draft Risk Note
+Evidence reviewed: plan, diff, five fixed cases, local test output
+Decision: REVISE
+Reason: unknown policy flags currently fall through to the normal route
+Next action: add the unknown-policy handoff test and rerun all fixed cases
+Release status: local learning reference only; no external connection
+Rollback: restore previous local rule version if the ordinary case regresses
+```
+
+PASS means only that the scoped change passed the named cases in the documented synthetic environment. It does not mean “production ready.” REVISE means the evidence exposed one repairable gap. STOP means the problem needs a real decision owner, a data-rights answer, a security review, or a less risky first slice. Stopping is evidence of judgement, not a failed demo.
+
+## What belongs in the repository
+
+For an AI-assisted coding project, a reviewer should be able to find more than polished UI or a model name. Keep:
+
+- a README with the fictional user, decision, success proxy, non-goals, and local-only statement;
+- the accepted brief and agent plan;
+- a data card saying the fixtures are synthetic and which data must never enter the project;
+- tests for normal, conflict, missing, unknown, and bypass attempts;
+- a concise change log or reviewer note with PASS, REVISE, or STOP;
+- a run record with the command, versions, results, and known failures; and
+- a rollback note explaining which prior rule or tag is the safe local fallback.
+
+That evidence helps a hiring conversation move beyond “which coding assistant did you use?” A stronger answer is: “I used an assistant to draft a bounded implementation, but I defined the acceptance cases, rejected scope expansion, tested negative cases, and recorded the condition that would block a release.” It cannot guarantee a role or prove real business impact. It can demonstrate engineering judgement.
+
+## When this is the wrong workflow
+
+Do not treat this tutorial as permission to point an agent at a production repository, a customer system, a live credential, or a high-impact decision. It is also the wrong starting point when you cannot name a human owner, cannot describe a reversible first outcome, need real personal data to make the example work, or cannot say how an incorrect output would be caught.
+
+If you do not write code, take the separate [AI without writing code route](/en/articles/use-ai-without-writing-code): the same standards apply, but you can practise them through a no-code draft workflow. For a realistic reference package, inspect [the coding-agent review loop](/en/articles/review-a-coding-agent-build-without-being-a-developer). Then compare [PolicyPilot’s deterministic policy-support baseline and RAG extension path](/en/articles/enterprise-ai-portfolio-policy-pilot), a time-safe MLOps case in [Renewal Triage](/en/articles/renewal-triage-mlops), and your work against the [portfolio-evidence rubric](/en/articles/score-an-ai-portfolio-by-evidence-not-fluency). When you are ready to turn a learning exercise into a planned project, use the [eight-week evidence sprint](/en/articles/turn-an-ai-course-into-an-eight-week-evidence-sprint). For the non-coder foundation, see [the low-code automation tutorial](/en/articles/build-a-low-code-ai-automation).

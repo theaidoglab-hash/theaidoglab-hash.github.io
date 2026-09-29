@@ -1,0 +1,131 @@
+> 更高的 F1 分数，只是关于一个已定义测试集的证据；它不会自动授权系统改变任何人的优先顺序，也不代表团队或业务已经变得更好。
+
+## 这是一个刻意使用合成数据的情境
+
+想象一个完全虚构的运营团队，每周只能审查有限数量的续约风险个案。某个候选模型的 F1 分数高于透明的规则式基线。面试官在任何人收到候选队列前问：
+
+> “候选模型的 F1 更高。你需要看到哪些证据，才会让同事收到它排出的队列？”
+
+**答对一半的答案：**“F1 合并了 precision 和 recall，所以候选模型已经可以 release。”
+
+这个答案知道一个 metric，却跳过了真正的 decision。它没有说明审查者每期能处理多少个 case、false alert 的代价是什么、分数是否代表它看起来的意思、数据是否在当时已经存在，或谁可以停止这项改动。
+
+以下全部是虚构的学习情境：没有客户数据、不会联系任何人、不会提出 offer 或修改账户，也不会声称 retention、收入、节省时间或 production readiness。
+
+## 先写 decision，再谈 score
+
+在选择 metric 前，先写一句：
+
+> “一位被清楚命名的 reviewer 可以使用这条合成队列，决定先审查哪些 case；系统不可代替对方决定，也不可自行采取行动。”
+
+这句话让后面的每个数字都有工作。队列有 owner、capacity limit、baseline 和 safe stop。没有它们，“better”只是一个好听的形容词。
+
+这个例子真正要回答的，不是“哪个 model 最准确预测 label？”而是“reviewer 能否收到一小批可解释、比现有 rules 更有用的 case，同时不隐藏不可接受的错误？”
+
+## F1 更高，先问这六件事
+
+### 1．Base rate：事件本身有多罕见？
+
+**Base rate（基准比率）** 是 model 还没有看任何数据前，outcome 原本发生的频率。假设 1,000 个合成 case 中，只有 20 个后来得到虚构的“需要审查”label。永远回答“不需要”的系统，在重要之处是错的，却可能因为多数 case 都是 negative 而看起来很准。
+
+所以只看 accuracy 很容易误导，尤其是罕见事件。先记录每个 split 中 positive 和 negative 的数量；metric 必须连同它所描述的人群比例一起看。
+
+### 2．Confusion matrix：发生的是哪一种错误？
+
+**Confusion matrix（混淆矩阵）** 把结果拆成四类：
+
+- **True positive**：队列标记了一个 case，而它后来符合虚构的审查 label。
+- **False positive**：队列标记了一个其实不需要审查的 case。
+- **False negative**：队列漏掉了一个其实需要审查的 case。
+- **True negative**：队列正确地没有把 case 放进去。
+
+它比单一分数有用，因为 false positive 会占用 reviewer 的时间，false negative 则可能让重要 case 没被看见。哪一种错误比较不能接受，应由这个有边界的工作流程决定，而不是由 model 自己决定。
+
+### 3．Precision、recall 与 F1：改善的是哪一种取舍？
+
+**Precision（精确率）** 问的是：“放进队列的 case 中，有多少真的有用？”**Recall（召回率）** 问的是：“所有应该出现的 case 中，我们抓到多少？”**F1** 是 precision 和 recall 的调和平均数，所以其中一个很差时，F1 也会被拉低。
+
+但只有当这项取舍符合 workflow 时，F1 才是合理的摘要。若 reviewer 只能看 20 个 case，一个为了抓齐所有可能 case 而送来 400 个低质量 alert 的 model，并没有让工作更容易。反过来说，若漏掉少数紧急 case 已经不可接受，一条 precision 很高但 recall 太低的队列也不安全。把 precision 和 recall 放在 F1 旁边，并说明为何这个平衡适合此虚构 workflow。
+
+### 4．Calibration：分数是否有它看起来的意思？
+
+**Calibration（校准）** 问的是分数能否被一致地理解。在一个足够大而且可比较的合成 holdout set 中，接近 0.70 的 case，观察到的 outcome rate 应大致接近 70%；若分数显示 0.70，实际却接近 0.20，model 就过度自信。
+
+Calibration 不会告诉 reviewer 应该怎么做。它帮助人避免把 ranking 或看似 probability 的数字当成承诺。保留 calibration plot 或 bucket table，并按对虚构 decision 有意义的维度检查，例如 score band 和 queue position。
+
+### 5．Threshold：谁可以进入队列？
+
+**Threshold（阈值）** 把 score 转成队列：例如只保留某个分数以上的 case，或直接取前 20 个。它要按 reviewer capacity 和 error cost 选择，不是因为 0.50 看起来很中性。
+
+保留一张小型 capacity table：每期可看 10、20、40 个 case；对应的 precision、recall、预期 handoff 数量，以及同一 capacity 下 baseline 的结果。被命名的 reviewer 必须能通过已批准的流程拒绝队列或改变 threshold；model 从来不拥有这个决定。
+
+### 6．Point-in-time split：model 有没有偷看到未来？
+
+**Point-in-time split（时间点切分）** 是用每个过去 decision 当时原本已经存在的字段测试 candidate。后来才出现的 outcome、修正过的 record、月底总数，或 case 被审查后才填入的字段，不可悄悄放进 training。
+
+这是为了防止 **future-data leakage（未来数据泄漏）**：model 看起来很聪明，只是因为它已经看过未来的线索。做一张简单的 data-availability table：字段、available-at timestamp、是否允许使用、原因。接着在同一个 held-out time window 上，比较 rules baseline 和 candidate。
+
+## 老师的托盘，不是排行榜
+
+想象有个小帮手，替老师把贴纸分到一个小小的“先看这些”托盘。小帮手说自己比较好，因为它在练习箱里答对更多。
+
+先问：罕见的红色贴纸是否特别难找？托盘有没有塞进太多普通贴纸？它说一张贴纸“很红”时，通常真的红吗？老师今天只能看 20 张吗？小帮手有没有偷看明天答案纸的颜色？
+
+小帮手可以提出建议；老师决定看什么、可以把贴纸放回去，托盘开始让人困惑时就停止使用它。
+
+## 从 queue 到 rollback，逐步检查
+
+1. **命名 decision 和 non-goal。** Reviewer 只排序虚构队列；系统不可联系人、定价、批准行动或宣称 outcome。
+2. **先做最简单的 baseline。** 从透明的 rules queue 或人工 checklist 开始；candidate 出现后也保留 baseline 的 case 和结果。
+3. **冻结 synthetic data contract。** 版本化虚构字段、label、availability timestamp、point-in-time split 和排除的 future fields。
+4. **公平比较 candidate 与 baseline。** 使用同一批 held-out cases、capacity limit、错误定义、precision／recall／F1 table、calibration buckets 和代表性 failure。
+5. **先采用 shadow mode。** Candidate queue 只产生建议，不会改变 live workflow。Reviewer 将它和 baseline 对照，记录每个建议是否可理解、是否可用。
+6. **使用预先同意的 release gate。** 此练习要先写好条件：不能有 data-contract failure、不能超过 capacity、不能出现不可接受的 error class，并要有 reviewer 对抽样 case 的 sign-off。
+7. **保留 rollback。** 若任何 gate 失败，就回到已版本化的 baseline 或人工 checklist，记录 failure，调查后才提出下一个改动。
+
+Shadow mode 不是 launch；它只是受限比较，candidate 不能造成任何下游行动。本地的 synthetic result 仍不是 business outcome 的证据。
+
+## 模型工作留下什么证据
+
+- 一份让 future-data leakage 可见的 point-in-time data contract。
+- 使用 confusion matrix、precision、recall、F1、calibration 和 capacity-aware threshold 比较 baseline 与 candidate。
+- 版本化 test cases、failure examples 和明确的 release／rollback gate，而不是只有 score dashboard。
+- 一条可追溯连接：score、queue position、model／data version、reviewer observation 和 safe stop state。
+
+## 交付工作留下什么证据
+
+- 有 named decision owner 和有限的 reviewer capacity，而不是假设自动化一定带来影响。
+- 分开 model proxy、可用队列和延迟才会出现的 real-world outcome。
+- 清楚的 shadow-mode boundary：不联系客户、不改账户、不提出 offer、不定价，也不做其他后果重大的行动。
+- 明确 non-claim：合成数据和本地 evaluation 不证明 fairness、adoption、retention、收入或 production readiness。
+
+## 高分最容易掩盖的地方
+
+不要说“F1 上升，所以创造了 business value”。不要看完 test result 才挑一个让结果好看的 threshold。不要用 candidate 最容易的一个月，比较 baseline 最困难的一个月。更不要让 score 自动派发行动。
+
+可信且更简单的 baseline，是一条有 capacity limit 的 rules queue 加人工 checklist。它更容易解释、更容易 audit，也给 candidate 一个真正值得胜过的比较对象。若 candidate 无法在不藏起新风险下改善虚构 reviewer workflow，就保留 baseline。
+
+## Reviewer 可以检查的证据
+
+把以下放进一个清楚标明 synthetic 的 repository：
+
+- `problem-brief.md`：user、decision、capacity、non-goal、named owner 和 stop condition。
+- `data-card.md`：虚构字段、label definition、可用 timestamp、排除的 future fields 和 limitations。
+- `baseline-vs-candidate.md`：confusion matrices、precision／recall／F1、calibration buckets、capacity table 和代表性 failures。
+- `threshold-decision.md`：为何选择该 capacity 和 threshold、被拒绝的 alternatives，以及本应批准改动的 reviewer。
+- `shadow-review-form.md`：用于记录 usefulness、解释质量、漏掉 case 和 handoff 的小型 rubric。
+- `release-rollback-checklist.md`：gates、version identifiers、rollback target 和明确 non-claims。
+
+这些文件不会把 synthetic project 变成 production system；它们只让面试官看见你能分清 model experiment 和 decision workflow。
+
+## 一个精简的面试答案
+
+“F1 更高只是一个起点，不是 release decision。我会先确认 point-in-time split，并在同一 reviewer capacity 下，用同一条 rules baseline 比较 candidate。我会看 confusion matrix、precision、recall、calibration 和代表性 failure，然后先跑 shadow mode。由被命名的 reviewer 判断队列是否可用。若数据、capacity 或安全 gate 失败，我会保留或 rollback 到 baseline。若这是 portfolio，我会清楚标明全部是 synthetic，也不会声称有 business outcome。”
+
+## 延伸阅读
+
+[从分数走到 workflow 的练习卡](/zh-Hans/interview-lab/offline-score-and-human-workflow)、[Renewal Triage：考虑 capacity 的 ML Lab](/zh-Hans/articles/renewal-triage-mlops)、[用证据而不是流畅度评估 portfolio](/zh-Hans/articles/score-an-ai-portfolio-by-evidence-not-fluency)，以及 [AI Engineer 能力地图](/zh-Hans/articles/ai-engineer-interview-learning-map)。
+
+## 边界与来源说明
+
+这是 AI.DOG 教学材料，参考公开可见的常见面试主题模式，但不是任何公司题目的翻译或重制，也不是当前 interview loop 的预测。情境、数据、labels、capacity、输出和 artefacts 全部是虚构；请把它当成练习透明判断的方法，不是任何真实 model、team 或 business result 的证明。

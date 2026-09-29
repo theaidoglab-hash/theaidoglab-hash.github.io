@@ -1,0 +1,107 @@
+別從「哪一門 AI 課程最好」開始。先說清楚你現在要補的 evidence gap：還無法解釋 agent 怎麼拆 task、還沒把 workflow state 和人工交接寫清楚、還沒留下可重跑的 evaluation case，或是不懂得怎麼看一個 runtime event。課程、framework 和文件只是學習輸入；真正要留下的是別人能檢查的判斷。
+
+## 五張官方 source receipt，不是一張課程排名表
+
+以下五個官方起點於 2026-09-25 核對。它們不是 affiliate link、推薦順序、求職保證，也不表示你必須全部完成。每張 receipt 都配一份 AI.DOG 自行設計的第一週練習：不抄課程作業、不假裝是 provider 認可成果，而是把讀到的概念轉成你自己的、只使用 synthetic 或公開安全資料的 evidence。
+
+先選一句最像你現在狀態的話：
+
+- 我想理解 agent 的 tool、observation 和 task loop，不想只會背名詞。
+- 我需要讓 route、state、memory 和 human handoff 可以被檢查。
+- 我想弄懂 runtime event、sandbox 和 cleanup，不把「completed」當成成功。
+- 我想把「看起來可以」變成固定 cases、assertion 和 reviewer note。
+- 我想練較正式的 evaluation 方法，但還不應接真實資料或帳戶。
+
+## 1．先補 agent 的共同語言：Hugging Face AI Agents Course
+
+[Hugging Face AI Agents Course](https://huggingface.co/learn/agents-course/unit0/introduction) 把 agent fundamentals、常見 libraries、hands-on、use-case assignment、challenge 和 evaluation/observability 單元放在同一條學習線。官方列出的起點是 basic Python 與 basic LLM knowledge；若要使用 Hub 或 Spaces，也需要 Hugging Face 帳戶。
+
+它適合你想先分清 **tool、thought、action、observation** 不是同一件事，而不是立刻做一個聲稱能自動處理所有事情的 agent。
+
+**第一週留下什麼：** 用三份自己寫的 synthetic FAQ 或 role card，畫一張 `input → allowed tool → observation → draft → human decision` 小圖。再寫三個 case：正常資料、資料缺失、有人要求禁止 action。每個 case 都要有預期 route：`DRAFT`、`HANDOFF` 或 `BLOCKED`。
+
+**別人能檢查什麼：** tool contract、輸入邊界、可見 route，以及 agent 無法越過的人工作業決策。
+
+**完成後仍不能宣稱什麼：** 你已經有 enterprise agent、選對 framework、每個 tool 都安全，或 challenge／certificate 等於能交付真實工作。完成課程與建立 portfolio evidence 是兩回事。
+
+## 2．想練 state 與人工關卡：LangGraph Foundation
+
+[LangChain Academy 的 Introduction to LangGraph](https://academy.langchain.com/courses/intro-to-langgraph) 公開課綱包含 simple graph、router、agent、state schema、memory、breakpoint、human feedback 和 deployment 概念。頁面目前列出免費、55 個 lessons、約六小時影片，並說明 LangGraph library 是 MIT license。這兩件事都不代表課程文字、任何雲端服務或你連上的 model provider 可以任意重用或免費執行。
+
+它適合你已有一些 Python 基礎，想從「一個 chat loop」走到看清 **誰可以改 state、何時暫停、誰能覆寫 decision**。
+
+**第一週留下什麼：** 做一張 workflow state card：`received`、`needs-evidence`、`draft-ready`、`review-required`、`stopped`。只允許一個 synthetic request 從 `draft-ready` 走到 `review-required`，再由 named reviewer 選 `PASS`、`REVISE` 或 `STOP`。保留 transition table 和一個被拒絕的 transition。
+
+**別人能檢查什麼：** state schema、每一條 transition 的 owner、interrupt 點與 failure record。
+
+**完成後仍不能宣稱什麼：** 你有 production orchestration、long-term memory 已可靠、deployment 已完成，或加上 human-in-the-loop 按鈕就解決 permission、資料權利、成本和 incident path。
+
+## 3．想看 managed runtime 的證據：OpenAI Agents API quickstart
+
+[OpenAI Agents API quickstart](https://developers.openai.com/api/docs/guides/agents-api/quickstart) 用 hosted sandbox 示範建立 session、執行工作、stream event 和 cleanup。官方把 API key、指定 permission scopes 與 beta header 列為 prerequisite，也特別提醒：completed turn 不表示每個 tool 都成功。
+
+這條路只適合已有程式基礎，也有明確 API／支出／資料授權的人。做第一個 portfolio 練習時，**不需要 key** 才能先學到最重要的判斷。
+
+**第一週留下什麼：** 不做 live call。用英文 `session-receipt.md` 寫一個虛構、local-only task 的 expected events：`started`、`tool-requested`、`tool-result`、`completed`／`failed`／`cancelled`。指定哪些 event 仍要 human review、何時 cleanup，以及少了哪個 result 就不能宣稱成功。這是 static fixture design，不是 API output。
+
+**別人能檢查什麼：** session boundary、event interpretation、completion 與 success 的差異、cleanup owner 和 credential boundary。
+
+**完成後仍不能宣稱什麼：** 你已跑過 OpenAI API、看過 model result、配置了安全 sandbox、控制了成本，或能把 workflow 用於真實帳戶。live experiment 需要另一份資料授權、test set、成本控制、logging 和 release evidence。
+
+## 4．把「看起來 OK」變成 case matrix：Promptfoo
+
+[Promptfoo Getting Started](https://www.promptfoo.dev/docs/getting-started/) 示範 `promptfooconfig.yaml` 如何放入 prompt、provider 與 test case，也支援 assertions、執行 evaluation 和檢視 outputs。官方也說明許多 provider 需要 authentication；有一份 YAML 不表示你可以把 credential、客戶資料或真實 prompt 放進公開 repository。
+
+它適合你有基本 Node／CLI 概念，現在缺的是 **evaluation evidence**，不是另一個漂亮 demo。
+
+**第一週留下什麼：** 建一份 key-free、fixture-only 的 `promptfooconfig.yaml` 草案，只有五個 synthetic cases：正常 request、缺 source、矛盾 source、hidden instruction、禁止 action。每個 case 寫 expected route、可見 evidence 和 `PASS`／`REVISE` rule。第一次可以先 manual review；不要把還沒跑過的 provider 寫成 test result。
+
+**別人能檢查什麼：** case set、expected assertion、failure taxonomy、一次 reviewer decision，以及 prompt 改前改後怎麼比較。
+
+**完成後仍不能宣稱什麼：** 本機 pass rate 等於真實流量品質、business KPI、privacy review、agent trajectory safety 或 production approval。Promptfoo 是 eval harness；它不能替你定義資料權利和 action boundary。
+
+## 5．學 cloud evaluation 的方法，不只比 model：Microsoft Learn
+
+[Microsoft Learn 的 Evaluate generative AI applications](https://learn.microsoft.com/en-us/training/paths/evaluate-generative-ai-apps/) 包括 evaluation fundamentals，以及用 Azure AI Evaluation SDK 跑 evaluation 和產生 synthetic dataset。列出的先備包括 Azure subscription、Azure portal 熟悉度、初階 Python；browser 或 local development 還有 GitHub、Docker、VS Code／Dev Containers 等要求。頁面提到 free account／trial 和 pay-as-you-go，不能直接說成「一定零成本」。
+
+它適合你想練 **evaluation plan、quality/risk metric、synthetic test data**，而不只是問哪個 model 較好。
+
+**第一週留下什麼：** 做一張一頁 evaluation plan：虛構 user decision、五個 synthetic cases、一個 quality metric、一個 risk metric、誰閱讀結果，以及什麼 outcome 必須 `STOP`。你可以在還沒開 Azure account 前先完成這份 plan；它讓「定義如何驗收」先於「開啟服務」。
+
+**別人能檢查什麼：** evaluator 的問題、metric 與 failure mode 的關係、synthetic data boundary、result interpretation 與 human release decision。
+
+**完成後仍不能宣稱什麼：** 已驗證其他 provider、真實資料分布、成本、合規或組織批准。cloud learning path 不是 production evidence。
+
+## 用同一張 receipt，選一條而不是收集五個 badge
+
+每次要開始新來源時，都保留一張英文 source receipt。程式、fixture、config 和 file name 保持英文，讓 reviewer 能重跑；README 再按讀者需要做不同語言版本。
+
+```text
+Source title and official URL:
+Accessed on:
+Evidence gap I am addressing:
+Prerequisites and account/cost boundary I checked:
+One lesson or section I used:
+My independently authored Week-1 artefact:
+Synthetic/public data boundary:
+Five fixed cases or checks:
+Feedback or review route:
+What failed, remains unknown, or must stop:
+What this artefact does not prove:
+```
+
+這張 receipt 把「我看過某個 course」變成「我如何把一個來源轉成可 review 的 engineering decision」。它也保護你不會把 instructor solution、course wording 或 certificate，假裝成完全原創的 commercial work。
+
+## 一個簡單的選擇規則
+
+如果你還不能解釋 agent 的組成，先從 Hugging Face fundamentals 開始；問題是 state、handoff 或 interrupt 時，看 LangGraph；想理解 hosted session/event 的真正邊界，就讀 OpenAI quickstart，但不要急著加 key；需要固定 case 和 regression evidence，就先做 Promptfoo fixture-only pack；想補 evaluation methodology，再考慮 Microsoft Learn。
+
+不論選哪條路，第一週只做一份可檢查 artefact。當你無法寫 expected result、需要真實私人資料、需要連帳戶、需要花錢、需要向外送資料，或沒有人願意擁有最後 decision 時，就先 STOP。縮小 task 比多加一個 framework 更有價值。
+
+已有一個具名來源想核對？先用[學習證據規劃器](/zh-TW/learning-evidence-planner)記下缺口、官方頁、第一份成果和停止條件；它不替供應者排位。
+
+延伸閱讀：[按職務與 evidence gap 選學習來源](/zh-TW/articles/choose-an-ai-learning-source-by-role-and-evidence-gap)、[把課程作業變成可追問 portfolio evidence](/zh-TW/articles/turn-an-ai-course-project-into-portfolio-evidence)、[LLM eval、human review 與 observability](/zh-TW/articles/llm-evals-human-review-and-observability)、[按 Allow 前的 permission review](/zh-TW/articles/review-an-ai-agent-before-clicking-allow)，或由 [不寫 Code／coder 兩條 AI 建置路線](/zh-TW/series/ai-use-routes) 選今天可安全完成的一步。
+
+## 邊界與更新說明
+
+以上是官方來源的當日收據，不是永久產品規格。帳戶、price、lesson、licence、region access 與 prerequisite 都可能改變；投入金錢、上傳資料或建立帳戶前，請回官方頁面再次核對。本站所有例子都是虛構、local-first 或 fixture-only 練習，沒有執行 API call、沒有處理真實個人／雇主資料，也不保證課程、portfolio 或求職結果。

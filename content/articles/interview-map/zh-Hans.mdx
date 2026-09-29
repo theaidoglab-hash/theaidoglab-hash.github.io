@@ -1,0 +1,67 @@
+> 这页是地图，不是要你死背答案。选一条路线，说一道题，再连到一份其他人能检查的 artefact。
+
+## 先从目标职位真正需要的能力开始
+
+AI Engineer 这个职称太宽，不能直接告诉你面试会追到哪一层。挑三个你真的会申请的职位，读清楚 job description 里反复出现的动词。`build`、`integrate`、`ship` 通常要你说产品与系统；`operate`、`secure`、`scale` 会走到权限、延迟、成本、事故恢复与 release decision；`experiment`、`improve` 则需要 baseline、数据边界与可信的 evaluation。
+
+Interview Lab 现在有 **59 道独立练习，分成十条能力路线**。不要一次读完 59 道题。圈出职位里反复出现的动词，选最接近的一条路线，再从第一题开始。这个顺序是帮你找出弱点，不是声称任何雇主都会按这样面试。
+
+## 十条进入 Lab 的路线
+
+### 1. 模型基础、serving 与交互
+
+职位提到 model choice、latency、cost、streaming、voice 或长文件时，从这条开始。好答案不是“用更大的 context window”，而是说清工作负载、哪里会变慢或变贵，以及用户层面如何知道这个选择值得。从 [long context 不是免费升级](/zh-Hans/interview-lab/long-context-is-not-a-free-upgrade) 开始。
+
+### 2. Retrieval、agent 与安全边界
+
+知识助手、tool use、内部数据与有权限的 workflow，都适合这条。练习区分 retrieval failure、generation failure 与 permission failure；再说清系统可以读取、起草、建议到哪一步，哪些行动永远不能自行执行。从 [找不到条款，到底是 retrieval、generation 还是 permission 问题？](/zh-Hans/interview-lab/rag-retrieval-generation-or-permission) 开始。
+
+### 3. Evaluation、数据与可靠 workflow
+
+如果答案要经得起不止一个漂亮 demo，走这条。把固定 case set 和 trace 接回 release decision，再谈 retries、重复工作、partial failure、reviewer capacity 与何时应停止。从 [何时应该 release，何时应该 rollback？](/zh-Hans/interview-lab/release-or-rollback-with-evidence) 开始。
+
+### 4. System design 与工程沟通
+
+遇到模糊需求，要变成可控 pilot，就走这条。先说 user decision、baseline、non-goal、service boundary、owner，以及什么证据会让你改方案。一张架构图只有在让后果或 handoff 更清楚时才有用。从 [设计一个内部 policy assistant](/zh-Hans/interview-lab/design-an-internal-policy-assistant) 开始。
+
+### 5. Input、contract 与 model 边界
+
+团队依赖 schema、prompt version、model routing 或 public data 时，走这条。Structured response 不代表有根据；prompt 有版本也不代表有 audit trail。练习把假设变成 case、receipt、fallback 与安全 baseline。从 [token budget 不等于能处理多语内容](/zh-Hans/interview-lab/token-budget-is-not-a-language-test) 开始。
+
+### 6. Training、label 与 model 失败边界
+
+职位涉及 prediction、fine-tuning、model training 或 offline metric，就选这条。先解释决策使用的 label、时间边界、split 与失败模式，再建议换更大 model。分数变好，有时只是任务定义变了，不是系统真的学到业务需要。从 [label 定义会改变你正在做的 model](/zh-Hans/interview-lab/a-label-definition-can-change-the-model) 开始。
+
+### 7. Retrieval 与 agent controls
+
+有 state 的 agent workflow，走这条。来源冲突时要说 owner，tool 有行动时要说 permission，loop 卡住要说 terminal state，memory 过期才不会成为旧政策。从 [reranker 救不回遗失的 permission](/zh-Hans/interview-lab/a-reranker-cannot-restore-a-missing-permission) 开始。
+
+### 8. Embeddings、ANN 与 index lifecycle
+
+这条处理“search 看起来合理，为什么仍未必可信”的问题。不只看 similarity；还要说清 embedding model 如何与 index 成对更换、ANN 漏了什么、metadata 如何回填，以及 source 被撤回后 query 如何停止或转 route。从 [换 embedding model 要当成 index migration](/zh-Hans/interview-lab/an-embedding-change-needs-an-index-migration) 开始。
+
+### 9. Serving、evaluation 与 release decision
+
+当系统要给真实用户用，这条很重要。把 queue、P99 latency、人工 calibration、business measure、monitoring、rollback 与安全 baseline 串成一个决策。不要让平均值变快掩盖 P99 变差，或让 reviewer queue 爆满。从 [queue 要有 dead-letter path](/zh-Hans/interview-lab/a-queue-needs-a-dead-letter-path) 开始。
+
+### 10. Multimodal input 与 portfolio evidence
+
+项目有 OCR、image、audio，或你要说 project 成效时，走这条。文字提取出来仍当 untrusted input；visual field 要指回 evidence region；比较 image transform 或 model change 时，不能只看漂亮平均数，要按 modality slice 看。好的 portfolio 不只展示漂亮 output，而是让 reviewer 看见一个 failure 如何查。从 [visual claim 要有 region 和 abstention](/zh-Hans/interview-lab/a-visual-claim-needs-a-region-and-an-abstention) 开始。
+
+## 一道题，做三次 pass
+
+第一轮，不看内容，先用 90 秒回答。第二轮，读回题目，找出你少了哪条因果链：数据从哪里进、系统为什么会慢或错、谁有批准权，或哪个 metric 会令决策逆转。第三轮，打开 portfolio，指向一份 artefact：README 的 decision、evaluation case、source receipt、trace 或 handoff rule。还没有就把它变成下一个小改动，而不是再加一个 framework。
+
+## 练对话，不要背稿
+
+每一道 [Interview Lab](/zh-Hans/interview-lab) 页面都附有可复制 prompt，可以带到你选择的 LLM voice 或 live chat。它一次问一题，等你回答后才给 feedback，并把意见分成 reasoning、evidence 与风险。只使用公开、虚构或已去标识的材料；任何 feedback 都是练习输入，技术主张仍要回到自己项目的证据核对。
+
+## 练完一道题，下一步怎么选
+
+一个答案会暴露两种不同缺口。若你连机制也说不清，回到 [AI Engineer roadmap](/zh-Hans/series/ai-engineer-roadmap#roadmap-stage-00)，从最早漏掉的一站补起，不要继续收集题目。若你能说明机制，却无法指向自己 project 里的 baseline、fixed case 或 named owner，使用 [Portfolio Evidence Planner](/zh-Hans/portfolio-evidence-planner) 将这个缺口变成一个有界的 project 改动。
+
+如果只需要一个更小的第一步，想定义并 review 决策、还不准备实现 system，走 [不写 Code 的草稿 workflow 路线](/zh-Hans/articles/use-ai-without-writing-code)。准备好检查一个窄改动、它的 diff 和 test 后，再走 [coding partner 路线](/zh-Hans/articles/use-ai-as-a-coding-partner-with-proof)。两条路最后都会回到同一个面试问题：你做了什么决策、用什么 evidence 验证，以及哪一位人员仍保有 authority？
+
+## 这份地图的范围
+
+这些是 AI.DOG 练习材料，按公开职位与技术讨论里反复出现的能力整理。每道题只用来练习机制、取舍、失败边界与可展示证据；不代表任何公司的真题、逐间公司的题库，也不预测当前 interview process。Team、level 与地区会测不同内容；这张地图只帮你选择下一步站得住脚的练习。

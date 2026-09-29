@@ -1,0 +1,33 @@
+當一個 training run 突然出現 `NaN`、loss curve 平到不動，或者 prediction 永遠不變時，先加 layers 多數只是猜。先沿住一個 labelled example 走到一次 parameter update。Gradient 和 backpropagation 在這條路上，才會由課本名詞變成實際的 engineering 工具。
+
+## 跟住一個 prediction 倒行一次
+
+想像一個虛構的 triage model，看到一宗 case 後估它有 0.80 機會需要人手覆核。記錄的 target 是 1，因為以前 reviewer 有把它升級。Loss function 把這個差距變成數字訊號。**Gradient** 問的是一條局部問題：如果某個 parameter 細微地改動，向哪個方向可以減少這個訊號？
+
+**Backpropagation** 把 chain rule 套進 calculation graph。它由 loss 開始，倒推過最後 output 和前面的 layers，計算每個可學 parameter 對錯誤的貢獻。Optimizer 再根據 gradients 和 learning rate 決定 update。Backpropagation 不是另一種「智能」；它只是有效地計清目前這次計算如何影響 loss。
+
+這也說明了限制：它可以降低指定的 objective，卻仍然學到錯的營運行為。如果 label 記錄的是不一致的舊 routing，gradient 只會很忠實地優化那份不一致。
+
+## 先 debug 最小 case，才跑全套
+
+用一個受控次序，不要一次改五樣 setting：
+
+1. 印出一個 input、它的 target、raw model output 和算出的 loss，確認 shape、unit 和次序一致。
+2. 核對 output 和 loss 的配搭。期望 raw logits 的 loss，跟期望 probabilities 的 loss，行為不同。
+3. 用一小批固定資料 train 到 model 刻意 overfit。如果都做不到，檢查 data pipeline、被凍結的 parameter、gradient flow 和 optimiser 接線。
+4. 為幾層記錄 gradient norm 和 parameter change。全部零、爆升或非有限值都是診斷線索，不是應該藏起來的 run。
+5. 到這一步才一次改一個因素，例如 learning rate、batch size 或 feature representation，並跟同一個 baseline 比較。
+
+Tiny-batch test 不是 generalisation 證據。它只檢查 learning machinery 到底能不能郁。
+
+## 留下別人能看懂的 debugging trail
+
+每次 run 保留 run ID、code 與 data revision、seed、input schema、target 定義、loss configuration、optimiser setting 和簡短觀察。改動前先寫一條假設，例如「loss 預期 logits，但現在收到 probabilities」。記下預期看到甚麼、實際結果和這次改動有沒有保留或 rollback。
+
+這同時是非技術證據。Reviewer 看得到你有管理不確定性、一次只改一個變數，亦沒有把一條幸運 curve 包裝成結論。記錄裡加兩個 failure example：一個是 model 很有信心但錯，一個是連 label 本身都需要人重新判斷。
+
+## 常見但不夠的修補
+
+Gradient clipping 可以阻止爆炸，卻不能證明 architecture 或 target 正確。降低 learning rate 可令 curve 平靜，但也可能慢到根本未學到東西。Missing value 的 default 可以造出一條太容易的捷徑。低 loss 也無法回答：這個 queue threshold 對收到結果的人是否可接受。
+
+下一步是令 run 可以重現和穩定，同時不要把一個 training convenience 誤當 release gate。延伸閱讀：[training stability、dropout 和 normalisation](/zh-HK/articles/training-stability-dropout-normalisation) 與 [由模糊 AI 需求到可驗收改動](/zh-HK/articles/from-vague-request-to-accepted-feature)。

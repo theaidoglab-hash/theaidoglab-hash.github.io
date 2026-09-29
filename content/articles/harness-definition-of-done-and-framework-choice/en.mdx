@@ -1,0 +1,80 @@
+> A good AI harness is not the thing that calls a model. It is the surrounding testable system that makes it possible to say what “done” means and to reject a pleasant-looking failure.
+
+## The portfolio problem hidden behind a polished demo
+
+Consider a fictional **Claims Brief Desk**. A reviewer provides a sanitised incident summary and a small, approved policy library. The desk may produce a source-linked internal draft and route uncertain cases to a reviewer. It must not make a coverage decision, contact a claimant, change a claim, or use real customer data.
+
+It is easy to show one impressive answer. It is harder to answer: which inputs are allowed, which sources are authoritative, what happens when sources conflict, how is a regression detected, and who accepts the result? Those questions define the **harness**.
+
+For this project, define the **definition of done** before selecting a framework. A candidate run is done only when it returns schema-valid JSON, cites approved source IDs, takes an allowed route, avoids prohibited claims, stays within the declared budget, and either produces a draft or a complete handoff packet. A fluent paragraph is not an acceptance criterion.
+
+## A harness has more than a prompt
+
+Treat the harness as the execution and evidence layer surrounding an AI capability. It can include:
+
+- an input contract and a data-minimisation rule;
+- an approved source registry and retrieval boundary;
+- prompt, model, parser, and policy versions;
+- deterministic validators for schema, citations, route, and forbidden fields;
+- a fixed evaluation set with expected outcomes;
+- trace fields that record safe state changes rather than raw private text;
+- a reviewer queue, decision log, release gate, and rollback target.
+
+The model belongs inside that frame. If it returns prose that cannot be parsed, introduces a policy claim without a source ID, or turns uncertainty into a confident decision, the harness should reject or hand off the output. The model is then a replaceable component rather than the place where all control and evidence disappear.
+
+## Make “done” a small contract
+
+Start with a table that someone else could apply without watching a demo.
+
+| Check | Expected result | What failure means |
+| --- | --- | --- |
+| Input boundary | only allowed fixture fields enter the run | route to `BLOCKED` |
+| Source fidelity | every material claim has an approved source ID | route to `HANDOFF` |
+| Output schema | required fields parse and validate | reject candidate output |
+| Decision route | one of `DRAFT`, `HANDOFF`, `BLOCKED` | reject unknown route |
+| Safety boundary | no coverage decision, message, or record change | hard release failure |
+| Operational budget | bounded steps, latency, and cost proxy | stop with reason code |
+
+The contract needs an example of an acceptable failure. A source conflict that becomes `HANDOFF` is a success for the harness. A confident summary that hides the conflict is not.
+
+## Choose a framework after the contract is clear
+
+Framework choice is a trade-off, not a career identity. A custom script can be the right first harness when there is one prompt, one structured output, and a small fixed case set. It makes control flow and dependencies obvious. An agent SDK can help when you need standard tool schemas, traces, handoffs, or session boundaries. A workflow orchestrator can help when independent jobs need queues, durable retries, and scheduled execution.
+
+Ask four questions:
+
+1. What state must survive a restart?
+2. Which tool call, if any, could have an external effect?
+3. What evidence must a reviewer inspect after a failed run?
+4. Can the same acceptance cases run before and after a framework change?
+
+If a framework makes these answers harder to see, it has increased complexity without increasing reliability. Do not create a multi-agent graph because a portfolio screenshot looks sophisticated. A deterministic retrieval-and-draft workflow is often the stronger first release.
+
+## A minimal harness experiment
+
+Use synthetic fixtures: an ordinary policy match, a missing source, a source conflict, an injected instruction in a document, malformed JSON, an over-budget run, and a request for a prohibited action. Freeze them as `eval-v1`. Then change one variable at a time: prompt version, parser, source projection, or model configuration.
+
+For each run, keep the fixture ID, versions, output validation result, route, prohibited-action check, latency, cost proxy, and reviewer verdict. Compare a baseline and candidate case by case. An overall score must never hide one hard failure such as an invented coverage decision or an invalid output. The rollback target is the last candidate that passed every hard gate.
+
+This makes the repository useful in an interview. You can explain not only that you evaluated a model, but also how you prevented a better-looking output from masking an operational regression.
+
+## What belongs in the portfolio
+
+```text
+brief.md                    user decision, non-goals, owner
+contracts/output.schema.json structured draft and handoff contract
+sources/registry.json       approved synthetic source IDs
+evals/eval-v1.json          fixed cases and expected routes
+validators/                 schema, citation, route, safety checks
+traces/schema.md            retained fields and exclusions
+CHANGE-001.md               one-variable hypothesis and result
+decision-log.md             framework choice and rejected alternatives
+release-gate.md             hard failures, rollback, local-only status
+README.md                   reproduce, inspect, and challenge the claims
+```
+
+A reviewer can open the runnable contract, validator, test cases, trace shape, and reproducible change comparison. Before anyone uses the workflow, the team still needs a named decision owner, the consequence of an error, a data boundary, an acceptance rule, and an explicit non-claim. A model can pass a text-quality check while still fail the job a team cares about.
+
+## Boundary and next reading
+
+The scenario is fictional and stays draft-only. It does not demonstrate claims handling, legal interpretation, regulatory compliance, customer impact, or production readiness. Use [portfolio evidence rather than fluency](/en/articles/score-an-ai-portfolio-by-evidence-not-fluency) to review the repository, then compare it with [workflow-level agent evaluation](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer) and [turning a course project into portfolio evidence](/en/articles/turn-an-ai-course-project-into-portfolio-evidence).

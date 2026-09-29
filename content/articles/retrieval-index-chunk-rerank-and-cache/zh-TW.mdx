@@ -1,0 +1,41 @@
+Retrieval demo 可能找回非常相似的段落，卻仍支持錯誤決策。工程問題不是「search 有沒有回傳 text」，而是「它是否為這次 claim 找到正確、最新、可使用的 evidence」。
+
+## 一則 note，三個可能 source
+
+想像一個完全虛構的 policy-evidence desk。reviewer 問為何某個 refund route 被擋。system 只能 search 一小組 approved document，產生有 citation 的 draft；它不能修改 refund、讀 customer account 或使用未批准文件。
+
+真正答案位於 policy chapter。旁邊 FAQ 有相似句子，但 exception 不同；舊 version policy 也有很強 lexical match。naive vector search 可能把三者都取回。最終答案可以看似合理，實際上卻根據錯誤 record。
+
+## Retrieval 包含多個獨立選擇
+
+**Index** 儲存可搜尋的 representation 與 metadata。**Chunk** 是一次 retrieval 的單位，通常小於整份 document。小 chunk 易於定位一句話，但過小會失去前後 exception；大 chunk 保留 context，卻可能把關鍵句埋起來並耗掉 context budget。
+
+只要已有明確 boundary，就先使用 metadata，而不是先信 semantic similarity：document status、policy version、region、effective date、permission scope、content type。接著取適量 candidate set。**Reranker** 可更仔細比對 request 和 candidates 並重新排序；它不是 authority source，不應越過 metadata rule 讓 stale 或 forbidden document 排到前面。
+
+Cache 同樣需要邊界。response cache 的 key 應包括問題形狀、audience 或 permission scope、document version 和 validity interval。retrieval cache 則應在 index 或 approved source 改動時有清楚的 invalidation rule。「昨天很快」不是今天可安全重用的證據。
+
+## 讓每個選擇可測
+
+建立一張小型 retrieval evaluation table：
+
+| Case | 必需 evidence | 必須排除 | Expected route |
+| --- | --- | --- | --- |
+| 精確 policy exception | 現行 chapter 和 section | 舊 version | Cited draft |
+| 相似但錯的 FAQ | 現行 policy | FAQ exception | Cited draft |
+| 沒有 source | 無 | 虛構 passage | HANDOFF |
+| Region 不符 | 正確 region | 其他 region | HANDOFF 或 scoped draft |
+| 新 policy version | 新 version | cache 舊 answer | Cache miss 後重新 retrieval |
+
+每次 run 應保留 document ID、version、chunk boundary、metadata filter、candidate count、reranked order、selected evidence、cache decision 和 final route。量 retrieval recall 時，要對照已知必需 evidence；但不能只看分數，也要檢查 assembled draft 是否真的使用正確 source，以及沒有 source 時是否正確 handoff。
+
+## Simple baseline 也值得保留
+
+若只有十份 approved documents，filtered keyword search 可能比 vector index 更易 audit。若每次都必須取整段 policy section，未必需要 chunk。只有在某個已命名 failure 讓維護與 regression risk 值得時，才加入 embedding、reranking、hybrid search 或 cache。
+
+Portfolio artefact 應包含 index manifest、chunking rationale、metadata schema、case set、cache invalidation rule、query trace 和一個 failure analysis。business evidence 是 user decision、freshness requirement、access boundary、named reviewer 和引用錯 source 的代價。不要把高 retrieval score 說成可靠 RAG product。
+
+延伸閱讀：[把 RAG 從 chat demo 變成 portfolio evidence](/zh-TW/articles/rag-chatbot-to-portfolio-evidence)、[RAG 的 freshness 與 conflict handling](/zh-TW/articles/rag-freshness-conflicts-and-advanced-patterns)，以及[workflow evaluation](/zh-TW/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)。
+
+## 邊界
+
+policy desk、document、version rule 與結果都是示範。本文不是法律、refund、privacy 或 production search 建議；這些 test 只說明如何檢查有界 prototype，不代表真實 knowledge system 準確或安全。

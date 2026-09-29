@@ -1,0 +1,38 @@
+「loss 下降了」不是 product result。它只表示 model 在某一批 example 上，較擅長完成你交給它的數學 objective。真正的工作，是判斷這個 objective 有沒有代表一個有用的決定，以及改善能不能在新資料上留下來。
+
+## 先替你在意的錯誤定價
+
+想像一個虛構團隊，預測有多少預約要求會錯過 service window。Loss function 把 prediction error 壓成一個讓 optimiser 最小化的數字。Squared error 會令大錯誤特別重；absolute error 對每多錯一宗的處理較平均。沒有一個永遠正確。如果團隊是在安排人手，用 case 數表達誤差可能比一個抽象分數更有意義；如果低估的代價比高估大得多，也要寫明這個不對稱，而不是希望 default loss 自己懂。
+
+Training loss 和 evaluation metric 可以刻意不同。你可以用較平滑的 objective 來 train，再用營運指標，例如誤差是否在可接受的人手範圍內，來評估。缺少的關鍵一步，是清楚交代兩者各自為何存在。
+
+## Generalisation 是 notebook 以外的考試
+
+當 model 在未見過、而且與將來決定有關的資料上仍表現合理，我們說它有 **generalisation**。最後的 test period 要留開；用 validation period 比較 model setting，只有準備好決定後才看最後 test。對時間相關工作來說，較後時段往往比隨機洗牌更真實。
+
+差距要看得懂。Training loss 很低但 validation loss 變差，可能是 model 記住偶然 feature。Training 和 validation 很接近也不等於好：兩邊都可能漏了一個重要 group、季節或 failure mode。保留簡單 baseline，才知道「更好」到底是甚麼。
+
+## Regularisation 是限制，不是萬靈丹
+
+**Regularisation** 是 training 時加入一個偏好，令 parameter 不要太複雜。L2 regularisation 會抑制很大的 weight；L1 regularisation 可以把部分 weight 推到零。用平常說法，它令 model 較難過份依賴一個脆弱細節。它可以減少 overfitting，但修不好有歧義的 label、未來資料 leakage、沒有 consent 的資料，或者選錯了決定。
+
+不要把 penalty value 說成神奇 setting。比較少量幾個值、記錄 data split，再看兩條 error curve。Penalty 太弱可能不會改變脆弱的 fit；太強則會 underfit，連有用 pattern 也看不到。
+
+## 留下一份經得起覆核的實驗紀錄
+
+每個 candidate 都應有一張 **experiment card**：
+
+- exact target 和 loss 定義；
+- data version、observation cutoff 和 split rule；
+- baseline 和 model configuration；
+- training、validation、final-test 的結果，並用營運單位表達；
+- error slice 和幾個被覆核的 miss；
+- 下一個決定：做一個有人覆核的有限試行、改資料，還是停止。
+
+把 final test 當 receipt，不要當成 tuning dashboard。看完它才不斷改 setting，等於把它也變成 validation set，最後報出的結果自然太樂觀。
+
+## Regularisation 不會承諾甚麼
+
+Regularisation 不會令 model 自動公平、私隱安全、因果正確或可部署。一條平滑的 validation curve 可以同時配上一個有害的 action threshold。如果 model 要改變隊列，拿它跟 rule 或 human baseline 比後果，並給人推翻它的權力。若沒有選項在指定決定上勝過 baseline，誠實結論就是保留 baseline。
+
+延伸閱讀：[gradient 和 backpropagation 如何令 objective 移動](/zh-HK/articles/gradient-backprop-and-loss-debugging) 與 [調參前先理解 neural learning loop](/zh-HK/articles/understand-neural-learning-before-you-tune)。

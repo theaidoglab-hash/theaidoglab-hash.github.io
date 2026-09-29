@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Test output
+coverage/
+.nyc_output/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Operating system files
+.DS_Store
+Thumbs.db

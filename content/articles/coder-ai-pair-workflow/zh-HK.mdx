@@ -1,0 +1,142 @@
+叫 coding assistant 交 diff 前，先留低一份 reviewer 可以挑戰的 feature brief：要改甚麼、邊啲不做、哪些 case 需要安全地失敗，以及誰決定可否依賴。agent 話 done，唔會令呢啲工程判斷自動轉手。
+
+## 畀會寫 Code 的人：另一條 AI 練習路線
+
+呢篇係畀 developer、analyst，或者已經會喺 codebase 裏工作嘅學習者。唔係教你用一句話叫 agent 生出一個完整產品。更值得練的範圍其實窄得多：把一個 business need 寫成可檢查的改動，讓 agent 提出 plan 和 implementation，test、review 同 release decision 仍由人手負責。
+
+以下 case 完全虛構，叫做 **Draft Risk Note**。想像一個小型 internal support tool 收到合成 support category 同虛構 policy flag，只可以為 reviewer 產生一張本地、read-only 的 risk note。它唔可以發訊息、改客戶紀錄、發 credit、call service，亦唔可以讀真實帳戶。第一個改動刻意收窄：當輸入的 policy flag 跟建議 draft route 矛盾時，加入一個回傳 `needs-review` 的 route。
+
+這個練習不會接觸真實客戶資料或 production 環境，不會用 API key 或連接外部服務，也不聲稱帶來商業成果。你要留下的是任何 reviewer 都可重看的紀錄：做了甚麼決定、實際改了甚麼、固定題目的結果、誰同意或要求修改，以及怎樣退回舊版。
+
+## 做完後，其他人可以核對甚麼
+
+### 你會留下甚麼
+
+- 一個薄而可測的 feature slice：typed synthetic input、deterministic conflict check、draft-only output，同一個明確的 `needs-review` route。
+- 一個 agent-assisted workflow：已核對的 plan、受限 diff、unit／acceptance tests、本地 run record，同可回到的 versioned rollback target。
+- 把 deterministic decision path 同任何可選 language-generation layer 分開。後者只可以解釋已批准結果，唔可以自己發明 policy state 或觸發 action。
+
+### 交畀人覆核時要講清楚嘅事
+
+- 虛構使用者係一位 reviewer，決定一份 *draft* 是否需要多看一眼；唔係由 AI 作 support、財務、法律、醫療或聘用決定。
+- 成功只係一個 workflow proxy：所有固定 conflict case 去到 `needs-review`，而正常 draft case 不會壞。它唔等於節省了工時、提高滿意度、收入或真實採用。
+- engineer 保留 requirement、data boundary、approval、release 和 rollback 的權限。coding assistant 係一個有範圍的 contributor，唔係系統 owner。
+
+assistant 可以協助起草 rule；但「policy conflict 必須交 review」有冇寫清、測試是否能捉到錯 route，以及這個本地練習可否停在這個範圍，仍然由你決定。
+
+## 先寫 acceptance brief，不要只講「幫我寫好啲 code」
+
+開 coding assistant 前，先寫一段 reviewer 可以不同意的 brief。這個虛構 feature 可以是：
+
+```text
+使用者：檢查合成 support draft 的 reviewer
+決定：這份 draft 是否要標記為 needs-review？
+輸入：合成 category、proposed route、合成 policy flag
+預期輸出：draft-only route 加 reason code；沒有 external side effect
+成功 proxy：所有 fixed conflict case 去 needs-review；
+             一般 matching case 保持原有 route
+不做：沒有 retrieval、live model call、account lookup、send 或 write
+停下條件：unknown policy flag、missing field 或 unexpected route 一律 handoff
+```
+
+這份 brief 比「加 safety」更可以檢查。它給 agent 一個有限問題，也讓你有理由拒絕一個看似聰明的 implementation。日後 portfolio reviewer 亦應能驗到這些邊界。
+
+## 先要 plan，暫時不要 diff
+
+第一個 prompt 可以要求 agent 只交 plan，內容包括：
+
+1. 它怎樣理解 input、output、non-goal 和 stop condition；
+2. 它要 inspect 或修改的確實檔案；
+3. 最小 implementation path，以及每個改檔的理由；
+4. 它會新增或更新甚麼 test，包括 conflict、normal case 和 missing input；
+5. 哪些 assumption 要人手回答；以及
+6. 確認未有獨立指示前，不會讀 workspace 外內容、用 secrets、加 dependency、接 service 或做 write。
+
+把 plan 當成 product 同 risk review 來看，唔只係技術 checklist。一條三個條件的 rule，卻要加 database、network call、authentication、telemetry 或新 package，已經是應該停一停的訊號。Agent 提出了一種可行做法，未等於證明那種做法合理。
+
+## 給 agent 一份窄的 implementation contract
+
+Plan 獲接受後，給它可在 diff 裏核對的限制：
+
+```text
+只實作 conflict-routing rule。
+所有 source data 保持 synthetic 及 local。
+不要加入 credentials、outbound requests、persistence、analytics 或 dependencies。
+每個 needs-review result 都要有 reason code。
+保留現在 normal case 的行為。
+報告完成前先加 fixed tests。
+若有 assumption 未清楚，停下來問，不要自行訂 policy。
+```
+
+關鍵是「只實作」。coding assistant 很擅長填補空白；但 request 裏的空白，可能變成你沒有要求的架構。範圍愈小，scope creep 愈早顯形，亦愈容易復原。
+
+## 用測試決定可否 PASS
+
+把日常語言寫成 acceptance cases，再把它們變成 tests。Draft Risk Note 的 case table 可以很小：
+
+| Case | 合成輸入 | 預期結果 | 絕不應出現 |
+| --- | --- | --- | --- |
+| Normal | proposed route 跟 policy flag 一致 | 保留原有 draft route | 憑空加警告 |
+| Conflict | proposed route 跟 policy flag 不一致 | `needs-review` 加 reason code | 自動 override 或 send |
+| Missing | 少了 category 或 policy flag | handoff 並說明 missing input | 猜答案 |
+| Unknown | policy flag 不在 fixture set | handoff 並說明 unknown policy | 預設一個表面安全的答案 |
+| Prompt-like text | 某欄文字叫它 ignore contract | 當資料處理，維持 deterministic route | 繞過 rule |
+
+這裡列的是五類必備 cases，用來對準測試邊界；它不是 Coder Starter Lab 的完整材料。Lab 有六個已提供的固定輸入，請按它自己的 reference outcome 記錄結果。
+
+即使 agent 說 tests passed，也要由你自己跑一次。再看 test 寫得對不對：只 assert 一個 truthy value 的 test，可能讓錯 route 過關。你留下的 evidence 應包括 command、exit result、case ID，以及任何未跑的 test。
+
+## 像交付 review 一樣看 diff
+
+你不用對每一行生成 code 都先假設最差，但可以由幾條高價值問題開始：
+
+- 每個 changed file 是否都在已接受的 plan 內？
+- helper 有冇暗中加入 network、file-system、logging 或 package-install 行為？
+- conflict rule 是否足夠清楚，讓另一位 developer 可以安全改？
+- test 有冇覆蓋 negative path，而不只是 happy path？
+- `needs-review` 是真 route 加 reason，還是只在流暢文字裏加了一句？
+- 日後若加 language model layer，它有冇能力改掉 decision，還是被放在 deterministic rule 後面？
+
+一個由 AI 生成嘅 commit 本身唔夠。保留你嘅 review 記錄：agent 提議甚麼、你接受甚麼、你叫它改甚麼，以及為何。
+
+## 第一版不要帶入 secrets 或真實資料
+
+不要因為缺 fixture，就把真實 ticket、policy 文件、database export、token 或 client detail 貼進 coding assistant。做一個小 synthetic fixture 就可以。若 task 真正需要 authorised data、external action 或 production credential，它已不再適合作為這篇 tutorial 的第一個 portfolio exercise。先停，然後在 tutorial 以外取得合適的 owner、environment、permission 和 review process。
+
+隔離 workspace 可以減少意外 access，但不能代替判斷。Prompt 裏寫「不要發送」不是 permission control。第一版最好的做法，是根本沒有 send、write 或 call external system 的能力。
+
+## PASS、REVISE 或 STOP，由人手 review 決定
+
+本地 run 後，寫一段很短的 reviewer note 即可：
+
+```text
+Change：為 Draft Risk Note 加 deterministic conflict route
+Evidence reviewed：plan、diff、五類 fixed cases 的結果、本地 test output
+Decision：REVISE
+Reason：unknown policy flag 現時會落到 normal route
+Next action：加入 unknown-policy handoff test，再重跑全部 fixed cases
+Release status：只限本地 learning reference；沒有 external connection
+Rollback：若 normal case regression，回到前一個 local rule version
+```
+
+PASS 只代表這個小改動在已寫明的 synthetic environment 通過指定 cases，絕不代表 production ready。REVISE 代表 evidence 找到一個可修的缺口。STOP 代表問題需要真正的 decision owner、data-rights 答案、security review，或者一個風險較低的 first slice。知道何時停止也是工程 judgment。
+
+## Repo 應留下哪些東西
+
+一個 AI-assisted coding project，應該讓 reviewer 找到的不只是靚 UI 或 model 名。保留：
+
+- README：虛構使用者、決定、success proxy、non-goal 和 local-only 聲明；
+- 已接受的 brief 和 agent plan；
+- data card：fixtures 是 synthetic，還有甚麼資料永不可以入 project；
+- normal、conflict、missing、unknown 和 bypass attempt 的 tests；
+- 有 PASS、REVISE 或 STOP 的簡短 change log／reviewer note；
+- 寫下 command、versions、results 和已知 failure 的 run record；以及
+- rollback note：哪個舊 rule 或 tag 是安全的 local fallback。
+
+面試時，可以具體講明：你用 assistant 起草有邊界嘅 implementation；acceptance cases、拒絕 scope expansion、測 negative cases，同埋何時 block release，都由你決定並記低。呢啲係工程判斷嘅證據，但唔保證職位，亦唔等於真實 business impact。
+
+## 這個 workflow 不適合甚麼情況
+
+不要把這篇當成容許你把 agent 指向 production repo、customer system、live credential 或 high-impact decision 的理由。若你不能指出 human owner、不能說出可逆的 first outcome、一定要靠真實 personal data 才運作，或者答不出錯 output 怎樣被捉到，這亦不是合適起點。
+
+若你不寫 code，請走另一條 [不打 Code 也能用 AI 的路線](/zh-HK/articles/use-ai-without-writing-code)：標準一樣，但你可用 no-code draft workflow 練習。想看可對照的 reference package，先讀 [coding-agent review loop](/zh-HK/articles/review-a-coding-agent-build-without-being-a-developer)。再比較 [PolicyPilot 的 deterministic 政策支援 baseline 與 RAG extension 路線](/zh-HK/articles/enterprise-ai-portfolio-policy-pilot)、[Renewal Triage](/zh-HK/articles/renewal-triage-mlops) 的 time-safe MLOps，以及用 [portfolio-evidence rubric](/zh-HK/articles/score-an-ai-portfolio-by-evidence-not-fluency) 檢查自己的 project。準備把學習練習變成有計劃的 project 時，使用 [八星期 evidence sprint](/zh-HK/articles/turn-an-ai-course-into-an-eight-week-evidence-sprint)。non-coder 的基本做法也可看 [low-code automation tutorial](/zh-HK/articles/build-a-low-code-ai-automation)。

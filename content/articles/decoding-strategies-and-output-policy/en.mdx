@@ -1,0 +1,64 @@
+Two runs receive the same approved policy excerpt. One gives a short, reviewable draft. The other adds a friendly sentence that sounds plausible but was not supported by the source. The problem is not that the model has a “creative personality.” At generation time, it repeatedly chooses the next token from a probability distribution. A product needs an output policy to decide which variation is acceptable and when no generated answer should leave the workflow.
+
+## What you should be able to decide
+
+By the end of this lesson, you should be able to match a decoding setting to a task, then write the acceptance rule around it. The evidence is not “temperature equals 0.” It is a fixed test set showing that the system returns a valid, grounded result or a clear handoff under known failure conditions.
+
+## From scores to a generated sequence
+
+At each step, a language model produces **logits**: relative scores for possible next tokens. A transformation turns those scores into probabilities, and a decoding strategy selects one token. The new token becomes part of the next input, so a small early change can lead the rest of a response down a different path.
+
+Common choices have different effects:
+
+| Choice | What it tends to do | Suitable starting point | What it cannot guarantee |
+| --- | --- | --- | --- |
+| greedy selection | repeatedly choose the highest-scoring token | compact deterministic-style labels | truth, citation, or business safety |
+| low temperature | concentrate probability on higher-scoring tokens | bounded drafting or extraction experiments | the same correct output every time |
+| top-p sampling | choose within a cumulative-probability set | controlled variation for ideation | that rare bad completions disappear |
+| output limit and stop rule | cap length or terminate at a known boundary | structured sections and latency control | that the content before the stop is valid |
+
+Temperature and top-p adjust variety. They do not fix missing data, unsafe instructions, incorrect retrieval, or a vague task. A model can be consistently wrong at low temperature.
+
+## Put an output policy around the model
+
+For the fictional return desk, decide before testing that there are only four acceptable terminal products:
+
+```text
+SUPPORTED_DRAFT — cites an approved policy ID and matches the required schema
+HANDOFF — evidence is missing, conflicting, or outside the declared category
+DECLINE — input is invalid or asks for an unavailable action
+BLOCKED — validator, budget, or safety rule fails
+```
+
+The model may propose text. A validator checks the JSON or section schema, required citations, allowed route, prohibited claims, length, and whether the supplied evidence supports the draft. The runtime, not the model, assigns the terminal state. A reviewer owns `HANDOFF` and any draft that could affect a person.
+
+This is the difference between a generation parameter and a product policy. The policy says what must be true for output to travel further; the parameter only influences how a candidate sequence is selected.
+
+## Build a repeatable decoding evaluation
+
+Make a small `decoding-evals/` folder with ten to twenty fixed synthetic cases. Include a normal short request, a long request, missing policy evidence, conflicting evidence, an unknown item code, an instruction that asks the model to ignore its task, and a request for an unavailable external action. For each case, record:
+
+- model and prompt version, decoding settings, maximum output, and context version;
+- expected terminal state, required source IDs, and forbidden wording or route;
+- raw candidate output retained only if safe, validator result, and reviewer result;
+- input tokens, output tokens, time to first result, total time, and retry count.
+
+Run the exact suite for a baseline and one proposed change. You might compare a short structured response at low temperature with a more varied configuration used only for internal idea generation. Do not grade both by a single “quality” number. Separately count schema failures, unsupported citations, correct handoffs, reviewer edits, latency, and cost proxy.
+
+## The useful failure modes
+
+Greedy decoding may repeat a bad pattern with impressive consistency. A very low temperature can make a wrong retrieval look reliable. A high output limit may turn a two-line evidence gap into a long invented explanation. A JSON-shaped response can still contain a false citation. Streaming may show words early, but the system should not expose a final recommendation before the required validation stage.
+
+The simpler baseline may be a template filled from structured fields, or a rule that sends uncertainty to a person. Use a generative draft layer only where it reduces real review work without moving the decision boundary outside review.
+
+## What to put in a portfolio repository
+
+Keep an `output-policy.md`, the fixed cases, validator rules, results table, and one rejected output with a brief diagnosis. State that a reviewer should never mistake fluent language for verified evidence. Then document how a model produces token candidates while schema checks, source checks, and terminal states constrain what the workflow accepts.
+
+That demonstrates more than prompt craft. It shows you can turn probabilistic generation into a bounded, inspectable process.
+
+Continue with [workflow-level agent evaluation](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer), [building stoppable agents with serving budgets](/en/articles/build-stoppable-ai-agents-with-serving-budgets), and [a prompt contract that needs an acceptance test](/en/interview-lab/prompt-contracts-need-an-acceptance-test).
+
+## Boundary
+
+This is AI.DOG teaching material using a synthetic, draft-only scenario. It is not a recommendation for universal settings or proof that a validator makes a system safe. Settings, output policy, evaluation cases, data controls, and human authority must be chosen for the actual task.

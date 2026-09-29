@@ -1,0 +1,66 @@
+> A flagship case does not need to be large. It needs to let a stranger open a few files and see the small decision you are supporting, how you checked it, and what your local exercise does not establish.
+
+## A flagship case is not the project with the most features
+
+The usual portfolio problem is not a lack of ability. It is three or four half-finished projects at once: a RAG chat, a fine-tune, an agent, and a polished interface. Each can be demonstrated for a few minutes, but none gives a reviewer a clear path to ask about your choices.
+
+Work in the other direction. Pick one bounded situation and write down the six things that are otherwise scattered across your head. You do not need customer data, employer data, or an external account to make a learning version. Synthetic material or public material with clear terms is enough. The point is not to present it as an enterprise system. The point is to let a reviewer follow one line of reasoning.
+
+If you have not chosen a case, start with the [Portfolio Evidence Planner](/en/portfolio-evidence-planner). Name one user, one small decision, a data boundary, and one thing the system deliberately will not do. Do not start with a model, framework, or job title and work backwards.
+
+## Use one sentence to reject a weak project idea
+
+Write a candidate like this: “A __ needs to decide __ from __ at __; if the material is missing, stale, or out of scope, the system __.”
+
+That is different from “I want to build an AI document assistant.” For example: “A fictional reviewer receives a source update and decides whether a source-grounded draft can be prepared; conflicting sources or missing fields stop at human review.” The sentence forces you to choose an owner, timing, input, stop point, and cost of error.
+
+Do not make this your flagship case if it only works with data you are not allowed to use, if a polished output is its only demonstration, or if you cannot name one way it could fail. Adding another agent will not repair any of those problems.
+
+## Six rows: every row has an artefact, a check, and a nonclaim
+
+The six rows are not an instruction to collect six documents. Each row answers a reasonable follow-up question. Start with a short Markdown file; grow it into code, tests, or records only when there is a real change to show.
+
+| Row | Artefact to leave behind | What a reviewer can check | What this row does not establish |
+| --- | --- | --- | --- |
+| 01 · Small decision | `docs/problem-brief.md` with the user, decision time, cost of error, owner, and non-goal. | A reader can say who the tool helps with which limited decision, and who retains the final call. | It does not prove real demand, a customer, permission, or adoption. |
+| 02 · Data boundary | `docs/data-receipt.md`, a schema, and a small synthetic or public fixture. | The source, allowed fields, excluded fields, and data version are clear. | It does not prove access to real data, privacy approval, or that live data is current. |
+| 03 · Simple starting point | `src/baseline.*` and `docs/baseline-and-change.md`, recording the simplest approach and one deliberate change. | The same input can run through a baseline and a candidate; the reader can identify what changed and why. | It does not prove that the candidate is better in real work, or that more complexity adds value. |
+| 04 · Fixed situations | `eval/cases.*`, expected routes, and a failure log. | Ordinary, missing-data, stale-or-conflicting, out-of-scope, and regression cases have an expected response. | It does not prove a statistical benchmark, comprehensive safety testing, or certification. |
+| 05 · Stop and return | `docs/reviewer-decision.md` and `docs/rollback.md`, with `KEEP`, `REVISE`, or `STOP` conditions. | A reviewer can find the failure that blocks a change, the person who decides, and the earlier method to return to. | It does not prove release, deployment, security, or compliance approval. |
+| 06 · Hand-off map | `README.md`, the smallest run command, `docs/five-minute-walkthrough.md`, and a claims note. | A stranger can find the entry point, understand where the local result came from, and hear you explain one failure. | It does not prove a public repository exists, that every line was written alone, or that the project guarantees an employment outcome. |
+
+Row 03 matters more than it looks. Without a baseline, you can only show that one combination runs. With a simple comparison on the same inputs, you can discuss which failure a new component was meant to address, and which cost or risk it introduced.
+
+Do not fill Row 04 with successful screenshots. Its value is that, after you change a prompt, retrieval step, rule, or model, you can see whether an earlier problem returned. One passing local check proves only that local check. It is not a scorecard for a live system.
+
+## Make one row real before opening the next one
+
+The table is easy to misread as “finish every document tonight.” A better rhythm is to move one row at a time from blank to openable:
+
+1. Complete Rows 01 and 02 first. Otherwise you do not know which material you may use or which actions must stay out of scope.
+2. Build the smallest Row 03 and 04 pair: one baseline, one change, and the same cases.
+3. Add Rows 05 and 06 so a change can be reviewed and you can still explain it a few weeks later.
+
+For a worked case that orders a human-review queue from an earlier snapshot, read [Renewal Triage](/en/articles/renewal-triage-mlops). It deliberately separates a model score, queue behaviour, and real retention results. To begin from a small local exercise, choose a case in the [Build Lab](/en/labs#build-lab-kit-renewal-triage-mlops); the page itself does not connect an account, data source, or real workflow for you.
+
+## When a second project is actually justified
+
+Do not start a second project because you are tired of the first screen. Ask three questions instead:
+
+- **Does it support a different decision?** Changing the prompt, model, or interface for the same FAQ does not make a new case. Moving from “can a draft be prepared?” to “which record should be reviewed first when capacity is limited?” does.
+- **Does it fail in a different way?** A retrieval case must handle sources, versions, and unsupported answers. A time-based or queue case must handle data availability, capacity, and thresholds. A new colour palette does not add a new kind of reasoning.
+- **Has the first case received a full response loop?** Every row has at least one openable item, and you have kept, revised, or rejected a change against the same cases. Only then is it worth moving attention away.
+
+PolicyPilot and Renewal Triage make a useful pair because their problems differ, not because their names sound larger. The first concentrates on a source-supported draft and human handoff; the second on time-safe data, ordering, and reviewer capacity. Read [PolicyPilot](/en/articles/enterprise-ai-portfolio-policy-pilot) for the other kind of bounded case, but do not collapse both into “I built enterprise AI.”
+
+## Turn the six rows into an answer you can give in an interview
+
+Use the document layout in the [Portfolio Proof Pack](/en/articles/build-a-github-portfolio-proof-pack), then point each row to a real file. Next, open the [Interview Lab](/en/interview-lab) and choose a question close to your case. You do not need to recite a README. Walk through the decision, the simplest approach, the case that made you change it, how it stops, and what the local exercise still leaves unknown.
+
+If you want a gap check first, compare your work with the [portfolio evidence review](/en/articles/score-an-ai-portfolio-by-evidence-not-fluency). It helps identify the next missing piece; this guide helps prevent those pieces from being scattered across several half-finished projects.
+
+## Boundary of this guide
+
+This is a learning architecture. It does not create a GitHub repository, publish data, run a model call, or turn a local fixture into a business outcome. Before using employer, client, classmate, or personal data, the person with authority still needs to confirm the purpose, permission, retention, and publication boundary.
+
+The value of one flagship case is that nobody has to take “I built AI” on trust. They can follow the six rows and see where you narrowed the problem, how you checked it, when you stopped, and which questions remain unanswered.

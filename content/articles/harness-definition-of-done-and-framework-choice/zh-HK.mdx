@@ -1,0 +1,63 @@
+> AI harness 不只是呼叫 model 的程式。它是令你能清楚說出「做到甚麼才算完成」、又能拒絕一個看起來流暢但其實失敗的結果的執行與證據層。
+
+## 漂亮 demo 背後真正的 portfolio 問題
+
+假設有一個虛構的「索償簡報桌」。審閱者給它一段已淨化的 incident summary 和一個細小、已批准的 policy library。它只可產出附 source 的內部 draft，資料不夠時交給 reviewer；不能作 coverage decision、聯絡 claimant、改 claim，也不能用真實 customer data。
+
+要展示一次回答很容易。難的是回答：哪些 input 可以入系統、哪套 source 才權威、source 衝突怎處理、怎樣偵測 regression、誰可接受結果。這些問題合起來就是 **harness**。
+
+挑 framework 前先寫 **definition of done**。一次 candidate run 只有在輸出是 schema-valid JSON、有 approved source ID、走 permitted route、沒有 forbidden claim、留在宣告的 budget 內，並提供 draft 或完整 handoff packet，才算完成。好聽的一段文字不是 acceptance criterion。
+
+## Harness 不止 prompt
+
+把 harness 看成圍繞 AI capability 的 execution 和 evidence layer：input contract 與 data-minimisation rule、approved source registry 和 retrieval boundary、prompt/model/parser/policy version、驗證 schema/citation/route/forbidden field 的 deterministic validator、固定 evaluation set、只記錄安全 state change 的 trace、reviewer queue、decision log、release gate 和 rollback target。
+
+Model 在這個框架之內。它回傳無法 parse 的 prose、加上沒有 source ID 的 policy claim、或把不確定寫成肯定決定時，harness 要 reject 或 handoff。這樣 model 變成可替換元件，控制與證據不會消失在一段 prompt 裡。
+
+## 把「完成」寫成細小 contract
+
+| 檢查 | 預期結果 | 失敗代表甚麼 |
+| --- | --- | --- |
+| Input boundary | 只讓 allowed fixture field 入 run | 去 `BLOCKED` |
+| Source fidelity | 每個 material claim 有 approved source ID | 去 `HANDOFF` |
+| Output schema | 必要欄位可 parse 及 validate | reject candidate output |
+| Decision route | 只可 `DRAFT`、`HANDOFF`、`BLOCKED` | reject unknown route |
+| Safety boundary | 無 coverage decision、message 或 record change | hard release failure |
+| Operational budget | step、latency、cost proxy 有上限 | 以 reason code 停止 |
+
+Contract 還需要一個被接受的 failure：source conflict 走到 `HANDOFF` 是 harness 的成功；自信地略過衝突並寫摘要，才是失敗。
+
+## Framework 要在 contract 清楚後才選
+
+Framework 選擇是 trade-off，不是身份標籤。一個 prompt、structured output、細小 fixed case set，custom script 往往最適合第一版，control flow 和 dependency 一眼可見。需要標準 tool schema、trace、handoff 或 session boundary 時，agent SDK 可幫忙。要處理 queue、durable retry、scheduled execution 的獨立 job，workflow orchestrator 才可能合理。
+
+問四條問題：甚麼 state 要在 restart 後仍存在？哪個 tool call 可能有 external effect？reviewer 失敗後要看甚麼 evidence？換 framework 後同一 acceptance case 能否再跑？如果 framework 令答案更模糊，它只是增加 complexity，不會提高 reliability。不要為了 portfolio 圖好看就畫 multi-agent graph；一條 deterministic retrieval-and-draft workflow 常常更有力。
+
+## 一個最小 harness experiment
+
+用 synthetic fixture：普通 policy match、missing source、source conflict、文件內的 injected instruction、malformed JSON、over-budget run、prohibited action request。凍結為 `eval-v1`。每次只改一個 variable，例如 prompt version、parser、source projection 或 model configuration。
+
+每個 run 保留 fixture ID、versions、output validation、route、prohibited-action check、latency、cost proxy 和 reviewer verdict。逐 case 比 baseline 和 candidate，不只看平均分。一個 invented coverage decision 或 invalid output 是 hard failure，不能用整體分數掩蓋。Rollback target 是最後一個所有 hard gate 都通過的 candidate。
+
+## 作品集要留下甚麼
+
+```text
+brief.md                    user decision、non-goal、owner
+contracts/output.schema.json structured draft 與 handoff contract
+sources/registry.json       approved synthetic source ID
+evals/eval-v1.json          fixed case 和 expected route
+validators/                 schema、citation、route、safety check
+traces/schema.md            保留欄位與排除欄位
+CHANGE-001.md               one-variable hypothesis 與結果
+decision-log.md             framework 選擇和被拒方案
+release-gate.md             hard failure、rollback、local-only status
+README.md                   如何重跑、檢查、挑戰 claim
+```
+
+技術證據是可執行的 contract、validator、test case、trace shape 和可重複的 change comparison。非技術證據是 decision owner、錯誤的 business consequence、data boundary、acceptance rule 和明確 non-claim。兩者都需要，因為 model 可以通過文字品質檢查，卻沒有完成團隊真正關心的工作。
+
+延伸閱讀：[用證據而非流暢度檢查 portfolio](/zh-HK/articles/score-an-ai-portfolio-by-evidence-not-fluency)、[評估整條 agent workflow](/zh-HK/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer)、[把 course project 變成 portfolio evidence](/zh-HK/articles/turn-an-ai-course-project-into-portfolio-evidence)。
+
+## 邊界
+
+情境是虛構，並且只停留在 draft-only。它沒有展示真實索償處理、法律判斷、合規、customer impact 或 production readiness。用途是示範如何在任何人依賴系統前，把 claim 變成可檢查的東西。

@@ -1,0 +1,31 @@
+如果你答「Transformer 就係 attention，唔準就 fine-tune」，interviewer 通常會再問兩句：模型實際睇到咩？錯誤究竟係資料、generation，定係任務設計？這兩句決定你係背名詞，還是知道怎樣選工具。
+
+## 一個 token 如何影響下一個 token
+
+文字先被切成 **tokens**，再變成 vectors。每層 **self-attention** 讓目前位置用 query（要找甚麼）、key（我有甚麼線索）和 value（可帶走甚麼內容）去加權其他位置。**Position information** 令 model 分得出次序；decoder 的 **causal mask** 阻止它偷看未來 token。最後 layers 產生下一個 token 的 scores（logits）。
+
+這不是資料庫查詢。attention 只是在目前 context 內調整訊息權重；如果可靠資料根本沒有進 context，它不會自動找回來。這正是 retrieval、metadata filter 和 citation 仍有用的原因。
+
+## Generation 是一組取捨，不是 personality slider
+
+logits 經過 sampling 才變成 token。較低 **temperature** 傾向保守；**top-p** 只在一個累積機率集合選擇。它們可改變多樣性，不能修好錯誤資料、缺少權限或不清楚的 acceptance rule。
+
+互動服務也要分 **prefill** 和 **decode**。prefill 讀完整 prompt；decode 一個個產生 token。長 context 可能令第一個 token 慢，長輸出令總時間慢。streaming 會改善等待感，但不會令答案更正確。
+
+## Architecture 同 adaptation 怎樣揀
+
+Decoder-only model 適合逐 token 生成；encoder-style representations 常用於分類或 retrieval。dense model 每次都用大部分參數；Mixture-of-Experts（MoE）會路由到少量 expert，可能改善 compute efficiency，但增加 routing、capacity 和 serving 複雜度。KV cache 避免每次 decode 重算已見 token，但會吃 memory，直接影響 batch 和 context budget。
+
+面對一個不穩定任務，順序應是：
+
+1. 定義固定 input、可接受 output、拒答條件和 baseline。
+2. 檢查資料是否應由 retrieval 補足、metadata 是否錯、prompt contract 是否不完整，或 workflow 是否將不相關內容混入 context。
+3. 只有當同一類行為在合法、足夠、版本清楚的資料上反覆失敗，才比較 parameter-efficient fine-tuning（例如 LoRA）或其他 adaptation。
+
+Fine-tuning 可以學到穩定模式；它不會自動令資料更新、citation、權限或後果性 action 變安全。訓練前後都要用同一組 held-out cases，分開量 task quality、拒答、latency、cost 和 high-risk regression。
+
+## 留低的證據
+
+做一張 model-choice record：列出 baseline、12 個 synthetic cases、兩個 failure families、context budget、兩個候選改善、預期代價和 stop condition。若 retrieval 已修好 stale-policy case，這是「不 fine-tune」的有價值結論，不是失敗。
+
+延伸閱讀：[Prompt contract](/zh-HK/interview-lab/prompt-contracts-need-an-acceptance-test)、[similarity 高仍然拎錯文件](/zh-HK/interview-lab/high-similarity-is-not-relevance) 和 [模型分數怎樣變成 workflow 決定](/zh-HK/articles/model-score-to-workflow-decision)。

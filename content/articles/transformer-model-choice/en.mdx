@@ -1,0 +1,27 @@
+If your answer is “a Transformer is attention, and I would fine-tune it when it is wrong,” an interviewer can ask two useful questions: what did the model actually see, and is the failure data, generation, or task design? The answers distinguish a term list from an engineering choice.
+
+## How one token affects the next
+
+Text becomes **tokens**, then vectors. In each **self-attention** layer, a position uses a query (what it needs), key (what signal it offers), and value (what content can move) to weight other positions. **Position information** preserves order; a decoder’s **causal mask** blocks future tokens. The final layers produce next-token scores, or logits.
+
+This is not a database lookup. Attention reweights information already in the current context. If authoritative material never entered the context, it cannot retrieve it. That is why retrieval, metadata filtering, and citations remain separate work.
+
+## Generation is a trade-off, not a personality slider
+
+Sampling turns logits into a token. Lower **temperature** tends to make selection more conservative; **top-p** restricts selection to a cumulative-probability set. These controls can change variety. They cannot repair bad data, missing permissions, or a vague acceptance rule.
+
+Interactive serving also separates **prefill** from **decode**. Prefill reads the whole prompt; decode produces tokens one at a time. Long context can delay the first token, while long output increases total time. Streaming improves perceived wait time, not correctness.
+
+## Choose architecture and adaptation deliberately
+
+Decoder-only models suit token-by-token generation; encoder-style representations often support classification or retrieval. Dense models activate most parameters each time. Mixture-of-Experts routes work to a small set of experts, which can improve compute efficiency while adding routing, capacity, and serving complexity. A KV cache avoids recomputing seen tokens during decoding but consumes memory and constrains batches and context budgets.
+
+For an unstable task, first define fixed input, acceptable output, decline conditions, and a baseline. Check whether retrieval, metadata, the prompt contract, or workflow assembly is the problem. Compare parameter-efficient fine-tuning such as LoRA only when the same behaviour repeatedly fails on lawful, sufficient, versioned data.
+
+Fine-tuning does not make freshness, citations, permissions, or consequential actions safe. Evaluate before and after on the same held-out cases, separating task quality, correct declines, latency, cost, and high-risk regressions.
+
+## Evidence to keep
+
+Create a model-choice record: baseline, twelve synthetic cases, two failure families, context budget, two candidate changes, their costs, and a stop condition. If retrieval fixes a stale-policy case, “do not fine-tune” is an engineering result—not a failure.
+
+Continue with [a prompt contract](/en/interview-lab/prompt-contracts-need-an-acceptance-test), [why high similarity can still retrieve the wrong document](/en/interview-lab/high-similarity-is-not-relevance), and [turning a model score into a workflow decision](/en/articles/model-score-to-workflow-decision).

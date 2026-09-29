@@ -1,0 +1,247 @@
+{
+  "copy": {
+    "zh-HK": {
+      "eyebrow": "下一個能力練習",
+      "nextLead": "下一條問題會沿住這個能力再拆一次：",
+      "nextAction": "練下一條同一能力問題",
+      "rehearsalLead": "呢組問題已經走到尾。用 live chat 再答一次，刻意補返：",
+      "rehearsalAction": "用 live chat 重練這個能力"
+    },
+    "zh-TW": {
+      "eyebrow": "下一個能力練習",
+      "nextLead": "下一題會沿著這項能力再拆解一次：",
+      "nextAction": "練下一題相同能力問題",
+      "rehearsalLead": "這組問題已經走到最後。用 live chat 再回答一次，刻意補上：",
+      "rehearsalAction": "用 live chat 重練這項能力"
+    },
+    "zh-Hans": {
+      "eyebrow": "下一个能力练习",
+      "nextLead": "下一题会沿着这项能力再拆解一次：",
+      "nextAction": "练下一题相同能力问题",
+      "rehearsalLead": "这组问题已经走到最后。用 live chat 再回答一次，刻意补上：",
+      "rehearsalAction": "用 live chat 重练这项能力"
+    },
+    "en": {
+      "eyebrow": "NEXT CAPABILITY PRACTICE",
+      "nextLead": "The next question keeps this capability in view and tests:",
+      "nextAction": "Practise the next question in this capability",
+      "rehearsalLead": "You have reached the end of this capability sequence. Rehearse this question again in live chat and deliberately cover:",
+      "rehearsalAction": "Rehearse this capability in live chat"
+    }
+  },
+  "capabilities": [
+    {
+      "id": "shared-language",
+      "topicSlugs": [
+        "long-context-is-not-a-free-upgrade",
+        "temperature-is-not-a-reproducibility-contract",
+        "softmax-is-not-a-stability-plan",
+        "token-budget-is-not-a-language-test",
+        "a-baseline-is-not-a-benchmark-winner"
+      ],
+      "focus": {
+        "zh-HK": "attention score、context window、token budget 同 greedy／sampling 會點樣改變輸出；再用一個 baseline 比較取捨。",
+        "zh-TW": "attention score、context window、token budget 與 greedy／sampling 如何改變輸出；再用一個 baseline 比較取捨。",
+        "zh-Hans": "attention score、context window、token budget 与 greedy／sampling 如何改变输出；再用一个 baseline 比较取舍。",
+        "en": "How attention scores, the context window, token budget, and greedy versus sampling change an output; then use a baseline to compare the trade-offs."
+      }
+    },
+    {
+      "id": "prompt-context",
+      "topicSlugs": [
+        "prompt-contracts-need-an-acceptance-test",
+        "structured-output-is-not-a-grounding-check",
+        "prompt-versioning-is-not-an-audit-trail"
+      ],
+      "focus": {
+        "zh-HK": "prompt contract、格式正確同有根據之間嘅分別，以及版本紀錄。",
+        "zh-TW": "prompt contract、格式正確與有根據之間的差異，以及版本紀錄。",
+        "zh-Hans": "prompt contract、格式正确与有根据之间的差异，以及版本记录。",
+        "en": "the difference between a prompt contract, valid structure, grounded claims, and a useful version record."
+      }
+    },
+    {
+      "id": "retrieval-rag",
+      "topicSlugs": [
+        "rag-retrieval-generation-or-permission",
+        "a-reranker-cannot-restore-a-missing-permission",
+        "conflicting-sources-need-an-owner"
+      ],
+      "focus": {
+        "zh-HK": "retrieval、reranking、來源衝突同 permission boundary 各自負責嘅範圍。",
+        "zh-TW": "retrieval、reranking、來源衝突與 permission boundary 各自負責的範圍。",
+        "zh-Hans": "retrieval、reranking、来源冲突与 permission boundary 各自负责的范围。",
+        "en": "what retrieval, reranking, source conflicts, and permission boundaries are each responsible for."
+      }
+    },
+    {
+      "id": "agent-systems",
+      "topicSlugs": [
+        "agent-draft-without-consequential-actions",
+        "an-agent-loop-needs-terminal-states",
+        "an-agent-eval-needs-a-route-verdict",
+        "tool-schema-is-not-least-privilege",
+        "mcp-discovery-is-not-an-approval-gate",
+        "memory-must-expire-before-it-becomes-policy"
+      ],
+      "focus": {
+        "zh-HK": "agent terminal state、route verdict、tool permission 同 memory expiry 點樣避免 workflow 越界。",
+        "zh-TW": "agent terminal state、route verdict、tool permission 與 memory expiry 如何避免 workflow 越界。",
+        "zh-Hans": "agent terminal state、route verdict、tool permission 与 memory expiry 如何避免 workflow 越界。",
+        "en": "how terminal states, route verdicts, tool permissions, and expiring memory keep an agent workflow within its boundary."
+      }
+    },
+    {
+      "id": "adaptation",
+      "topicSlugs": [
+        "fine-tune-or-fix-the-system",
+        "a-label-definition-can-change-the-model",
+        "a-random-split-can-know-the-future",
+        "regularisation-is-not-a-fairness-control",
+        "a-gradient-check-precedes-a-bigger-model",
+        "adaptation-method-needs-a-memory-and-eval-budget",
+        "a-fine-tune-win-can-still-fail-a-critical-slice"
+      ],
+      "focus": {
+        "zh-HK": "資料定義、時間切分、regularisation、debugging，同埋 critical slice eval 點樣改變 fine-tune decision。",
+        "zh-TW": "資料定義、時間切分、regularisation、debugging，以及 critical slice eval 如何改變 fine-tune decision。",
+        "zh-Hans": "数据定义、时间切分、regularisation、debugging，以及 critical slice eval 如何改变 fine-tune decision。",
+        "en": "how data definitions, time splits, regularisation, debugging, and critical-slice evaluation change a fine-tuning decision."
+      }
+    },
+    {
+      "id": "embeddings-search",
+      "topicSlugs": [
+        "high-similarity-is-not-relevance",
+        "an-embedding-change-needs-an-index-migration",
+        "ann-recall-needs-a-latency-budget",
+        "metadata-needs-a-backfill-contract",
+        "a-document-deletion-needs-a-retrieval-receipt"
+      ],
+      "focus": {
+        "zh-HK": "embedding/index migration、ANN recall、metadata freshness 同 deletion receipt 成條 retrieval path。",
+        "zh-TW": "embedding/index migration、ANN recall、metadata freshness 與 deletion receipt 整條 retrieval path。",
+        "zh-Hans": "embedding/index migration、ANN recall、metadata freshness 与 deletion receipt 整条 retrieval path。",
+        "en": "the full retrieval path: embedding/index migration, ANN recall, metadata freshness, and deletion receipts."
+      }
+    },
+    {
+      "id": "system-design",
+      "topicSlugs": [
+        "design-an-internal-policy-assistant",
+        "a-model-metric-is-not-a-business-metric",
+        "a-rollout-needs-a-safe-baseline"
+      ],
+      "focus": {
+        "zh-HK": "system proposal 點樣連去可用嘅 business metric 同 safe rollout baseline。",
+        "zh-TW": "system proposal 如何連到可用的 business metric 與 safe rollout baseline。",
+        "zh-Hans": "system proposal 如何连到可用的 business metric 与 safe rollout baseline。",
+        "en": "how a system proposal connects to a usable business metric and a safe rollout baseline."
+      }
+    },
+    {
+      "id": "production-operations",
+      "topicSlugs": [
+        "a-retry-is-not-a-recovery-plan",
+        "a-queue-needs-a-dead-letter-path",
+        "a-faster-average-can-hide-a-worse-p99",
+        "data-drift-is-not-just-a-retraining-trigger"
+      ],
+      "focus": {
+        "zh-HK": "retry、dead-letter、tail latency 同 drift 嘅一套 recovery decision。",
+        "zh-TW": "retry、dead-letter、tail latency 與 drift 的整套 recovery decision。",
+        "zh-Hans": "retry、dead-letter、tail latency 与 drift 的整套 recovery decision。",
+        "en": "a coherent recovery decision across retries, dead letters, tail latency, and drift."
+      }
+    },
+    {
+      "id": "evaluation",
+      "topicSlugs": [
+        "release-or-rollback-with-evidence",
+        "an-eval-score-needs-human-calibration",
+        "an-adversarial-matrix-needs-a-regression-contract",
+        "offline-score-and-human-workflow"
+      ],
+      "focus": {
+        "zh-HK": "release signal、human calibration、adversarial／regression case，同真正 workflow outcome 之間嘅取捨。",
+        "zh-TW": "release signal、human calibration、adversarial／regression case 與真實 workflow outcome 之間的取捨。",
+        "zh-Hans": "release signal、human calibration、adversarial／regression case 与真实 workflow outcome 之间的取舍。",
+        "en": "the trade-off between a release signal, human calibration, adversarial/regression cases, and a real workflow outcome."
+      }
+    },
+    {
+      "id": "safety-governance",
+      "topicSlugs": [
+        "treat-untrusted-documents-as-data",
+        "masking-prevents-a-leak-not-a-bad-decision"
+      ],
+      "focus": {
+        "zh-HK": "untrusted input、masking，同埋 access control 解決唔到嘅決策風險。",
+        "zh-TW": "untrusted input、masking，以及 access control 解決不了的決策風險。",
+        "zh-Hans": "untrusted input、masking，以及 access control 解决不了的决策风险。",
+        "en": "untrusted input, masking, and the decision risks that access controls alone cannot solve."
+      }
+    },
+    {
+      "id": "multimodal",
+      "topicSlugs": [
+        "voice-latency-is-a-system-budget",
+        "ocr-text-is-still-untrusted-input",
+        "a-visual-claim-needs-a-region-and-an-abstention",
+        "image-preprocessing-needs-a-task-contract",
+        "multimodal-evals-need-a-modality-slice"
+      ],
+      "focus": {
+        "zh-HK": "voice latency、OCR、evidence region、image transform 同 modality slice 點樣一齊影響可審核性。",
+        "zh-TW": "voice latency、OCR、evidence region、image transform 與 modality slice 如何一起影響可審核性。",
+        "zh-Hans": "voice latency、OCR、evidence region、image transform 与 modality slice 如何一起影响可审核性。",
+        "en": "how voice latency, OCR, evidence regions, image transforms, and modality slices affect reviewability together."
+      }
+    },
+    {
+      "id": "infrastructure",
+      "topicSlugs": [
+        "trace-p99-latency-before-adding-gpus",
+        "model-routing-needs-a-fallback",
+        "mixed-prefill-decode-needs-a-shared-budget",
+        "kv-cache-needs-a-capacity-contract",
+        "batching-quantisation-and-fallback-need-one-policy"
+      ],
+      "focus": {
+        "zh-HK": "p99、model route fallback、prefill/decode、KV cache、batching 同 quantisation 嘅 shared capacity policy。",
+        "zh-TW": "p99、model route fallback、prefill/decode、KV cache、batching 與 quantisation 的 shared capacity policy。",
+        "zh-Hans": "p99、model route fallback、prefill/decode、KV cache、batching 与 quantisation 的 shared capacity policy。",
+        "en": "a shared capacity policy across p99, model-route fallback, prefill/decode, KV cache, batching, and quantisation."
+      }
+    },
+    {
+      "id": "implementation",
+      "topicSlugs": [
+        "coding-and-data-structures",
+        "a-priority-queue-needs-a-staleness-rule",
+        "a-cursor-is-not-a-stable-order",
+        "a-public-dataset-needs-a-source-receipt"
+      ],
+      "focus": {
+        "zh-HK": "work item state、priority、cursor resume，同 data source 點樣被接收同驗證之間嘅 connection。",
+        "zh-TW": "work item state、priority、cursor resume，以及 data source 如何被接收與驗證之間的 connection。",
+        "zh-Hans": "work item state、priority、cursor resume，以及 data source 如何被接收与验证之间的 connection。",
+        "en": "how work-item state, priority, cursor resume, and source intake fit into one inspectable implementation."
+      }
+    },
+    {
+      "id": "delivery-judgement",
+      "topicSlugs": [
+        "project-deep-dive-and-role-fit",
+        "a-project-story-needs-a-counterexample",
+        "applied-ai-delivery"
+      ],
+      "focus": {
+        "zh-HK": "project story、counterexample 同 delivery decision 點樣變成可信嘅 role evidence。",
+        "zh-TW": "project story、counterexample 與 delivery decision 如何變成可信的 role evidence。",
+        "zh-Hans": "project story、counterexample 与 delivery decision 如何变成可信的 role evidence。",
+        "en": "how a project story, counterexample, and delivery decision become credible role evidence."
+      }
+    }
+  ]
+}

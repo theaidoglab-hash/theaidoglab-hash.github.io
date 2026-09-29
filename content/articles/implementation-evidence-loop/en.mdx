@@ -1,0 +1,25 @@
+“I used a coding agent to build an app, and it runs” is not an implementation answer that survives follow-up. An interviewer or reviewer can ask what it was meant to do, which input it must reject, what actually changed, what the tests prove, and where it stops when wrong.
+
+## Practise implementation judgement with one small feature
+
+Imagine a fully synthetic policy-draft tool. A user asks a question; the system may select sources only from approved documents, then return a JSON draft or `HANDOFF`. It does not read real accounts, send messages, or alter records.
+
+Write an **input contract** first: the question must be text, document scope must exist, maximum length, and rejected fields. Then an **output contract**: a `draft` carries citation IDs; insufficient support becomes `HANDOFF`; no output can contain an external action. The contract turns “looks right” into testable conditions.
+
+## Happy paths are not enough
+
+A fixed case set should include supported and unsupported questions, stale and cross-region documents, empty input, malformed JSON, prompt-injection language, and a model-response timeout. Each case names its expected terminal state, not merely “should work.”
+
+A **unit test** checks a small function or validator. An **integration test** checks whether source selection, a model-shaped fixture, and the output parser jointly obey the contract. An **acceptance case** returns to the user decision: can a reviewer see this draft, or must it hand off?
+
+## The coding agent’s role
+
+A coding agent can propose a plan, diff, and tests. It must not quietly expand scope. A reviewer should ask whether the diff adds login, network, database, or write permissions that the brief never asked for; whether negative cases actually fail; whether schemas are checked at the boundary; and whether a failure leaves a trace and ends in handoff instead of silent retries.
+
+## Delivery evidence is not a production claim
+
+Keep `SPEC.md`, a one-page plan, readable diff, test matrix, one failure example, decision record, and README rerun steps. They demonstrate how you turn a request into an acceptable feature. They do not claim a real-company deployment, customer data handling, or business impact.
+
+When a change involves accounts, payments, outbound communication, medical, legal, or personal data, reduce it to a synthetic, draft-only prototype. If nobody can name who approves the final action, the correct implementation decision is to stop—not add more agents.
+
+Continue with [from vague request to accepted feature](/en/articles/from-vague-request-to-accepted-feature), [review a coding-agent build](/en/articles/review-a-coding-agent-build-without-being-a-developer), and [build a GitHub proof pack](/en/articles/build-a-github-portfolio-proof-pack).

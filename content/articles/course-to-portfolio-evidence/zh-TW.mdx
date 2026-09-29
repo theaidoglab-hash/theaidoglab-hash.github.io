@@ -1,0 +1,133 @@
+把課程練習放進作品集前，記下課程提供了什麼、你實際改動了什麼、資料能否使用、拿什麼作比較，還有故意測過哪些失敗。這份紀錄讓別人可以核對你的判斷；不會把課堂練習包裝成真實企業交付或業務成果。
+
+## 完成課程後，還缺哪些證據
+
+跟著 tutorial 做出畫面、繳交作業或拿到完成紀錄，可以是很好的開始。但面試官或 reviewer 通常還會問：你為何選這個問題？哪些部分由來源提供？哪些部分是你自己改的？資料可否使用？較簡單的方法表現如何？失敗時系統會做什麼？另一個人如何重跑？
+
+這些問題不是要你把小練習假裝成真實企業交付。相反，它們讓你誠實呈現工程判斷。這套做法適用於一個你已經選好的官方 tutorial、課程作業或 workshop exercise；它不評定任何供應商，也不代表任何課程、機構或雇主認可你的作品。
+
+## 先把練習收窄成一個決定
+
+先把原本的練習縮成一個有使用者、時間點和邊界的學習決定。例如，不是「做一個文件問答 bot」，而是「讓一位虛構的 reviewer 在一套合成政策文件中，決定是否有足夠依據草擬回覆，否則交回人工處理」。
+
+寫下四句：
+
+- **使用者與決定**：誰查看什麼，並做出什麼有限決定？
+- **錯誤代價**：哪些錯誤不可接受，例如過期資料、無根據回答或未授權操作？
+- **non-goal**：系統刻意不做什麼？
+- **可見輸出**：你會留下哪一件 artefact，例如 evaluation report、data card、README 或 decision log？
+
+這一步把課堂題目轉成可被追問的工作假設，但不會把它變成真實商業成果的聲稱。
+
+## 先寫一張來源收據
+
+來源收據（source receipt）不是 citation 裝飾。它讓人一眼分清：你學了什麼、可否重用，以及你的作品從哪裡開始變成自己的判斷。每個課程或 tutorial exercise 開一個 `SOURCE_RECEIPT.md`：
+
+```text
+source title: [tutorial / course / workshop exercise title]
+source URL: [exact URL]
+version or date: [version, release date, or "not stated"]
+accessed at: [YYYY-MM-DD, timezone]
+licence or terms: [exact licence / terms link, or "not stated"]
+reuse boundary: [what the terms allow; link-only if unclear]
+what I copied: [for example, a command pattern or high-level API sequence]
+what I changed: [problem framing, synthetic data, baseline, tests, documentation]
+what I did not reuse: [source solution text, proprietary data, branding, screenshots]
+```
+
+如果授權或課程條款不清楚，不要把講義、solution code、截圖或 dataset 放上公開 repository。保留網址、用自己的話重寫概念，或只把你的獨立實驗留在私人學習環境，都是較穩妥的選擇。這不是法律意見；你要依實際條款決定可否分享或改作。
+
+## 資料邊界要早於模型選擇
+
+最容易被忽略的問題不是 model，而是你是否有權把資料用於學習、測試、展示或發布。你的 `DATA_CARD.md` 應明確選擇其中一條路：
+
+- **合成資料**：由你編寫或生成的虛構 records，標示 generator、seed、schema 和已知不真實之處。
+- **已授權資料**：保留原始 licence、使用限制、是否允許衍生作業和公開展示的證據。
+- **自有且已同意資料**：只有在所有相關人士明確同意該用途時才使用，並仍然最小化與去識別化。
+
+不要把雇主、客戶、同學或課程平台的非公開資料帶入 project。拿不準時，改用較小的 synthetic fixture。這會減少 demo 的「真實感」，但增加你能誠實解釋的程度。
+
+## 用一個 baseline、一項刻意改動和固定測試，取代無止境調參
+
+把 tutorial 原本的最小方法重新實作成 **baseline**。它可以是 keyword search、rule-based router、人工模板或課程教的最簡版本。然後只選一項你有理由相信會改善指定 failure 的 **刻意改動**，例如加入 document version filter、把低信心結果交給人工，或替結構化輸出加入 schema validation。
+
+不要一次換 model、prompt、chunk size、retriever 和 UI。否則分數變好或變差時，你不知道是哪件事造成。
+
+再建立一份不隨意改動的 `eval/cases.jsonl`。至少包括：
+
+- 一個正常、資料新鮮的 case；
+- 一個沒有足夠依據、應交給人工的 case；
+- 一個資料過期、缺欄位或版本衝突的 case；
+- 一個高風險或不可信輸入的 case；以及
+- 一個 candidate 比 baseline 更差的反例。
+
+每個 case 都有 input、expected boundary、預期 handoff／拒答和判斷準則。固定 case 不是為了假裝統計顯著，而是防止你只保留成功畫面。若後來新增 case，保留舊版本並說明原因，不要為了掩蓋 regression 重寫答案。
+
+## 每次實驗留下一條可讀的證據鏈
+
+一份小型 experiment log 已經足夠。記錄日期、source version、data version、baseline、唯一改動、固定 case 結果、error taxonomy 和下一步決定。可以像這樣：
+
+```text
+run: 004
+baseline: keyword retrieval + human template
+deliberate change: reject documents outside the active version
+fixed cases: 5 passed, 1 correctly handed off
+failure observed: ambiguous question still retrieved two conflicting policies
+decision: keep version filter; do not add a generative answer layer yet
+limit: all cases are synthetic; no customer or workflow outcome is claimed
+```
+
+真正有價值的紀錄包括「沒有採用更複雜方案」的理由。若改動沒有勝過 baseline，保留 baseline 和失敗證據，正好顯示你不會把技術當成答案本身。
+
+## 寫好重跑指引，讓判斷可以被驗證
+
+README 不必很長，但要讓陌生人知道最小路徑。依你的實際工具為準，涵蓋以下順序：
+
+```text
+1. Read SOURCE_RECEIPT.md and DATA_CARD.md before using any files.
+2. Create the pinned environment from the lockfile or requirements file.
+3. Generate or download only the permitted synthetic / authorised fixture.
+4. Run the baseline against eval/cases.jsonl.
+5. Run the deliberate-change candidate against the same fixed cases.
+6. Produce the comparison report and inspect failed or handed-off cases.
+7. Do not connect write actions, personal data or external accounts.
+```
+
+加上版本、seed、config path 和預期 output path。若 project 不能完整重跑，誠實寫清哪個部分受限於課程 access、API 成本或已失效的第三方 service，並提供最小的 local fixture。這比假裝一鍵部署更有用。
+
+## 把個人貢獻寫成可核對的聲明
+
+在 README 加一小節「我的貢獻」。不要寫「我完成了整個系統」；寫出你實際做的工作和未做的部分。例如：
+
+- 我選定虛構使用者決定、non-goal 和資料邊界。
+- 我自行編寫合成 records、baseline、固定 evaluation cases 和 failure taxonomy。
+- 我把 tutorial 的高層步驟改成 version filter 與 human handoff 的實驗；沒有複製示範 solution。
+- 我沒有擁有或聲稱擁有任何課程、隊友或第三方的內容與成果。
+
+若是小組作業，列出每位成員實際負責的 artefact，以及你可獨立講解和重跑的部分。這不是把貢獻縮小，而是讓信任放在準確位置。
+
+## 用五分鐘說清楚這份作品
+
+把 portfolio walkthrough 練成五分鐘：
+
+- **0:00–0:40**：說清使用者決定、錯誤代價與 non-goal。
+- **0:40–1:20**：展示來源收據和資料邊界；指出什麼不可重用或不可展示。
+- **1:20–2:10**：走過 baseline，以及你只改了哪一個變數。
+- **2:10–3:20**：展示同一組固定 cases 的比較，包括一個 failure 或 human handoff。
+- **3:20–4:10**：打開重跑指引、版本和 experiment log。
+- **4:10–5:00**：說出你的個人貢獻、限制，以及下一個需要真實授權或人工 review 才能驗證的假設。
+
+被問到「這個 project 有沒有 business impact？」時，最可靠的回答可能是：「我沒有這個聲稱。它用合成或已授權資料測試一個有限 workflow；我把 model／system evidence 和真實 business outcome 分開。」這不是扣分，而是成熟的範圍管理。
+
+## 一張完成前檢查表
+
+- 來源收據有 URL、版本或日期、存取日期、授權／條款、重用邊界、複製內容與改動內容。
+- 資料被明確標為 synthetic、已授權或已同意；不含未授權的人或機構資料。
+- 有可解釋的 baseline、一項刻意改動和同一組固定 evaluation cases。
+- README 可重跑，並說明受限部分、failure 和 non-goal。
+- 個人貢獻與任何小組／課程內容分開撰寫。
+- 五分鐘答辯可展示一個正常 case 和一個不成功或交給人工的 case。
+
+這些 artefact 不保證工作、面試或收入。它們只會讓對方更容易看見：當你從別人的學習材料出發時，仍然知道如何做出誠實、可檢查而有邊界的工程作品。
+
+延伸閱讀：[先依能力證據選 AI 學習來源](/zh-TW/articles/choose-ai-learning-sources-by-evidence)、[Renewal Triage 如何把 model metrics 與 workflow evidence 分開](/zh-TW/articles/renewal-triage-mlops)、[PolicyPilot 的資料、評估與 human handoff](/zh-TW/articles/enterprise-ai-portfolio-policy-pilot)，以及 [AI Engineer 面試練習](/zh-TW/interview-lab)。

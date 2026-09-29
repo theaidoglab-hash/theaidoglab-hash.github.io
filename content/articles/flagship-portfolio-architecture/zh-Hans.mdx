@@ -1,0 +1,66 @@
+> 一个主力案例不必很大。它只要让陌生人打开几份文件后，看得出你想替谁处理哪个小决定、怎样检查，以及你没有把本地练习说成真实成果。
+
+## 主力案例不是功能最多的那个
+
+作品集常见的问题不是能力不够，而是同时开始三、四个半完成的 project：一个 RAG chat、一次模型微调、一个 agent，再加一个好看的界面。每个都能 demo 几分钟，却没有人能顺着文件追问你的取舍。
+
+主力案例要反过来做。只选一个有限情境，再把六项原本散在脑中的信息写下来。它不必碰真实客户、雇主数据或外部账户；合成数据或条款清楚的公开数据，已足够做学习版本。重点不是把它说成企业系统，而是让 reviewer 能沿着同一条线看见你的判断。
+
+如果还没有选题，先用 [Portfolio Evidence Planner](/zh-Hans/portfolio-evidence-planner) 写出一位使用者、一个小决定、数据边界与一件刻意不做的事。不要先从 model、framework 或职位名称倒推题目。
+
+## 先用一句话筛掉不值得做的题目
+
+把候选题目写成：“一位 __ 在 __ 时，要根据 __ 决定 __；如果数据不足、过期或超出权限，就 __。”
+
+例如，不是“我要做一个 AI 文件助手”，而是“一位虚构 reviewer 收到一条数据更新时，要决定能否准备一份带来源的草稿；来源冲突或缺字段，就停在交给人处理。”这句话已经逼你选 owner、时间点、输入、停止点与错误后果。
+
+以下情况先别选作主力案例：一定要靠未获准的数据才有意义、只能用漂亮输出展示，或你连一种可能失败的情境都想不到。这些不是“再加一个 agent”能补救的问题。
+
+## 六格：每格都留下文件、检查方法与不能声称的结果
+
+这六格不是要你堆六份文件。每一格都对应一条合理追问。你可以先写一页短 Markdown；有实际改动时，再把它长成 code、测试或记录。
+
+| 格 | 留下什么 artefact | 别人怎样检查 | 这格不能声称什么 |
+| --- | --- | --- | --- |
+| 01 · 小决定 | `docs/problem-brief.md`，写使用者、决定时间、错误代价、owner 与 non-goal。 | 读者能用一句话说出工具替谁做哪个有限决定，也知道谁保留最后决定权。 | 不代表已有真实需求、客户、授权或采用。 |
+| 02 · 数据边界 | `docs/data-receipt.md`、schema 与一小份 synthetic 或公开 fixture。 | 能分辨数据来自哪里、哪些字段可用、哪些必须排除、数据是哪个版本。 | 不代表你有真实数据访问权、隐私批准或仍然新鲜的 live data。 |
+| 03 · 简单起点 | `src/baseline.*` 与 `docs/baseline-and-change.md`，记下最简单做法与一次刻意改动。 | 同一个 input 能走 baseline 与 candidate；读者能指出改了什么、为何改。 | 不代表 candidate 在真实工作中更好，也不代表更复杂就更有价值。 |
+| 04 · 固定情境 | `eval/cases.*`、预期 route 与 failure log。 | 至少能看到正常、数据不足、过期或冲突、越界要求与 regression case 的预期处理。 | 不代表统计 benchmark、完整安全测试或任何认证。 |
+| 05 · 停止与回退 | `docs/reviewer-decision.md` 与 `docs/rollback.md`，写 `KEEP`、`REVISE` 或 `STOP` 的条件。 | 别人能知道哪个失败会挡住改动、谁做决定，以及怎样回到前一个可用方法。 | 不代表已取得 release、部署、资安或合规批准。 |
+| 06 · 交代给下一个人 | `README.md`、最小 run command、`docs/five-minute-walkthrough.md` 与 claims note。 | 一位陌生人能找到入口、理解本地结果从何而来，并听你说清一个 failure。 | 不代表公开 repository 已存在、每行 code 都由你独自写成，或 project 能保证求职结果。 |
+
+第 03 格特别重要。没有 baseline 时，你只是在展示“某个组合可以跑”。有了同一批 input 的简单比较，才可以讨论新组件到底补了哪种 failure，又带来什么成本或新风险。
+
+第 04 格也别只放成功 screenshot。固定情境的价值在于你改 prompt、retrieval、rule 或 model 后，仍能看出旧问题是否回来。一次本地 pass 只表示那次本地检查；不是 live system 的成绩单。
+
+## 先让一格站得住，再开下一格
+
+这张表最容易被误解成“今晚要补齐所有文件”。更好的做法是让每次工作都把一格从空白变成能打开的东西：
+
+1. 先完成第 01 与 02 格，否则你不知道自己能用什么数据、不能做什么。
+2. 做出第 03 与 04 格的最小版本；保留一个 baseline、一项改动与同一批 cases。
+3. 最后补第 05 与 06 格，让改动有人能 review，也让你几周后仍说得回来。
+
+想看一个从旧快照排人工队列的例子，可读 [Renewal Triage](/zh-Hans/articles/renewal-triage-mlops)。它刻意把模型分数、队列行为与真实挽留结果分开。想从草稿流程开始，可在 [Build Lab](/zh-Hans/labs#build-lab-kit-renewal-triage-mlops) 选一个本地练习；内容本身不会替你连接账户、数据或真实工作流程。
+
+## 第二个 project 什么时候才有理由开始
+
+第二个 project 不是第一个画面看腻了就开始。至少先问三个问题：
+
+- **它有没有另一个决定？** 把同一个 FAQ 换 prompt、换 model 或换界面，不算另一个 case。从“能否草拟回复”转到“有限 capacity 下先 review 哪一条”，才是不同决定。
+- **它有没有另一种失败方式？** 例如 retrieval project 要处理来源、版本与无根据回答；时间序列或 queue project 要处理数据可用时间、capacity 与 threshold。只换主题颜色不会增加你能展示的判断。
+- **第一个是否已有一轮完整回应？** 六格每格至少有一件能打开的东西，而且你已根据同一批 cases 接受、修改或放弃过一次改动，才值得把注意力转走。
+
+PolicyPilot 与 Renewal Triage 可以是一对好对照，不是因为名称更大，而是它们的问题不同：前者着重来源支持的草稿与交人；后者着重时间安全的数据、排序与 reviewer capacity。你可从 [PolicyPilot](/zh-Hans/articles/enterprise-ai-portfolio-policy-pilot) 读另一种有限 case，但别把两者混成一句“我做过 enterprise AI”。
+
+## 把六格变成面试时说得出的路线
+
+开始前可参考 [Portfolio Proof Pack](/zh-Hans/articles/build-a-github-portfolio-proof-pack) 的文件结构，再把每一格连到一个文件。接着打开 [Interview Lab](/zh-Hans/interview-lab)，选一道与你案例最接近的题目。回答时不用重复 README；按这个顺序说就好：哪个决定、最简单做法、哪个 case 逼你修改、怎样停下，以及那次本地练习仍不知道什么。
+
+想先检查自己漏了什么，也可对照 [作品集 evidence review](/zh-Hans/articles/score-an-ai-portfolio-by-evidence-not-fluency)。它能帮你找下一个缺口；这篇则帮你避免把缺口分散到几个半完成 project。
+
+## 这份地图的边界
+
+这是一份学习用架构，不会建立 GitHub repository、不会公开数据、不会替你执行 model call，也不会让本地 fixture 变成真实业务结果。使用雇主、客户、同学或任何个人数据前，仍要由有权的人确认用途、权限、保存与公开范围。
+
+一个主力案例的价值，是让别人不必相信你说“我做过 AI”，也能沿着你留下的六格，看到你在哪里缩小问题、怎样检查、何时停止，以及哪些问题仍未有答案。

@@ -1,0 +1,29 @@
+只有当顺序在决定前已经存在，而且会改变人下一步的行动，sequence 才值得使用。Sequence model 不是 portfolio 的升级徽章；它是表示一连串观察的方法，适用于事件顺序、间隔或前文可能有意义的情况。
+
+## 把 sequence 写成运营 contract
+
+想象一笔虚构服务案件的 events：表单提交、要求补资料、收到文件、specialist review。简单的 tabular baseline 可以使用各类 event 数量与最新 status；sequence model 则接收有顺序的 event，可能还带 timestamp 或间隔时间，学习它们的 context。
+
+RNN、LSTM 与 GRU 这类 recurrent network，会把持续变化的 internal state 从一个 event 传到下一个。Transformer-style model 使用 attention 更直接地比较 sequence 的不同部分。两类都可能有用，但都看不到 observation window 外的数据。先写 cutoff，例如：“10:00 的 routing recommendation 只能使用 10:00 前已记录的 event。”
+
+这句话能保护实验不走捷径：不小心把之后 specialist 的决定放进 sequence，再拿来预测是否需要 specialist review。
+
+## 先保留一个短而可检查的 baseline
+
+先做 aggregate baseline，再做 sequence model：各类 event 的 count、距最新 event 的时间，以及对明显资料不完整案件的 rule。若 sequence model 在较晚时段仍不能改善有限的复核决定，它的额外复杂度还不值得进入 release 讨论。
+
+面对不同长度记录，要决定如何 truncate、pad 与 mask。**Padding** 加入 placeholder，使一个 batch 具有相同长度；**masking** 告诉 model 哪些位置只是 placeholder，不该影响结果。直接测试：给一笔 case 加 padding 后，prediction 不应改变。把一段 event trace 与其 feature representation 放在一起，让 evaluator 能检查转换。
+
+## Framework 不是 system design
+
+PyTorch、TensorFlow 与高阶 training library 可以加快实现，但不会替你决定 target、data boundary、acceptance criterion 或 human handoff。Framework 可能隐藏 tokenisation、batching、loss reduction、mixed precision 或 evaluation mode 的 default。把这些 default 视为 repository 内的 configuration，而不是背景魔法。
+
+制作一份 **sequence-model contract**：event schema、排序 rule、observation cutoff、padding／masking 行为、model configuration、training/evaluation command、baseline 结果与 rollback condition。Pin 重要 dependency version，并记录 run environment。加上一个 late event 必须排除的 test case，以及一个新 event type 的 case，使 fallback 行为明确。
+
+## 一个好 demo 应揭露的失败
+
+长 sequence 可能昂贵、有噪声且难解释。截错一端会丢掉唯一有用的 context；time leakage 会让每个 metric 虚高；library upgrade 也可能在不改 business question 的情况下改变 tokenisation 或 tensor behaviour。也可能 sequence 根本没有比几个设计良好的 aggregate feature 带来更多信号。
+
+AI engineer 需要的证据不是“我用过 Transformer”，而是使用 sequence information 的可辩护理由、boundary test、有可能胜出的 baseline，以及可由人停止的行动。
+
+延伸阅读：[Transformer、generation 与 adaptation 的选择](/zh-Hans/articles/choose-transformer-generation-and-adaptation-tradeoffs) 和 [implementation evidence loop](/zh-Hans/articles/turn-an-ai-request-into-an-accepted-change)。

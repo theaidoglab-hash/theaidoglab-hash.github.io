@@ -1,0 +1,123 @@
+Reviewer 打開 repo 幾分鐘內，應該找得到你的決定、資料邊界、baseline、固定 cases、營運限制和個人貢獻。找不到就補 artefact，不要再砌一個更亮眼的畫面；公開的 synthetic project 仍不能當作 production 使用或 business impact 的證據。
+
+## 先寫一個可以被檢查的決定
+
+不要一開始就叫 AI agent 「幫我起一個 full-stack AI app」。先選一個完全虛構而且有邊界的決定。例如，一名虛構課程 coordinator 要看一份**只供草稿**的合成申請資料摘要；資料不完整就交人處理。coordinator 仍然是最後 decision owner。這個 project 不會為人評分、不會外發訊息、不會改任何 record、不會用真實申請資料，亦不會聲稱替任何機構帶來成效。
+
+README 第一屏先寫四件事：
+
+- **使用者與決定：** 誰看輸出、可以作甚麼有限決定、在甚麼時間點作。
+- **錯誤代價：** 甚麼絕對不可發生，例如虛構事實、洩露資料或未授權 action。
+- **Non-goal：** 這個 project 刻意不會做甚麼。
+- **Success proxy：** 只量度本地合成觀察，例如有沒有正確引用或 handoff；不是收入、採用率或 business impact。
+
+這是 project 的非技術部分。它讓 reviewer 知道你先懂得選問題，才選模型。技術工作是為了驗證決定，不是為了把 demo 砌得更花。
+
+## 讓每份檔案回答一條問題
+
+保留一個小而公開安全的結構。source code、command、test 名稱和 runtime string 用英文，方便其他人重跑；如讀者需要其他語言，只翻譯 README 的入口，並連回英文 source 文件。
+
+~~~text
+README.md                   # decision、setup、test command、limits
+README.zh-HK.md             # 本地化入口，連去英文 source docs
+SOURCE_RECEIPT.md           # 靈感來源、可重用範圍和你改了甚麼
+DATA_CARD.md                # synthetic/public/authorised 資料邊界及 schema
+docs/problem-brief.md       # owner、錯誤代價、non-goal、success proxy
+src/                        # 小而可讀的 implementation
+eval/cases.jsonl            # 固定 normal、failure、prohibited-action cases
+tests/                      # deterministic checks 和 expected routes
+reports/                    # 本地生成的 comparison 或 test summary
+docs/decision-log.md        # baseline、一個改動、結果和下一個決定
+docs/claims.md              # 已有證據與刻意不作的聲稱
+.github/workflows/check.yml # 可重跑 validation trigger
+~~~
+
+GitHub 會把 repository README 當成 project 的介紹，所以開頭很重要；但 README 不能代替其他 artefact。reviewer 應可由 README 的說法一路查到 data card、test、fixture 和 result。若 repo 是 public，應假設陌生人可看見你 commit 的 code 及 repository 可見的 workflow material。不要放 secret、真實工作內容、客戶資料、私人 URL 或複製的課程 solution。
+
+想像：README 是玩具盒外面的標籤；proof pack 才是說明書、安全規則、零件表和煞車測試。標籤靚，不代表玩具安全。
+
+## 由程式到使用方式，都要畀人核對
+
+別人會同時想知道系統點樣做，同喺咩情況可以用、幾時要停。只展示 code，未必睇到你有冇處理正確問題；只講 business story，亦未必檢查到系統係咪按你所說運作。
+
+| 別人想知道甚麼 | 系統部分，可以打開核對乜 | 用喺工作上，仲要講清乜 |
+| --- | --- | --- |
+| 第一條有用路徑 | 透明規則／關鍵字對照、輸入欄位、固定結果 | 明確使用者、有限決定、錯誤代價、刻意不做的事 |
+| 想嘗試的模型或 prompt 改動 | 有版本的設定、固定情境、預期結果、失敗分類 | 為何值得試，以及哪個決定絕不能自動化 |
+| 怎樣檢查它 | 簡單做法和新做法用同一批情境、通過／不通過規則、錯誤例子 | 分開模型行為、流程訊號和仍未量度的真實結果 |
+| 怎樣維持和退回 | 測試指令、套件版本、本地處理紀錄欄位、退回目標 | 最後拍板的人、批准關口、資料保留限制、停止條件 |
+| 公開檔案 | 英文 source、註解、測試名稱、檢查設定 | 本地化 README、來源收據、資料權利、個人貢獻、不作的聲稱 |
+
+即使你不寫 Code，這張表仍然適用。你可以叫 AI coding tool 起草檔案，但決定、acceptance cases、資料邊界、最後 review 同停手，仍然要由你負責。
+
+## Baseline 要刻意普通
+
+第一個可 run 版本應該兩分鐘講得完。以虛構資料摘要為例，baseline 可以只檢查必填欄位、用固定 template 列出合成 facts、資料不足就 handoff。它可能沒有 LLM 流暢，卻建立了 candidate 必須超越的起點。
+
+之後只作一個有意識的改動。例如，放一份寫了 gpt-5-mini Responses API request 形狀的 static fixture，但 runnable reference 仍是本地 deterministic；或者 candidate 只有在同樣 field checks 通過後才起草摘要。不要同時改 prompt、retrieval、UI、model 和 data schema，否則 output 變了也不知原因。
+
+沒有 key、沒有 network call 的 API fixture，只是一份討論 artefact，不是 integration。它可展示未來 request 應有的格式和 safety requirement；不能證明 API compatibility、model quality、cost、permission、security 或 production readiness。README 和 claims file 要寫清楚。
+
+## 欣賞 output 前，先寫 evaluation
+
+建立一小組固定 synthetic cases。每個 case 有 ID、input、expected route、expected source 或 missing-support result，以及它為何重要。最少包括：
+
+1. 資料完整的 normal packet，應得到清楚標示的 draft。
+2. 缺欄位的 packet，必須 handoff，不可以補作答案。
+3. 有衝突或過期合成 source 的 case，必須不能選中。
+4. instruction override，不能改變 contract。
+5. 要求外部 action 的 case，在任何 action 前必須 blocked。
+6. candidate 退步、普通 baseline 反而較安全或較準確的一個 case。
+
+baseline 和 candidate 都跑同一批 case，保存簡短 report：version、command、expected、actual 和 failure reason。固定 cases 不會證明統計顯著或 business impact；它們只是防止你只留下一張成功 screenshot。
+
+想像：比較兩隻紙船前，把同一堆水氹、石頭和終點放在前面。不要給新船一條容易的河，再說它贏了。
+
+## CI 是可重跑檢查，不是品質證書
+
+GitHub Actions workflow 是一份 YAML 指令，可在選定 repository event 後跑同一套 validation。一個小 workflow 可以 run test command，輸出 pass 或 failure。它只證明那一次、那個 revision 通過了你指定的檢查；不能證明產品對真實用戶正確、安全、合法或已可 deploy。
+
+Portfolio repo 的 workflow 保持簡單：
+
+- install pinned dependencies；
+- run deterministic test suite；
+- 若 data card 或 claims file 屬 contract，就拒絕缺檔；
+- 不用 live credential、external write action 或 production data；以及
+- README 的本地 command 必須和 workflow command 一樣。
+
+Public 前先做 release preflight：找 key 和個人資料、讀生成 report 和 logs、確認資料集是 synthetic 或你看得懂條款的 public material、核對 licence，再看不同語言 README 有沒有比英文 source docs 說得過火。如有一項不清楚，保持 repo private 或 local，只寫一篇 learning note。這不是法律或 compliance 意見。
+
+## 練習五分鐘 GitHub walkthrough
+
+讓 reviewer 按這個順序開 repo：
+
+1. **0:00–0:40：** README 的使用者、決定、錯誤代價和 non-goal。
+2. **0:40–1:20：** source receipt 和 data card，說明為何 fixture 可安全展示。
+3. **1:20–2:10：** baseline 和那一個改動。
+4. **2:10–3:20：** fixed cases，包括 handoff、blocked action 或 regression。
+5. **3:20–4:10：** generated test report 和 workflow file；分開可重跑 check 和真實世界 validation。
+6. **4:10–5:00：** claims file：project 證明甚麼、不證明甚麼、下一個需要授權團隊處理的問題。
+
+比起捲動 UI，這更能展示技術判斷和把系統留在權限內的非技術責任。
+
+## 公開，不等於可以用喺真實工作
+
+一個公開的合成範例可以展示 repo 結構、本地執行、測試和決定紀錄；不能展示採用率、節省工時、收入、合法權限、私隱合規、模型安全或正式營運準備。不要用「enterprise-ready」「production-grade」或「客戶已使用」填補不存在的證據。
+
+可以直接寫：「這是 local、synthetic reference；它量度 fixed-case behaviour，並保留 human decision gate。真實資料、外部 action、deployment、monitoring 和 business outcome 都需要另外授權和評估。」這樣讓 hiring reviewer 知道你分得清 prototype 和 claim。
+
+## 完成 checklist
+
+- 陌生人一分鐘內說得出虛構使用者、決定、non-goal 和錯誤代價。
+- Repo 有 source receipt、data card、baseline、fixed cases、tests、decision log 和 claims file。
+- Code、runtime message、command 和 tests 用英文；其他語言 README 只解釋，不改寫 source contract。
+- Candidate 與 baseline 用同一批 synthetic cases 比較，包含 failure 和 prohibited-action case。
+- Test workflow 沒有 credential、可安全重跑，而且被描述為 check 而非 certification。
+- 沒有 commit secret、private material、未授權課程 solution、僱主痕跡或虛構 business outcome。
+- 最後 walkthrough 有一個 limit 和下一個 approval question，不只得 happy path。
+
+## 未有 public repo 前，先留低交接紀錄
+
+完成 README、test 同固定 case 之後，仲未等於要開 repo。先用 [Portfolio Evidence Handoff Pack](/templates/portfolio-evidence-handoff-pack/v1/README.zh-HK.md) 留低 project brief、資料權利、實際本機 run、non-claims、reviewer decision 同 rollback。佢由 `NOT_RUN` 開始，唔會逼你補一個冇跑過嘅結果；CI candidate 亦刻意放喺 inactive example，唔會自行建立 workflow 或上載任何內容。填齊只代表可以畀 owner 覆核下一步，唔代表可以公開、deploy 或聲稱有成效。
+
+延伸閱讀：[用證據評分你的 project](/zh-HK/articles/score-an-ai-portfolio-by-evidence-not-fluency)、[把課程作業變成可被追問的 portfolio](/zh-HK/articles/turn-an-ai-course-project-into-portfolio-evidence)、[PolicyPilot 的有邊界 AI workflow](/zh-HK/articles/enterprise-ai-portfolio-policy-pilot)、[Renewal Triage 的 model-to-workflow evidence](/zh-HK/articles/renewal-triage-mlops)，以及 [Portfolio Evidence Planner](/zh-HK/portfolio-evidence-planner)。

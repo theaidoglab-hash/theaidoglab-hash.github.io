@@ -1,0 +1,104 @@
+> A portfolio project is valuable not because it contains many model names, but because someone else can inspect how you turn a consequential decision into a measurable, bounded and hand-off-ready system.
+
+## What this demo explicitly demonstrates
+
+### What you can inspect in the build
+
+- Versioned synthetic policy records, a deterministic keyword baseline, approval/date eligibility checks, citations, a handoff route, and a trace that fingerprints the query instead of retaining it.
+- Fixed local quality and safety checks and redacted traces, plus a documented local release decision and future rollback plan that can be reviewed through the README, tests and a local run.
+
+### What has to work around the build
+
+- A support-worker lookup decision, its cost of error and its non-goals are defined before RAG is introduced.
+- The data boundary is fictional; final replies, exceptions and actions affecting money or rights remain human-owned.
+- Results use synthetic workflow proxies only. The project does not claim savings, adoption or production readiness.
+
+## This is a fully fictional case
+
+**PolicyPilot** is a synthetic policy-support assistant. Imagine support staff at a mid-sized online retailer repeatedly looking up return, warranty and exception rules. Incorrect advice creates rework and trust risk. The implemented local reference scores keywords over approved, versioned fictional policy records and either produces a cited reply draft or recommends human handoff.
+
+It does not run RAG, semantic search, a document index, or a model. The retrieval/RAG architecture discussed later is a possible next experiment, not a description of the local code.
+
+It **does not** issue refunds, change orders, read real customer accounts or send messages automatically. These non-goals do not make the project smaller. They show that you know which actions must remain human-owned.
+
+## Step one: make the business problem inspectable
+
+Do not start with “I will build a RAG chatbot.” Write a one-page problem brief first:
+
+- **User and decision:** a support worker decides whether a reply can be drafted from policy or must be escalated.
+- **Cost of error:** an unsupported answer, an outdated policy, an exception treated as a default, or an uncertain case that was not handed off.
+- **Success proxy:** on controlled synthetic tasks, time to locate an appropriate policy, share of answers supported by citations, correct-handoff rate and reviewer acceptance of a draft.
+- **Non-goals:** no direct customer operation; no real personal or employer data in the corpus, traces or demo.
+- **Human owner:** a person still decides exceptions, final sending and any action that affects money or rights.
+
+Those are a measurement plan, not performance claims. Do not write “40% time saved” for a fictional system. If you need an estimate, publish the formula, assumptions and limitations instead.
+
+## Step two: create a baseline before proving an LLM is useful
+
+Make a small corpus of fictional policy documents you wrote yourself: standard returns, warranty exceptions, member benefits and a withdrawn version. Give each a policy ID, version, effective dates and status. Then write synthetic questions and their expected handling.
+
+The first baseline can be keyword search plus a human template. It may not look impressive, but it forces an answer: does RAG improve coverage, lookup time or citation ability, or merely make an answer sound fluent? Without a baseline, a successful demo screen has nothing to compare with.
+
+## Step three: keep the implemented flow small; make RAG a later decision
+
+You do not need to imitate a company’s private platform. The current local reference implements this small, reproducible flow:
+
+```text
+Authored fictional policy records with version, status and effective dates
+  -> input safety boundary
+  -> deterministic keyword score
+  -> current-and-approved eligibility check at a fixed as-of date
+  -> cited draft OR human handoff
+  -> privacy-minimised trace + fixed local quality/safety checks
+```
+
+Here, versions identify the synthetic record behind a citation, and a SHA-256 value fingerprints the query in the trace. The code does **not** parse documents, hash documents, split chunks, build an index, filter by region or role, rerank candidates, invoke a model, or execute an external action.
+
+If fixed cases show that the keyword baseline is not enough, design a separate, approved retrieval/RAG experiment rather than silently treating it as already built:
+
+```text
+Authorised source intake
+  -> parse, validate, version and optionally fingerprint documents
+  -> chunk and indexed retrieval with declared metadata rules
+  -> optional reranking and model-assisted cited draft
+  -> human handoff, evaluation and a release decision
+```
+
+Every added arrow needs a reason and an owner. For example, a metadata rule can prevent an inapplicable source from reaching a draft; citations let a reviewer return to the source; and handoff handles low confidence, conflicts and exceptions. Those are extension requirements, not local implementation claims.
+
+## Step four: split evaluation into four classes, not one score
+
+The local reference checks fixed synthetic routes, citations, no-action behaviour and trace privacy. If you add retrieval or a model later, expand the evaluation rather than calling those local checks RAG results.
+
+**Quality for a retrieval/model extension:** retrieval recall@k, citation-supported-answer rate, correctness on a human rubric and correct abstention. Some good outcomes are “there is not enough evidence to answer.”
+
+**Safety:** unauthorised-action rate must remain zero; test unsupported policy claims, source-scope mistakes, prompt injection and attempts to bypass handoff. If you cannot test a risk, call it unverified instead of safe.
+
+**Operations for a retrieval/model extension:** p95 latency, cost per request, error rate, corpus-version coverage and retries. These do not pretend you have huge traffic. They give the design capacity and failure language.
+
+**Business proxy:** on equivalent synthetic tasks, record time to complete a policy lookup, whether a reviewer accepts a draft and how often the case is correctly handed off. These are simulation measures, not enterprise KPIs.
+
+Your test set should include ordinary questions, no-answer cases, conflicting documents, stale policy, wrong source scope, exception cases and prompt injection. Change one major variable at a time and keep the baseline plus an error taxonomy. Otherwise you know only that a score moved, not why.
+
+## Step five: record what someone needs to review later
+
+For a portfolio, do not try to impress someone with a cloud diagram. Leave enough behind for them to ask sensible follow-up questions about the data, tests, decisions and limits:
+
+- A data card: which data you wrote, which fields never enter a trace and how policy updates work.
+- A decision log for a later RAG extension: why use retrieval rather than fine-tuning, and what evidence would reverse that decision.
+- An evaluation report: baseline, test cases, metric definitions, failure examples and limitations.
+- A redacted trace schema for an extension: request ID, version, latency, retrieved policy IDs and handoff status—never sensitive full text.
+- Reproducibility: `README`, environment configuration, seeds/versions, tests, Docker or an equivalent rerunnable method.
+- A release note: conditions for a shadow test, disablement, rollback and the person who owns the final decision.
+
+CI can begin simply. For a future prompt, index or model-setting change, run fixed evaluation cases and block a change when a high-risk case regresses or the unsupported-citation rate exceeds the stated threshold. That is a proposed release control; it does not claim you operate a production service.
+
+## Step six: turn the project into an interview evidence pack
+
+Open the README with the problem, user, non-goal and data boundary. Then show an architecture diagram, baseline and evaluation result. Finish with three things you deliberately did not build and why. A demo video needs only one normal case, one abstention or handoff case, and one version change. You can then answer from artefacts: why RAG, how you measured, when the system must not act and how it stops when something goes wrong.
+
+## Do not present this as a real enterprise delivery
+
+This is a learning case using synthetic data and simulated conditions. It does not prove customer adoption, cost savings, security compliance or production readiness. Its purpose is to show the same reasoning order: problem, baseline, data boundary, evaluation, decision rights, observability and rollback.
+
+Related reading: [why a RAG chatbot is not a complete portfolio](/en/articles/rag-chatbot-to-portfolio-evidence), [a public-data KEV review packet](/en/articles/build-a-public-data-kev-review-packet), [how to explain evaluation and system design in an interview](/en/articles/ai-engineer-interview-learning-map), and [a non-developer’s workflow for evaluating AI automation](/en/articles/build-a-low-code-ai-automation).

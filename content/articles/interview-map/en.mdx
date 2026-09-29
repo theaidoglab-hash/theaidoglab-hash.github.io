@@ -1,0 +1,67 @@
+> This is a map, not a list to memorise. Choose one route, answer one question aloud, then connect it to an artefact that another person could inspect.
+
+## Start with the layer the role is actually hiring for
+
+An AI Engineer title is too broad to tell you what will be tested. Read the verbs in three roles you would genuinely apply for. `Build`, `integrate`, and `ship` usually point to a product and system story. `Operate`, `secure`, and `scale` bring permissions, latency, cost, failure recovery, and release decisions into view. `Experiment` and `improve` require a baseline, a data boundary, and a credible evaluation.
+
+The Interview Lab now has **59 standalone practice questions across ten capability routes**. Do not attempt all 59 at once. Circle the repeated verbs in the roles, choose the closest route below, and start with its first question. The order is a way to locate a weakness, not a claim about any employer's interview loop.
+
+## Ten routes into the lab
+
+### 1. Model foundations, serving and interaction
+
+Use this route when a role mentions model choice, latency, cost, streaming, voice, or long documents. The useful answer is not “use a larger context window.” It explains the workload, what becomes slow or expensive, and the user-facing signal that tells you the choice was worthwhile. Start with [long context is not a free upgrade](/en/interview-lab/long-context-is-not-a-free-upgrade).
+
+### 2. Retrieval, agents and safety boundaries
+
+Use this route for knowledge assistants, tool use, internal data, and permissioned workflows. Practise separating a retrieval failure from a generation failure and from a permission failure. Then name what the system may read, draft, suggest, or never execute. Start with [is the missing clause a retrieval, generation, or permission failure?](/en/interview-lab/rag-retrieval-generation-or-permission).
+
+### 3. Evaluation, data and reliable workflows
+
+This route is for answers that need to survive more than a pleasant demo. Connect a fixed case set and trace to a release decision, then explain retries, duplicate work, partial failure, reviewer capacity, and the threshold at which you stop. Start with [when should you release, and when should you roll back?](/en/interview-lab/release-or-rollback-with-evidence).
+
+### 4. System design and engineering communication
+
+Use this route when you must turn a vague request into a scoped pilot. State the user decision, baseline, non-goal, service boundary, owner, and the evidence that can change the plan. A diagram is only useful if it makes a consequence or handoff clear. Start with [designing an internal policy assistant](/en/interview-lab/design-an-internal-policy-assistant).
+
+### 5. Inputs, contracts and model boundaries
+
+Use this route when a team is relying on schemas, prompt versions, model routing, or public data. A structured response is not proof that it is grounded; a prompt version is not an audit trail. Practise turning assumptions into cases, receipts, fallbacks, and a safe baseline. Start with [a token budget is not a language test](/en/interview-lab/token-budget-is-not-a-language-test).
+
+### 6. Training, labels and model failure boundaries
+
+Take this route when the role involves prediction, fine-tuning, model training, or an offline metric. Explain the decision label, time boundary, split, and failure mode before proposing a larger model. A score can improve because the task definition changed, not because the system learned what the business needs. Start with [a label definition can change the model](/en/interview-lab/a-label-definition-can-change-the-model).
+
+### 7. Retrieval and agent controls
+
+Use this route for stateful agent workflows. Good answers name ownership when sources conflict, permission when a tool acts, terminal states when a loop stalls, and expiry when memory could become stale policy. Start with [a reranker cannot restore a missing permission](/en/interview-lab/a-reranker-cannot-restore-a-missing-permission).
+
+### 8. Embeddings, ANN, and index lifecycle
+
+Use this route for the question behind a plausible-looking search result: why should anyone trust it? Go beyond similarity. Explain why an embedding model and index change together, what ANN can miss, how metadata is backfilled, and how a query stops or reroutes after a source is withdrawn. Start with [an embedding change needs an index migration](/en/interview-lab/an-embedding-change-needs-an-index-migration).
+
+### 9. Serving, evaluation and release decisions
+
+Use this route when a team runs a system for real users. The job is to connect queue handling, P99 latency, human calibration, business measures, monitoring, rollback, and a safe baseline. Do not let a better average hide a worse tail or an overloaded reviewer queue. Start with [a queue needs a dead-letter path](/en/interview-lab/a-queue-needs-a-dead-letter-path).
+
+### 10. Multimodal inputs and portfolio evidence
+
+Use this route when a project handles OCR, images, audio, or makes a claim about its own success. Treat extracted text as untrusted input; make a visual field point back to a region; and compare image transforms or model changes by modality slice, not only an attractive average. A strong portfolio gives a reviewer a way to inspect a failure, not just an attractive output. Start with [a visual claim needs a region and an abstention](/en/interview-lab/a-visual-claim-needs-a-region-and-an-abstention).
+
+## Work one question in three passes
+
+First, answer aloud for 90 seconds without reading. Second, read the page and identify the missing causal link: where the data enters, why the system becomes slow or wrong, who owns approval, or which measure reverses the decision. Third, open your portfolio and point to one artefact: a README decision, evaluation case, source receipt, trace, or handoff rule. If no artefact exists, that is a concrete next change—not a reason to add another framework.
+
+## Rehearse the conversation, not a script
+
+Every [Interview Lab](/en/interview-lab) question page includes a copyable prompt for an LLM voice or live-chat session. It asks one question, waits for your answer, and separates feedback about reasoning, evidence, and risk. Use public, fictional, or de-identified material only. Treat any feedback as practice input; verify technical claims against the evidence in your own project.
+
+## Leave the lab with a next move
+
+An answer can reveal two different gaps. If you cannot explain the mechanism yet, return to the [AI Engineer roadmap](/en/series/ai-engineer-roadmap#roadmap-stage-00) and repair the earliest missing stage rather than collecting more questions. If you can explain the mechanism but cannot point to a baseline, a fixed case, or a named owner in your own work, use the [Portfolio Evidence Planner](/en/portfolio-evidence-planner) to turn that gap into one bounded project change.
+
+If you need a smaller first practice exercise, take the [no-code draft-workflow route](/en/articles/use-ai-without-writing-code) when you want to define and review the decision without implementing a system. Take the [coding-partner route](/en/articles/use-ai-as-a-coding-partner-with-proof) when you are ready to inspect a narrow change, its diff, and its tests. Both routes lead back to the same interview question: what did you decide, what evidence checked it, and where did a person keep authority?
+
+## Scope of this map
+
+These are AI.DOG practice materials, organised around recurring capabilities visible in public role and technical discussions. Each is for practising mechanism, trade-offs, failure boundaries, and inspectable evidence; none is presented as a company question, company-by-company bank, or current interview process. Teams, levels, and regions test different things; the map is here to help you choose the next defensible practice step.

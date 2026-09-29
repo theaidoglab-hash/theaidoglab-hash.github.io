@@ -1,0 +1,133 @@
+Before placing a course exercise in a portfolio, record what the course supplied, what you changed, whether the data may be used, what you compared it with, and which failures you tested on purpose. That record lets someone inspect your judgement; it does not turn a class exercise into a claim of real delivery or a business outcome.
+
+## What a completed course still needs
+
+Following a tutorial, submitting an assignment or receiving a completion record can be a strong start. A reviewer or interviewer will usually ask more: Why did you choose this problem? Which parts came from the source? What did you change? May you use the data? How did a simpler approach perform? What happens when the system fails? Can someone else rerun it?
+
+Those questions are not an invitation to present a small exercise as a real enterprise delivery. They let you show honest engineering judgement. This approach starts with an official tutorial, course assignment or workshop exercise you have already chosen. It does not rate a provider or imply endorsement by a course, institution or employer.
+
+## Narrow the exercise to one decision
+
+Reduce the original exercise to a learning decision with a user, a point in time and a boundary. Instead of “build a document Q&A bot,” try: “Help a fictional reviewer decide whether a synthetic policy corpus provides enough support to draft a reply; otherwise hand the case back to a person.”
+
+Write four statements:
+
+- **User and decision:** Who sees what, and which limited decision can they make?
+- **Cost of being wrong:** Which errors are unacceptable, such as stale material, unsupported answers or unauthorised actions?
+- **Non-goal:** What does the system deliberately not do?
+- **Inspectable output:** Which artefact will remain: an evaluation report, data card, README or decision log?
+
+This turns a course prompt into a testable work hypothesis. It does not turn it into a claim of real business outcomes.
+
+## Write a source receipt first
+
+A source receipt is not decorative citation. It makes the learning, reuse boundary and your original judgement visible in one place. Create a `SOURCE_RECEIPT.md` for every course or tutorial exercise:
+
+```text
+source title: [tutorial / course / workshop exercise title]
+source URL: [exact URL]
+version or date: [version, release date, or "not stated"]
+accessed at: [YYYY-MM-DD, timezone]
+licence or terms: [exact licence / terms link, or "not stated"]
+reuse boundary: [what the terms allow; link-only if unclear]
+what I copied: [for example, a command pattern or high-level API sequence]
+what I changed: [problem framing, synthetic data, baseline, tests, documentation]
+what I did not reuse: [source solution text, proprietary data, branding, screenshots]
+```
+
+If a licence or course term is unclear, do not upload the handout, solution code, screenshots or dataset to a public repository. Retaining the URL, explaining the idea in your own words, or keeping an independent experiment in a private learning environment are safer options. This is not legal advice; use the actual terms to decide what you may share or adapt.
+
+## Set the data boundary before choosing a model
+
+The overlooked question is rarely the model. It is whether you may use data for learning, testing, demonstration or publication. Your `DATA_CARD.md` should explicitly choose one path:
+
+- **Synthetic data:** fictional records you write or generate, with generator, seed, schema and known unrealistic properties recorded.
+- **Authorised data:** evidence of the original licence, usage restrictions, and whether derivative work and public demonstration are allowed.
+- **Owned and consented data:** only where everyone relevant has clearly agreed to that use, while still minimising and de-identifying it.
+
+Do not bring non-public employer, customer, classmate or course-platform data into the project. When uncertain, use a smaller synthetic fixture. It may feel less realistic in a demo, but makes your explanation more truthful.
+
+## Replace endless tuning with a baseline, one deliberate change and fixed tests
+
+Reimplement the smallest method from the tutorial as a **baseline**. It might be keyword search, a rule-based router, a human template or the simplest course method. Then choose one **deliberate change** that you believe addresses a named failure: filtering by document version, handing low-confidence results to a person, or validating a structured output against a schema.
+
+Do not replace the model, prompt, chunk size, retriever and UI at once. If the score moves, you will not know why.
+
+Build an `eval/cases.jsonl` set that you do not casually rewrite. It should include at least:
+
+- one normal case with fresh data;
+- one case with insufficient support that should be handed off;
+- one stale, missing-field or conflicting-version case;
+- one high-risk or untrusted-input case; and
+- one counterexample where the candidate is worse than the baseline.
+
+Give each case an input, expected boundary, expected handoff or refusal, and judging rule. Fixed cases do not pretend to establish statistical significance. They prevent you from retaining only happy-path screenshots. If you add cases later, preserve the old version and explain why; do not rewrite answers to hide a regression.
+
+## Keep a readable evidence chain for each experiment
+
+A small experiment log is enough. Record the date, source version, data version, baseline, single change, fixed-case outcome, error taxonomy and next decision. For example:
+
+```text
+run: 004
+baseline: keyword retrieval + human template
+deliberate change: reject documents outside the active version
+fixed cases: 5 passed, 1 correctly handed off
+failure observed: ambiguous question still retrieved two conflicting policies
+decision: keep version filter; do not add a generative answer layer yet
+limit: all cases are synthetic; no customer or workflow outcome is claimed
+```
+
+The reason for not adopting a more complex approach is valuable evidence too. If a change does not beat the baseline, keep the baseline and failure evidence. That shows you do not treat technology as the answer by default.
+
+## Make rerunning the judgement possible
+
+A README need not be long, but a stranger should find the minimum path. Adapt this sequence to your real tools:
+
+```text
+1. Read SOURCE_RECEIPT.md and DATA_CARD.md before using any files.
+2. Create the pinned environment from the lockfile or requirements file.
+3. Generate or download only the permitted synthetic / authorised fixture.
+4. Run the baseline against eval/cases.jsonl.
+5. Run the deliberate-change candidate against the same fixed cases.
+6. Produce the comparison report and inspect failed or handed-off cases.
+7. Do not connect write actions, personal data or external accounts.
+```
+
+Add versions, seed, configuration path and expected output path. If the full project cannot be rerun, state which part is limited by course access, API cost or a retired third-party service, then provide the smallest local fixture. That is more useful than pretending there is one-click deployment.
+
+## State individual contribution so it can be checked
+
+Add a “My contribution” section to the README. Do not write “I built the whole system.” Name what you actually did and did not do. For example:
+
+- I chose the fictional user decision, non-goal and data boundary.
+- I wrote the synthetic records, baseline, fixed evaluation cases and failure taxonomy.
+- I turned a high-level tutorial sequence into a version-filter and human-handoff experiment; I did not copy a sample solution.
+- I do not own or claim ownership of course, teammate or third-party material or outcomes.
+
+For group work, list each person's actual artefact and the portion you can independently explain and rerun. This does not diminish contribution; it puts trust in the right place.
+
+## Explain the work in five minutes
+
+Practise the walkthrough in five minutes:
+
+- **0:00–0:40:** State the user decision, cost of error and non-goal.
+- **0:40–1:20:** Show the source receipt and data boundary; identify what cannot be reused or shown.
+- **1:20–2:10:** Walk through the baseline and the one variable you changed.
+- **2:10–3:20:** Compare the same fixed cases, including a failure or human handoff.
+- **3:20–4:10:** Open the rerun instructions, versions and experiment log.
+- **4:10–5:00:** State your contribution, limits and the next hypothesis that needs genuine authorisation or human review.
+
+If asked whether the project has business impact, the most reliable answer may be: “I do not make that claim. It tests a limited workflow with synthetic or authorised data; I keep model and system evidence separate from real business outcomes.” That is not a weakness. It is mature scope control.
+
+## Completion checklist
+
+- The source receipt includes URL, version or date, access date, licence or terms, reuse boundary, copied material and changed material.
+- Data is explicitly synthetic, authorised or consented; it contains no unauthorised person or organisation data.
+- There is an explainable baseline, one deliberate change and the same fixed evaluation cases.
+- The README supports a rerun and names limitations, failures and non-goals.
+- Individual contribution is separate from group or course material.
+- The five-minute defence shows one normal case and one failure or human-handoff case.
+
+These artefacts do not guarantee a job, interview or income. They make it easier for someone to see that, even when you begin with another person's learning material, you know how to build an honest, inspectable engineering project with boundaries.
+
+Related reading: [choose AI learning sources by the evidence gap](/en/articles/choose-ai-learning-sources-by-evidence), [separate model metrics from workflow evidence in Renewal Triage](/en/articles/renewal-triage-mlops), [data, evaluation and human handoff in PolicyPilot](/en/articles/enterprise-ai-portfolio-policy-pilot), and [AI engineer interview practice](/en/interview-lab).

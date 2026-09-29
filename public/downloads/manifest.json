@@ -1,138 +1,138 @@
 {
-  "generatedAt": "2026-09-23T00:00:00.000Z",
+  "generatedAt": "2026-09-26T00:00:00.000Z",
   "assets": [
     {
       "article": "role-route",
       "locale": "zh-HK",
       "format": "pdf",
-      "size": 25241,
-      "sha256": "767cec10a16a21f546fa079d35fef4e060332fca9d7fea76b2a4bc691ffc0922"
+      "size": 25120,
+      "sha256": "a36aafde6a8abc7f6668ea8b368a242e8f817bbfcfaa6b22337854f3ecde2c1a"
     },
     {
       "article": "role-route",
       "locale": "zh-HK",
+      "format": "md",
+      "size": 763,
+      "sha256": "3c13f7a79f9d39cf4888ed4343bef26d5a627e386945928d57ba96ca04b8afb4"
+    },
+    {
+      "article": "role-route",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 25115,
+      "sha256": "123542b23c4e86163cbd5eb59adf56b4ed84c2ec2df9d911b613be0f217a39c2"
+    },
+    {
+      "article": "role-route",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 763,
+      "sha256": "fcbf2265de1ee7cd8ed6b651e981c381addeb311ca04f0a4243f97b32571f6dd"
+    },
+    {
+      "article": "role-route",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 46050,
+      "sha256": "a25c05087b0b7ed0ffba2c4eea33c809d6ea8d7a65b5f696126c619f45bda1d7"
+    },
+    {
+      "article": "role-route",
+      "locale": "zh-Hans",
       "format": "md",
       "size": 750,
-      "sha256": "4e713834aa140e5e96cd1d00a5b62e07eec092ad6003937f8b4aa8259ee9b932"
-    },
-    {
-      "article": "role-route",
-      "locale": "zh-TW",
-      "format": "pdf",
-      "size": 25624,
-      "sha256": "23478769971a5eea6a98d5c746a9ed4035467792a00ca109fa25db47eeda4d7c"
-    },
-    {
-      "article": "role-route",
-      "locale": "zh-TW",
-      "format": "md",
-      "size": 758,
-      "sha256": "6a86db9176c8cb185c2f2a3d6647c0e16166fd94eb5af009053d3c7d4b293034"
-    },
-    {
-      "article": "role-route",
-      "locale": "zh-Hans",
-      "format": "pdf",
-      "size": 47187,
-      "sha256": "b4e06c8b3e1e715aef2e9b461fad95d7a3ceb824c4bf6f94e0e81e14314e455d"
-    },
-    {
-      "article": "role-route",
-      "locale": "zh-Hans",
-      "format": "md",
-      "size": 745,
-      "sha256": "c840c080b7cb83b416e5b21c3b2a9c77c346aeaf4d718f83e9134b62dff684b9"
+      "sha256": "068654ce4dc3a9a58f29d804a3ef286211c17d1ee352b193eccaa4b39105a87c"
     },
     {
       "article": "role-route",
       "locale": "en",
       "format": "pdf",
-      "size": 12178,
-      "sha256": "188783e6e9962be3e7235bfdbb92fe57c7d7f4192d3665a2407dd6f28347eace"
+      "size": 12209,
+      "sha256": "4dd47114315de97dda0cf101a44f1f6e0d094c220ed310fc4aa1a28e407f64f8"
     },
     {
       "article": "role-route",
       "locale": "en",
       "format": "md",
-      "size": 785,
-      "sha256": "258694a342d3880bf861f130c503ac5105d585bf54321e66ff8e54782bf3b9ab"
+      "size": 786,
+      "sha256": "aeac8d5fb9ee33369953776342fa9d4a8561df072d68abeec6b9c32f42833283"
     },
     {
       "article": "rag-evidence",
       "locale": "zh-HK",
       "format": "pdf",
-      "size": 22607,
-      "sha256": "6220ffc41a41367ee4c21a35d12a7857cccdcc1ca6318c8316bed3fae281d04b"
+      "size": 27076,
+      "sha256": "d34c8c17b043d05a5f7399f50bc2d3d0a730dc41b6a79c94c2cdbd062da163d6"
     },
     {
       "article": "rag-evidence",
       "locale": "zh-HK",
       "format": "md",
-      "size": 798,
-      "sha256": "570f8ab4903bc00f2e47ded133190ab0430ce7f04a8d9e33932cf5feb45a717d"
+      "size": 821,
+      "sha256": "7db2e04b7f8638cabfaebc38ae1ad5ba76e8c44c1dce50e960469da94ccd15fa"
     },
     {
       "article": "rag-evidence",
       "locale": "zh-TW",
       "format": "pdf",
-      "size": 23644,
-      "sha256": "e84f0497ae074375b0f60b2753970733729728a80e44d5c17beb938477c932dd"
+      "size": 23688,
+      "sha256": "3c4c16a8760baf222b2e20508c1668b4f6f1cfa2a906f8734576fc6058fb2875"
     },
     {
       "article": "rag-evidence",
       "locale": "zh-TW",
       "format": "md",
       "size": 797,
-      "sha256": "ed63a3c7f4d67d03a3fe69fcb6527fc7119684f614fa1cd69a24109e06fbe8e5"
+      "sha256": "f3dacbeeed3f5e05ad7d867617ac39f6441ed110923cbb115252fe7b8bff788a"
     },
     {
       "article": "rag-evidence",
       "locale": "zh-Hans",
       "format": "pdf",
-      "size": 43886,
-      "sha256": "5e94fa8f940d16e4d2c686ffb46d8c4d2d316e683122e8c243e59af6a3940a93"
+      "size": 43918,
+      "sha256": "c47312279f3b34cb36322eb4e9249c768b0133615f9addd6cd45f12dee2ee00c"
     },
     {
       "article": "rag-evidence",
       "locale": "zh-Hans",
       "format": "md",
       "size": 786,
-      "sha256": "676a8f6049aac3d713b65c330c8a4713a7af921b57318001bb6f71cccaf3059a"
+      "sha256": "ff208369879ca6ec2a3b8f05021956a585fefb6191f3cca6dfcf6fbd27c8b4a1"
     },
     {
       "article": "rag-evidence",
       "locale": "en",
       "format": "pdf",
-      "size": 12234,
-      "sha256": "d80d60ff4d593cd56f344d2989a4551145f4f938e71633db048ed20df6f56690"
+      "size": 12268,
+      "sha256": "391532e5770ac7cf7c8265b9f7b7ade0d4a55bf5dece468f947b5dae6b6ce28d"
     },
     {
       "article": "rag-evidence",
       "locale": "en",
       "format": "md",
       "size": 831,
-      "sha256": "c77d342d18f1e3b15d608a286187fd7f74815d559c4ac5d5111686e46d4441d6"
+      "sha256": "931d936f5c8b5a07ce197af88d6e99f11646239996cc82a47b7979ac92b85475"
     },
     {
       "article": "professional-workflow",
       "locale": "zh-HK",
       "format": "pdf",
-      "size": 19780,
-      "sha256": "8a40e079783cb5d4741e3c76b56f64d388583815e47977afbce605903c9f0cd3"
+      "size": 25979,
+      "sha256": "d7ae3536098e4ad811ecff3a2a53cb9198ba0e1d4c696552d3d853f8655bbfe3"
     },
     {
       "article": "professional-workflow",
       "locale": "zh-HK",
       "format": "md",
-      "size": 787,
-      "sha256": "3ae34a6a8a00db8283562eb6163ed18fd1c257ebaa7aef63e31801f1c1f38eb8"
+      "size": 777,
+      "sha256": "08f026056b74e2380a5d9a10103e4ab758da27d181f0186234bded314b91564c"
     },
     {
       "article": "professional-workflow",
       "locale": "zh-TW",
       "format": "pdf",
-      "size": 20251,
-      "sha256": "0fe8b83ab7d67cc6d3d9252d763ac445f9c2b3ea193622838ca3ba7bf0754894"
+      "size": 20275,
+      "sha256": "b4fc7da361715a66323b7079ae1792498746739afe5fc9fcdecf9983a9b3e10b"
     },
     {
       "article": "professional-workflow",
@@ -145,8 +145,8 @@
       "article": "professional-workflow",
       "locale": "zh-Hans",
       "format": "pdf",
-      "size": 37644,
-      "sha256": "00deff6525fc151ac706895da5e7c2da8fbbab1d551ec70bd12261ecb1a0dd27"
+      "size": 37671,
+      "sha256": "a7a73cebe10c04dbc8a983947883ab22ecd01ecb0836a4c8d95f36efb9b9099f"
     },
     {
       "article": "professional-workflow",
@@ -159,8 +159,8 @@
       "article": "professional-workflow",
       "locale": "en",
       "format": "pdf",
-      "size": 12198,
-      "sha256": "5f6e9a7b0a09e7bae9d2e63b3cc635aac3b72bec0b3df773b83292f88691184c"
+      "size": 12230,
+      "sha256": "66b16da5b6f11cad1c028d6a67eb0327c503764c3ad1d713c13d147932931bed"
     },
     {
       "article": "professional-workflow",
@@ -173,22 +173,22 @@
       "article": "prompt-evidence",
       "locale": "zh-HK",
       "format": "pdf",
-      "size": 19821,
-      "sha256": "cfa84b0091df156936ee3a7eab8cc28e74ce1bb46341f0abfcade07beae973ca"
+      "size": 25466,
+      "sha256": "01f789d52e1a191abf4762bdd8e8058077180d7a5e245cb65bc30d0b3b476c23"
     },
     {
       "article": "prompt-evidence",
       "locale": "zh-HK",
       "format": "md",
-      "size": 745,
-      "sha256": "bf7f63e6ae4d6f58ce701c834d687c3d2d90c82fa0f3916a676d28b93d8a91d1"
+      "size": 736,
+      "sha256": "a2bf2b0c10c9c8dea7f4549237fd8aac10ea7b7533dddaeb56598c20afde85ba"
     },
     {
       "article": "prompt-evidence",
       "locale": "zh-TW",
       "format": "pdf",
-      "size": 21046,
-      "sha256": "a0e8a3287f6ab10d37f1264e0540b9d44c38114c0b008424aeef195950861368"
+      "size": 21078,
+      "sha256": "6f4ce51da2de70a7a347ff618c78269c28faa0d67e634eee198df8654ac76805"
     },
     {
       "article": "prompt-evidence",
@@ -201,8 +201,8 @@
       "article": "prompt-evidence",
       "locale": "zh-Hans",
       "format": "pdf",
-      "size": 37264,
-      "sha256": "e5756b863468a431f85b488939360a3f7be4d4a8c5043f3c23fcc993fc25b311"
+      "size": 37295,
+      "sha256": "8bb42188c48d23c3569569f116a925de7bb02a976f1964bcaeeb80eacc1f8206"
     },
     {
       "article": "prompt-evidence",
@@ -215,8 +215,8 @@
       "article": "prompt-evidence",
       "locale": "en",
       "format": "pdf",
-      "size": 12183,
-      "sha256": "7748af60674f23db349aa6640fea2214a693a2e077563d9198fec9d029fcf1c4"
+      "size": 12214,
+      "sha256": "4c940778f98f4c26e900b2ba83e66b279766735db7f56a8b80ac0b41366dc607"
     },
     {
       "article": "prompt-evidence",
@@ -229,22 +229,22 @@
       "article": "opportunity-scorecard",
       "locale": "zh-HK",
       "format": "pdf",
-      "size": 24422,
-      "sha256": "4f72c221f4f9ee2db992111f149be22466b0713fb1c10b09e3613066a7e9648e"
+      "size": 25185,
+      "sha256": "7eb011b170e89e5afd44adab59cc814cda16f5c3d9cf835cfea9f45fe198372e"
     },
     {
       "article": "opportunity-scorecard",
       "locale": "zh-HK",
       "format": "md",
-      "size": 747,
-      "sha256": "b5d6e4d1d0c640810303fe135c59a64dcbeba2116cdbb445beae76a82ce83dff"
+      "size": 741,
+      "sha256": "5c15473580e16e3efeaa02381afdea70fd4411c223a3112174ef9a9b49232c17"
     },
     {
       "article": "opportunity-scorecard",
       "locale": "zh-TW",
       "format": "pdf",
-      "size": 25049,
-      "sha256": "ba88132a90e642ddcd49c3d9cae543396a91e52f15ec4e44008babd1aa53053b"
+      "size": 25082,
+      "sha256": "4c960afbb4e4507bbbb4797c99d5fcef625dfc36b84b39030919cdd78b45105f"
     },
     {
       "article": "opportunity-scorecard",
@@ -257,8 +257,8 @@
       "article": "opportunity-scorecard",
       "locale": "zh-Hans",
       "format": "pdf",
-      "size": 45959,
-      "sha256": "ae12469742ecc130f3ef7cd05c51c915955a0ff3441f91fd3383a82c1c170aee"
+      "size": 46003,
+      "sha256": "cdb93db0ae9fb25cf77a1d374491a10571af50fde73566a2cdca9a8d25b20225"
     },
     {
       "article": "opportunity-scorecard",
@@ -271,8 +271,8 @@
       "article": "opportunity-scorecard",
       "locale": "en",
       "format": "pdf",
-      "size": 12218,
-      "sha256": "155fc58028af49d214b3fe469be5f2b502f65e6b4e46ec22dcc39cead1fb2650"
+      "size": 12249,
+      "sha256": "17adbbda15a078a1309119ca620a9170fa0f134cedcda115dc0377114c03d875"
     },
     {
       "article": "opportunity-scorecard",
@@ -280,6 +280,3198 @@
       "format": "md",
       "size": 793,
       "sha256": "e2254ba0068f47b7d064c3ce8fb833c305807e9c133e7f20de3f5855c79261be"
+    },
+    {
+      "article": "interview-map",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 29791,
+      "sha256": "a00a14dd3afcda38ca4810fd002a62e7d13abe4cced22b2d3d59cf413bbf26f3"
+    },
+    {
+      "article": "interview-map",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 842,
+      "sha256": "fb058238484391fb4f6d37aaa8cb5dcff99bc694174c515fe58fd3372a251ae6"
+    },
+    {
+      "article": "interview-map",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 29803,
+      "sha256": "c946574379516fd052238d02ad6db12e0a7f4e0bad4753d06d1e3f23b9d5f196"
+    },
+    {
+      "article": "interview-map",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 824,
+      "sha256": "00ecb44470410393a545ba5533898ca89db50b76159140ff52c5c03451852442"
+    },
+    {
+      "article": "interview-map",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 54896,
+      "sha256": "9e5257434738d77ad859281d7c3b10477342fbaae2afe9051f7f7d09dde182f7"
+    },
+    {
+      "article": "interview-map",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 827,
+      "sha256": "65f70c948f31278b2a7569cf9d61ad0b5fa79b23d1eb560b6eb92baacafc2dfe"
+    },
+    {
+      "article": "interview-map",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12308,
+      "sha256": "cc188fc811b9c679c6248c5ff1bfd16b4341a2ccad5c3597d4eac5d729540321"
+    },
+    {
+      "article": "interview-map",
+      "locale": "en",
+      "format": "md",
+      "size": 913,
+      "sha256": "7c53c19add6ac4688c3ff1ea3d59faf476d22590143bdb83ffeaa22da884a27b"
+    },
+    {
+      "article": "policy-pilot",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 20436,
+      "sha256": "4cba1c97ab3157a462b36cb3f65a1b7055faece4829897808e9db0fc609d924a"
+    },
+    {
+      "article": "policy-pilot",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 861,
+      "sha256": "fd2d46a14219aa6665adc76a8b40be8b9e46f6513880ef1f712be929c4738dec"
+    },
+    {
+      "article": "policy-pilot",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 20516,
+      "sha256": "31d7e64066d5e3c26c35be1476156136f16a9d644b9d4c9dae9b71d4f0119dd1"
+    },
+    {
+      "article": "policy-pilot",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 861,
+      "sha256": "e730d4403ef016664287e8e38802c70bf29f961784043f6a21276a4ced6116a5"
+    },
+    {
+      "article": "policy-pilot",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 37034,
+      "sha256": "82c997386900fe808f8197b6fd3b4e11ecd6e4a72227b55f946f11d1abd3ac1c"
+    },
+    {
+      "article": "policy-pilot",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 861,
+      "sha256": "1a81a2a541f1f1da0ad98d10c33231d82dcb3965ded6519fa0bef125068ec04a"
+    },
+    {
+      "article": "policy-pilot",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12294,
+      "sha256": "32bb5f79a5e2ef2a675d6d03225624afb70a303673229cd2adf7dc6b98074e4c"
+    },
+    {
+      "article": "policy-pilot",
+      "locale": "en",
+      "format": "md",
+      "size": 880,
+      "sha256": "a521695c39520afcf871fc312dff2eb11e703ca4f7f1e19348339e6c21ad1435"
+    },
+    {
+      "article": "renewal-triage-mlops",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 23606,
+      "sha256": "5f569eedc0442dab9e5111b8d88e7822d6bdc056ea6638d01bf9bd26517fa6fd"
+    },
+    {
+      "article": "renewal-triage-mlops",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 917,
+      "sha256": "2b9ab68d76eca3ecff4d8eda47ff4ebaef450ffc77d54c89287321dde301a51c"
+    },
+    {
+      "article": "renewal-triage-mlops",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 23832,
+      "sha256": "6f83ffec1edd908c71da1616cdbd782bca0e8b08803a99193591d0b76f8a0984"
+    },
+    {
+      "article": "renewal-triage-mlops",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 917,
+      "sha256": "59bf5932e0acf88866537eb3a40f634a77cd36b8354b3211d209ecda424c1563"
+    },
+    {
+      "article": "renewal-triage-mlops",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 43492,
+      "sha256": "c17f535f5ac9957fb861a75b69943d8c8f95c0752360aa9dbef184dee3b21726"
+    },
+    {
+      "article": "renewal-triage-mlops",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 917,
+      "sha256": "6f2511db093c392504d442e91122994ac254e603a469694ebc2fad0f6f017465"
+    },
+    {
+      "article": "renewal-triage-mlops",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12354,
+      "sha256": "380eb7ead739e6fabf6566270e8df6d29c075872a4bbc6f5ae0b3c65e6823e43"
+    },
+    {
+      "article": "renewal-triage-mlops",
+      "locale": "en",
+      "format": "md",
+      "size": 960,
+      "sha256": "83951b6e54a4fb982cd2ef3e16276af9bc21a24f9afeaf9fa09c85701f9e0ec2"
+    },
+    {
+      "article": "course-to-portfolio-evidence",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 29738,
+      "sha256": "e096d39ab9e37ef89f40fc53b5a3df12a2ee7953241216e15af4e18f7b982a14"
+    },
+    {
+      "article": "course-to-portfolio-evidence",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 914,
+      "sha256": "4cd53d2df746abedf8ad94a13dd7f78d3ea9f3b1e1eb90cacb1c033ecbb26209"
+    },
+    {
+      "article": "course-to-portfolio-evidence",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 29709,
+      "sha256": "f0365b48be03ff80c64a36483726556ba99f790d74957261a37692a8be027ad1"
+    },
+    {
+      "article": "course-to-portfolio-evidence",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 914,
+      "sha256": "61ea45cbf9afbfb5d55cda643c09213b86de35bcc49a790eae8d58116ab35c10"
+    },
+    {
+      "article": "course-to-portfolio-evidence",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 53647,
+      "sha256": "8aeccd4b7cabf4ff9943d962d99af19907b5e29178d438fc6537603a6eccd48f"
+    },
+    {
+      "article": "course-to-portfolio-evidence",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 911,
+      "sha256": "db06afa1f94f8462debb2d51c8fb3938567bfc0686d775e16eabc96715a0cc98"
+    },
+    {
+      "article": "course-to-portfolio-evidence",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12367,
+      "sha256": "b0b9402efba79c9b5603a35f9f67a36d8a6365657979f6238586f1c02969ec77"
+    },
+    {
+      "article": "course-to-portfolio-evidence",
+      "locale": "en",
+      "format": "md",
+      "size": 976,
+      "sha256": "5dc91b27de80d17a401bfc05b6e55e48c3332491c72900d7cfddd35734534cb2"
+    },
+    {
+      "article": "low-code-automation",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 25261,
+      "sha256": "eff70a44f056d50beca75eb56a676bc01f2c8fbdf88b2070ef9f40c896ee93b0"
+    },
+    {
+      "article": "low-code-automation",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 834,
+      "sha256": "8fa82353ea47de87e3a5461e60c580944849f4809ed5fb2c038e44c4a4aebad2"
+    },
+    {
+      "article": "low-code-automation",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 25211,
+      "sha256": "25589c1038724c0ffceeab83ddb3ca35cc2ad0359bc4f2d5b06d63ceeeaffa8a"
+    },
+    {
+      "article": "low-code-automation",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 834,
+      "sha256": "b2907d3c2584c6c6a1a5bf50d674414871b55ebd23d09ab967445fb9db42dc1d"
+    },
+    {
+      "article": "low-code-automation",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 45168,
+      "sha256": "d6505ae31b0c560b10c071de3582638dc4afd3f8cc530ea6494d1974236ddbdb"
+    },
+    {
+      "article": "low-code-automation",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 831,
+      "sha256": "ee9b063d3ac608d6be6302945a2b6bbb3c150d8d4731767a606f96871d6e76a8"
+    },
+    {
+      "article": "low-code-automation",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12280,
+      "sha256": "18bcb502810e3ce9d12870c092865f47fe819d0b880ab90dc1445e559e44aff4"
+    },
+    {
+      "article": "low-code-automation",
+      "locale": "en",
+      "format": "md",
+      "size": 865,
+      "sha256": "658c85bb8ad52f95beba390dd9139208cf2098f139b1fdf9058d6c4e3020ced7"
+    },
+    {
+      "article": "coding-agent-review-loop",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 22784,
+      "sha256": "c47a2171577188b2c20110c013a89c428b26ad12205702c473e77b3e4a4690f1"
+    },
+    {
+      "article": "coding-agent-review-loop",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 900,
+      "sha256": "d15b52a9ce4c9382abd7a86cd3ffd0bec29f344538e0574aa13d8feb70f050a6"
+    },
+    {
+      "article": "coding-agent-review-loop",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 22518,
+      "sha256": "83498978f708a6229c942040450721215fa273b03fabbb2ece7b3f917aab21c4"
+    },
+    {
+      "article": "coding-agent-review-loop",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 900,
+      "sha256": "fbb1a8351ce992a935e30c3e2e3c266bd5d886db1536ddf6293145984b9c5711"
+    },
+    {
+      "article": "coding-agent-review-loop",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 41021,
+      "sha256": "fe6ec24a91d00c49e7e3bbc5554387e653ef1519bc82f90b3474e9a7ff91477a"
+    },
+    {
+      "article": "coding-agent-review-loop",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 900,
+      "sha256": "5778a5bf811cd69d3b34c42e76c752219e4b7a44a187a63d54c47d7ce4fb3c11"
+    },
+    {
+      "article": "coding-agent-review-loop",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12327,
+      "sha256": "a6633aa1668dfdc88bba7a68078b813b373186ef9181af554194aac747b24c61"
+    },
+    {
+      "article": "coding-agent-review-loop",
+      "locale": "en",
+      "format": "md",
+      "size": 908,
+      "sha256": "81e0f4323478c77cb365048a9b04cc52a583e40be121d58aea93a8f2246d4b39"
+    },
+    {
+      "article": "portfolio-evidence-rubric",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 24268,
+      "sha256": "22936b96734a5406e3182d3c58fd1c95e87c6d1889a351d890ebe984a7aae8ad"
+    },
+    {
+      "article": "portfolio-evidence-rubric",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 856,
+      "sha256": "fba1a342de159fddb46b4d31de7319938af0cbb872d5cff6ee013cc8c00ccc98"
+    },
+    {
+      "article": "portfolio-evidence-rubric",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 24238,
+      "sha256": "7007d19c2c56c49f01dd7232938dbb80da261b100b50a951430c50694fd8c116"
+    },
+    {
+      "article": "portfolio-evidence-rubric",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 856,
+      "sha256": "7380e006f57afa6f07567eaba7fe22a5806fad1988c6941a43776f80abbfa4e1"
+    },
+    {
+      "article": "portfolio-evidence-rubric",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 44044,
+      "sha256": "47214cc1c5188585a77050af8474634e08c72c1a7b76c4c31817eb34808d15ef"
+    },
+    {
+      "article": "portfolio-evidence-rubric",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 853,
+      "sha256": "a31f60bb3a47959451ce7d85a12190edc448ff763a66339876ab20ab12bdbca3"
+    },
+    {
+      "article": "portfolio-evidence-rubric",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12305,
+      "sha256": "34033cb5440f91b79c40048550c986ee257be47c8c008cfaeb1d443c83c9decd"
+    },
+    {
+      "article": "portfolio-evidence-rubric",
+      "locale": "en",
+      "format": "md",
+      "size": 884,
+      "sha256": "e0f5f7a7269601300abfa1e729cef2931ade60d6d7ef6dec36cd93023ea5bc11"
+    },
+    {
+      "article": "learning-to-evidence-sprint",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 23501,
+      "sha256": "a9e4d89090522f5644b72e09415ca232dc5b903698ded99c0f3324653899ff25"
+    },
+    {
+      "article": "learning-to-evidence-sprint",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 921,
+      "sha256": "bedb855ab698851b4bde57adaa0c4429da967f92eba4b1821f6bb2450d114ac6"
+    },
+    {
+      "article": "learning-to-evidence-sprint",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 23718,
+      "sha256": "5168b93ba58ed0d65a8b2626a3b892c1f55f2aaa8b4d4ce7dab26523df1a7df8"
+    },
+    {
+      "article": "learning-to-evidence-sprint",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 918,
+      "sha256": "9df834b847d65ed820eb2cb07f4a7a17100692397f6f843cd746ea4c6f5900b9"
+    },
+    {
+      "article": "learning-to-evidence-sprint",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 40647,
+      "sha256": "6fc7fb267fc11e3d900e612b1de29bb8bb49a4186dee9b1cabaf8739cffb3ff2"
+    },
+    {
+      "article": "learning-to-evidence-sprint",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 915,
+      "sha256": "8664cab2deb2bc9716c8a0731c62445ed4969bfddcc939da856234fb582e24f0"
+    },
+    {
+      "article": "learning-to-evidence-sprint",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12319,
+      "sha256": "cfc516cd6aa7b929464bfe357a837a67f34159248038ea9be80aebd1e2dfc196"
+    },
+    {
+      "article": "learning-to-evidence-sprint",
+      "locale": "en",
+      "format": "md",
+      "size": 932,
+      "sha256": "9116269cd87111a94d3bf878c493258529a17bed14f9c5dcc127c7221c6cf501"
+    },
+    {
+      "article": "learning-evidence",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 26165,
+      "sha256": "9b761a48b50a0dbb269f89f8f50d94401958772e1216353b790ab930c94b0989"
+    },
+    {
+      "article": "learning-evidence",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 804,
+      "sha256": "be9c583b1f3b2af9ae1521baa2e259304b513c48630e2d75c76484fdba438428"
+    },
+    {
+      "article": "learning-evidence",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 26393,
+      "sha256": "7430e862866089244dd6bde6f22c1fd81e7350c2c5c575b4643bdc3d26b50c2a"
+    },
+    {
+      "article": "learning-evidence",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 804,
+      "sha256": "a878d3e53fab9eb19f3c40daf42bfdcc182843e1e6f164ac5e76adf1e85436d1"
+    },
+    {
+      "article": "learning-evidence",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 48349,
+      "sha256": "3cbe3997eb49fef5032780d147a325ab7ee7c86acd35a5e3692afd0ac1a76884"
+    },
+    {
+      "article": "learning-evidence",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 804,
+      "sha256": "3a4354a202b8f4321027ada33d9cda0e627d39c600f44534ec59ec31bf353fdc"
+    },
+    {
+      "article": "learning-evidence",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12248,
+      "sha256": "699fa2136f380eccae43bba52bcc42a3f31d30adc1e6e2707f430bcb8098af7b"
+    },
+    {
+      "article": "learning-evidence",
+      "locale": "en",
+      "format": "md",
+      "size": 841,
+      "sha256": "b1470fbb1a0c56ab24f425a9448b208d8235f9ffe8510068edd7c932659f24da"
+    },
+    {
+      "article": "interview-practice-cards",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 27093,
+      "sha256": "999493da3f49b22bb7d26edc6d823d2b3d2faaabbb72ed9de6cb48cca658c946"
+    },
+    {
+      "article": "interview-practice-cards",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 820,
+      "sha256": "324f3d6ddfbbb2e8dc3f2d1f1a7e08590b953a280384679bb3c57857b2bc3a0f"
+    },
+    {
+      "article": "interview-practice-cards",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 27362,
+      "sha256": "9bd649f3d468578371437d75eb81ffaa3f7a58a260fcb2847b4468a5b885e12f"
+    },
+    {
+      "article": "interview-practice-cards",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 794,
+      "sha256": "913866867ce516a218f62c32a594ebd310e4f96284d97bf5afab360137738218"
+    },
+    {
+      "article": "interview-practice-cards",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 49370,
+      "sha256": "9accb83e1c314257d51d06b3cd44e2885849b4db10ed154b3bd3ca0d5a6cc79c"
+    },
+    {
+      "article": "interview-practice-cards",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 797,
+      "sha256": "78591f1986ea638426d16e1dabf8d547411d3358652958c4ba1f4b812b707b68"
+    },
+    {
+      "article": "interview-practice-cards",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12290,
+      "sha256": "db9bac6492a637d16797dc541669dc2920a7e2ffd8946727f2a19f72253ae0ba"
+    },
+    {
+      "article": "interview-practice-cards",
+      "locale": "en",
+      "format": "md",
+      "size": 874,
+      "sha256": "a6057e34ee8554ebbf83d5b6318788dee85c101fc98514fbd5b11369ffdf313b"
+    },
+    {
+      "article": "non-coder-ai-workflow",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 25432,
+      "sha256": "859cfbfdc1d49ce819b5f536653387db29f28bf50f9094491e160ad5bee2a377"
+    },
+    {
+      "article": "non-coder-ai-workflow",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 880,
+      "sha256": "ff6f83e9b571dd5bd09eb99c7d5666c9d18c5f58b7eeb91bcce1d87d6e490450"
+    },
+    {
+      "article": "non-coder-ai-workflow",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 25017,
+      "sha256": "aeb592d532af1b281e00017f49c898b60d467c8842d4e2e0ef044eff5cf50317"
+    },
+    {
+      "article": "non-coder-ai-workflow",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 880,
+      "sha256": "7f7a0340c70736249b0b123a0a35313204f93bb0bf8f20e214ad578488d38bf6"
+    },
+    {
+      "article": "non-coder-ai-workflow",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 45329,
+      "sha256": "77efd4c14971f233b28ed209c54d111f08dbbfd8489e6dd6939344ae5db4fb39"
+    },
+    {
+      "article": "non-coder-ai-workflow",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 877,
+      "sha256": "d44e238e3e072429e2e01a644b3db157a74a1d54a7efb8a97af1fe0ffcf9d24b"
+    },
+    {
+      "article": "non-coder-ai-workflow",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12334,
+      "sha256": "12e498a1e58dcb4b11a6f35360ac8f699672005f4dbd6d0602630e6e0c297783"
+    },
+    {
+      "article": "non-coder-ai-workflow",
+      "locale": "en",
+      "format": "md",
+      "size": 905,
+      "sha256": "8b074804de85ed82419451cec7262d067cb86aee9d63f0160f18cd8474e88da4"
+    },
+    {
+      "article": "ai-agent-permission-review",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 21607,
+      "sha256": "f28ce0fe3c99c446f43375b9658e5b545b6dc4d2b836e2c778289162ae240ca6"
+    },
+    {
+      "article": "ai-agent-permission-review",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1056,
+      "sha256": "2f8da3d38776c79f89815c5528107447d6b78358566af035b5c7ab838e8ccff6"
+    },
+    {
+      "article": "ai-agent-permission-review",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 21782,
+      "sha256": "5377b5fb0c58b7e92057c22d4c587462eb2700593805e04b4bc7878fc3e603a1"
+    },
+    {
+      "article": "ai-agent-permission-review",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1056,
+      "sha256": "a5696e33c03d15141d3f1b38a30bd0f094c4aea7ec8e7fdb3a0bfeac86135411"
+    },
+    {
+      "article": "ai-agent-permission-review",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 39808,
+      "sha256": "98d6be00a60544eb79593d882d121c1dcafd57a9d2409848f80b99e223e8fd5f"
+    },
+    {
+      "article": "ai-agent-permission-review",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1059,
+      "sha256": "4a01aec7f0bc614c435ec1aedd9d2600f3b7cca3d1f37678b8cd0e7774b7d419"
+    },
+    {
+      "article": "ai-agent-permission-review",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12453,
+      "sha256": "125683c2e3b3cc3033c1c4aab8dc743969bd869ad5ed9b412c317bfeaee7c5de"
+    },
+    {
+      "article": "ai-agent-permission-review",
+      "locale": "en",
+      "format": "md",
+      "size": 1061,
+      "sha256": "b35d19a1b0143f4e9edc2e4a1ce8441e8c43e481d8d1b948723c8e62c78128a8"
+    },
+    {
+      "article": "coder-ai-pair-workflow",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 23345,
+      "sha256": "f0467dfd0af406cd4825d595f63c707ce9ff5509f93aa189683909db5c4b347c"
+    },
+    {
+      "article": "coder-ai-pair-workflow",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 915,
+      "sha256": "324b8a80473f13c86ffc4db267faceeada7fc891674d1f2f16e1a3e9016a14ed"
+    },
+    {
+      "article": "coder-ai-pair-workflow",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 23427,
+      "sha256": "894d5016fca365587d4b46ca8b11084dfbf41080dbffad00dff5eebcea64d2b0"
+    },
+    {
+      "article": "coder-ai-pair-workflow",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 918,
+      "sha256": "73175a4b923088f2ecacb212c8cd611910757ba1050dd8a741ae1a96ccc8877e"
+    },
+    {
+      "article": "coder-ai-pair-workflow",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 42199,
+      "sha256": "cb2f07ddf772f33de2d14f5e150fe310336179b6af03cd180d32044633986b62"
+    },
+    {
+      "article": "coder-ai-pair-workflow",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 915,
+      "sha256": "4582d399a86264732aaf88086c7c86fe32a8c39bd8d403c5096ea2af9ec84a29"
+    },
+    {
+      "article": "coder-ai-pair-workflow",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12342,
+      "sha256": "36da78c838b9c2a17ac5500bf4225f9fac644cb6009560e893dc93aa80b91551"
+    },
+    {
+      "article": "coder-ai-pair-workflow",
+      "locale": "en",
+      "format": "md",
+      "size": 963,
+      "sha256": "629e2018e8d8ed073541042368f0855c57a9617c179d075d47faf29206cc7b10"
+    },
+    {
+      "article": "ai-batch-worker-reliability",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 19716,
+      "sha256": "f9ddc0b0d425451a3c022c151052d0aa8c5495947d9ce8e06e6b0e4132f93416"
+    },
+    {
+      "article": "ai-batch-worker-reliability",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 961,
+      "sha256": "424ef18a406e3d5e2f4bf90292a5b8af25268a47093cd7d3395768b7c1fc1c75"
+    },
+    {
+      "article": "ai-batch-worker-reliability",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 19789,
+      "sha256": "477859fbda2f344d21ad04701e3605d25aa1400a33796e465cfbfc5e86943ab1"
+    },
+    {
+      "article": "ai-batch-worker-reliability",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 961,
+      "sha256": "5c22c211b2ee57d7a51ce4d26b8919e2375472bcc2dbeed103b330f2c287822a"
+    },
+    {
+      "article": "ai-batch-worker-reliability",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 35410,
+      "sha256": "3824056fecc47e5c4c712a87b7bb7acdedf7eefbb56698a1c01d812a65c32d70"
+    },
+    {
+      "article": "ai-batch-worker-reliability",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 961,
+      "sha256": "79a9f6d706c88087b9a818f1c7041b8393e3338f4947bf35b7c2c4e067e2d209"
+    },
+    {
+      "article": "ai-batch-worker-reliability",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12390,
+      "sha256": "c99046a42438460ca7acc178b040853c424073bac054fa6ec8508f2331c59185"
+    },
+    {
+      "article": "ai-batch-worker-reliability",
+      "locale": "en",
+      "format": "md",
+      "size": 988,
+      "sha256": "6f2862d683cebada595e97c5d49e4b07f219727a35495ac3deb70bb33d1e51c7"
+    },
+    {
+      "article": "approval-queue-reference",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 24823,
+      "sha256": "1f83e86bff9a7bfe0b6d9421e714e165eafb658cf1b7e9851c08bf0bbe69de45"
+    },
+    {
+      "article": "approval-queue-reference",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 995,
+      "sha256": "467130d1943aeff59aaadaa25db7e15ea11bc46584b720f8aac5db24c262078a"
+    },
+    {
+      "article": "approval-queue-reference",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 25022,
+      "sha256": "5433e814f4fc36cd38bd3495f2839201a42c42c22e43ea197b79be0cb3c1503a"
+    },
+    {
+      "article": "approval-queue-reference",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 998,
+      "sha256": "bf8ab06b68a9905f3217f0247feb7fc24aa65f4513c135b0d01d65fc6e296205"
+    },
+    {
+      "article": "approval-queue-reference",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 46002,
+      "sha256": "c203866143a93c62d61e3dfd172d33a9b2430e1e53da24ff1cf97b9a8db04535"
+    },
+    {
+      "article": "approval-queue-reference",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 998,
+      "sha256": "9cb254cf4b6c265e87b4e786937293bf0f2bf15fe2be3780a09970a03d7ef42d"
+    },
+    {
+      "article": "approval-queue-reference",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12413,
+      "sha256": "8b8f0f1cc98e05662488bd9f4e92e7d24c40b732024c90461fb6ae9eed3987a5"
+    },
+    {
+      "article": "approval-queue-reference",
+      "locale": "en",
+      "format": "md",
+      "size": 1038,
+      "sha256": "932df2aafc33e778952320c1e66ab9b9541582494662ea290774751f5bed798d"
+    },
+    {
+      "article": "model-score-workflow-decision",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 23139,
+      "sha256": "1161277f7ff2c62d771a7b50f2f1922337d4cb4e770f732e7d8ffaa18acda583"
+    },
+    {
+      "article": "model-score-workflow-decision",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1023,
+      "sha256": "15e993e1b4d11c3861f61d17dc55241bfc3be235ebe478d07ad2c2037e621785"
+    },
+    {
+      "article": "model-score-workflow-decision",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 23183,
+      "sha256": "57be57282084c998c8594be194d32bc8485726613b32b7d2d7b6952f8fd14f2f"
+    },
+    {
+      "article": "model-score-workflow-decision",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1023,
+      "sha256": "7523d335847faf36f1cd61fd3297045bed539da7b10782990be7e2016d440849"
+    },
+    {
+      "article": "model-score-workflow-decision",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 41417,
+      "sha256": "34ce91ae1d6fb720889cb12e841786959fcb27ecf6e5e9382b09904a4a984abd"
+    },
+    {
+      "article": "model-score-workflow-decision",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1020,
+      "sha256": "d8c87621fd1c2eebe3f2b40459d8ab82cfd028998632e5dab67ce9b5611ae41f"
+    },
+    {
+      "article": "model-score-workflow-decision",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12431,
+      "sha256": "2fa15b90904c857b7f771e2ca2e64ce795c7c1ee76648ee14bf383108fbd84d8"
+    },
+    {
+      "article": "model-score-workflow-decision",
+      "locale": "en",
+      "format": "md",
+      "size": 1017,
+      "sha256": "4399e845266611fea90e495d8e6995b083bbfadf8b6621438df0005ab316cd82"
+    },
+    {
+      "article": "agent-workflow-evaluation",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 18560,
+      "sha256": "8531a01a175f862757496a80f17143c99db2cbce87a7a148694c544c7ad3cae7"
+    },
+    {
+      "article": "agent-workflow-evaluation",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1082,
+      "sha256": "53c6927b4ae8f9cceb217715eced7c2516b17c7be95a5105073fc517e4793646"
+    },
+    {
+      "article": "agent-workflow-evaluation",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 18637,
+      "sha256": "b415a58bf251992d2247513010d8f87c81adef23cd01d71c015b3aa7843ea264"
+    },
+    {
+      "article": "agent-workflow-evaluation",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1082,
+      "sha256": "bb7ca020b9b3db4d887b6c0d07ce1a6c681c083e164ae1ac2226831da408a8c3"
+    },
+    {
+      "article": "agent-workflow-evaluation",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 33528,
+      "sha256": "18a65afc372c136123f6ebdbdeebc90a5603484a9de75c6f6b0fe60a2fbf370e"
+    },
+    {
+      "article": "agent-workflow-evaluation",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1082,
+      "sha256": "4eabf092804d8c3cbd43cf21a37187f364d819d8a590f8440e34d78436ab07d6"
+    },
+    {
+      "article": "agent-workflow-evaluation",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12496,
+      "sha256": "f34657b79a6d31ee6789f2f0d0ddc3334a0a382fa20e69a547a34b80d6dbd63a"
+    },
+    {
+      "article": "agent-workflow-evaluation",
+      "locale": "en",
+      "format": "md",
+      "size": 1083,
+      "sha256": "80eb20a7314e6580ddc08d887db55451fc35309f76f68204ecff78bb3ed496b1"
+    },
+    {
+      "article": "github-portfolio-proof-pack",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 24742,
+      "sha256": "ecd7207cb6136e811395276cb4001cdf20c0400a715e05233e0529fa22e1e935"
+    },
+    {
+      "article": "github-portfolio-proof-pack",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1077,
+      "sha256": "7b97344e1110bbe09753cf914b0321a0c52e63b26412f735d840b92e52959119"
+    },
+    {
+      "article": "github-portfolio-proof-pack",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 24724,
+      "sha256": "193ced14a6c290172872c0766afc5985e365aaebcbfca641df5bb47cafff5cfa"
+    },
+    {
+      "article": "github-portfolio-proof-pack",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1074,
+      "sha256": "8a2f680848175d1288c550c84e5592d2c46e9396639901e63f1f1e4472d2c372"
+    },
+    {
+      "article": "github-portfolio-proof-pack",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 45800,
+      "sha256": "49882b4ce6170bb47fd3fb7fd5195865ad19e214420c4280c648bae3f2899551"
+    },
+    {
+      "article": "github-portfolio-proof-pack",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1071,
+      "sha256": "5cfc2d5ab89ce6c78c45fd1e187a3812bcf8dda6cc0ced1891f8ecf6fa333bad"
+    },
+    {
+      "article": "github-portfolio-proof-pack",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12449,
+      "sha256": "1c3ce33ec93d2f277155df69ad17a176ce19b29fd970b39d30c512ac1efa1d66"
+    },
+    {
+      "article": "github-portfolio-proof-pack",
+      "locale": "en",
+      "format": "md",
+      "size": 1096,
+      "sha256": "84920e7400b59aaa49adbe74d6e38597e1c9d2f03be0d5cd56d560ec95dfc35a"
+    },
+    {
+      "article": "from-offline-evaluation-to-an-authorised-pilot",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 20201,
+      "sha256": "cd00b30a33cc343500455c47b92884bb17b7e4cc02a850c1bb282cd85e243607"
+    },
+    {
+      "article": "from-offline-evaluation-to-an-authorised-pilot",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1125,
+      "sha256": "05e271fa80d93adc382022d8f2080e3e66c029a8bbdbaf883467628f644fc111"
+    },
+    {
+      "article": "from-offline-evaluation-to-an-authorised-pilot",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 20486,
+      "sha256": "7754209b55e22eb219b8c2488131a3ad9a82f7d89c1978538a1918c45397196b"
+    },
+    {
+      "article": "from-offline-evaluation-to-an-authorised-pilot",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1125,
+      "sha256": "5f3471a7a05b886c82b003a00add7904bcd03c51d5705938185b893f4430ae00"
+    },
+    {
+      "article": "from-offline-evaluation-to-an-authorised-pilot",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 36624,
+      "sha256": "85429e6f24cda5f2172e22df492bb06fc38374840e47d58c9eda62d6ca29994b"
+    },
+    {
+      "article": "from-offline-evaluation-to-an-authorised-pilot",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1125,
+      "sha256": "ae4f51aa818123cc126e1ea71229994d6596a2e9dbbf77cede0acfdc5c0fe3c7"
+    },
+    {
+      "article": "from-offline-evaluation-to-an-authorised-pilot",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12535,
+      "sha256": "5ec74f62274866e715c76a3eca43e5640ff91c2415905e996a239d980ec2d31e"
+    },
+    {
+      "article": "from-offline-evaluation-to-an-authorised-pilot",
+      "locale": "en",
+      "format": "md",
+      "size": 1145,
+      "sha256": "edacb6109ccb40c0d3e7104ad884b5499dd344a745e222216c4977c1d60cae6b"
+    },
+    {
+      "article": "role-aware-ai-learning-source-map",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 26173,
+      "sha256": "79d062ad9c4ca6bd21b5e8de59d835ffd986c76cbeb572f7d91e926263dac9ff"
+    },
+    {
+      "article": "role-aware-ai-learning-source-map",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1097,
+      "sha256": "91b56dc62857003ec219c4a3b107269a3ea7db6f5f7ca85d8f3b727d393bfc54"
+    },
+    {
+      "article": "role-aware-ai-learning-source-map",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 26581,
+      "sha256": "ae44fba9b0ece58efc3e0bb8fe2721cb78abed084966e4e9715b4b85bbb5ea24"
+    },
+    {
+      "article": "role-aware-ai-learning-source-map",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1091,
+      "sha256": "89221c8884af740def4adc9df9c257c725708c4113f4152f1c96203252a9c90e"
+    },
+    {
+      "article": "role-aware-ai-learning-source-map",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 47975,
+      "sha256": "a54cfeed02055c7e953072b6701f9242dcb2963672eabf16768098660f93247b"
+    },
+    {
+      "article": "role-aware-ai-learning-source-map",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1091,
+      "sha256": "38045f79eff23dddfcbe5cba6ff32765860bd253d57abd48f7875cc559846a03"
+    },
+    {
+      "article": "role-aware-ai-learning-source-map",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12519,
+      "sha256": "5db73e679b13a4516b67971c9254313ce023cd34140df5ee2f870554a142e491"
+    },
+    {
+      "article": "role-aware-ai-learning-source-map",
+      "locale": "en",
+      "format": "md",
+      "size": 1093,
+      "sha256": "642fd9990fe726234859d33a97900815e282329a6d21e84e4b65de2bdb08a834"
+    },
+    {
+      "article": "ai-engineering-shared-language",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 27911,
+      "sha256": "62f5b9343df9e75eb82b9d5350c759682a7bf3196e9b3f5e5159e47c1272d4b2"
+    },
+    {
+      "article": "ai-engineering-shared-language",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1000,
+      "sha256": "a5ef234f0db4721e0a0ae0feb14e2d64eb011cd2d8384d879a1c77de503bdd5f"
+    },
+    {
+      "article": "ai-engineering-shared-language",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 28456,
+      "sha256": "961814cd78aac386d61df96a5746bcb6ac964b2754d7b3e1f98b61a71abc6523"
+    },
+    {
+      "article": "ai-engineering-shared-language",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1006,
+      "sha256": "f84bb1fb628d574f0288130f2df7deb56938c9002da3a7a2e18f9ec904ede21b"
+    },
+    {
+      "article": "ai-engineering-shared-language",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 54088,
+      "sha256": "fb5c3e4f0452de064732cd39327412aa50fd277dcee112ed38b6ee68a6c70c74"
+    },
+    {
+      "article": "ai-engineering-shared-language",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1006,
+      "sha256": "01c9158f72acfd8ce0a116820649dec39a4c13dc3851b8ca1c52d407963a4e0b"
+    },
+    {
+      "article": "ai-engineering-shared-language",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12444,
+      "sha256": "a3ce52923f1018a94a10c2a85817672c9624501748ecb7b5e56a1d860a79eb2a"
+    },
+    {
+      "article": "ai-engineering-shared-language",
+      "locale": "en",
+      "format": "md",
+      "size": 1028,
+      "sha256": "ee095cd0cc7b574d2cee08cbc7c2158ffb4e4f03ba6d2465e7ebc69e1623c6ca"
+    },
+    {
+      "article": "transformer-model-choice",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 28779,
+      "sha256": "e619487c819d08209e1e406d5c9629cfa0a67131ba2462a2e9a3409065255267"
+    },
+    {
+      "article": "transformer-model-choice",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1020,
+      "sha256": "55c5ef666e17bbc190d30786c187a4053007fc873a6f782e18bd42d8ee3b6109"
+    },
+    {
+      "article": "transformer-model-choice",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 28855,
+      "sha256": "7c8479fb423991883965aad19e56989f3e0e092b6f5b58845a229188159bc090"
+    },
+    {
+      "article": "transformer-model-choice",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1023,
+      "sha256": "dbb08ea03f85b06f1500eefbdb2e0995a543d359a55b54de84d875389543ccf6"
+    },
+    {
+      "article": "transformer-model-choice",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 53623,
+      "sha256": "4a3e2511d0c0047de5c9363542d8561e0c8f425ca41ec16a8287f30c7ad37414"
+    },
+    {
+      "article": "transformer-model-choice",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1023,
+      "sha256": "699998aedf09ef1e93688d4f8319d7147e585e8b2a1a7a527467f74575db8fb3"
+    },
+    {
+      "article": "transformer-model-choice",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12457,
+      "sha256": "a714b51dffbc016e7f2eb43ccd44e82d9117adafd1c7846cb4c7930a0d433348"
+    },
+    {
+      "article": "transformer-model-choice",
+      "locale": "en",
+      "format": "md",
+      "size": 1054,
+      "sha256": "88b57385c77a364cbe71ce16abd758d8e676612d494e57611ef880d64e1e5d53"
+    },
+    {
+      "article": "neural-learning-loop",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 30247,
+      "sha256": "0854d54e794f71d768906fe3066c6bf27399b1043c479dffd89eb72b6fe72b04"
+    },
+    {
+      "article": "neural-learning-loop",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 988,
+      "sha256": "4e0ad8ebf4662970eeaab8a847a74f0e5060360861ef0468c820433a6bd22921"
+    },
+    {
+      "article": "neural-learning-loop",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 30499,
+      "sha256": "ee82c09dde4d825c8416278271735405e4e384a28e57396a165bb7547b9c2487"
+    },
+    {
+      "article": "neural-learning-loop",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 994,
+      "sha256": "ab7b1da8474f017e525e93b3e1faebe614a32811194fefd7132c8bf7b7735d8b"
+    },
+    {
+      "article": "neural-learning-loop",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 55611,
+      "sha256": "111e11cd180727202aad6ac4cc7883c5f629f828a932b1dd7d8bd606b2c82d15"
+    },
+    {
+      "article": "neural-learning-loop",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 994,
+      "sha256": "cf7301c1847acf79de0023e9a0001e484645cde7d851e0a0cb22db960eef613f"
+    },
+    {
+      "article": "neural-learning-loop",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12429,
+      "sha256": "0c328036e172f7884da75b329530336b131bd887c23b3ee861b1bf6514336eb9"
+    },
+    {
+      "article": "neural-learning-loop",
+      "locale": "en",
+      "format": "md",
+      "size": 1022,
+      "sha256": "fed3159d45c00f67d1c6b040bbc21415e187cb6b91a6d4ba68015a135a3e95df"
+    },
+    {
+      "article": "implementation-evidence-loop",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 30619,
+      "sha256": "b030dbc9b21edc9576567f2ba7d2b21da251c316f2729719c292602079350d51"
+    },
+    {
+      "article": "implementation-evidence-loop",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 996,
+      "sha256": "66171736f00445473ccf32c0c67e019bd4f84a6279bd3439a909736f1c73be57"
+    },
+    {
+      "article": "implementation-evidence-loop",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 30558,
+      "sha256": "c68e29fb5a38226b9ebb2c782dddb9fe7aa6204f32789b9328db532a875dac4a"
+    },
+    {
+      "article": "implementation-evidence-loop",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1005,
+      "sha256": "81c1ef76b3e8561a34835ed47d85d4e7295a4b95b5abb796506ee56876cca5f1"
+    },
+    {
+      "article": "implementation-evidence-loop",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 57493,
+      "sha256": "c91d1ee154da663622a4c5aa911380cb3b7d17449d39cf8615f2379b0ced028c"
+    },
+    {
+      "article": "implementation-evidence-loop",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1005,
+      "sha256": "8f6b73715d8c19f4011eab20335e3338ff7d0c46ee578d33bdb8fccff08544d8"
+    },
+    {
+      "article": "implementation-evidence-loop",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12435,
+      "sha256": "e827134a3cca64875055c5b96a8c8ded878c5298237b4415e1ca425ad65839fa"
+    },
+    {
+      "article": "implementation-evidence-loop",
+      "locale": "en",
+      "format": "md",
+      "size": 1034,
+      "sha256": "8eec6421378f1424b2755e5ae8ab501f60bd6c575425337fa6fadcdc38a80aca"
+    },
+    {
+      "article": "agent-execution-and-serving",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 26352,
+      "sha256": "de31e1a41b040091d994671c3f75a4bacf97adfd078c05081930da4e305546dd"
+    },
+    {
+      "article": "agent-execution-and-serving",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1015,
+      "sha256": "4f123faa8ee46cd184ed9c247aca4e4eb0ba04ec97e3e0c9a83b9f3373f6932c"
+    },
+    {
+      "article": "agent-execution-and-serving",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 27020,
+      "sha256": "94ce3cfd227fde1294aca122c7e3ab33ff3b378b6cc71f47b980cd2d1cf66b9f"
+    },
+    {
+      "article": "agent-execution-and-serving",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1021,
+      "sha256": "0570830874bb53c53118c8530d35a3ce56cd99ee7104b205feb2dac693867043"
+    },
+    {
+      "article": "agent-execution-and-serving",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 50077,
+      "sha256": "69f38af64f29a3ca97840463b342d14ef788b61dd132d0eb5f55e5e3c2961174"
+    },
+    {
+      "article": "agent-execution-and-serving",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1021,
+      "sha256": "f83791653eb5fc903927ef4661c149c5df481456519722b9aa75a76a5b251bcb"
+    },
+    {
+      "article": "agent-execution-and-serving",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12469,
+      "sha256": "8f295ab787598b3d919dfc97047d2effb7c021ab640ee65cac0a1fb875345b13"
+    },
+    {
+      "article": "agent-execution-and-serving",
+      "locale": "en",
+      "format": "md",
+      "size": 1045,
+      "sha256": "f0772c4749ae7044b3fdeb328e5041046b81fb9951dd95767db4cccc71ed9a63"
+    },
+    {
+      "article": "multimodal-product-boundaries",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 31347,
+      "sha256": "ed459130476db3a6c687b5a57d925a9a9b234d8fe908b8676f21870d78ab47ce"
+    },
+    {
+      "article": "multimodal-product-boundaries",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 961,
+      "sha256": "16663e917f662df02dd8eaa02fcff57e26a82f8317e14463799ceb45f408103f"
+    },
+    {
+      "article": "multimodal-product-boundaries",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 30785,
+      "sha256": "821df6e0fec79a49550f4c18dde9d833e8715be5a26e669c6f281fed0725874d"
+    },
+    {
+      "article": "multimodal-product-boundaries",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 970,
+      "sha256": "4e8c82bbc3c68d6bdc7eb082a8d9a8e90f4de53aeaa73395c08f3aae155e1b40"
+    },
+    {
+      "article": "multimodal-product-boundaries",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 58411,
+      "sha256": "35ec57c9dd575d6d986846e005cb830dcb86ea7138a8a81dcd7d5283cdd5c6ff"
+    },
+    {
+      "article": "multimodal-product-boundaries",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 970,
+      "sha256": "23f9588251e12f1f6276bdb47cf68d245ee258e3c05a49d4a18768a5843bd25d"
+    },
+    {
+      "article": "multimodal-product-boundaries",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12397,
+      "sha256": "f59886626d88ec2583d4470e5ccce550209184cec7207f8d6b4c8ef3cac8172e"
+    },
+    {
+      "article": "multimodal-product-boundaries",
+      "locale": "en",
+      "format": "md",
+      "size": 976,
+      "sha256": "74e44d06aaa63217e629f5c99bd9bca5d826a5758fa0d2f62c1459d13f2acea0"
+    },
+    {
+      "article": "frontier-source-receipts",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 27995,
+      "sha256": "267d0eabf683ab462af4a163dade7583746a29cf298b17b63a6bff3bd81b6938"
+    },
+    {
+      "article": "frontier-source-receipts",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 943,
+      "sha256": "c077dbd344c6890cdb68332e0b6bf8c26ae9165eb825c7c9af6d88f096e787b1"
+    },
+    {
+      "article": "frontier-source-receipts",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 28373,
+      "sha256": "f279d480ab732f57e86f8477c3d851cd48be3532fbce9794e7347581ffdc7ee5"
+    },
+    {
+      "article": "frontier-source-receipts",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 949,
+      "sha256": "de59cc407ca4a2c0613ddcb4dd5c4a69de3ab9ab6ccd1154f0dfc3d60e72c453"
+    },
+    {
+      "article": "frontier-source-receipts",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 51596,
+      "sha256": "e3cae002afff4f44f5f8d2e334b7f990fc708a026a2054f585b7d6f72a74f2d7"
+    },
+    {
+      "article": "frontier-source-receipts",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 949,
+      "sha256": "c195813cb78750aeccd379752f33ef3032cb385a6f3d0baad19caa3c1e65205d"
+    },
+    {
+      "article": "frontier-source-receipts",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12383,
+      "sha256": "843e6d01bf58d93653a23280eed68702c2eebde4b77f1ae215ac586c112fc603"
+    },
+    {
+      "article": "frontier-source-receipts",
+      "locale": "en",
+      "format": "md",
+      "size": 969,
+      "sha256": "32f921b28dc20158890f4a208a78c7c778301bf691fe5135e998c674b3bc1836"
+    },
+    {
+      "article": "kev-review-packet",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 33619,
+      "sha256": "1b00a043770b65db6d4b2dcf5fb0942ba6c732f54444b8304b6127ddf382fb04"
+    },
+    {
+      "article": "kev-review-packet",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1056,
+      "sha256": "d4736c4dafa6f6911649871eaa603863051832cde25f1eecdc2cc8ee95e2f1e9"
+    },
+    {
+      "article": "kev-review-packet",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 33927,
+      "sha256": "5f9fcadf47895d50df0096c47af6839dc29575eb3b2814c583fcaaeb198baf89"
+    },
+    {
+      "article": "kev-review-packet",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1062,
+      "sha256": "400c6a8b61db5c8f3ec8748610e26f6c4a012ed0a07648f1cf071e3a4f267f8c"
+    },
+    {
+      "article": "kev-review-packet",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 64042,
+      "sha256": "25cf41f22cc83e895cef2ede332b35122d744abcc2f28988bf9baf61e6f3d96f"
+    },
+    {
+      "article": "kev-review-packet",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1062,
+      "sha256": "44bb88c87ccdfd22802596958c07c5513eac9c7231b9407fa04f766b65f1d750"
+    },
+    {
+      "article": "kev-review-packet",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12508,
+      "sha256": "3c9988886ef5d15f1af58b4ca7617e650111ac2d98bd2bba4d1316d004626e32"
+    },
+    {
+      "article": "kev-review-packet",
+      "locale": "en",
+      "format": "md",
+      "size": 1108,
+      "sha256": "c2f65ec5c19592104b6ef6a91574eb75578252f5361b6794214bf8a8793f7fa9"
+    },
+    {
+      "article": "ml-learning-modes-and-baselines",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 29519,
+      "sha256": "15871315bb2ef403cfeb091d01b97a9c8f1a5c9116b5a35f37dabe6fc726e201"
+    },
+    {
+      "article": "ml-learning-modes-and-baselines",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1001,
+      "sha256": "27df3712588c854abe60fae5d83e19f7875c4ed9e125f7412bed27aa71d1d522"
+    },
+    {
+      "article": "ml-learning-modes-and-baselines",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 30187,
+      "sha256": "dfc9ce0e09896b48989d6e0e102623c8cd31f55ce78ec2577c099ebb446acdfd"
+    },
+    {
+      "article": "ml-learning-modes-and-baselines",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1007,
+      "sha256": "b49f9136a2acc060da4018387615b1d5f7e54a245d594f8f086136b101e705b2"
+    },
+    {
+      "article": "ml-learning-modes-and-baselines",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 54733,
+      "sha256": "3b2249b0c47e86f054b8b479a5b5fc50cc9ef078b420f23373bc93a94090dc8b"
+    },
+    {
+      "article": "ml-learning-modes-and-baselines",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1007,
+      "sha256": "ecfe58e29cf6e8485b6e282a2e8b20f75594ed4ade84a817d670a4ec048ccac2"
+    },
+    {
+      "article": "ml-learning-modes-and-baselines",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12427,
+      "sha256": "a106ad4af062a9f1e26d3c096a1ec24c5bca6744edccbe02dda93f9c1ccd030c"
+    },
+    {
+      "article": "ml-learning-modes-and-baselines",
+      "locale": "en",
+      "format": "md",
+      "size": 1042,
+      "sha256": "0a48da47c52c2fb9a5cab57e6292461b59c3bcdde869a4efe8a0fafcda311431"
+    },
+    {
+      "article": "linear-logistic-and-feature-decisions",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 28473,
+      "sha256": "efb0003099d7c03964f7ffc6e55965484f7839b1dd8339434b2ae5574d4983ce"
+    },
+    {
+      "article": "linear-logistic-and-feature-decisions",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1000,
+      "sha256": "ff7f94fb1a3b366daed03865b5997411acd1da6842fd389eaa3d39459f83c16d"
+    },
+    {
+      "article": "linear-logistic-and-feature-decisions",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 28455,
+      "sha256": "a62ba1beae2a5a51bbd07e400e117abb95cec318e5934c1553ec3d416cf6102a"
+    },
+    {
+      "article": "linear-logistic-and-feature-decisions",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1006,
+      "sha256": "3b1dae51bbcbaf2562b74a1fdda8acd8aacbb34094966b3fc3733cb970138965"
+    },
+    {
+      "article": "linear-logistic-and-feature-decisions",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 53370,
+      "sha256": "20035e35ee3ca630e6fd0da09ee6af0544304a6565256e15e1aea6ce10e4af36"
+    },
+    {
+      "article": "linear-logistic-and-feature-decisions",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1006,
+      "sha256": "e94d402df47543aed5d5507309015df62285672bf9f4dafc6970931eaa96dde2"
+    },
+    {
+      "article": "linear-logistic-and-feature-decisions",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12459,
+      "sha256": "8f5fb8c15f7a38b9e102e64e391235f1a5c04ac08d3c652e2ed7a982b63cb232"
+    },
+    {
+      "article": "linear-logistic-and-feature-decisions",
+      "locale": "en",
+      "format": "md",
+      "size": 1061,
+      "sha256": "3d60d3dd640dcc48ece5d3e74a13da1815d0a826576bdddfdb934b97a4f7c310"
+    },
+    {
+      "article": "regularisation-loss-and-generalisation",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 29508,
+      "sha256": "ef4eae55b14e26c551b3b5880ca88c8a875e5ea08b03eb422c2b1ff5fa4430ab"
+    },
+    {
+      "article": "regularisation-loss-and-generalisation",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1016,
+      "sha256": "630cab3be6d6593429b2c67b8640727dfabc6c77d48a5e8c92a513771835ebfc"
+    },
+    {
+      "article": "regularisation-loss-and-generalisation",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 29271,
+      "sha256": "ba6540adc77b33cb62d8d8fcfce1cd508ee870b02f125a48559a5c88ff2a5e93"
+    },
+    {
+      "article": "regularisation-loss-and-generalisation",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1019,
+      "sha256": "70e3aad9ea478d4568ff84e6429cd053f726a280e906cad8a54725bc23906f62"
+    },
+    {
+      "article": "regularisation-loss-and-generalisation",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 54762,
+      "sha256": "ec458d21d58404f63c61caa6ca125a08ee315f72ca13480e3239936b36cc0d55"
+    },
+    {
+      "article": "regularisation-loss-and-generalisation",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1019,
+      "sha256": "7ee6eebd31d1cc72f6181d5a14401c0a8394853ce99300ce49dcd808bccff88a"
+    },
+    {
+      "article": "regularisation-loss-and-generalisation",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12415,
+      "sha256": "6a9cf90cb14d6133fb0f66b391170f4911a616964ee1aff7a0530f1d1242cdd5"
+    },
+    {
+      "article": "regularisation-loss-and-generalisation",
+      "locale": "en",
+      "format": "md",
+      "size": 1028,
+      "sha256": "7810935c71dc4143df3b9494a8cbd86c311c93a35e1261b74cde02dd2efae4da"
+    },
+    {
+      "article": "gradient-backprop-and-loss-debugging",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 26678,
+      "sha256": "8300cb016a848a6a689f6bf3320bd68a6e65d1f9a3ef1b89f3a43ea478ac0de3"
+    },
+    {
+      "article": "gradient-backprop-and-loss-debugging",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1006,
+      "sha256": "05598cf0ba2e61bb07ce7390848e4c3bc6af981f5345b79389a0253659632dc9"
+    },
+    {
+      "article": "gradient-backprop-and-loss-debugging",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 27665,
+      "sha256": "87a9783dd2e7da977fac4f379bd212adb71d282510d62cb25fa0591e38309c79"
+    },
+    {
+      "article": "gradient-backprop-and-loss-debugging",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1012,
+      "sha256": "84d2f7f81777b692997b208acd81bdda43ef0876b7f02119f1da76632946ed8d"
+    },
+    {
+      "article": "gradient-backprop-and-loss-debugging",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 51246,
+      "sha256": "ee400ab657dcfbfc23d9de7f1c1dba96999431304faa8e0e4996fd59f0ea42bc"
+    },
+    {
+      "article": "gradient-backprop-and-loss-debugging",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1012,
+      "sha256": "051d9de4506d4a08052bebc27cf189b484f43e069bc8a09d899db66c9a1f5e05"
+    },
+    {
+      "article": "gradient-backprop-and-loss-debugging",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12452,
+      "sha256": "08855f28c320e95a28bccd35148c957c6e63d64e321f1ac3d480c50de12aad55"
+    },
+    {
+      "article": "gradient-backprop-and-loss-debugging",
+      "locale": "en",
+      "format": "md",
+      "size": 1042,
+      "sha256": "7944fb7683b229155bc60d162235f449b14b047ab5a5d2f73183e45fa2fbd564"
+    },
+    {
+      "article": "training-stability-dropout-normalisation",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 28567,
+      "sha256": "055c6974083fa3ccf964996e35401bca28fbf7abe5f324d4fea764d404b96331"
+    },
+    {
+      "article": "training-stability-dropout-normalisation",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1005,
+      "sha256": "e5dd105c13dcd298cad383ec05b91ae0077c79ee114f4bfb3a92de2cdbe18ddb"
+    },
+    {
+      "article": "training-stability-dropout-normalisation",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 28126,
+      "sha256": "71f730ff5813dd73dd2820d483daee44ba63f46ccd2c7a0539d2ef69e4b7ddcb"
+    },
+    {
+      "article": "training-stability-dropout-normalisation",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1014,
+      "sha256": "ca46045db461e18a78ea521b1eca66c284c5fb7f847255ba76152932031e10f5"
+    },
+    {
+      "article": "training-stability-dropout-normalisation",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 51939,
+      "sha256": "f151cf73aaebf0f377ebf7525e5ffa68d135f892ec4954da91eaabd42a14ffcc"
+    },
+    {
+      "article": "training-stability-dropout-normalisation",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1014,
+      "sha256": "b2af4d7b4ecd347a41bc798d7ed7fe5b4b8113ab3508e5aa8928a1caa9a7c5c7"
+    },
+    {
+      "article": "training-stability-dropout-normalisation",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12423,
+      "sha256": "3aad4433b85362088f3689ae732eb4bc0201cb62dbbbee6c8595bac1dfdacf70"
+    },
+    {
+      "article": "training-stability-dropout-normalisation",
+      "locale": "en",
+      "format": "md",
+      "size": 1031,
+      "sha256": "7c921e53727ab3be84a6753f06bb5641e56dcdc3f95184e00f715771d06d40f2"
+    },
+    {
+      "article": "sequence-models-and-framework-boundaries",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 27571,
+      "sha256": "18ef49793623d625f9de05bbf0cbe0feb66a76650a7d6791cd810f6450f0f722"
+    },
+    {
+      "article": "sequence-models-and-framework-boundaries",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1003,
+      "sha256": "95c545b64a84078f8d4adfb794c2b4d52f62b0931eae554325b80fbae789c756"
+    },
+    {
+      "article": "sequence-models-and-framework-boundaries",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 27377,
+      "sha256": "ae7052d8e00831c58b1a265d2bcef06e7953358f8c8c6e3783df5f75195f51de"
+    },
+    {
+      "article": "sequence-models-and-framework-boundaries",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1009,
+      "sha256": "b9cdbe14fa0a62ce0a09192e8a7aed686bb20f49b4b68284fe333bf4b14170d4"
+    },
+    {
+      "article": "sequence-models-and-framework-boundaries",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 51115,
+      "sha256": "a2df255bb518bd10e2503497f1ce1b3df878b6e90069ba73b654fc8d22338a21"
+    },
+    {
+      "article": "sequence-models-and-framework-boundaries",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1009,
+      "sha256": "4ad48af843d5dc7eacf64209d4b1044749653875c5d2dcc496ac26d82c1ae345"
+    },
+    {
+      "article": "sequence-models-and-framework-boundaries",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12443,
+      "sha256": "4c071139969c2098ca30aff80f773af52f2177606715151b4e673467d7954279"
+    },
+    {
+      "article": "sequence-models-and-framework-boundaries",
+      "locale": "en",
+      "format": "md",
+      "size": 1039,
+      "sha256": "11b0ac4f02434e3bdef184b09b3157c8266e8354638599977db8c2162f4d9f50"
+    },
+    {
+      "article": "tokenisation-and-domain-terms",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 26436,
+      "sha256": "2b9e359869ddc322525deb2731fbed34eb683e70915e7cc4f60f969d9d94faed"
+    },
+    {
+      "article": "tokenisation-and-domain-terms",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1006,
+      "sha256": "d692162eddf0154c8f472cec23f7f7b280317565d894f4d7eb42a760c750f8d4"
+    },
+    {
+      "article": "tokenisation-and-domain-terms",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 26592,
+      "sha256": "ee64ae63bc2f2503b3c23aa1b9d232111e791aba1623daff7803aa78c91f27d2"
+    },
+    {
+      "article": "tokenisation-and-domain-terms",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1012,
+      "sha256": "86e56d15b5bf2e34cfbd1bd90591fa144c1b63471aea6d70dbb83ebe33632265"
+    },
+    {
+      "article": "tokenisation-and-domain-terms",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 49373,
+      "sha256": "dee19d77a29169f6995f6288a79c192e4aee52cb5e4b64320c71ccd9faeef831"
+    },
+    {
+      "article": "tokenisation-and-domain-terms",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1012,
+      "sha256": "998c78b956f426e0bd37e24804067c8bdee0f05b593069292d80834b062065c5"
+    },
+    {
+      "article": "tokenisation-and-domain-terms",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12455,
+      "sha256": "ec9d56b45545ebfd4d398505f44a05f8e891948a0b0405b52272f2b48c42b6c4"
+    },
+    {
+      "article": "tokenisation-and-domain-terms",
+      "locale": "en",
+      "format": "md",
+      "size": 1042,
+      "sha256": "4d28b1f4908604e93662cf9205160f6e1fb800612de81bbab641e3696a51a54e"
+    },
+    {
+      "article": "attention-qkv-mask-position",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 28534,
+      "sha256": "711eb5e8735db8fde262f7fcd5fbb6d98feb79d24f7061de01817d772ad45720"
+    },
+    {
+      "article": "attention-qkv-mask-position",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1029,
+      "sha256": "4acd49a88048d17e28ce87cb7ed2a5ca037a489b40554ea8d1afcba85965be97"
+    },
+    {
+      "article": "attention-qkv-mask-position",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 28525,
+      "sha256": "85d3db10b53e7d3b6a776ae2d5264d8108aea4742cb1712e964fadb43b465f05"
+    },
+    {
+      "article": "attention-qkv-mask-position",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1038,
+      "sha256": "149a46bf88f246c88fc519ab3bc482f4d81daf5cf32faa599ca1db4b5a57246d"
+    },
+    {
+      "article": "attention-qkv-mask-position",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 52880,
+      "sha256": "433dcd0618cdcb6d3ecba882bcd4838ca6de2283686d1a946facb7f6c1cbccc8"
+    },
+    {
+      "article": "attention-qkv-mask-position",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1035,
+      "sha256": "137c9caa88d23aedbfa0da16733cf8e57940547d7d28e5ce3e10efed99db3430"
+    },
+    {
+      "article": "attention-qkv-mask-position",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12437,
+      "sha256": "b70128fa09da14059bb54d068c73a7cd1b9651dfceddd8ee13e5def092646a1c"
+    },
+    {
+      "article": "attention-qkv-mask-position",
+      "locale": "en",
+      "format": "md",
+      "size": 1038,
+      "sha256": "932bad95ed1f3a6d1483c0de38392bd914075bc3c2357719c235271597677908"
+    },
+    {
+      "article": "transformer-blocks-and-architecture-choice",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 27028,
+      "sha256": "e1320a60f1eb02d885defc54ea4a64c150bcfde9ef48847803d80ad56df933b3"
+    },
+    {
+      "article": "transformer-blocks-and-architecture-choice",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1017,
+      "sha256": "c4f34c54dce335f6d6935643cfb6ec8d22f29c199d200293496a330e14594f2b"
+    },
+    {
+      "article": "transformer-blocks-and-architecture-choice",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 26732,
+      "sha256": "3d323563ad402c0d40c7b73512d895df13ec4e714e6b9def45d03e3d6f3ccd58"
+    },
+    {
+      "article": "transformer-blocks-and-architecture-choice",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1023,
+      "sha256": "5926885f5e0e1f8e103c3c164bb33b797d51f00fd60e996320cc6b2b87c47693"
+    },
+    {
+      "article": "transformer-blocks-and-architecture-choice",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 49393,
+      "sha256": "4be0883540ddc7284793e4f930693193254c26e7e0085088203752df350f9de1"
+    },
+    {
+      "article": "transformer-blocks-and-architecture-choice",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1023,
+      "sha256": "34cdef97e24e207a830683b71759fda0cea457b8d666ca1dc9162627a6191e05"
+    },
+    {
+      "article": "transformer-blocks-and-architecture-choice",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12453,
+      "sha256": "41b0f81202bb5e753f8c8daf2fafabba9fbaa0f490424a7e41b7eaeecf9099c3"
+    },
+    {
+      "article": "transformer-blocks-and-architecture-choice",
+      "locale": "en",
+      "format": "md",
+      "size": 1049,
+      "sha256": "e48e705336f6f936ba4c3aca0001741f8231f88730a9a2bfdd794aad8cf24a5a"
+    },
+    {
+      "article": "decoding-strategies-and-output-policy",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 29056,
+      "sha256": "8b0d4a7ae7983f0ffc218b00a460235bdd5d653864e675e9f0153a01285a9ea8"
+    },
+    {
+      "article": "decoding-strategies-and-output-policy",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1024,
+      "sha256": "0ff4285d4e1a81369d50c4e26998546ecace3aeefecba69517c9ffbf5a4bbf8a"
+    },
+    {
+      "article": "decoding-strategies-and-output-policy",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 29344,
+      "sha256": "9f67f97dfc0aada4cff14dbdf156efa5ca5d718515aeff0a4384e865c969d1a0"
+    },
+    {
+      "article": "decoding-strategies-and-output-policy",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1033,
+      "sha256": "9ca2d3c43aa6b18a91b13fc19a97d32f5c37a5964754585a111791ae0589c8cd"
+    },
+    {
+      "article": "decoding-strategies-and-output-policy",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 54476,
+      "sha256": "7c4cd454e7d2cbe91d6d7ebccbcbac67303a4c6d1094f21df840a53a9ab08e74"
+    },
+    {
+      "article": "decoding-strategies-and-output-policy",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1033,
+      "sha256": "accc3a30d20e7a4ad3280a55fa5a8297c71a7ebbb73c11d007087a8310cafc3c"
+    },
+    {
+      "article": "decoding-strategies-and-output-policy",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12440,
+      "sha256": "8c0fe3ea4622b119d8a9706491dfd4f75426b48fb65414f6bc3c9bd361125871"
+    },
+    {
+      "article": "decoding-strategies-and-output-policy",
+      "locale": "en",
+      "format": "md",
+      "size": 1052,
+      "sha256": "73cb1453c771cab7cb1ada81ef6f92eb974ff1eecc54528920ec76941dde5707"
+    },
+    {
+      "article": "long-context-retrieval-and-lost-middle",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 29414,
+      "sha256": "215d76927291adcdad28fb2c748059e584a0baa71c13af1ca89cc77e945af9ce"
+    },
+    {
+      "article": "long-context-retrieval-and-lost-middle",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1024,
+      "sha256": "479e3629e4ed91a610f297f569da3f1a935a55845d0b3f8fbea008bbb2fbf979"
+    },
+    {
+      "article": "long-context-retrieval-and-lost-middle",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 29731,
+      "sha256": "a2be9b4726d59933504adbec87aa4a731ec9d10666bd4cf6da56d22727b2cd84"
+    },
+    {
+      "article": "long-context-retrieval-and-lost-middle",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1036,
+      "sha256": "9f0441cba0d4842b4c206692e1a0c835c423c4661af989671cc6fd0ed5e440d3"
+    },
+    {
+      "article": "long-context-retrieval-and-lost-middle",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 56448,
+      "sha256": "53ca97b705689e8ab44584127614e90c680ddacfba13df1d5d88f62d3ce24a41"
+    },
+    {
+      "article": "long-context-retrieval-and-lost-middle",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1036,
+      "sha256": "8014498892421c8d765b743b8003302b32b5f21e453f68093fa53c917014391f"
+    },
+    {
+      "article": "long-context-retrieval-and-lost-middle",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12498,
+      "sha256": "92639487d3e9d89d04e6bdd75e55ca82bf09388115a0e8932d17b07d8745b82a"
+    },
+    {
+      "article": "long-context-retrieval-and-lost-middle",
+      "locale": "en",
+      "format": "md",
+      "size": 1083,
+      "sha256": "3588ac36357628bf438d3abc80979e14d26f23c9ce5577963f6a6cef9bf31b56"
+    },
+    {
+      "article": "modern-attention-moe-and-serving-tradeoffs",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 27456,
+      "sha256": "a221c7fe974e2c422ac8e884ebc4c94c3eca8cac3bc02c06c8778139baec6ba3"
+    },
+    {
+      "article": "modern-attention-moe-and-serving-tradeoffs",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1027,
+      "sha256": "c1c4b0c2cc4e4474b4032eaf75f43c9a677a01ac806de358c53338fdded41edf"
+    },
+    {
+      "article": "modern-attention-moe-and-serving-tradeoffs",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 27868,
+      "sha256": "5c239a1c1a6ea5aa8e419272a26e45a373c551a1eff055e9f095a997670206ee"
+    },
+    {
+      "article": "modern-attention-moe-and-serving-tradeoffs",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1027,
+      "sha256": "310a3d183b1cc69dc3847552b18110849ddbd0dac08117f9ac00c33ff3691f98"
+    },
+    {
+      "article": "modern-attention-moe-and-serving-tradeoffs",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 51557,
+      "sha256": "87a2543695c16e93c098886668c1e81e460d086b3d3dcdb6b0c7f228303fbaa5"
+    },
+    {
+      "article": "modern-attention-moe-and-serving-tradeoffs",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1027,
+      "sha256": "5714233162b93d971250206963ee1c06fdf94b67387b7bf2f3c6a431fe9c0e26"
+    },
+    {
+      "article": "modern-attention-moe-and-serving-tradeoffs",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12463,
+      "sha256": "177412a8a0dcfa81ecf0893fcd2b8778236a2657967f87455f58d16e37ea22b9"
+    },
+    {
+      "article": "modern-attention-moe-and-serving-tradeoffs",
+      "locale": "en",
+      "format": "md",
+      "size": 1051,
+      "sha256": "9904dfdb85691036ef4dd159a54546dbd99369a6e6973a5e56572c28e4450284"
+    },
+    {
+      "article": "language-model-families-and-when-to-use-them",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 28437,
+      "sha256": "78ea1a5ed12c3ad87ab88e5e4d977dcdec47c306cbc9ca20b85e0b887831b4bd"
+    },
+    {
+      "article": "language-model-families-and-when-to-use-them",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1016,
+      "sha256": "2296ceeb2927585d1718d134dc8a91642bb2eda2fca2f7dd24179f87efed18cf"
+    },
+    {
+      "article": "language-model-families-and-when-to-use-them",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 28448,
+      "sha256": "f4564779a1e1b42e11244ff01b340f1736d1a61a3ce99a015e48ce2b71e21cc8"
+    },
+    {
+      "article": "language-model-families-and-when-to-use-them",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1025,
+      "sha256": "81f96ef7da819c4546923ec9901791008a2cc8eb673b9ee7feb98579ebe7c87f"
+    },
+    {
+      "article": "language-model-families-and-when-to-use-them",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 52343,
+      "sha256": "24986e03d6bba3c9e68eb5b19a948f8c5f1a34854337b617c3d24547683b3df2"
+    },
+    {
+      "article": "language-model-families-and-when-to-use-them",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1025,
+      "sha256": "8637147fd80b68363c3b066333dca292afbd724abe3b04df83002118ef862ca7"
+    },
+    {
+      "article": "language-model-families-and-when-to-use-them",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12480,
+      "sha256": "ac176bbad65fc7063e0fbc14472e5d0012292df86e0c644d955f25001242310e"
+    },
+    {
+      "article": "language-model-families-and-when-to-use-them",
+      "locale": "en",
+      "format": "md",
+      "size": 1055,
+      "sha256": "8953fc36bee946be82fd7f7aead0e8a7d153e6a05867e5219321e2934b5ff4d0"
+    },
+    {
+      "article": "adaptation-data-and-alignment-choice",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 28585,
+      "sha256": "1448a3f2dd60cf9f23468b1541f813de128df620762355b5bdbbad3f2de2ab06"
+    },
+    {
+      "article": "adaptation-data-and-alignment-choice",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1053,
+      "sha256": "69785d3314a29edc3fcd6b50035d3b5be7a68704a4237bcc116e5346336954e5"
+    },
+    {
+      "article": "adaptation-data-and-alignment-choice",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 28852,
+      "sha256": "9377fb1399a97d26102c531ab7bef938295c4bb3390835c79d8a380124d7ed84"
+    },
+    {
+      "article": "adaptation-data-and-alignment-choice",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1054,
+      "sha256": "0a68adb5e536bad6773944b786fd7b8061a60ae27c5bdf378327d82671f76cd8"
+    },
+    {
+      "article": "adaptation-data-and-alignment-choice",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 53665,
+      "sha256": "8a753de05ff14d9fbbdddadbc9c2c78012ab5c81369669facde4881531ce0e04"
+    },
+    {
+      "article": "adaptation-data-and-alignment-choice",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1054,
+      "sha256": "9c665720e65bac29ddb7d20c7d27cd680b51cfabbe9022b0dcf3317db8c3e183"
+    },
+    {
+      "article": "adaptation-data-and-alignment-choice",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12483,
+      "sha256": "2559ff87cf09125e8653faaac8fdc924bebeab6bc62755d5f9a9580c6bbc7d42"
+    },
+    {
+      "article": "adaptation-data-and-alignment-choice",
+      "locale": "en",
+      "format": "md",
+      "size": 1088,
+      "sha256": "24a31ddbf830c1c99ac9d213f5f2a11693d7ff0d1e4a15a0179d2f001019c276"
+    },
+    {
+      "article": "prompt-patterns-context-compaction-and-multilingual-evals",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 28465,
+      "sha256": "1f4c25f61d6ca295868acd12dfe1593b2d517606f4cdaeaf70c1fe6dc701dd29"
+    },
+    {
+      "article": "prompt-patterns-context-compaction-and-multilingual-evals",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1043,
+      "sha256": "fe52e213f1cb35110bfb476c720eb9085f6c9de915c8dd9056fcdf66a1208046"
+    },
+    {
+      "article": "prompt-patterns-context-compaction-and-multilingual-evals",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 28659,
+      "sha256": "edac0cdfc0246f9e0b6704939fff6ac724cd77604dfb49a2bdccc77820be4e50"
+    },
+    {
+      "article": "prompt-patterns-context-compaction-and-multilingual-evals",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1049,
+      "sha256": "1d501ca609e7cfae969e8c5060127a468b43b38bacbc5b8eac92182e4d08bd63"
+    },
+    {
+      "article": "prompt-patterns-context-compaction-and-multilingual-evals",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 52796,
+      "sha256": "9bcaa38e3798a5bf0327d2defe42dd41225a57ba29a69e368f21db5fc5ef999e"
+    },
+    {
+      "article": "prompt-patterns-context-compaction-and-multilingual-evals",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1046,
+      "sha256": "c5cbb77c5c2e23b03ce0f0243250d5d89490f877637f4ffa2ad070b131d4f8e1"
+    },
+    {
+      "article": "prompt-patterns-context-compaction-and-multilingual-evals",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12483,
+      "sha256": "1b534906c00aacb108cc715a6170f83d69c0ccb0b17c29f0e12f4d3702686ce2"
+    },
+    {
+      "article": "prompt-patterns-context-compaction-and-multilingual-evals",
+      "locale": "en",
+      "format": "md",
+      "size": 1083,
+      "sha256": "cec64fccd13da351f6f1b35da8c48bf79e92cfbfcbd9c0557005293b22e7641b"
+    },
+    {
+      "article": "retrieval-index-chunk-rerank-and-cache",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 28481,
+      "sha256": "6971fbb206ebb45271c5ae9df19f7fca96caea7949dee9daf3613139eeb76eec"
+    },
+    {
+      "article": "retrieval-index-chunk-rerank-and-cache",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1006,
+      "sha256": "49dcd8f3cd389a33898f0c3251d41049482ff618120cabd9be51c98f5323c9d2"
+    },
+    {
+      "article": "retrieval-index-chunk-rerank-and-cache",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 29599,
+      "sha256": "721d81475e7a16fa651ec446a005d4b6b131e668b4f67563fb1bcaf4510b9fe2"
+    },
+    {
+      "article": "retrieval-index-chunk-rerank-and-cache",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1015,
+      "sha256": "3e1c5bcc0dc49a1f9d58c811937743045b443ed8c23f7513750be37a676e834e"
+    },
+    {
+      "article": "retrieval-index-chunk-rerank-and-cache",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 54595,
+      "sha256": "0e9ed6b4f8d221b54da964b29ebfbdfb629198887f2b05f18adc50b0ca53501e"
+    },
+    {
+      "article": "retrieval-index-chunk-rerank-and-cache",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1015,
+      "sha256": "e4ac6ce10f1cb81a073f637e479de2066bb456dd9b812691ae5dac23c5d77905"
+    },
+    {
+      "article": "retrieval-index-chunk-rerank-and-cache",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12449,
+      "sha256": "9ff2ca83b7990d3ca4db0e25b9841011a07e21c6336180248a17657c5e77d802"
+    },
+    {
+      "article": "retrieval-index-chunk-rerank-and-cache",
+      "locale": "en",
+      "format": "md",
+      "size": 1054,
+      "sha256": "6075e886a552fce04b8946a4e5b7726bb2c1915fd34edb43e75ab820239bfc6d"
+    },
+    {
+      "article": "rag-freshness-conflicts-and-advanced-patterns",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 29151,
+      "sha256": "b1a7270ca5be562a8eaf0ff021f7ce819ef0c87be5d52e85f574375992de5a8f"
+    },
+    {
+      "article": "rag-freshness-conflicts-and-advanced-patterns",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1023,
+      "sha256": "725a8331a3afca5c8cc09db061346ddfbda59162f7637351f2eccc3d077aeb5e"
+    },
+    {
+      "article": "rag-freshness-conflicts-and-advanced-patterns",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 30672,
+      "sha256": "2292875a83f811e888653b0ea179655c3546d02b8acf228c214e91a1031baa87"
+    },
+    {
+      "article": "rag-freshness-conflicts-and-advanced-patterns",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1026,
+      "sha256": "5b93cbc9fa65954c503eb8b5eec21ac4fa01dcdff4fed4f6b913e29daad69761"
+    },
+    {
+      "article": "rag-freshness-conflicts-and-advanced-patterns",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 56401,
+      "sha256": "6e7d43c83e7833a839a2d2808908a553928c8851533ea64e1fc9c2f75befdaa8"
+    },
+    {
+      "article": "rag-freshness-conflicts-and-advanced-patterns",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1026,
+      "sha256": "7d07f799eb9bd227a8d5235726a8791ce64a95c67e28a7254c0425a2d1df1b10"
+    },
+    {
+      "article": "rag-freshness-conflicts-and-advanced-patterns",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12445,
+      "sha256": "0977d5e68eb33596576f33ac369265e5adfc8f379e12d9dcd3baecb8dbb17372"
+    },
+    {
+      "article": "rag-freshness-conflicts-and-advanced-patterns",
+      "locale": "en",
+      "format": "md",
+      "size": 1051,
+      "sha256": "55cc49da6e814a9e8458708be99f450a7450596178f5443ee593fa258bfba4cc"
+    },
+    {
+      "article": "agent-memory-planning-and-reflection",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 27032,
+      "sha256": "9af4b99a832a1f5a1a0f9baaefac1735655d1671b1fd08c13f5946f5f442faf7"
+    },
+    {
+      "article": "agent-memory-planning-and-reflection",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1034,
+      "sha256": "c2c9f75aac3ef8c7cd8d3a2609bacc2bf9c961ec0ed8a9d654d3d18fa6bec9bd"
+    },
+    {
+      "article": "agent-memory-planning-and-reflection",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 27029,
+      "sha256": "071142c5111bb06706490f2cbd8e58802e8c1aeab9160492bf4b1e633e186bb8"
+    },
+    {
+      "article": "agent-memory-planning-and-reflection",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1040,
+      "sha256": "6987aaf0428b5a22adaa61774c76dab9374fb19808daf41d63e46c8099817a6e"
+    },
+    {
+      "article": "agent-memory-planning-and-reflection",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 50316,
+      "sha256": "0646c297051a7cd00dccb4232d2c26e716e6ddd3d785a05183cc524be0afcbf1"
+    },
+    {
+      "article": "agent-memory-planning-and-reflection",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1040,
+      "sha256": "2ea316940f5c90082d77affab0dabdc774c555fdc36612289e7789fe1c2dede4"
+    },
+    {
+      "article": "agent-memory-planning-and-reflection",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12447,
+      "sha256": "a56e4a199e65e90770f6790f83f95be0056bb35d2e7cb99873ed64408f526b2b"
+    },
+    {
+      "article": "agent-memory-planning-and-reflection",
+      "locale": "en",
+      "format": "md",
+      "size": 1046,
+      "sha256": "54266f4133ebee02075c37b241037341b434a65bd111c875a5dcdc634402b5df"
+    },
+    {
+      "article": "ai-hardware-routing-deployment-and-transport",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 26819,
+      "sha256": "8268711dd33ef4e0130a6856733046abf5714a6d35612a3575a2f23d81d267f3"
+    },
+    {
+      "article": "ai-hardware-routing-deployment-and-transport",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1049,
+      "sha256": "a9f1691b16bb849578e7a7060c54828969656ad21354ebefdfb0dce70433545b"
+    },
+    {
+      "article": "ai-hardware-routing-deployment-and-transport",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 27003,
+      "sha256": "4423f2392e711a95f094b129fb44142050ec12ec679064b999a3326c8df8797f"
+    },
+    {
+      "article": "ai-hardware-routing-deployment-and-transport",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1055,
+      "sha256": "ffea9e832be4a544d773454ec0f9fb87d0a49a9ebc97c2c9b27c949b157e02a5"
+    },
+    {
+      "article": "ai-hardware-routing-deployment-and-transport",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 49182,
+      "sha256": "f5a8461363089e6cb45b5e1a28551c35773b1d662396937db9b705f9b59be132"
+    },
+    {
+      "article": "ai-hardware-routing-deployment-and-transport",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1055,
+      "sha256": "7a3603a15ad13e4a5fb1ce54a5d9ab5ee9ec83216a2f5936233def46f86608e5"
+    },
+    {
+      "article": "ai-hardware-routing-deployment-and-transport",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12490,
+      "sha256": "a2f08484be4a761790aae126c6fed8c315c0376d804b91ad04bd89c23a22a72a"
+    },
+    {
+      "article": "ai-hardware-routing-deployment-and-transport",
+      "locale": "en",
+      "format": "md",
+      "size": 1070,
+      "sha256": "4d37e4a6f9ba5e38756fc9610b0b203d4f5f555bb779c80c8af648dbd80d5b73"
+    },
+    {
+      "article": "frontier-world-models-and-self-improvement",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 28918,
+      "sha256": "29a9e8cc218a9aa2b651b228c82417ad5e4d88df968697fde42a629507f9433b"
+    },
+    {
+      "article": "frontier-world-models-and-self-improvement",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1081,
+      "sha256": "a6ded1782d1490b8dcc66ff15030b538a4e4345c461fda7085b8ae12dde36ea8"
+    },
+    {
+      "article": "frontier-world-models-and-self-improvement",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 28843,
+      "sha256": "7890092518811552beee3e1397ced60ea356d5010e22e2b0ca512b21229c547f"
+    },
+    {
+      "article": "frontier-world-models-and-self-improvement",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1081,
+      "sha256": "ec2e52950cd34331ef4e0f5f966b10fa876da689a32ab97fdbaace1a58335d1a"
+    },
+    {
+      "article": "frontier-world-models-and-self-improvement",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 54424,
+      "sha256": "392accb15a65a478d23477c1dab6195c99bfc6fe68c6df0e1530dc0197c62722"
+    },
+    {
+      "article": "frontier-world-models-and-self-improvement",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1081,
+      "sha256": "727bdba02f35b93ac164dad6eb52ea6c6fb31e845aa148cae49e7ff2c0bcda34"
+    },
+    {
+      "article": "frontier-world-models-and-self-improvement",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12499,
+      "sha256": "9fe96c8981eb10898584271780d1b5810c7ad69375576aab041ad5e3d231778c"
+    },
+    {
+      "article": "frontier-world-models-and-self-improvement",
+      "locale": "en",
+      "format": "md",
+      "size": 1119,
+      "sha256": "b65545b489297b5951e6e92853e94d8c68b95c0cc02b7a2e0ce550c7ae4f013c"
+    },
+    {
+      "article": "agent-protocols-orchestration-and-computer-use",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 27456,
+      "sha256": "7d4fc115d94b75bc8138f2aaba0a38f13ee66ec25aa2bb7b297ab432c2b95dd4"
+    },
+    {
+      "article": "agent-protocols-orchestration-and-computer-use",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1010,
+      "sha256": "581d87892024a649f6425295af4a243d8299f6f7f20f2761b28ac7c46ce7e9d4"
+    },
+    {
+      "article": "agent-protocols-orchestration-and-computer-use",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 27358,
+      "sha256": "24d9c7499fb78dead0f2fa009bb2236e46bcc123b4e175657672e96070c8091a"
+    },
+    {
+      "article": "agent-protocols-orchestration-and-computer-use",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1016,
+      "sha256": "4c841e9193f3c5feecc0e46bef65aa5b904bdbb72d19a505d08b7014d7c31166"
+    },
+    {
+      "article": "agent-protocols-orchestration-and-computer-use",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 50115,
+      "sha256": "a635b5bd21dba15fd740646d9b8cc6a6776284e15ef4698332e5757f09e479a1"
+    },
+    {
+      "article": "agent-protocols-orchestration-and-computer-use",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1016,
+      "sha256": "7748a9fb76133a3201b7bb5d509ea7f6ff05578acc70375eb9e8d265807d19f9"
+    },
+    {
+      "article": "agent-protocols-orchestration-and-computer-use",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12429,
+      "sha256": "9b0756b20b130f78780f3d5634935f3c89c29ec008b0db6397f380ae634f15d5"
+    },
+    {
+      "article": "agent-protocols-orchestration-and-computer-use",
+      "locale": "en",
+      "format": "md",
+      "size": 1032,
+      "sha256": "3b37cc2c38e1de0043e55c809cd98de50a678d6cff0554a5ba3de80d50e34dd3"
+    },
+    {
+      "article": "harness-definition-of-done-and-framework-choice",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 33263,
+      "sha256": "26d6eeeacb9ef83f4344a3abe2a8f21c4eaa1b793292cc925b8fc38bbb93dfcd"
+    },
+    {
+      "article": "harness-definition-of-done-and-framework-choice",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1011,
+      "sha256": "b168e35767ea4d6bd860b57142cd65944dfbaa6931032c174a11bbbace789640"
+    },
+    {
+      "article": "harness-definition-of-done-and-framework-choice",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 33012,
+      "sha256": "d582f23e2cac3534877705c9a6d23c1bc690840f4d16c6b9c92876b4a4c18ce7"
+    },
+    {
+      "article": "harness-definition-of-done-and-framework-choice",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1020,
+      "sha256": "2290d183931d4a5823056cd8117377b7545029975bced9f6e8b2c29c78e72df8"
+    },
+    {
+      "article": "harness-definition-of-done-and-framework-choice",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 61556,
+      "sha256": "6854d1a04544c4f629fc815d41debbbab2bafbd51b5db0c84d9c540a29eab962"
+    },
+    {
+      "article": "harness-definition-of-done-and-framework-choice",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1017,
+      "sha256": "69933329b8346518f10f36b563da7015f25dcf69ce45957bf2f7ea3f7ea10806"
+    },
+    {
+      "article": "harness-definition-of-done-and-framework-choice",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12464,
+      "sha256": "08cc5525b82881a2e79d4b6cfc5b08b2d09e07ec932771501fd6d18f7e5b6809"
+    },
+    {
+      "article": "harness-definition-of-done-and-framework-choice",
+      "locale": "en",
+      "format": "md",
+      "size": 1049,
+      "sha256": "7ad61e1a02a27f67776a02e8df856f5ae4cc06212053baf5ee0a64f3307c31b7"
+    },
+    {
+      "article": "inference-memory-scheduling-and-serving-engines",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 27080,
+      "sha256": "efe0a79431adf8cc395cf248de46542f6e049871d610baa8f49c00a51eef1e22"
+    },
+    {
+      "article": "inference-memory-scheduling-and-serving-engines",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1056,
+      "sha256": "8fc4ccdfe8fa1779e49c098abd40bebbf1f7b6aabf897953eca8908b4f06c6e5"
+    },
+    {
+      "article": "inference-memory-scheduling-and-serving-engines",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 27187,
+      "sha256": "217736e4f4a6a32b8aeeda9913e812e89373b083cc358d8a592642a02fbedb40"
+    },
+    {
+      "article": "inference-memory-scheduling-and-serving-engines",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1059,
+      "sha256": "7f7525d1183c1f9355f116642bcb1fbe83a65d1d9a861929c92ce0bab1d0d7eb"
+    },
+    {
+      "article": "inference-memory-scheduling-and-serving-engines",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 50436,
+      "sha256": "7b27da7ced7d6d6e9c382f772ab2d50819676e933e13f805aa5d08a1675e62b5"
+    },
+    {
+      "article": "inference-memory-scheduling-and-serving-engines",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1059,
+      "sha256": "00c38ea8d1344da8b6a677c7a99978e160945a53cbed749d5fcf504579e6f214"
+    },
+    {
+      "article": "inference-memory-scheduling-and-serving-engines",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12488,
+      "sha256": "76f0cd9a4aa39fee9c9e0a1db6b14463c66aefb9b287c7690543b9d038112f9d"
+    },
+    {
+      "article": "inference-memory-scheduling-and-serving-engines",
+      "locale": "en",
+      "format": "md",
+      "size": 1094,
+      "sha256": "deb47a884851f52345e87fd0acbb2dca1b54bf859fabcfc3d2e3d68cdc635238"
+    },
+    {
+      "article": "llm-evals-human-review-and-observability",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 32991,
+      "sha256": "fdfba498953102634363a414ae3e0516f0516c1a28a78c6fdee2ec0dbb53c7bf"
+    },
+    {
+      "article": "llm-evals-human-review-and-observability",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1062,
+      "sha256": "4ca074c6ead0cac929222415e1c5d17acd3fc1286c44b3833d183bce8f22f4b7"
+    },
+    {
+      "article": "llm-evals-human-review-and-observability",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 33130,
+      "sha256": "c8f2fcab3b59dbf471194b08d7486814d28a73031850ed49035756ebca1481cf"
+    },
+    {
+      "article": "llm-evals-human-review-and-observability",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1074,
+      "sha256": "edd2929e568151dcadc1b16b9b91016e1df0e366318688d20c1ab8976e5ee2d1"
+    },
+    {
+      "article": "llm-evals-human-review-and-observability",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 63494,
+      "sha256": "1292c0e042f56058cc9e1bf509f5f75f5bac90be2bff73d86b4bc32b191bed32"
+    },
+    {
+      "article": "llm-evals-human-review-and-observability",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1080,
+      "sha256": "383c679e0be667c987009b534df38f00aa09684cbe8ceafbe9489edfa7df6383"
+    },
+    {
+      "article": "llm-evals-human-review-and-observability",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12489,
+      "sha256": "24665b922c68b71abec14f59b4fb64e1c2b34a0926422fbad6170b886f78ac87"
+    },
+    {
+      "article": "llm-evals-human-review-and-observability",
+      "locale": "en",
+      "format": "md",
+      "size": 1119,
+      "sha256": "d1a024ac2fc802eefe8dcb60e2d496883a92d277a6dc47e4dddbe9cae1039b8a"
+    },
+    {
+      "article": "safety-governance-privacy-and-incident-response",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 27158,
+      "sha256": "0e0ffe1b95ebb5063d494b4c6ec3688bd4aa909848f13e33eddf5d57d661910a"
+    },
+    {
+      "article": "safety-governance-privacy-and-incident-response",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1001,
+      "sha256": "3e3af6ea4a95165881aea23d9d4cd5e667d333c84c488b19e271adbcb5b5e82e"
+    },
+    {
+      "article": "safety-governance-privacy-and-incident-response",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 27920,
+      "sha256": "15d511513a507947703c924ebd399fa7cfea43302c2dc09fc7fbebefc823b1e2"
+    },
+    {
+      "article": "safety-governance-privacy-and-incident-response",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1007,
+      "sha256": "e2de2d5f193f76933fbe6a5f2cf9c81a3afb5ce6af6bff17166f91ac13bfeebe"
+    },
+    {
+      "article": "safety-governance-privacy-and-incident-response",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 51763,
+      "sha256": "938845374e3fed197edbff24e2580991fd2cb6d0d55bbbd29af9fa057015a243"
+    },
+    {
+      "article": "safety-governance-privacy-and-incident-response",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1007,
+      "sha256": "d90986e591e17c328579c507525b14ea4e12bac87726cfea28acee959eadba36"
+    },
+    {
+      "article": "safety-governance-privacy-and-incident-response",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12403,
+      "sha256": "66c439bff77878bf9d7c33568b539c2bd7f5bc224bc6987be89e06b16c7a7000"
+    },
+    {
+      "article": "safety-governance-privacy-and-incident-response",
+      "locale": "en",
+      "format": "md",
+      "size": 1028,
+      "sha256": "32b2b74f7a8df4dd57da471215c0ab23dd241818776f2dca844d3f3e8bf75171"
+    },
+    {
+      "article": "multimodal-architectures-generation-and-evaluation",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 28014,
+      "sha256": "447e2e72b3d83bf02a75470e31ce7425edabb0070b34b71c8d6b0e5221299ff3"
+    },
+    {
+      "article": "multimodal-architectures-generation-and-evaluation",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1025,
+      "sha256": "a0d772cd0642b80494a62aa9d484ca00a8da66e6f0c2b043e31498df4500d806"
+    },
+    {
+      "article": "multimodal-architectures-generation-and-evaluation",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 28346,
+      "sha256": "5270ef25555c290fa2c2a54377de824e5f44087b22de92a95a7fbddb8c78991b"
+    },
+    {
+      "article": "multimodal-architectures-generation-and-evaluation",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1028,
+      "sha256": "e7a2eea0fbda22574a263d2017062143405975909baadc2998029b67b7c50cc1"
+    },
+    {
+      "article": "multimodal-architectures-generation-and-evaluation",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 52917,
+      "sha256": "c5cb7397d1665db17399d98a22f1e5e834abf635776b447808cba4565619848e"
+    },
+    {
+      "article": "multimodal-architectures-generation-and-evaluation",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1028,
+      "sha256": "6c7e21a1875ae8b2cfc6d4387b361bebdd94bfc8ddfc313de8eb484a3c1750bd"
+    },
+    {
+      "article": "multimodal-architectures-generation-and-evaluation",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12449,
+      "sha256": "0863e88bdaacccad65de4a74d619555a0f26a153a52d12a36633716464049e4a"
+    },
+    {
+      "article": "multimodal-architectures-generation-and-evaluation",
+      "locale": "en",
+      "format": "md",
+      "size": 1051,
+      "sha256": "2d22733b416e8dbd556b64fc2fc27ba985d37365938192b0c40b76ddc55ecaae"
+    },
+    {
+      "article": "agent-eval-source-receipts",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 29370,
+      "sha256": "44260c4bf0211e546fa62f95e49f362dc4017eccf21215efd7d52a6d26a22139"
+    },
+    {
+      "article": "agent-eval-source-receipts",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1021,
+      "sha256": "5a3285bf04c6fdaa0b377fa0c95b2614a53f7da61ea6358f60cc394aac0837f2"
+    },
+    {
+      "article": "agent-eval-source-receipts",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 29750,
+      "sha256": "a307ebf6980fbaa2444902a6cd338d1bc92ef5e1f49facdb068c66399ff678f8"
+    },
+    {
+      "article": "agent-eval-source-receipts",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1024,
+      "sha256": "957dbe333a27c4182eafbea16792a55a37433c28afd6dd57cf079391e9ad02aa"
+    },
+    {
+      "article": "agent-eval-source-receipts",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 54886,
+      "sha256": "d074bb6f12cfa5d0ee37ddf27bd8f9ffd7a9b46675af6c161a4b170197ca192f"
+    },
+    {
+      "article": "agent-eval-source-receipts",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1024,
+      "sha256": "2eda21db81db9698aac9998e607507862b6d63f9d074b9fb6658627059c51a4f"
+    },
+    {
+      "article": "agent-eval-source-receipts",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12453,
+      "sha256": "ee2c777ed614ff0c4108a877fde2d3798505851d16edf1ce3a2a713233322449"
+    },
+    {
+      "article": "agent-eval-source-receipts",
+      "locale": "en",
+      "format": "md",
+      "size": 1069,
+      "sha256": "c89eaffc20b843f39ce4773d1fa81f01200feafa9b1622c77580d43bdcd78052"
+    },
+    {
+      "article": "workforce-signal-brief",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 32741,
+      "sha256": "e7feb056551894c8b7150476a599de2565a3ec829b6171d6f39dc8cf73e2232c"
+    },
+    {
+      "article": "workforce-signal-brief",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1034,
+      "sha256": "6416625227f060307130c2b7d68369036ae8cc5226f5e5f6158fdada1ba3f415"
+    },
+    {
+      "article": "workforce-signal-brief",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 32938,
+      "sha256": "5705f20f8c692ea5952614c5b02cf03c6017333afee520f68835bfbc63797394"
+    },
+    {
+      "article": "workforce-signal-brief",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1040,
+      "sha256": "08eb60b58686da10ece270b7669ac20f6ebb6e8c1e98be08ea7e2a0cb509ba11"
+    },
+    {
+      "article": "workforce-signal-brief",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 62227,
+      "sha256": "a816236ecf5a8d0a41074d39647c0f0612df39babf62ded5ceacab4a73e94268"
+    },
+    {
+      "article": "workforce-signal-brief",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1043,
+      "sha256": "e125f1e493cc82ec774eb84586392b48f3c16f25d36252875140b913b4926f65"
+    },
+    {
+      "article": "workforce-signal-brief",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12501,
+      "sha256": "c1dbed9034421d8c21a332bdbc2dbea5e7352198ebd89f1de8fe7dea5c7baa86"
+    },
+    {
+      "article": "workforce-signal-brief",
+      "locale": "en",
+      "format": "md",
+      "size": 1124,
+      "sha256": "b9b35b9093105a95e5b3e620e144b0eb5559bc57b393681121342424c8b0f704"
+    },
+    {
+      "article": "flagship-portfolio-architecture",
+      "locale": "zh-HK",
+      "format": "pdf",
+      "size": 31608,
+      "sha256": "61663227099f901a08fa99b652e02452135414d9e97a18857746aacea9b03d69"
+    },
+    {
+      "article": "flagship-portfolio-architecture",
+      "locale": "zh-HK",
+      "format": "md",
+      "size": 1062,
+      "sha256": "5fe45776e26f5c8d35001f324fe153a9616d61cc3f7a8c3c6f4f909eab4480ae"
+    },
+    {
+      "article": "flagship-portfolio-architecture",
+      "locale": "zh-TW",
+      "format": "pdf",
+      "size": 31036,
+      "sha256": "520da60810155f5cabb50283d8b4ad1a64b5835400a32badd8c901a03ca6a376"
+    },
+    {
+      "article": "flagship-portfolio-architecture",
+      "locale": "zh-TW",
+      "format": "md",
+      "size": 1062,
+      "sha256": "8771b5b09014354d820b34a00d2497fc6f4840379cbf2db8a635e436900b1e9e"
+    },
+    {
+      "article": "flagship-portfolio-architecture",
+      "locale": "zh-Hans",
+      "format": "pdf",
+      "size": 59093,
+      "sha256": "6df49bcc8a79579e665624688e108e65d52cf9e0739faa02ea8e1ac858162d67"
+    },
+    {
+      "article": "flagship-portfolio-architecture",
+      "locale": "zh-Hans",
+      "format": "md",
+      "size": 1062,
+      "sha256": "dd166b608792e36b2b97b3f309267f996a278bad6eb175e95ffa32295d99da9b"
+    },
+    {
+      "article": "flagship-portfolio-architecture",
+      "locale": "en",
+      "format": "pdf",
+      "size": 12548,
+      "sha256": "6643bd5a9f22ef1252f8e893321b04495cbf1eadc9e35a446f44769e8fd900db"
+    },
+    {
+      "article": "flagship-portfolio-architecture",
+      "locale": "en",
+      "format": "md",
+      "size": 1136,
+      "sha256": "1e4553417c03f770b5990d2879ea0300c57e2d6b4ab5a154ff4048b4e914eb5e"
     }
   ]
 }

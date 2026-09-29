@@ -1,0 +1,712 @@
+{
+  "questions": [
+    {
+      "slug": "long-context-is-not-a-free-upgrade",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["shared-language", "transformer-mental-model"],
+      "prepTracks": ["shared-language"],
+      "practice": {
+        "zh-HK": { "scenario": "產品團隊發現長文件入面嘅關鍵條款經常被漏掉。", "trap": "把更大 context window 當成可靠記憶。", "mechanism": "token budget、attention 分配、檢索選取同放置位置。", "tradeoff": "召回率要同延遲、成本同干擾內容一齊衡量。", "failure": "關鍵條款雖然放得入，卻被埋喺中段或根本冇被取到。", "evidence": "一組長 context case，記錄條款位置、budget 同結果。" },
+        "zh-TW": { "scenario": "產品團隊發現長文件裡的關鍵條款經常被漏掉。", "trap": "把更大的 context window 當成可靠記憶。", "mechanism": "token budget、attention 分配、檢索選取與放置位置。", "tradeoff": "召回率要和延遲、成本與干擾內容一起衡量。", "failure": "關鍵條款雖然放得進去，卻被埋在中段或根本沒有被取到。", "evidence": "一組長 context case，記錄條款位置、budget 與結果。" },
+        "zh-Hans": { "scenario": "产品团队发现长文档里的关键条款经常被漏掉。", "trap": "把更大的 context window 当成可靠记忆。", "mechanism": "token budget、attention 分配、检索选择与放置位置。", "tradeoff": "召回率要和延迟、成本与干扰内容一起衡量。", "failure": "关键条款虽然放得进去，却被埋在中段或根本没有被取到。", "evidence": "一组长 context case，记录条款位置、budget 与结果。" },
+        "en": { "scenario": "A product team keeps missing critical clauses in long documents.", "trap": "Treating a larger context window as reliable memory.", "mechanism": "Token budget, attention allocation, retrieval selection, and placement.", "tradeoff": "Balance recall against latency, cost, and distracting content.", "failure": "The clause fits but is buried in the middle, or was never retrieved.", "evidence": "Long-context cases recording clause position, budget, and outcome." }
+      }
+    },
+    {
+      "slug": "trace-p99-latency-before-adding-gpus",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["inference-budget"],
+      "prepTracks": ["infrastructure"],
+      "practice": {
+        "zh-HK": { "scenario": "模型冇改，但 P99 latency 突然升高。", "trap": "一見慢就假定 GPU 唔夠。", "mechanism": "trace 分解 queue、retrieval、model、tool 同 network 時間。", "tradeoff": "先縮短最慢路徑，先至考慮加 capacity。", "failure": "平均值變好，但少數請求卡住整條 workflow。", "evidence": "一張按 step 切開嘅 P50/P95/P99 trace。" },
+        "zh-TW": { "scenario": "模型沒有改，但 P99 latency 突然升高。", "trap": "一變慢就假定 GPU 不夠。", "mechanism": "trace 分解 queue、retrieval、model、tool 與 network 時間。", "tradeoff": "先縮短最慢路徑，再考慮加 capacity。", "failure": "平均值變好，但少數請求卡住整條 workflow。", "evidence": "一張按 step 切開的 P50/P95/P99 trace。" },
+        "zh-Hans": { "scenario": "模型没有改，但 P99 latency 突然升高。", "trap": "一变慢就假定 GPU 不够。", "mechanism": "trace 分解 queue、retrieval、model、tool 与 network 时间。", "tradeoff": "先缩短最慢路径，再考虑加 capacity。", "failure": "平均值变好，但少数请求卡住整条 workflow。", "evidence": "一张按 step 切开的 P50/P95/P99 trace。" },
+        "en": { "scenario": "The model is unchanged, but P99 latency suddenly rises.", "trap": "Assuming more GPUs are the first answer.", "mechanism": "Trace queue, retrieval, model, tool, and network time separately.", "tradeoff": "Shorten the slowest path before adding capacity.", "failure": "The average improves while rare requests stall the whole workflow.", "evidence": "A step-level P50/P95/P99 trace." }
+      }
+    },
+    {
+      "slug": "rag-retrieval-generation-or-permission",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["retrieval-rag"],
+      "prepTracks": ["retrieval-rag"],
+      "practice": {
+        "zh-HK": { "scenario": "政策助手漏咗一條本應答到嘅條款。", "trap": "一見錯答就急住改 prompt。", "mechanism": "分開量度 retrieval、generation、citation 同 permission。", "tradeoff": "提高召回唔可以跨越資料權限。", "failure": "答案似乎合理，但引用嘅係過期或未授權資料。", "evidence": "一個可重播 query，連候選文件、權限同答案 trace。" },
+        "zh-TW": { "scenario": "政策助手漏掉一條本來應該答得到的條款。", "trap": "一看到錯答就急著改 prompt。", "mechanism": "分開衡量 retrieval、generation、citation 與 permission。", "tradeoff": "提高召回不能跨越資料權限。", "failure": "答案看似合理，但引用的是過期或未授權資料。", "evidence": "一個可重播 query，包含候選文件、權限與答案 trace。" },
+        "zh-Hans": { "scenario": "政策助手漏掉一条本来应该答得到的条款。", "trap": "一看到错答就急着改 prompt。", "mechanism": "分开衡量 retrieval、generation、citation 与 permission。", "tradeoff": "提高召回不能跨越数据权限。", "failure": "答案看似合理，但引用的是过期或未授权资料。", "evidence": "一个可重播 query，包含候选文档、权限与答案 trace。" },
+        "en": { "scenario": "A policy assistant misses a clause it should answer.", "trap": "Rewriting the prompt as soon as an answer is wrong.", "mechanism": "Measure retrieval, generation, citation, and permission separately.", "tradeoff": "Higher recall must not cross a data boundary.", "failure": "The answer sounds plausible but uses stale or unauthorised material.", "evidence": "A replayable query with candidate documents, permissions, and answer trace." }
+      }
+    },
+    {
+      "slug": "agent-draft-without-consequential-actions",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["agents-tools"],
+      "prepTracks": ["agent-systems"],
+      "practice": {
+        "zh-HK": { "scenario": "Agent 要研究個案並草擬回覆，但唔可以自行送出。", "trap": "把 draft mode 當成已經安全。", "mechanism": "tool permission、human approval、狀態分離同 audit log。", "tradeoff": "自動化速度要讓位畀可撤回嘅決策控制。", "failure": "草稿流程偷偷取得送出、付款或改資料嘅權限。", "evidence": "一張 tool permission table，加一條 approval trace。" },
+        "zh-TW": { "scenario": "Agent 要研究個案並草擬回覆，但不能自行送出。", "trap": "把 draft mode 當成已經安全。", "mechanism": "tool permission、human approval、狀態分離與 audit log。", "tradeoff": "自動化速度要讓位給可撤回的決策控制。", "failure": "草稿流程偷偷取得送出、付款或改資料的權限。", "evidence": "一張 tool permission table，加上一條 approval trace。" },
+        "zh-Hans": { "scenario": "Agent 要研究个案并草拟回复，但不能自行送出。", "trap": "把 draft mode 当成已经安全。", "mechanism": "tool permission、human approval、状态分离与 audit log。", "tradeoff": "自动化速度要让位给可撤回的决策控制。", "failure": "草稿流程偷偷取得送出、付款或改资料的权限。", "evidence": "一张 tool permission table，加上一条 approval trace。" },
+        "en": { "scenario": "An agent researches a case and drafts a reply, but cannot send it.", "trap": "Assuming draft mode is safe by itself.", "mechanism": "Tool permissions, human approval, state separation, and audit logs.", "tradeoff": "Automation speed yields to reversible decision control.", "failure": "The draft path quietly gains send, payment, or edit authority.", "evidence": "A tool-permission table and one approval trace." }
+      }
+    },
+    {
+      "slug": "fine-tune-or-fix-the-system",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["model-family-choice", "adaptation-choice"],
+      "prepTracks": ["adaptation"],
+      "practice": {
+        "zh-HK": { "scenario": "助手經常答錯，團隊想即刻 fine-tune。", "trap": "把每個錯誤都當成模型能力不足。", "mechanism": "比較資料品質、retrieval、prompt contract、tool workflow 同 training。", "tradeoff": "訓練成本要對應穩定、可重複嘅 failure pattern。", "failure": "用錯誤資料 fine-tune，只會把不一致放大。", "evidence": "一份 decision record，列 baseline、失敗分類同停止條件。" },
+        "zh-TW": { "scenario": "助手經常答錯，團隊想立刻 fine-tune。", "trap": "把每個錯誤都當成模型能力不足。", "mechanism": "比較資料品質、retrieval、prompt contract、tool workflow 與 training。", "tradeoff": "訓練成本要對應穩定、可重複的 failure pattern。", "failure": "用錯誤資料 fine-tune，只會把不一致放大。", "evidence": "一份 decision record，列 baseline、失敗分類與停止條件。" },
+        "zh-Hans": { "scenario": "助手经常答错，团队想立刻 fine-tune。", "trap": "把每个错误都当成模型能力不足。", "mechanism": "比较数据质量、retrieval、prompt contract、tool workflow 与 training。", "tradeoff": "训练成本要对应稳定、可重复的 failure pattern。", "failure": "用错误数据 fine-tune，只会把不一致放大。", "evidence": "一份 decision record，列 baseline、失败分类与停止条件。" },
+        "en": { "scenario": "An assistant is often wrong and the team wants to fine-tune immediately.", "trap": "Treating every error as a model-capability gap.", "mechanism": "Compare data quality, retrieval, prompt contract, tool workflow, and training.", "tradeoff": "Training cost needs a stable, repeatable failure pattern.", "failure": "Fine-tuning on faulty data magnifies inconsistency.", "evidence": "A decision record with baseline, failure categories, and stop condition." }
+      }
+    },
+    {
+      "slug": "release-or-rollback-with-evidence",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["evaluation-observability"],
+      "prepTracks": ["evaluation"],
+      "practice": {
+        "zh-HK": { "scenario": "模型改動後，團隊要決定 release 定 rollback。", "trap": "把一個高 eval score 當成 release 許可。", "mechanism": "versioned cases、human review、trace、guardrail 同 rollback gate。", "tradeoff": "改善要同回歸風險、觀察窗口同影響範圍一齊看。", "failure": "本機通過後，未見過嘅 case 令真人 workflow 退步。", "evidence": "一份 release brief，寫清 gate、owner 同 rollback signal。" },
+        "zh-TW": { "scenario": "模型改動後，團隊要決定 release 還是 rollback。", "trap": "把一個高 eval score 當成 release 許可。", "mechanism": "versioned cases、human review、trace、guardrail 與 rollback gate。", "tradeoff": "改善要和回歸風險、觀察窗口與影響範圍一起看。", "failure": "本機通過後，沒見過的 case 讓人工 workflow 退步。", "evidence": "一份 release brief，寫清 gate、owner 與 rollback signal。" },
+        "zh-Hans": { "scenario": "模型改动后，团队要决定 release 还是 rollback。", "trap": "把一个高 eval score 当成 release 许可。", "mechanism": "versioned cases、human review、trace、guardrail 与 rollback gate。", "tradeoff": "改善要和回归风险、观察窗口与影响范围一起看。", "failure": "本机通过后，没见过的 case 让人工 workflow 退步。", "evidence": "一份 release brief，写清 gate、owner 与 rollback signal。" },
+        "en": { "scenario": "After a model change, the team must release or roll back.", "trap": "Treating one high evaluation score as release permission.", "mechanism": "Versioned cases, human review, traces, guardrails, and rollback gates.", "tradeoff": "Weigh improvement against regression risk, observation window, and blast radius.", "failure": "A local pass degrades an unseen case in the human workflow.", "evidence": "A release brief naming gate, owner, and rollback signal." }
+      }
+    },
+    {
+      "slug": "treat-untrusted-documents-as-data",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["safety-security"],
+      "prepTracks": ["safety-governance"],
+      "practice": {
+        "zh-HK": { "scenario": "上傳文件叫 agent 忽略規則並外傳資料。", "trap": "以為一條 prompt guardrail 已經足夠。", "mechanism": "content isolation、instruction hierarchy、tool allowlist 同 human handoff。", "tradeoff": "文件可用性要同資料外流風險一齊管理。", "failure": "不受信文字被當成 system instruction 或 tool parameter。", "evidence": "一個 red-team document case，連停止同交接記錄。" },
+        "zh-TW": { "scenario": "上傳文件叫 agent 忽略規則並外傳資料。", "trap": "以為一條 prompt guardrail 已經足夠。", "mechanism": "content isolation、instruction hierarchy、tool allowlist 與 human handoff。", "tradeoff": "文件可用性要和資料外流風險一起管理。", "failure": "不受信文字被當成 system instruction 或 tool parameter。", "evidence": "一個 red-team document case，包含停止與交接記錄。" },
+        "zh-Hans": { "scenario": "上传文档叫 agent 忽略规则并外传资料。", "trap": "以为一条 prompt guardrail 已经足够。", "mechanism": "content isolation、instruction hierarchy、tool allowlist 与 human handoff。", "tradeoff": "文档可用性要和数据外流风险一起管理。", "failure": "不受信文字被当成 system instruction 或 tool parameter。", "evidence": "一个 red-team document case，包含停止与交接记录。" },
+        "en": { "scenario": "An uploaded document tells an agent to ignore rules and export data.", "trap": "Assuming one prompt guardrail is enough.", "mechanism": "Content isolation, instruction hierarchy, tool allowlists, and human handoff.", "tradeoff": "Document usefulness must be managed with exfiltration risk.", "failure": "Untrusted text becomes a system instruction or tool parameter.", "evidence": "A red-team document case with stop and handoff records." }
+      }
+    },
+    {
+      "slug": "voice-latency-is-a-system-budget",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["multimodal"],
+      "prepTracks": ["multimodal"],
+      "practice": {
+        "zh-HK": { "scenario": "Voice assistant 要喺對話停頓前播出第一段聲音。", "trap": "只量 text model 嘅 first-token latency。", "mechanism": "ASR、turn detection、retrieval、generation、TTS 同 network budget。", "tradeoff": "更完整答案未必值得犧牲可自然對話嘅節奏。", "failure": "文字很快出現，但使用者等唔到第一段音訊。", "evidence": "一張由麥克風到 first audio 嘅 budget trace。" },
+        "zh-TW": { "scenario": "Voice assistant 要在對話停頓前播出第一段聲音。", "trap": "只量 text model 的 first-token latency。", "mechanism": "ASR、turn detection、retrieval、generation、TTS 與 network budget。", "tradeoff": "更完整答案未必值得犧牲自然對話的節奏。", "failure": "文字很快出現，但使用者等不到第一段音訊。", "evidence": "一張從麥克風到 first audio 的 budget trace。" },
+        "zh-Hans": { "scenario": "Voice assistant 要在对话停顿前播出第一段声音。", "trap": "只量 text model 的 first-token latency。", "mechanism": "ASR、turn detection、retrieval、generation、TTS 与 network budget。", "tradeoff": "更完整答案未必值得牺牲自然对话的节奏。", "failure": "文字很快出现，但使用者等不到第一段音频。", "evidence": "一张从麦克风到 first audio 的 budget trace。" },
+        "en": { "scenario": "A voice assistant must play first audio before the conversation feels stalled.", "trap": "Measuring only the text model’s first-token latency.", "mechanism": "ASR, turn detection, retrieval, generation, TTS, and network budgets.", "tradeoff": "A fuller answer may not justify losing conversational rhythm.", "failure": "Text appears quickly but the user waits too long for audio.", "evidence": "A microphone-to-first-audio budget trace." }
+      }
+    },
+    {
+      "slug": "design-an-internal-policy-assistant",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["system-delivery"],
+      "prepTracks": ["system-design"],
+      "practice": {
+        "zh-HK": { "scenario": "內部政策助手要按文件權限回答，例外要交畀人。", "trap": "由 model name 或 vector database 開始設計。", "mechanism": "user decision、permission-aware retrieval、citation、owner 同 escalation。", "tradeoff": "覆蓋範圍擴大時，例外處理同審計成本亦會增加。", "failure": "助手自信地把過期或無權資料講成政策。", "evidence": "一頁 architecture brief，連 owner、handoff 同 pilot gate。" },
+        "zh-TW": { "scenario": "內部政策助手要依文件權限回答，例外要交給人。", "trap": "從 model name 或 vector database 開始設計。", "mechanism": "user decision、permission-aware retrieval、citation、owner 與 escalation。", "tradeoff": "覆蓋範圍擴大時，例外處理與審計成本也會增加。", "failure": "助手自信地把過期或無權資料講成政策。", "evidence": "一頁 architecture brief，包含 owner、handoff 與 pilot gate。" },
+        "zh-Hans": { "scenario": "内部政策助手要按文档权限回答，例外要交给人。", "trap": "从 model name 或 vector database 开始设计。", "mechanism": "user decision、permission-aware retrieval、citation、owner 与 escalation。", "tradeoff": "覆盖范围扩大时，例外处理与审计成本也会增加。", "failure": "助手自信地把过期或无权资料讲成政策。", "evidence": "一页 architecture brief，包含 owner、handoff 与 pilot gate。" },
+        "en": { "scenario": "An internal policy assistant answers by document permission and hands exceptions to people.", "trap": "Starting with a model name or vector database.", "mechanism": "User decision, permission-aware retrieval, citations, owner, and escalation.", "tradeoff": "Broader coverage raises exception-handling and audit cost.", "failure": "The assistant states stale or unauthorised material as policy.", "evidence": "A one-page architecture brief with owner, handoff, and pilot gate." }
+      }
+    },
+    {
+      "slug": "coding-and-data-structures",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["system-delivery"],
+      "prepTracks": ["implementation"],
+      "practice": {
+        "zh-HK": { "scenario": "要喺 rate limit 下處理五萬個 work items，容許部分失敗。", "trap": "只講一個最靚嘅演算法或一次成功嘅 run。", "mechanism": "queue、backoff、idempotency、checkpoint、data structure 同 test case。", "tradeoff": "吞吐量要同公平性、成本同 recovery 能力一齊揀。", "failure": "retry 令同一 work item 重覆寫入或漏咗記錄。", "evidence": "一份 plan、failure fixture 同可檢查嘅 test result。" },
+        "zh-TW": { "scenario": "要在 rate limit 下處理五萬個 work items，容許部分失敗。", "trap": "只講一個最漂亮的演算法或一次成功的 run。", "mechanism": "queue、backoff、idempotency、checkpoint、data structure 與 test case。", "tradeoff": "吞吐量要和公平性、成本與 recovery 能力一起選。", "failure": "retry 讓同一 work item 重複寫入或漏掉記錄。", "evidence": "一份 plan、failure fixture 與可檢查的 test result。" },
+        "zh-Hans": { "scenario": "要在 rate limit 下处理五万个 work items，允许部分失败。", "trap": "只讲一个最漂亮的算法或一次成功的 run。", "mechanism": "queue、backoff、idempotency、checkpoint、data structure 与 test case。", "tradeoff": "吞吐量要和公平性、成本与 recovery 能力一起选。", "failure": "retry 让同一 work item 重复写入或漏掉记录。", "evidence": "一份 plan、failure fixture 与可检查的 test result。" },
+        "en": { "scenario": "Process fifty thousand work items under a rate limit with partial failures.", "trap": "Discussing only a neat algorithm or one successful run.", "mechanism": "Queue, backoff, idempotency, checkpoints, data structures, and tests.", "tradeoff": "Choose throughput alongside fairness, cost, and recoverability.", "failure": "A retry duplicates a write or loses a work item.", "evidence": "A plan, failure fixture, and inspectable test result." }
+      }
+    },
+    {
+      "slug": "applied-ai-delivery",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["system-delivery"],
+      "prepTracks": ["delivery-judgement"],
+      "practice": {
+        "zh-HK": { "scenario": "客戶話助手不停 hallucinate，要你喺 48 小時內處理。", "trap": "即刻承諾修好，或者只換一個 model。", "mechanism": "收集可重播 case、分流 failure、設 temporary guardrail 同 owner。", "tradeoff": "短期止血要同修復根因嘅時間同影響分開交代。", "failure": "未理解問題已部署改動，令可信答案一齊被擋住。", "evidence": "一份 48-hour triage note，列假設、風險同下一個檢查。" },
+        "zh-TW": { "scenario": "客戶說助手不停 hallucinate，要你在 48 小時內處理。", "trap": "立刻承諾修好，或只換一個 model。", "mechanism": "收集可重播 case、分流 failure、設 temporary guardrail 與 owner。", "tradeoff": "短期止血要和修復根因的時間與影響分開說明。", "failure": "未理解問題就部署改動，讓可信答案一起被擋住。", "evidence": "一份 48-hour triage note，列假設、風險與下一個檢查。" },
+        "zh-Hans": { "scenario": "客户说助手不停 hallucinate，要你在 48 小时内处理。", "trap": "立刻承诺修好，或只换一个 model。", "mechanism": "收集可重播 case、分流 failure、设 temporary guardrail 与 owner。", "tradeoff": "短期止血要和修复根因的时间与影响分开说明。", "failure": "未理解问题就部署改动，让可信答案一起被挡住。", "evidence": "一份 48-hour triage note，列假设、风险与下一个检查。" },
+        "en": { "scenario": "A customer says an assistant hallucinates constantly and wants action in 48 hours.", "trap": "Promising a fix immediately or swapping the model alone.", "mechanism": "Collect replayable cases, classify failures, add a temporary guardrail, and assign an owner.", "tradeoff": "Separate immediate containment from time and impact needed to fix the cause.", "failure": "An unexplained change blocks useful answers alongside unsafe ones.", "evidence": "A 48-hour triage note with assumptions, risks, and next check." }
+      }
+    },
+    {
+      "slug": "project-deep-dive-and-role-fit",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["interview-evidence"],
+      "prepTracks": ["delivery-judgement"],
+      "practice": {
+        "zh-HK": { "scenario": "面試官叫你講一個證據改變咗技術決定嘅 project。", "trap": "背一段沒有反例嘅成功故事。", "mechanism": "context、個人決定、可查 artefact、反證同修正。", "tradeoff": "要保護敏感資料，同時畀人追問到你嘅判斷。", "failure": "將團隊成果包裝成自己做，或者補出未驗證成效。", "evidence": "一段 90 秒回答，加一份可公開嘅 README 或 decision record。" },
+        "zh-TW": { "scenario": "面試官叫你講一個證據改變技術決策的 project。", "trap": "背一段沒有反例的成功故事。", "mechanism": "context、個人決策、可查 artefact、反證與修正。", "tradeoff": "要保護敏感資料，同時讓人追問到你的判斷。", "failure": "把團隊成果包裝成自己做，或補出未驗證成效。", "evidence": "一段 90 秒回答，加一份可公開的 README 或 decision record。" },
+        "zh-Hans": { "scenario": "面试官叫你讲一个证据改变技术决策的 project。", "trap": "背一段没有反例的成功故事。", "mechanism": "context、个人决策、可查 artefact、反证与修正。", "tradeoff": "要保护敏感资料，同时让人追问到你的判断。", "failure": "把团队成果包装成自己做，或补出未验证成效。", "evidence": "一段 90 秒回答，加一份可公开的 README 或 decision record。" },
+        "en": { "scenario": "An interviewer asks for a project where evidence changed your technical decision.", "trap": "Reciting a success story with no counterexample.", "mechanism": "Context, personal decision, inspectable artefact, counterevidence, and correction.", "tradeoff": "Protect sensitive material while still making your judgement probeable.", "failure": "Presenting team work as personal work or inventing unverified outcomes.", "evidence": "A 90-second answer plus a public-safe README or decision record." }
+      }
+    },
+    {
+      "slug": "offline-score-and-human-workflow",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["ml-decisions"],
+      "prepTracks": ["evaluation"],
+      "practice": {
+        "zh-HK": { "scenario": "候選模型 offline 勝過 baseline，但 reviewer 話工作冇變好。", "trap": "把離線分數直接當成 business value。", "mechanism": "threshold、queue volume、handoff、時機同 human feedback。", "tradeoff": "分數改善要對比增加嘅 review 負擔同錯誤成本。", "failure": "高分模型將更多無用 case 推畀人工隊列。", "evidence": "一張 threshold-to-workflow table，加一個 reviewer sample。" },
+        "zh-TW": { "scenario": "候選模型 offline 勝過 baseline，但 reviewer 說工作沒有變好。", "trap": "把離線分數直接當成 business value。", "mechanism": "threshold、queue volume、handoff、時機與 human feedback。", "tradeoff": "分數改善要比較增加的 review 負擔與錯誤成本。", "failure": "高分模型把更多無用 case 推給人工佇列。", "evidence": "一張 threshold-to-workflow table，加上一個 reviewer sample。" },
+        "zh-Hans": { "scenario": "候选模型 offline 胜过 baseline，但 reviewer 说工作没有变好。", "trap": "把离线分数直接当成 business value。", "mechanism": "threshold、queue volume、handoff、时机与 human feedback。", "tradeoff": "分数改善要比较增加的 review 负担与错误成本。", "failure": "高分模型把更多无用 case 推给人工队列。", "evidence": "一张 threshold-to-workflow table，加上一个 reviewer sample。" },
+        "en": { "scenario": "A candidate beats baseline offline, but reviewers say their work did not improve.", "trap": "Treating an offline score as business value.", "mechanism": "Threshold, queue volume, handoff, timing, and human feedback.", "tradeoff": "Compare score gains with added review burden and error cost.", "failure": "A higher-scoring model pushes more useless cases into the human queue.", "evidence": "A threshold-to-workflow table and reviewer sample." }
+      }
+    },
+    {
+      "slug": "prompt-contracts-need-an-acceptance-test",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["prompt-context-interface"],
+      "prepTracks": ["prompt-context"],
+      "practice": {
+        "zh-HK": { "scenario": "原本穩定嘅 classifier 由 web form 換成 email 同掃描文件後失準。", "trap": "直接改 prompt，冇先看 input contract。", "mechanism": "input shape、context、acceptance cases、version 同 error taxonomy。", "tradeoff": "收窄 input contract 會提高可靠性，但可能增加前處理成本。", "failure": "新格式破壞欄位結構，模型卻自信分類。", "evidence": "一組固定 acceptance cases，涵蓋新舊 input。" },
+        "zh-TW": { "scenario": "原本穩定的 classifier 從 web form 換成 email 與掃描文件後失準。", "trap": "直接改 prompt，沒有先看 input contract。", "mechanism": "input shape、context、acceptance cases、version 與 error taxonomy。", "tradeoff": "收窄 input contract 會提高可靠性，但可能增加前處理成本。", "failure": "新格式破壞欄位結構，模型卻自信分類。", "evidence": "一組固定 acceptance cases，涵蓋新舊 input。" },
+        "zh-Hans": { "scenario": "原本稳定的 classifier 从 web form 换成 email 与扫描文档后失准。", "trap": "直接改 prompt，没有先看 input contract。", "mechanism": "input shape、context、acceptance cases、version 与 error taxonomy。", "tradeoff": "收窄 input contract 会提高可靠性，但可能增加预处理成本。", "failure": "新格式破坏字段结构，模型却自信分类。", "evidence": "一组固定 acceptance cases，涵盖新旧 input。" },
+        "en": { "scenario": "A stable classifier fails after web forms become email and scanned documents.", "trap": "Editing the prompt before checking the input contract.", "mechanism": "Input shape, context, acceptance cases, version, and error taxonomy.", "tradeoff": "A narrower input contract raises reliability but may add preprocessing cost.", "failure": "The new format breaks field structure while the model classifies confidently.", "evidence": "Fixed acceptance cases covering old and new input." }
+      }
+    },
+    {
+      "slug": "high-similarity-is-not-relevance",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["retrieval-rag"],
+      "prepTracks": ["embeddings-search"],
+      "practice": {
+        "zh-HK": { "scenario": "Similarity 很高，但使用者拎到錯文件。", "trap": "把 embedding distance 當成 user relevance。", "mechanism": "query intent、chunk、metadata filter、freshness 同 reranking。", "tradeoff": "更廣召回會帶入更多相似但不適用嘅文件。", "failure": "文件字面相近，但權限、版本或情境不對。", "evidence": "一組 high-similarity wrong-result search cases。" },
+        "zh-TW": { "scenario": "Similarity 很高，但使用者拿到錯文件。", "trap": "把 embedding distance 當成 user relevance。", "mechanism": "query intent、chunk、metadata filter、freshness 與 reranking。", "tradeoff": "更廣召回會帶進更多相似但不適用的文件。", "failure": "文件字面相近，但權限、版本或情境不對。", "evidence": "一組 high-similarity wrong-result search cases。" },
+        "zh-Hans": { "scenario": "Similarity 很高，但使用者拿到错文档。", "trap": "把 embedding distance 当成 user relevance。", "mechanism": "query intent、chunk、metadata filter、freshness 与 reranking。", "tradeoff": "更广召回会带进更多相似但不适用的文档。", "failure": "文档字面相近，但权限、版本或情境不对。", "evidence": "一组 high-similarity wrong-result search cases。" },
+        "en": { "scenario": "Similarity is high, but the user gets the wrong document.", "trap": "Treating embedding distance as user relevance.", "mechanism": "Query intent, chunking, metadata filters, freshness, and reranking.", "tradeoff": "Broader recall brings more similar but inapplicable documents.", "failure": "The document is lexically close but has the wrong permission, version, or context.", "evidence": "High-similarity, wrong-result search cases." }
+      }
+    },
+    {
+      "slug": "a-retry-is-not-a-recovery-plan",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["agentic-engineering"],
+      "prepTracks": ["production-operations"],
+      "practice": {
+        "zh-HK": { "scenario": "batch worker timeout 後重跑，可能重覆送出信用指令。", "trap": "retry 成功就當 workflow 已 recovery。", "mechanism": "idempotency key、durable checkpoint、state reconciliation 同 dead letter。", "tradeoff": "更嚴格嘅 recovery state 會加複雜度，但避免重覆後果。", "failure": "外部寫入已成功，本地 record 卻未更新。", "evidence": "一條 timeout-and-rerun fixture，加一次 reconciliation trace。" },
+        "zh-TW": { "scenario": "batch worker timeout 後重跑，可能重複送出信用指令。", "trap": "retry 成功就當 workflow 已 recovery。", "mechanism": "idempotency key、durable checkpoint、state reconciliation 與 dead letter。", "tradeoff": "更嚴格的 recovery state 會增加複雜度，但避免重複後果。", "failure": "外部寫入已成功，本地 record 卻未更新。", "evidence": "一條 timeout-and-rerun fixture，加上一份 reconciliation trace。" },
+        "zh-Hans": { "scenario": "batch worker timeout 后重跑，可能重复送出信用指令。", "trap": "retry 成功就当 workflow 已 recovery。", "mechanism": "idempotency key、durable checkpoint、state reconciliation 与 dead letter。", "tradeoff": "更严格的 recovery state 会增加复杂度，但避免重复后果。", "failure": "外部写入已成功，本地 record 却未更新。", "evidence": "一条 timeout-and-rerun fixture，加上一份 reconciliation trace。" },
+        "en": { "scenario": "A batch worker times out and reruns could duplicate a credit instruction.", "trap": "Treating a successful retry as workflow recovery.", "mechanism": "Idempotency keys, durable checkpoints, state reconciliation, and dead letters.", "tradeoff": "Stricter recovery state adds complexity but prevents duplicate consequences.", "failure": "The external write succeeded but the local record did not update.", "evidence": "A timeout-and-rerun fixture plus a reconciliation trace." }
+      }
+    },
+    {
+      "slug": "token-budget-is-not-a-language-test",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["generation-control"],
+      "prepTracks": ["shared-language"],
+      "practice": {
+        "zh-HK": { "scenario": "支援工具要讀英文、繁中同 code-switched case notes。", "trap": "用字數截斷，當每種語言 token 一樣。", "mechanism": "tokenisation、language detection、reserved budget 同 truncation policy。", "tradeoff": "保留更多 context 會同成本、延遲同關鍵欄位競爭。", "failure": "固定字數切走咗地址、否定詞或 code 裡嘅關鍵片段。", "evidence": "一組多語 input，記錄 token count、截斷點同結果。" },
+        "zh-TW": { "scenario": "支援工具要讀英文、繁中與 code-switched case notes。", "trap": "用字數截斷，當每種語言 token 一樣。", "mechanism": "tokenisation、language detection、reserved budget 與 truncation policy。", "tradeoff": "保留更多 context 會和成本、延遲與關鍵欄位競爭。", "failure": "固定字數切走地址、否定詞或 code 裡的關鍵片段。", "evidence": "一組多語 input，記錄 token count、截斷點與結果。" },
+        "zh-Hans": { "scenario": "支持工具要读英文、繁中与 code-switched case notes。", "trap": "用字数截断，当每种语言 token 一样。", "mechanism": "tokenisation、language detection、reserved budget 与 truncation policy。", "tradeoff": "保留更多 context 会和成本、延迟与关键字段竞争。", "failure": "固定字数切走地址、否定词或 code 里的关键片段。", "evidence": "一组多语 input，记录 token count、截断点与结果。" },
+        "en": { "scenario": "A support tool reads English, Traditional Chinese, and code-switched case notes.", "trap": "Truncating by character count as if every language tokenised alike.", "mechanism": "Tokenisation, language detection, reserved budget, and truncation policy.", "tradeoff": "More retained context competes with cost, latency, and critical fields.", "failure": "A fixed character cut removes an address, negation, or key code fragment.", "evidence": "Multilingual inputs recording token count, cut point, and outcome." }
+      }
+    },
+    {
+      "slug": "masking-prevents-a-leak-not-a-bad-decision",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["safety-security"],
+      "prepTracks": ["safety-governance"],
+      "practice": {
+        "zh-HK": { "scenario": "團隊話 causal mask 已阻止模型看 future data，所以任何 retrieved doc 都安全。", "trap": "把模型內嘅 mask 當成整個系統嘅 data control。", "mechanism": "data availability、retrieval permission、time boundary 同 decision policy。", "tradeoff": "多資料未必帶來更好決策，尤其資料當時未可用。", "failure": "模型未看未來 token，但 retriever 已帶入未來文件。", "evidence": "一張 as-of timeline，標記每份資料何時可用。" },
+        "zh-TW": { "scenario": "團隊說 causal mask 已阻止模型看 future data，所以任何 retrieved doc 都安全。", "trap": "把模型內的 mask 當成整個系統的 data control。", "mechanism": "data availability、retrieval permission、time boundary 與 decision policy。", "tradeoff": "更多資料未必帶來更好決策，尤其資料當時不可用。", "failure": "模型沒有看未來 token，但 retriever 已帶入未來文件。", "evidence": "一張 as-of timeline，標記每份資料何時可用。" },
+        "zh-Hans": { "scenario": "团队说 causal mask 已阻止模型看 future data，所以任何 retrieved doc 都安全。", "trap": "把模型内的 mask 当成整个系统的 data control。", "mechanism": "data availability、retrieval permission、time boundary 与 decision policy。", "tradeoff": "更多数据未必带来更好决策，尤其数据当时不可用。", "failure": "模型没有看未来 token，但 retriever 已带入未来文档。", "evidence": "一张 as-of timeline，标记每份资料何时可用。" },
+        "en": { "scenario": "A team says a causal mask makes any retrieved document safe because it blocks future data.", "trap": "Treating an in-model mask as a system-wide data control.", "mechanism": "Data availability, retrieval permission, time boundary, and decision policy.", "tradeoff": "More data need not make a better decision, especially if unavailable then.", "failure": "The model never sees future tokens, but the retriever supplied a future document.", "evidence": "An as-of timeline marking when each source became available." }
+      }
+    },
+    {
+      "slug": "structured-output-is-not-a-grounding-check",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["prompt-context-interface"],
+      "prepTracks": ["prompt-context"],
+      "practice": {
+        "zh-HK": { "scenario": "政策助手每次都輸出合格 JSON，卻可能引用錯 source。", "trap": "schema validator 過咗就當答案有根據。", "mechanism": "claim-to-source entailment、citation validation、abstention 同 eval cases。", "tradeoff": "嚴格 grounding check 會增加拒答同人工 review。", "failure": "source_ids 格式正確，但根本唔支持 verdict。", "evidence": "一組 JSON-valid but unsupported-answer cases。" },
+        "zh-TW": { "scenario": "政策助手每次都輸出合格 JSON，卻可能引用錯 source。", "trap": "schema validator 通過就當答案有根據。", "mechanism": "claim-to-source entailment、citation validation、abstention 與 eval cases。", "tradeoff": "嚴格 grounding check 會增加拒答與人工 review。", "failure": "source_ids 格式正確，但根本不支持 verdict。", "evidence": "一組 JSON-valid but unsupported-answer cases。" },
+        "zh-Hans": { "scenario": "政策助手每次都输出合格 JSON，却可能引用错 source。", "trap": "schema validator 通过就当答案有根据。", "mechanism": "claim-to-source entailment、citation validation、abstention 与 eval cases。", "tradeoff": "严格 grounding check 会增加拒答与人工 review。", "failure": "source_ids 格式正确，但根本不支持 verdict。", "evidence": "一组 JSON-valid but unsupported-answer cases。" },
+        "en": { "scenario": "A policy assistant returns valid JSON but may cite the wrong source.", "trap": "Assuming a schema pass means the answer is grounded.", "mechanism": "Claim-to-source entailment, citation validation, abstention, and evaluation cases.", "tradeoff": "Stricter grounding checks raise abstentions and human review.", "failure": "Source IDs are well formed but do not support the verdict.", "evidence": "JSON-valid but unsupported-answer cases." }
+      }
+    },
+    {
+      "slug": "a-reranker-cannot-restore-a-missing-permission",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["retrieval-rag"],
+      "prepTracks": ["retrieval-rag", "embeddings-search"],
+      "practice": {
+        "zh-HK": { "scenario": "reranker 把最相關三份文件排最前，但來源 permission 或 freshness 未知。", "trap": "把 relevance ranking 當成 access control。", "mechanism": "pre-retrieval filtering、ACL propagation、freshness 同 ranker boundary。", "tradeoff": "過濾得太早可能降召回，但太遲已暴露資料。", "failure": "最高排名文件唔應該畀個 user 見。", "evidence": "一個 permission-denied query，記錄 filter 同 rank 結果。" },
+        "zh-TW": { "scenario": "reranker 把最相關三份文件排最前，但來源 permission 或 freshness 未知。", "trap": "把 relevance ranking 當成 access control。", "mechanism": "pre-retrieval filtering、ACL propagation、freshness 與 ranker boundary。", "tradeoff": "過濾得太早可能降召回，但太晚已暴露資料。", "failure": "最高排名文件不該讓那位 user 看見。", "evidence": "一個 permission-denied query，記錄 filter 與 rank 結果。" },
+        "zh-Hans": { "scenario": "reranker 把最相关三份文档排最前，但来源 permission 或 freshness 未知。", "trap": "把 relevance ranking 当成 access control。", "mechanism": "pre-retrieval filtering、ACL propagation、freshness 与 ranker boundary。", "tradeoff": "过滤得太早可能降召回，但太晚已暴露数据。", "failure": "最高排名文档不该让那位 user 看见。", "evidence": "一个 permission-denied query，记录 filter 与 rank 结果。" },
+        "en": { "scenario": "A reranker puts the top three relevant documents first, but permission and freshness are unknown.", "trap": "Treating relevance ranking as access control.", "mechanism": "Pre-retrieval filtering, ACL propagation, freshness, and ranker boundary.", "tradeoff": "Filtering early can lower recall; filtering late can expose data.", "failure": "The top-ranked document must not be visible to this user.", "evidence": "A permission-denied query recording filter and rank result." }
+      }
+    },
+    {
+      "slug": "conflicting-sources-need-an-owner",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["retrieval-rag"],
+      "prepTracks": ["retrieval-rag"],
+      "practice": {
+        "zh-HK": { "scenario": "兩份可讀文件分別講 30 日同 90 日 retention。", "trap": "叫模型取平均、揀較新日期或自己判斷。", "mechanism": "source authority、effective date、conflict detection、owner 同 abstention。", "tradeoff": "停低等人確認會慢，但避免助手自創政策。", "failure": "模型把相衝突規則合成一個從未批准嘅答案。", "evidence": "一張 source-conflict record，連 authority 同 escalation owner。" },
+        "zh-TW": { "scenario": "兩份可讀文件分別說 30 日與 90 日 retention。", "trap": "叫模型取平均、選較新日期或自行判斷。", "mechanism": "source authority、effective date、conflict detection、owner 與 abstention。", "tradeoff": "停下來等人確認會慢，但避免助手自行創造政策。", "failure": "模型把衝突規則合成一個從未核准的答案。", "evidence": "一張 source-conflict record，包含 authority 與 escalation owner。" },
+        "zh-Hans": { "scenario": "两份可读文档分别说 30 日与 90 日 retention。", "trap": "叫模型取平均、选较新日期或自行判断。", "mechanism": "source authority、effective date、conflict detection、owner 与 abstention。", "tradeoff": "停下来等人确认会慢，但避免助手自行创造政策。", "failure": "模型把冲突规则合成一个从未批准的答案。", "evidence": "一张 source-conflict record，包含 authority 与 escalation owner。" },
+        "en": { "scenario": "Two readable documents say retention is 30 days and 90 days.", "trap": "Letting the model average, choose the newer date, or decide alone.", "mechanism": "Source authority, effective date, conflict detection, owner, and abstention.", "tradeoff": "Pausing for confirmation is slower but avoids invented policy.", "failure": "The model merges conflicting rules into an answer nobody approved.", "evidence": "A source-conflict record with authority and escalation owner." }
+      }
+    },
+    {
+      "slug": "an-agent-loop-needs-terminal-states",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["agentic-engineering"],
+      "prepTracks": ["agent-systems"],
+      "practice": {
+        "zh-HK": { "scenario": "Agent 會 plan、search、call tool 同 revise，直到自己話完成。", "trap": "相信模型會自行知道幾時應該停。", "mechanism": "terminal states、step budget、evidence threshold、timeout 同 escalation。", "tradeoff": "更早停低減少成本，但可能令更多 case 交人。", "failure": "Agent 不停搜尋，或者冇足夠證據就自信完成。", "evidence": "一個 state diagram，含 success、stop、handoff 同 timeout。" },
+        "zh-TW": { "scenario": "Agent 會 plan、search、call tool 與 revise，直到自己說完成。", "trap": "相信模型會自行知道何時應該停止。", "mechanism": "terminal states、step budget、evidence threshold、timeout 與 escalation。", "tradeoff": "更早停止減少成本，但可能讓更多 case 交給人。", "failure": "Agent 不停搜尋，或沒有足夠證據就自信完成。", "evidence": "一個 state diagram，包含 success、stop、handoff 與 timeout。" },
+        "zh-Hans": { "scenario": "Agent 会 plan、search、call tool 与 revise，直到自己说完成。", "trap": "相信模型会自行知道何时应该停止。", "mechanism": "terminal states、step budget、evidence threshold、timeout 与 escalation。", "tradeoff": "更早停止减少成本，但可能让更多 case 交给人。", "failure": "Agent 不停搜索，或没有足够证据就自信完成。", "evidence": "一个 state diagram，包含 success、stop、handoff 与 timeout。" },
+        "en": { "scenario": "An agent plans, searches, calls tools, and revises until it says it is done.", "trap": "Trusting the model to know when it should stop.", "mechanism": "Terminal states, step budget, evidence threshold, timeout, and escalation.", "tradeoff": "Stopping earlier lowers cost but sends more cases to people.", "failure": "The agent searches forever or completes confidently without enough evidence.", "evidence": "A state diagram with success, stop, handoff, and timeout." }
+      }
+    },
+    {
+      "slug": "tool-schema-is-not-least-privilege",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["agents-tools"],
+      "prepTracks": ["agent-systems", "safety-governance"],
+      "practice": {
+        "zh-HK": { "scenario": "refund tool 需要 invoice_id、amount 同 reason，而且 schema 全部驗證通過。", "trap": "欄位有效就當權限最小。", "mechanism": "scope、actor identity、policy check、approval、amount limit 同 audit。", "tradeoff": "細粒度權限增加 integration 成本，但縮細意外後果。", "failure": "合法格式嘅 request 仍然超出 agent 應有嘅授權。", "evidence": "一張 tool policy matrix，含 allow、deny 同 approval cases。" },
+        "zh-TW": { "scenario": "refund tool 需要 invoice_id、amount 與 reason，而且 schema 全部驗證通過。", "trap": "欄位有效就當權限最小。", "mechanism": "scope、actor identity、policy check、approval、amount limit 與 audit。", "tradeoff": "細粒度權限增加 integration 成本，但縮小意外後果。", "failure": "合法格式的 request 仍然超出 agent 應有的授權。", "evidence": "一張 tool policy matrix，包含 allow、deny 與 approval cases。" },
+        "zh-Hans": { "scenario": "refund tool 需要 invoice_id、amount 与 reason，而且 schema 全部验证通过。", "trap": "字段有效就当权限最小。", "mechanism": "scope、actor identity、policy check、approval、amount limit 与 audit。", "tradeoff": "细粒度权限增加 integration 成本，但缩小意外后果。", "failure": "合法格式的 request 仍然超出 agent 应有的授权。", "evidence": "一张 tool policy matrix，包含 allow、deny 与 approval cases。" },
+        "en": { "scenario": "A refund tool requires invoice ID, amount, and reason, and the schema validates all fields.", "trap": "Assuming valid fields equal least privilege.", "mechanism": "Scope, actor identity, policy check, approval, amount limit, and audit.", "tradeoff": "Fine-grained permissions add integration cost but reduce accidental consequence.", "failure": "A well-formed request still exceeds the agent’s proper authority.", "evidence": "A tool-policy matrix with allow, deny, and approval cases." }
+      }
+    },
+    {
+      "slug": "mcp-discovery-is-not-an-approval-gate",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["agents-tools"],
+      "prepTracks": ["agent-systems", "safety-governance"],
+      "practice": {
+        "zh-HK": { "scenario": "Agent 經 MCP 搵到一個可以向供應商發訊息嘅工具。", "trap": "把 tool discovery 或 chat confirm 當成發送權限。", "mechanism": "action classification、proposal digest、短時效 approval grant、server receipt 同 idempotency。", "tradeoff": "多一層審批與重查會慢，但可防止錯 target、過期批准同重複發送。", "failure": "格式正確嘅 call 繞過 UI 或舊 approval，造成未經核對嘅外部 action。", "evidence": "一條完整 proposal-to-receipt trace，加上 bypass、變更同 timeout tests。" },
+        "zh-TW": { "scenario": "Agent 經 MCP 找到一個可以向供應商發訊息的工具。", "trap": "把 tool discovery 或 chat confirm 當成發送權限。", "mechanism": "action classification、proposal digest、短時效 approval grant、server receipt 與 idempotency。", "tradeoff": "多一層核准與重查會變慢，但能防止錯 target、過期核准與重複發送。", "failure": "格式正確的 call 繞過 UI 或舊 approval，造成未經核對的外部 action。", "evidence": "一條完整 proposal-to-receipt trace，加上 bypass、變更與 timeout tests。" },
+        "zh-Hans": { "scenario": "Agent 经 MCP 找到一个可以向供应商发消息的工具。", "trap": "把 tool discovery 或 chat confirm 当成发送权限。", "mechanism": "action classification、proposal digest、短时效 approval grant、server receipt 与 idempotency。", "tradeoff": "多一层批准与重查会变慢，但能防止错 target、过期批准与重复发送。", "failure": "格式正确的 call 绕过 UI 或旧 approval，造成未经核对的外部 action。", "evidence": "一条完整 proposal-to-receipt trace，加上 bypass、变更与 timeout tests。" },
+        "en": { "scenario": "An agent discovers an MCP tool that can message a supplier.", "trap": "Treating tool discovery or chat confirmation as send authority.", "mechanism": "Action classification, proposal digest, short-lived approval grant, server receipt, and idempotency.", "tradeoff": "An extra approval and recheck add latency but prevent wrong targets, stale approval, and duplicate sends.", "failure": "A well-formed call bypasses the UI or uses old approval to create an unchecked external action.", "evidence": "One complete proposal-to-receipt trace plus bypass, change, and timeout tests." }
+      }
+    },
+    {
+      "slug": "memory-must-expire-before-it-becomes-policy",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["agents-tools"],
+      "prepTracks": ["agent-systems", "safety-governance"],
+      "practice": {
+        "zh-HK": { "scenario": "Agent 記住 user 曾講某類 request 可以直接處理。", "trap": "把舊對話當成持久授權。", "mechanism": "memory scope、expiry、consent、policy source 同 revalidation。", "tradeoff": "記憶越多越方便，但過期授權同錯配風險越大。", "failure": "過咗期嘅偏好被當成可以執行嘅規則。", "evidence": "一個 memory record，含用途、expiry、source 同 revoke path。" },
+        "zh-TW": { "scenario": "Agent 記住 user 曾說某類 request 可以直接處理。", "trap": "把舊對話當成持久授權。", "mechanism": "memory scope、expiry、consent、policy source 與 revalidation。", "tradeoff": "記憶越多越方便，但過期授權與錯配風險越大。", "failure": "過期的偏好被當成可以執行的規則。", "evidence": "一個 memory record，包含用途、expiry、source 與 revoke path。" },
+        "zh-Hans": { "scenario": "Agent 记住 user 曾说某类 request 可以直接处理。", "trap": "把旧对话当成持久授权。", "mechanism": "memory scope、expiry、consent、policy source 与 revalidation。", "tradeoff": "记忆越多越方便，但过期授权与错配风险越大。", "failure": "过期的偏好被当成可以执行的规则。", "evidence": "一个 memory record，包含用途、expiry、source 与 revoke path。" },
+        "en": { "scenario": "An agent remembers a user said a type of request could be handled directly.", "trap": "Treating an old conversation as durable authorisation.", "mechanism": "Memory scope, expiry, consent, policy source, and revalidation.", "tradeoff": "More memory is convenient but raises stale-authorisation and mismatch risk.", "failure": "An expired preference becomes an executable rule.", "evidence": "A memory record with purpose, expiry, source, and revoke path." }
+      }
+    },
+    {
+      "slug": "a-queue-needs-a-dead-letter-path",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["agentic-engineering"],
+      "prepTracks": ["production-operations"],
+      "practice": {
+        "zh-HK": { "scenario": "夜間 batch 有 input validation fail、worker lease loss 同 checkpoint write fail。", "trap": "只重試直到成功，將失敗藏起。", "mechanism": "queue state、lease、idempotency、dead-letter、replay 同 alert。", "tradeoff": "自動重跑減少手工，但要保留可見嘅未處理失敗。", "failure": "壞 input 永遠佔住 queue，或者成功結果冇 checkpoint。", "evidence": "一組 success、failure、dead-letter、replay fixtures。" },
+        "zh-TW": { "scenario": "夜間 batch 有 input validation fail、worker lease loss 與 checkpoint write fail。", "trap": "只重試直到成功，把失敗藏起來。", "mechanism": "queue state、lease、idempotency、dead-letter、replay 與 alert。", "tradeoff": "自動重跑減少手工，但要保留可見的未處理失敗。", "failure": "壞 input 永遠占住 queue，或成功結果沒有 checkpoint。", "evidence": "一組 success、failure、dead-letter、replay fixtures。" },
+        "zh-Hans": { "scenario": "夜间 batch 有 input validation fail、worker lease loss 与 checkpoint write fail。", "trap": "只重试直到成功，把失败藏起来。", "mechanism": "queue state、lease、idempotency、dead-letter、replay 与 alert。", "tradeoff": "自动重跑减少手工，但要保留可见的未处理失败。", "failure": "坏 input 永远占住 queue，或成功结果没有 checkpoint。", "evidence": "一组 success、failure、dead-letter、replay fixtures。" },
+        "en": { "scenario": "A nightly batch has input-validation failures, worker lease loss, and checkpoint-write failures.", "trap": "Retrying until success and hiding the failures.", "mechanism": "Queue state, lease, idempotency, dead letter, replay, and alerting.", "tradeoff": "Automatic reruns reduce manual work but failures must remain visible.", "failure": "Bad input occupies the queue forever or success has no checkpoint.", "evidence": "Success, failure, dead-letter, and replay fixtures." }
+      }
+    },
+    {
+      "slug": "a-faster-average-can-hide-a-worse-p99",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["inference-budget"],
+      "prepTracks": ["production-operations", "infrastructure"],
+      "practice": {
+        "zh-HK": { "scenario": "新 serving stack 令平均 latency 快咗，但少數 page 會卡 18 秒。", "trap": "用平均 latency 宣布改善。", "mechanism": "tail distribution、queueing、timeouts、load shape 同 per-step trace。", "tradeoff": "為咗快大部分請求，唔可以犧牲極慢個案嘅可用性。", "failure": "少數超時令使用者放棄，平均值仍然好睇。", "evidence": "change 前後嘅 percentile chart，加 stuck-request traces。" },
+        "zh-TW": { "scenario": "新 serving stack 讓平均 latency 變快，但少數 page 會卡 18 秒。", "trap": "用平均 latency 宣布改善。", "mechanism": "tail distribution、queueing、timeouts、load shape 與 per-step trace。", "tradeoff": "為了加快大多數請求，不能犧牲極慢個案的可用性。", "failure": "少數超時讓使用者放棄，平均值仍然好看。", "evidence": "change 前後的 percentile chart，加上 stuck-request traces。" },
+        "zh-Hans": { "scenario": "新 serving stack 让平均 latency 变快，但少数 page 会卡 18 秒。", "trap": "用平均 latency 宣布改善。", "mechanism": "tail distribution、queueing、timeouts、load shape 与 per-step trace。", "tradeoff": "为了加快大多数请求，不能牺牲极慢个案的可用性。", "failure": "少数超时让使用者放弃，平均值仍然好看。", "evidence": "change 前后的 percentile chart，加上 stuck-request traces。" },
+        "en": { "scenario": "A new serving stack lowers mean latency, but some pages hang for 18 seconds.", "trap": "Declaring improvement from mean latency.", "mechanism": "Tail distribution, queueing, timeouts, load shape, and per-step traces.", "tradeoff": "Faster common requests cannot sacrifice usability for very slow cases.", "failure": "A few timeouts make users abandon the flow while the average looks good.", "evidence": "Before-and-after percentile charts plus stuck-request traces." }
+      }
+    },
+    {
+      "slug": "an-eval-score-needs-human-calibration",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["evaluation-observability"],
+      "prepTracks": ["evaluation"],
+      "practice": {
+        "zh-HK": { "scenario": "自動 evaluator 過咗 92%，但 reviewer 發現靚答案漏咗必需 caveat。", "trap": "把 evaluator score 當成 ground truth。", "mechanism": "representative sample、human rubric、error slices、agreement 同 recalibration。", "tradeoff": "真人 review 慢，但可以知道 auto score 漏咗乜。", "failure": "evaluator 獎勵流暢說法，卻漏掉安全或政策限制。", "evidence": "一份 human-vs-auto calibration table，含 disagreement cases。" },
+        "zh-TW": { "scenario": "自動 evaluator 過了 92%，但 reviewer 發現漂亮答案漏掉必需 caveat。", "trap": "把 evaluator score 當成 ground truth。", "mechanism": "representative sample、human rubric、error slices、agreement 與 recalibration。", "tradeoff": "真人 review 慢，但可以知道 auto score 漏掉什麼。", "failure": "evaluator 獎勵流暢說法，卻漏掉安全或政策限制。", "evidence": "一份 human-vs-auto calibration table，包含 disagreement cases。" },
+        "zh-Hans": { "scenario": "自动 evaluator 过了 92%，但 reviewer 发现漂亮答案漏掉必需 caveat。", "trap": "把 evaluator score 当成 ground truth。", "mechanism": "representative sample、human rubric、error slices、agreement 与 recalibration。", "tradeoff": "真人 review 慢，但可以知道 auto score 漏掉什么。", "failure": "evaluator 奖励流畅说法，却漏掉安全或政策限制。", "evidence": "一份 human-vs-auto calibration table，包含 disagreement cases。" },
+        "en": { "scenario": "An automated evaluator passes 92%, but reviewers find polished answers missing a required caveat.", "trap": "Treating evaluator score as ground truth.", "mechanism": "Representative sample, human rubric, error slices, agreement, and recalibration.", "tradeoff": "Human review is slower but reveals what the automated score misses.", "failure": "The evaluator rewards fluency while omitting safety or policy limits.", "evidence": "A human-versus-automated calibration table with disagreement cases." }
+      }
+    },
+    {
+      "slug": "a-model-metric-is-not-a-business-metric",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["ml-decisions"],
+      "prepTracks": ["system-design", "evaluation"],
+      "practice": {
+        "zh-HK": { "scenario": "分類模型喺從未畀模型見過嘅合成測試資料上，F1 提升；產品負責人問實際會帶來幾多業務價值。", "trap": "由模型指標直接推算未驗證嘅收入或節省。", "mechanism": "決定門檻、現時做法、流程量度、如果冇用模型會點，同小規模試行設計。", "tradeoff": "F1 提升可能換來更多誤報或人手負擔。", "failure": "模型分數升咗，卻冇改變任何使用者決定。", "evidence": "一條清楚標示假設同仍要量度結果嘅證據鏈。" },
+        "zh-TW": { "scenario": "分類模型在 synthetic holdout 提高 F1，product lead 問會有多少 business value。", "trap": "從 model metric 推算未驗證的收入或節省。", "mechanism": "decision threshold、baseline、workflow metric、counterfactual 與 pilot design。", "tradeoff": "F1 提升可能換來更多 false positives 或人工負擔。", "failure": "模型分數升了，卻沒有改變任何使用者決策。", "evidence": "一份 metric chain，清楚標示假設與需要量度的結果。" },
+        "zh-Hans": { "scenario": "分类模型在 synthetic holdout 提高 F1，product lead 问会有多少 business value。", "trap": "从 model metric 推算未验证的收入或节省。", "mechanism": "decision threshold、baseline、workflow metric、counterfactual 与 pilot design。", "tradeoff": "F1 提升可能换来更多 false positives 或人工负担。", "failure": "模型分数升了，却没有改变任何使用者决策。", "evidence": "一份 metric chain，清楚标示假设与需要量度的结果。" },
+        "en": { "scenario": "A classifier raises F1 on a synthetic holdout and a product lead asks for business value.", "trap": "Converting a model metric into unverified revenue or savings.", "mechanism": "Decision threshold, baseline, workflow metric, counterfactual, and pilot design.", "tradeoff": "An F1 gain can bring more false positives or human burden.", "failure": "The model score rises without changing any user decision.", "evidence": "A metric chain that marks assumptions and outcomes still to measure." }
+      }
+    },
+    {
+      "slug": "data-drift-is-not-just-a-retraining-trigger",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["evaluation-observability"],
+      "prepTracks": ["production-operations"],
+      "practice": {
+        "zh-HK": { "scenario": "input feed 改名、時區格式改咗，missing values 亦增多。", "trap": "見 drift 就直接 retrain。", "mechanism": "schema check、data contract、feature distribution、label delay 同 incident triage。", "tradeoff": "即刻停用保守，但避免壞資料污染訓練同決策。", "failure": "新 schema 令 feature 意義變咗，retrain 反而學錯訊號。", "evidence": "一份 drift incident note，含 schema diff 同 decision。" },
+        "zh-TW": { "scenario": "input feed 改名、時區格式改了，missing values 也增多。", "trap": "看到 drift 就直接 retrain。", "mechanism": "schema check、data contract、feature distribution、label delay 與 incident triage。", "tradeoff": "立刻停用較保守，但避免壞資料污染訓練與決策。", "failure": "新 schema 讓 feature 意義改變，retrain 反而學錯訊號。", "evidence": "一份 drift incident note，包含 schema diff 與 decision。" },
+        "zh-Hans": { "scenario": "input feed 改名、时区格式改了，missing values 也增多。", "trap": "看到 drift 就直接 retrain。", "mechanism": "schema check、data contract、feature distribution、label delay 与 incident triage。", "tradeoff": "立刻停用较保守，但避免坏数据污染训练与决策。", "failure": "新 schema 让 feature 意义改变，retrain 反而学错信号。", "evidence": "一份 drift incident note，包含 schema diff 与 decision。" },
+        "en": { "scenario": "An input feed renames a category, changes timezone format, and doubles missing values.", "trap": "Retraining as soon as drift appears.", "mechanism": "Schema check, data contract, feature distribution, label delay, and incident triage.", "tradeoff": "Immediate pause is conservative but prevents bad data contaminating training and decisions.", "failure": "A new schema changes feature meaning and retraining learns the wrong signal.", "evidence": "A drift incident note with schema diff and decision." }
+      }
+    },
+    {
+      "slug": "a-rollout-needs-a-safe-baseline",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["evaluation-observability"],
+      "prepTracks": ["system-design", "production-operations"],
+      "practice": {
+        "zh-HK": { "scenario": "新 prompt-and-rules pipeline 喺 fixed synthetic eval 較好，團隊想明日取代舊 draft generator。", "trap": "把本機 eval 當 production 證明。", "mechanism": "safe baseline、limited rollout、comparison、monitor、rollback 同 owner。", "tradeoff": "放慢 rollout 會延遲收益，但保留可逆嘅安全選項。", "failure": "新流程退步時冇 baseline、冇 signal、亦冇人有權回退。", "evidence": "一份 rollout plan，寫 cohort、monitoring 同 rollback trigger。" },
+        "zh-TW": { "scenario": "新 prompt-and-rules pipeline 在 fixed synthetic eval 較好，團隊想明天取代舊 draft generator。", "trap": "把本機 eval 當 production 證明。", "mechanism": "safe baseline、limited rollout、comparison、monitor、rollback 與 owner。", "tradeoff": "放慢 rollout 會延遲收益，但保留可逆的安全選項。", "failure": "新流程退步時沒有 baseline、沒有 signal，也沒有人有權回退。", "evidence": "一份 rollout plan，寫 cohort、monitoring 與 rollback trigger。" },
+        "zh-Hans": { "scenario": "新 prompt-and-rules pipeline 在 fixed synthetic eval 较好，团队想明天取代旧 draft generator。", "trap": "把本机 eval 当 production 证明。", "mechanism": "safe baseline、limited rollout、comparison、monitor、rollback 与 owner。", "tradeoff": "放慢 rollout 会延迟收益，但保留可逆的安全选项。", "failure": "新流程退步时没有 baseline、没有 signal，也没有人有权回退。", "evidence": "一份 rollout plan，写 cohort、monitoring 与 rollback trigger。" },
+        "en": { "scenario": "A prompt-and-rules pipeline wins a fixed synthetic evaluation and the team wants to replace the draft generator tomorrow.", "trap": "Treating local evaluation as production proof.", "mechanism": "Safe baseline, limited rollout, comparison, monitoring, rollback, and owner.", "tradeoff": "A slower rollout delays benefit but keeps a reversible safety option.", "failure": "The new flow regresses with no baseline, signal, or owner able to revert.", "evidence": "A rollout plan naming cohort, monitoring, and rollback trigger." }
+      }
+    },
+    {
+      "slug": "ocr-text-is-still-untrusted-input",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["multimodal"],
+      "prepTracks": ["multimodal"],
+      "practice": {
+        "zh-HK": { "scenario": "文件 intake helper 從圖片抽文字、分類、草擬摘要，再檢索政策。", "trap": "OCR output 一有文字就當成可信內容。", "mechanism": "OCR confidence、content isolation、instruction filtering、citation 同 handoff。", "tradeoff": "較嚴格驗證會多交人，但減少錯讀同 prompt injection。", "failure": "掃描影像裡嘅命令變成 agent 要執行嘅指示。", "evidence": "一組 noisy OCR cases，含 misread text 同 injection attempt。" },
+        "zh-TW": { "scenario": "文件 intake helper 從圖片抽文字、分類、草擬摘要，再檢索政策。", "trap": "OCR output 一有文字就當成可信內容。", "mechanism": "OCR confidence、content isolation、instruction filtering、citation 與 handoff。", "tradeoff": "較嚴格驗證會多交給人，但減少錯讀與 prompt injection。", "failure": "掃描影像裡的命令變成 agent 要執行的指示。", "evidence": "一組 noisy OCR cases，包含 misread text 與 injection attempt。" },
+        "zh-Hans": { "scenario": "文件 intake helper 从图片抽文字、分类、草拟摘要，再检索政策。", "trap": "OCR output 一有文字就当成可信内容。", "mechanism": "OCR confidence、content isolation、instruction filtering、citation 与 handoff。", "tradeoff": "较严格验证会多交给人，但减少错读与 prompt injection。", "failure": "扫描影像里的命令变成 agent 要执行的指示。", "evidence": "一组 noisy OCR cases，包含 misread text 与 injection attempt。" },
+        "en": { "scenario": "A document intake helper extracts image text, categorises, drafts a summary, then retrieves policy.", "trap": "Treating OCR output as trusted as soon as it is text.", "mechanism": "OCR confidence, content isolation, instruction filtering, citation, and handoff.", "tradeoff": "Stricter validation hands off more work but reduces misreads and prompt injection.", "failure": "A command inside a scanned image becomes an instruction the agent follows.", "evidence": "Noisy OCR cases with misread text and an injection attempt." }
+      }
+    },
+    {
+      "slug": "a-project-story-needs-a-counterexample",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["interview-evidence"],
+      "prepTracks": ["delivery-judgement"],
+      "practice": {
+        "zh-HK": { "scenario": "你要講 portfolio project 解決咗咩問題，同埋點知有用。", "trap": "只展示最靚 output，冇講反例。", "mechanism": "problem boundary、baseline、counterexample、decision record 同 evidence limit。", "tradeoff": "故事越簡短，越要保留一個真實可查嘅失敗邊界。", "failure": "reviewer 一問壞 case，成個成果故事就站唔住。", "evidence": "README 裡一個反例、修正決定同 non-goal。" },
+        "zh-TW": { "scenario": "你要講 portfolio project 解決什麼問題，以及怎麼知道有用。", "trap": "只展示最漂亮 output，沒有講反例。", "mechanism": "problem boundary、baseline、counterexample、decision record 與 evidence limit。", "tradeoff": "故事越簡短，越要保留一個真實可查的失敗邊界。", "failure": "reviewer 一問壞 case，整個成果故事就站不住。", "evidence": "README 裡一個反例、修正決策與 non-goal。" },
+        "zh-Hans": { "scenario": "你要讲 portfolio project 解决什么问题，以及怎么知道有用。", "trap": "只展示最漂亮 output，没有讲反例。", "mechanism": "problem boundary、baseline、counterexample、decision record 与 evidence limit。", "tradeoff": "故事越简短，越要保留一个真实可查的失败边界。", "failure": "reviewer 一问坏 case，整个成果故事就站不住。", "evidence": "README 里一个反例、修正决策与 non-goal。" },
+        "en": { "scenario": "You must explain what a portfolio project solved and how you know it helped.", "trap": "Showing only the most polished output with no counterexample.", "mechanism": "Problem boundary, baseline, counterexample, decision record, and evidence limit.", "tradeoff": "The shorter the story, the more it needs one inspectable failure boundary.", "failure": "One question about a bad case collapses the whole outcome story.", "evidence": "A README with one counterexample, correction decision, and non-goal." }
+      }
+    },
+    {
+      "slug": "a-baseline-is-not-a-benchmark-winner",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["ml-decisions"],
+      "prepTracks": ["shared-language"],
+      "practice": {
+        "zh-HK": { "scenario": "新模型喺固定 test set 比 baseline 高四個百分點。", "trap": "一見 benchmark 贏咗就取代 baseline。", "mechanism": "baseline role、slice analysis、uncertainty、cost 同 deployment gate。", "tradeoff": "較複雜模型要有足夠改善先值得更多營運風險。", "failure": "總分提高，但重要 slice 變差或成本爆升。", "evidence": "一張 baseline comparison，含 slices、cost 同 uncertainty。" },
+        "zh-TW": { "scenario": "新模型在固定 test set 比 baseline 高四個百分點。", "trap": "一看到 benchmark 贏了就取代 baseline。", "mechanism": "baseline role、slice analysis、uncertainty、cost 與 deployment gate。", "tradeoff": "較複雜模型要有足夠改善才值得更多營運風險。", "failure": "總分提高，但重要 slice 變差或成本暴升。", "evidence": "一張 baseline comparison，包含 slices、cost 與 uncertainty。" },
+        "zh-Hans": { "scenario": "新模型在固定 test set 比 baseline 高四个百分点。", "trap": "一看到 benchmark 赢了就取代 baseline。", "mechanism": "baseline role、slice analysis、uncertainty、cost 与 deployment gate。", "tradeoff": "较复杂模型要有足够改善才值得更多营运风险。", "failure": "总分提高，但重要 slice 变差或成本暴升。", "evidence": "一张 baseline comparison，包含 slices、cost 与 uncertainty。" },
+        "en": { "scenario": "A new model is four points above baseline on a fixed test set.", "trap": "Replacing the baseline as soon as a benchmark is won.", "mechanism": "Baseline role, slice analysis, uncertainty, cost, and deployment gate.", "tradeoff": "A more complex model needs enough gain to justify operating risk.", "failure": "Overall score rises while an important slice worsens or cost spikes.", "evidence": "A baseline comparison with slices, cost, and uncertainty." }
+      }
+    },
+    {
+      "slug": "a-label-definition-can-change-the-model",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["ml-decisions"],
+      "prepTracks": ["adaptation"],
+      "practice": {
+        "zh-HK": { "scenario": "預測模型不穩定，團隊想換 architecture 或加 features。", "trap": "把 label 當成不可質疑嘅真相。", "mechanism": "label definition、collection timing、annotator agreement、leakage 同 business decision。", "tradeoff": "重新定義 label 會延遲模型工作，但可修正目標錯配。", "failure": "模型學得好，卻學緊一個同實際決定無關嘅 proxy。", "evidence": "一張 label decision table，列定義、例外、owner 同時間點。" },
+        "zh-TW": { "scenario": "預測模型不穩定，團隊想換 architecture 或加 features。", "trap": "把 label 當成不可質疑的真相。", "mechanism": "label definition、collection timing、annotator agreement、leakage 與 business decision。", "tradeoff": "重新定義 label 會延遲模型工作，但可修正目標錯配。", "failure": "模型學得好，卻學著一個和實際決策無關的 proxy。", "evidence": "一張 label decision table，列定義、例外、owner 與時間點。" },
+        "zh-Hans": { "scenario": "预测模型不稳定，团队想换 architecture 或加 features。", "trap": "把 label 当成不可质疑的真相。", "mechanism": "label definition、collection timing、annotator agreement、leakage 与 business decision。", "tradeoff": "重新定义 label 会延迟模型工作，但可修正目标错配。", "failure": "模型学得好，却学着一个和实际决策无关的 proxy。", "evidence": "一张 label decision table，列定义、例外、owner 与时间点。" },
+        "en": { "scenario": "A prediction model is unstable and the team wants a new architecture or more features.", "trap": "Treating the label as unquestionable truth.", "mechanism": "Label definition, collection timing, annotator agreement, leakage, and business decision.", "tradeoff": "Redefining a label delays modelling but can repair a target mismatch.", "failure": "The model learns well but learns a proxy unrelated to the actual decision.", "evidence": "A label-decision table with definition, exceptions, owner, and timing." }
+      }
+    },
+    {
+      "slug": "a-random-split-can-know-the-future",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["ml-decisions"],
+      "prepTracks": ["adaptation"],
+      "practice": {
+        "zh-HK": { "scenario": "模型喺 random train-test split 表現好，準備用喺每週 ranking。", "trap": "把 random split 當成未來 workflow 嘅模擬。", "mechanism": "time-aware split、as-of availability、entity leakage 同 label delay。", "tradeoff": "更貼近真實嘅 split 通常會有較低分，但較可信。", "failure": "test set 偷偷包含部署當時未知道嘅資訊。", "evidence": "一張 time split diagram，標每個特徵嘅可用日期。" },
+        "zh-TW": { "scenario": "模型在 random train-test split 表現好，準備用在每週 ranking。", "trap": "把 random split 當成未來 workflow 的模擬。", "mechanism": "time-aware split、as-of availability、entity leakage 與 label delay。", "tradeoff": "更貼近真實的 split 通常會有較低分，但較可信。", "failure": "test set 偷偷包含部署當時不知道的資訊。", "evidence": "一張 time split diagram，標每個特徵的可用日期。" },
+        "zh-Hans": { "scenario": "模型在 random train-test split 表现好，准备用在每周 ranking。", "trap": "把 random split 当成未来 workflow 的模拟。", "mechanism": "time-aware split、as-of availability、entity leakage 与 label delay。", "tradeoff": "更贴近真实的 split 通常会有较低分，但较可信。", "failure": "test set 偷偷包含部署当时不知道的信息。", "evidence": "一张 time split diagram，标每个特征的可用日期。" },
+        "en": { "scenario": "A model performs well on a random train-test split and will rank work weekly.", "trap": "Treating a random split as a simulation of future workflow.", "mechanism": "Time-aware split, as-of availability, entity leakage, and label delay.", "tradeoff": "A more realistic split often scores lower but is more credible.", "failure": "The test set quietly includes information unknown at deployment time.", "evidence": "A time-split diagram marking feature availability dates." }
+      }
+    },
+    {
+      "slug": "regularisation-is-not-a-fairness-control",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["neural-learning"],
+      "prepTracks": ["adaptation"],
+      "practice": {
+        "zh-HK": { "scenario": "加 L2 regularisation 後 validation loss 降咗。", "trap": "把 generalisation 改善當成公平改善。", "mechanism": "group definition、outcome slice、error disparity、threshold 同 harm context。", "tradeoff": "一個全體較好嘅 loss 可以掩蓋某 group 更差嘅後果。", "failure": "模型整體穩定咗，但少數群體 false negative 增加。", "evidence": "一個 group-sliced error table，連同公平性限制。" },
+        "zh-TW": { "scenario": "加 L2 regularisation 後 validation loss 降了。", "trap": "把 generalisation 改善當成公平改善。", "mechanism": "group definition、outcome slice、error disparity、threshold 與 harm context。", "tradeoff": "一個整體較好的 loss 可以掩蓋某 group 更差的後果。", "failure": "模型整體穩定了，但少數群體 false negative 增加。", "evidence": "一個 group-sliced error table，加上公平性限制。" },
+        "zh-Hans": { "scenario": "加 L2 regularisation 后 validation loss 降了。", "trap": "把 generalisation 改善当成公平改善。", "mechanism": "group definition、outcome slice、error disparity、threshold 与 harm context。", "tradeoff": "一个整体较好的 loss 可以掩盖某 group 更差的后果。", "failure": "模型整体稳定了，但少数群体 false negative 增加。", "evidence": "一个 group-sliced error table，加上公平性限制。" },
+        "en": { "scenario": "Validation loss falls after adding L2 regularisation.", "trap": "Treating better generalisation as better fairness.", "mechanism": "Group definition, outcome slice, error disparity, threshold, and harm context.", "tradeoff": "A better overall loss can conceal worse consequences for one group.", "failure": "The model is more stable overall but false negatives rise for a minority group.", "evidence": "A group-sliced error table and stated fairness limitation." }
+      }
+    },
+    {
+      "slug": "a-gradient-check-precedes-a-bigger-model",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["neural-learning"],
+      "prepTracks": ["adaptation"],
+      "practice": {
+        "zh-HK": { "scenario": "training loss 唔跌，團隊想加 layers 或換大 model。", "trap": "把 optimisation failure 當成 capacity shortage。", "mechanism": "gradient check、loss implementation、learning rate、data pipeline 同 baseline。", "tradeoff": "先 debug 基礎計算會慢，但避免把 bug 擴到更大模型。", "failure": "loss 或 gradient 有錯，大 model 只會更貴咁失敗。", "evidence": "一個 tiny overfit test，加 gradient-check result。" },
+        "zh-TW": { "scenario": "training loss 不降，團隊想加 layers 或換大 model。", "trap": "把 optimisation failure 當成 capacity shortage。", "mechanism": "gradient check、loss implementation、learning rate、data pipeline 與 baseline。", "tradeoff": "先 debug 基礎計算會慢，但避免把 bug 擴到更大模型。", "failure": "loss 或 gradient 有錯，大 model 只會更昂貴地失敗。", "evidence": "一個 tiny overfit test，加上 gradient-check result。" },
+        "zh-Hans": { "scenario": "training loss 不降，团队想加 layers 或换大 model。", "trap": "把 optimisation failure 当成 capacity shortage。", "mechanism": "gradient check、loss implementation、learning rate、data pipeline 与 baseline。", "tradeoff": "先 debug 基础计算会慢，但避免把 bug 扩到更大模型。", "failure": "loss 或 gradient 有错，大 model 只会更昂贵地失败。", "evidence": "一个 tiny overfit test，加上 gradient-check result。" },
+        "en": { "scenario": "Training loss will not fall and the team wants more layers or a bigger model.", "trap": "Treating optimisation failure as a capacity shortage.", "mechanism": "Gradient check, loss implementation, learning rate, data pipeline, and baseline.", "tradeoff": "Debugging basic computation first is slower but stops a bug reaching a larger model.", "failure": "A loss or gradient bug makes a bigger model fail more expensively.", "evidence": "A tiny-overfit test and gradient-check result." }
+      }
+    },
+    {
+      "slug": "model-routing-needs-a-fallback",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["architecture-tradeoffs"],
+      "prepTracks": ["infrastructure"],
+      "practice": {
+        "zh-HK": { "scenario": "系統想將簡單工作交畀小 model，難題交畀強 model。", "trap": "把 router score 當成冇風險嘅自動決定。", "mechanism": "routing signal、confidence、fallback、budget、quality gate 同 trace。", "tradeoff": "省成本可能帶來錯路由同無法解釋嘅品質落差。", "failure": "低成本 route 失敗後，冇 fallback 或冇記錄點解揀佢。", "evidence": "一張 routing policy table，含 fallback threshold 同 trace fields。" },
+        "zh-TW": { "scenario": "系統想把簡單工作交給小 model，難題交給強 model。", "trap": "把 router score 當成無風險的自動決策。", "mechanism": "routing signal、confidence、fallback、budget、quality gate 與 trace。", "tradeoff": "省成本可能帶來錯路由與無法解釋的品質落差。", "failure": "低成本 route 失敗後，沒有 fallback 或沒有記錄為何選它。", "evidence": "一張 routing policy table，包含 fallback threshold 與 trace fields。" },
+        "zh-Hans": { "scenario": "系统想把简单工作交给小 model，难题交给强 model。", "trap": "把 router score 当成无风险的自动决策。", "mechanism": "routing signal、confidence、fallback、budget、quality gate 与 trace。", "tradeoff": "省成本可能带来错路由与无法解释的质量落差。", "failure": "低成本 route 失败后，没有 fallback 或没有记录为何选它。", "evidence": "一张 routing policy table，包含 fallback threshold 与 trace fields。" },
+        "en": { "scenario": "A system sends simple work to a smaller model and harder work to a stronger one.", "trap": "Treating a router score as a risk-free automatic decision.", "mechanism": "Routing signal, confidence, fallback, budget, quality gate, and trace.", "tradeoff": "Lower cost can create misrouting and unexplained quality gaps.", "failure": "The low-cost route fails with no fallback or record of why it was chosen.", "evidence": "A routing-policy table with fallback threshold and trace fields." }
+      }
+    },
+    {
+      "slug": "prompt-versioning-is-not-an-audit-trail",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["prompt-context-interface"],
+      "prepTracks": ["prompt-context"],
+      "practice": {
+        "zh-HK": { "scenario": "團隊將 prompt 放入 Git 並標成 v12，卻要調查奇怪 output。", "trap": "以為 prompt version 已經足夠重播一次決定。", "mechanism": "prompt、model、context、tools、retrieval、config、input 同 trace version。", "tradeoff": "多記錄 metadata 會增加 storage，同時換來可調查性。", "failure": "同一 prompt version 用咗不同 context 或 tool response。", "evidence": "一份 execution receipt，記下可重播嘅 input-to-output path。" },
+        "zh-TW": { "scenario": "團隊把 prompt 放進 Git 並標成 v12，卻要調查奇怪 output。", "trap": "以為 prompt version 已經足夠重播一次決策。", "mechanism": "prompt、model、context、tools、retrieval、config、input 與 trace version。", "tradeoff": "多記錄 metadata 會增加 storage，同時換來可調查性。", "failure": "同一 prompt version 用了不同 context 或 tool response。", "evidence": "一份 execution receipt，記下可重播的 input-to-output path。" },
+        "zh-Hans": { "scenario": "团队把 prompt 放进 Git 并标成 v12，却要调查奇怪 output。", "trap": "以为 prompt version 已经足够重播一次决策。", "mechanism": "prompt、model、context、tools、retrieval、config、input 与 trace version。", "tradeoff": "多记录 metadata 会增加 storage，同时换来可调查性。", "failure": "同一 prompt version 用了不同 context 或 tool response。", "evidence": "一份 execution receipt，记下可重播的 input-to-output path。" },
+        "en": { "scenario": "A team stores its prompt in Git as v12 and must investigate a strange output.", "trap": "Assuming a prompt version can replay a decision by itself.", "mechanism": "Versions for prompt, model, context, tools, retrieval, config, input, and trace.", "tradeoff": "Recording more metadata adds storage but makes investigation possible.", "failure": "The same prompt version used different context or tool responses.", "evidence": "An execution receipt recording a replayable input-to-output path." }
+      }
+    },
+    {
+      "slug": "a-public-dataset-needs-a-source-receipt",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["safety-security", "frontier-filter"],
+      "prepTracks": ["implementation"],
+      "practice": {
+        "zh-HK": { "scenario": "想把網上公開 dataset 放入 portfolio demo 同 model evaluation。", "trap": "公開下載等於可任意重用同重新發布。", "mechanism": "licence、provenance、version、personal data、terms 同 source receipt。", "tradeoff": "花時間查來源會減慢 demo，但可避免錯誤宣稱同資料風險。", "failure": "demo 用咗不能再分發或 provenance 不清嘅資料。", "evidence": "一份 source receipt，寫 URL、version、licence、用途同限制。" },
+        "zh-TW": { "scenario": "想把網上公開 dataset 放進 portfolio demo 與 model evaluation。", "trap": "公開下載等於可任意重用與重新發布。", "mechanism": "licence、provenance、version、personal data、terms 與 source receipt。", "tradeoff": "花時間查來源會減慢 demo，但可避免錯誤宣稱與資料風險。", "failure": "demo 用了不能再分發或 provenance 不清的資料。", "evidence": "一份 source receipt，寫 URL、version、licence、用途與限制。" },
+        "zh-Hans": { "scenario": "想把网上公开 dataset 放进 portfolio demo 与 model evaluation。", "trap": "公开下载等于可任意重用与重新发布。", "mechanism": "licence、provenance、version、personal data、terms 与 source receipt。", "tradeoff": "花时间查来源会减慢 demo，但可避免错误声明与数据风险。", "failure": "demo 用了不能再分发或 provenance 不清的资料。", "evidence": "一份 source receipt，写 URL、version、licence、用途与限制。" },
+        "en": { "scenario": "You want to use an internet-public dataset in a portfolio demo and model evaluation.", "trap": "Assuming public download permits any reuse or redistribution.", "mechanism": "Licence, provenance, version, personal data, terms, and source receipt.", "tradeoff": "Checking the source slows a demo but avoids bad claims and data risk.", "failure": "The demo uses data that cannot be redistributed or has unclear provenance.", "evidence": "A source receipt stating URL, version, licence, use, and limit." }
+      }
+    },
+    {
+      "slug": "mixed-prefill-decode-needs-a-shared-budget",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["inference-budget"],
+      "prepTracks": ["infrastructure"],
+      "practice": {
+        "zh-HK": { "scenario": "短 prompt 同長文件請求同時塞入同一個 model service。", "trap": "只睇平均 latency，將所有慢都當成 GPU 不夠。", "mechanism": "prefill、decode、queue、TTFT、每 token 延遲同 shared capacity budget。", "tradeoff": "保護互動回覆可能令長 prompt 等耐咗，但避免兩邊一齊爆 P99。", "failure": "長 prefill 霸佔 batch，令已經開始回覆嘅 decode 斷續。", "evidence": "一張按 request class 分開嘅 trace，連同 budget、queue policy 同 fallback。" },
+        "zh-TW": { "scenario": "短 prompt 與長文件請求同時塞進同一個 model service。", "trap": "只看平均 latency，將所有慢都當成 GPU 不夠。", "mechanism": "prefill、decode、queue、TTFT、每 token 延遲與 shared capacity budget。", "tradeoff": "保護互動回覆可能讓長 prompt 等更久，但避免兩邊一起爆 P99。", "failure": "長 prefill 佔滿 batch，讓已開始回覆的 decode 斷續。", "evidence": "一張按 request class 分開的 trace，連同 budget、queue policy 與 fallback。" },
+        "zh-Hans": { "scenario": "短 prompt 与长文件请求同时塞进同一个 model service。", "trap": "只看平均 latency，把所有慢都当成 GPU 不够。", "mechanism": "prefill、decode、queue、TTFT、每 token 延迟与 shared capacity budget。", "tradeoff": "保护交互回复可能让长 prompt 等更久，但避免两边一起爆 P99。", "failure": "长 prefill 占满 batch，让已经开始回复的 decode 断续。", "evidence": "一张按 request class 分开的 trace，连同 budget、queue policy 与 fallback。" },
+        "en": { "scenario": "Short prompts and long-document requests share one model service at the same time.", "trap": "Reading only average latency and treating every slowdown as a GPU shortage.", "mechanism": "Prefill, decode, queues, TTFT, time per output token, and a shared capacity budget.", "tradeoff": "Protecting interactive replies can delay long prompts, but avoids both paths blowing up P99 together.", "failure": "Long prefills occupy the batch and make already-started decodes stutter.", "evidence": "A trace split by request class with budget, queue policy, and fallback." }
+      }
+    },
+    {
+      "slug": "kv-cache-needs-a-capacity-contract",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["architecture-tradeoffs", "inference-budget"],
+      "prepTracks": ["infrastructure"],
+      "practice": {
+        "zh-HK": { "scenario": "長對話同長文件令 GPU memory 被 KV cache 慢慢食盡。", "trap": "以為 cache 越大越快，或者 OOM 後才開始逐條清理。", "mechanism": "KV cache、context token、admission、reservation、eviction 同 memory headroom。", "tradeoff": "限制 context 或逐出 idle session 會減少方便，但保留可預測容量。", "failure": "新 request 入到一半先 OOM，連帶打斷已有 session。", "evidence": "一份 capacity contract：每類 request 的 token cap、headroom、拒絕或 handoff 條件。" },
+        "zh-TW": { "scenario": "長對話與長文件讓 GPU memory 被 KV cache 慢慢吃盡。", "trap": "以為 cache 越大越快，或在 OOM 後才逐條清理。", "mechanism": "KV cache、context token、admission、reservation、eviction 與 memory headroom。", "tradeoff": "限制 context 或逐出 idle session 會減少方便，但保留可預測容量。", "failure": "新 request 進到一半才 OOM，連帶中斷既有 session。", "evidence": "一份 capacity contract：每類 request 的 token cap、headroom、拒絕或 handoff 條件。" },
+        "zh-Hans": { "scenario": "长对话与长文件让 GPU memory 被 KV cache 慢慢吃尽。", "trap": "以为 cache 越大越快，或在 OOM 后才逐条清理。", "mechanism": "KV cache、context token、admission、reservation、eviction 与 memory headroom。", "tradeoff": "限制 context 或逐出 idle session 会减少方便，但保留可预测容量。", "failure": "新 request 进行一半才 OOM，连带中断已有 session。", "evidence": "一份 capacity contract：每类 request 的 token cap、headroom、拒绝或 handoff 条件。" },
+        "en": { "scenario": "Long chats and documents gradually consume GPU memory through the KV cache.", "trap": "Assuming a larger cache is always faster, or cleaning one request at a time only after OOM.", "mechanism": "KV cache, context tokens, admission, reservation, eviction, and memory headroom.", "tradeoff": "Capping context or evicting idle sessions loses convenience but preserves predictable capacity.", "failure": "A new request OOMs halfway through and interrupts existing sessions too.", "evidence": "A capacity contract with per-class token caps, headroom, and reject or handoff conditions." }
+      }
+    },
+    {
+      "slug": "batching-quantisation-and-fallback-need-one-policy",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["architecture-tradeoffs", "inference-budget"],
+      "prepTracks": ["infrastructure"],
+      "practice": {
+        "zh-HK": { "scenario": "服務接近容量上限，要決定先 batch、量化，定係 route 去較細 model。", "trap": "將某一個快咗嘅 benchmark 當成所有 request 都應用嘅答案。", "mechanism": "dynamic batching、quantisation、quality slice、latency budget、fallback 同 rollback。", "tradeoff": "更大 batch 提高吞吐但會等；量化慳 memory 但可能傷某些任務品質。", "failure": "成本降咗，卻令關鍵格式或語言 slice 的失敗率上升。", "evidence": "一份 serving policy，列 workload class、閾值、quality gate、fallback 與 rollback。" },
+        "zh-TW": { "scenario": "服務接近容量上限，要決定先 batch、量化，還是 route 到較小 model。", "trap": "把某一個變快的 benchmark 當成所有 request 都適用的答案。", "mechanism": "dynamic batching、quantisation、quality slice、latency budget、fallback 與 rollback。", "tradeoff": "更大 batch 提高吞吐但會等待；量化省 memory 但可能傷害某些任務品質。", "failure": "成本降了，卻讓關鍵格式或語言 slice 的失敗率上升。", "evidence": "一份 serving policy，列 workload class、閾值、quality gate、fallback 與 rollback。" },
+        "zh-Hans": { "scenario": "服务接近容量上限，要决定先 batch、量化，还是 route 到较小 model。", "trap": "把某一个变快的 benchmark 当成所有 request 都适用的答案。", "mechanism": "dynamic batching、quantisation、quality slice、latency budget、fallback 与 rollback。", "tradeoff": "更大 batch 提高吞吐但会等待；量化省 memory 但可能伤害某些任务质量。", "failure": "成本降了，却让关键格式或语言 slice 的失败率上升。", "evidence": "一份 serving policy，列 workload class、阈值、quality gate、fallback 与 rollback。" },
+        "en": { "scenario": "A service approaches capacity and must choose batching, quantisation, or routing to a smaller model first.", "trap": "Treating one faster benchmark as the answer for every request class.", "mechanism": "Dynamic batching, quantisation, quality slices, latency budgets, fallback, and rollback.", "tradeoff": "Larger batches improve throughput but wait; quantisation saves memory but can harm some task quality.", "failure": "Cost falls while failures rise for a critical format or language slice.", "evidence": "A serving policy with workload classes, thresholds, quality gates, fallback, and rollback." }
+      }
+    },
+    {
+      "slug": "adaptation-method-needs-a-memory-and-eval-budget",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["adaptation-choice"],
+      "prepTracks": ["adaptation"],
+      "practice": {
+        "zh-HK": { "scenario": "團隊想改善穩定格式輸出，但訓練 GPU memory 同 review 時間都有限。", "trap": "先揀 LoRA、QLoRA 或 full fine-tune，再倒推點樣證明佢有效。", "mechanism": "prompt、retrieval、adapter、quantised base、training memory、held-out eval 同 release gate。", "tradeoff": "較輕 adapter 省資源，但未必足以改掉穩定失敗模式；full tuning 成本與回歸面更大。", "failure": "訓練跑完但沒有 frozen baseline 或 critical-case eval，無法知道是否真改善。", "evidence": "一份 adaptation record：候選方法、memory budget、資料條件、eval slices 與停止條件。" },
+        "zh-TW": { "scenario": "團隊想改善穩定格式輸出，但訓練 GPU memory 與 review 時間都有限。", "trap": "先選 LoRA、QLoRA 或 full fine-tune，再倒推如何證明它有效。", "mechanism": "prompt、retrieval、adapter、quantised base、training memory、held-out eval 與 release gate。", "tradeoff": "較輕 adapter 省資源，但未必足以改掉穩定失敗模式；full tuning 成本與回歸面更大。", "failure": "訓練跑完但沒有 frozen baseline 或 critical-case eval，無法知道是否真改善。", "evidence": "一份 adaptation record：候選方法、memory budget、資料條件、eval slices 與停止條件。" },
+        "zh-Hans": { "scenario": "团队想改善稳定格式输出，但训练 GPU memory 与 review 时间都有限。", "trap": "先选 LoRA、QLoRA 或 full fine-tune，再倒推如何证明它有效。", "mechanism": "prompt、retrieval、adapter、quantised base、training memory、held-out eval 与 release gate。", "tradeoff": "较轻 adapter 省资源，但未必足以改掉稳定失败模式；full tuning 成本与回归面更大。", "failure": "训练跑完但没有 frozen baseline 或 critical-case eval，无法知道是否真改善。", "evidence": "一份 adaptation record：候选方法、memory budget、数据条件、eval slices 与停止条件。" },
+        "en": { "scenario": "A team wants more reliable formatted output but has limited training GPU memory and review time.", "trap": "Picking LoRA, QLoRA, or full fine-tuning before deciding how to prove it helped.", "mechanism": "Prompts, retrieval, adapters, quantised bases, training memory, held-out evaluation, and release gates.", "tradeoff": "A lighter adapter saves resources but may not change a stable failure; full tuning costs more and expands regression surface.", "failure": "Training finishes without a frozen baseline or critical-case evaluation, so improvement cannot be known.", "evidence": "An adaptation record with method candidates, memory budget, data condition, evaluation slices, and stop condition." }
+      }
+    },
+    {
+      "slug": "a-fine-tune-win-can-still-fail-a-critical-slice",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["adaptation-choice", "evaluation-observability"],
+      "prepTracks": ["adaptation", "evaluation"],
+      "practice": {
+        "zh-HK": { "scenario": "Fine-tune 後整體分數升咗，但一組高後果 request 的錯誤變多。", "trap": "用 overall score 蓋過 critical slice regression，照樣 release。", "mechanism": "slice、hard gate、baseline、confidence、human review、rollback trigger 同 release record。", "tradeoff": "保留 hard gate 可能犧牲總體分數或 rollout 速度，換取不把已知風險交畀用戶。", "failure": "平均表現更好，卻在少量關鍵 case 製造不可接受的錯誤。", "evidence": "一張分 slice 的 eval table，連同拒絕 release、handoff 或 rollback 的明確規則。" },
+        "zh-TW": { "scenario": "Fine-tune 後整體分數升了，但一組高後果 request 的錯誤變多。", "trap": "用 overall score 蓋過 critical slice regression，照樣 release。", "mechanism": "slice、hard gate、baseline、confidence、human review、rollback trigger 與 release record。", "tradeoff": "保留 hard gate 可能犧牲總體分數或 rollout 速度，換取不把已知風險交給使用者。", "failure": "平均表現更好，卻在少量關鍵 case 製造不可接受的錯誤。", "evidence": "一張分 slice 的 eval table，連同拒絕 release、handoff 或 rollback 的明確規則。" },
+        "zh-Hans": { "scenario": "Fine-tune 后整体分数升了，但一组高后果 request 的错误变多。", "trap": "用 overall score 盖过 critical slice regression，照样 release。", "mechanism": "slice、hard gate、baseline、confidence、human review、rollback trigger 与 release record。", "tradeoff": "保留 hard gate 可能牺牲总体分数或 rollout 速度，换取不把已知风险交给用户。", "failure": "平均表现更好，却在少量关键 case 制造不可接受的错误。", "evidence": "一张分 slice 的 eval table，连同拒绝 release、handoff 或 rollback 的明确规则。" },
+        "en": { "scenario": "A fine-tune raises the overall score but makes errors more frequent in a high-consequence request slice.", "trap": "Letting the overall score hide a critical-slice regression and releasing anyway.", "mechanism": "Slices, hard gates, baselines, confidence, human review, rollback triggers, and release records.", "tradeoff": "A hard gate can cost overall score or rollout speed, in exchange for not handing a known risk to users.", "failure": "Average performance improves while a small critical case set gains unacceptable errors.", "evidence": "A slice-level evaluation table with explicit reject-release, handoff, or rollback rules." }
+      }
+    },
+    {
+      "slug": "an-embedding-change-needs-an-index-migration",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["retrieval-rag"],
+      "prepTracks": ["embeddings-search"],
+      "practice": {
+        "zh-HK": { "scenario": "團隊想換 embedding model，但新舊 vector 的維度一樣。", "trap": "把維度相同當成可把新舊向量混入同一 index。", "mechanism": "embedding space、source snapshot、chunk rule、model receipt、dual read 和 reversible pointer。", "tradeoff": "完整重建和對照要花時間與 storage，換取可回退的 ranking decision。", "failure": "看似相容的向量混在一起，令 search ranking 悄悄失真。", "evidence": "一份舊新 paired-search eval，加 model/index receipt 和 cutover gate。" },
+        "zh-TW": { "scenario": "團隊想換 embedding model，但新舊 vector 的維度一樣。", "trap": "把維度相同當成可把新舊向量混進同一 index。", "mechanism": "embedding space、source snapshot、chunk rule、model receipt、dual read 與 reversible pointer。", "tradeoff": "完整重建與對照要花時間和 storage，換取可回退的 ranking decision。", "failure": "看似相容的向量混在一起，讓 search ranking 悄悄失真。", "evidence": "一份舊新 paired-search eval，加 model/index receipt 與 cutover gate。" },
+        "zh-Hans": { "scenario": "团队想换 embedding model，但新旧 vector 的维度一样。", "trap": "把维度相同当成可把新旧向量混进同一 index。", "mechanism": "embedding space、source snapshot、chunk rule、model receipt、dual read 与 reversible pointer。", "tradeoff": "完整重建与对照要花时间和 storage，换取可回退的 ranking decision。", "failure": "看似相容的向量混在一起，让 search ranking 悄悄失真。", "evidence": "一份旧新 paired-search eval，加 model/index receipt 与 cutover gate。" },
+        "en": { "scenario": "A team wants a new embedding model while old and new vectors have the same dimension.", "trap": "Treating matching dimensions as permission to mix old and new vectors in one index.", "mechanism": "Embedding space, source snapshot, chunk rule, model receipt, dual read, and reversible pointer.", "tradeoff": "A complete rebuild and comparison cost time and storage but preserve a reversible ranking decision.", "failure": "Apparently compatible vectors mix and quietly distort search ranking.", "evidence": "A paired old/new search evaluation with model/index receipts and a cutover gate." }
+      }
+    },
+    {
+      "slug": "ann-recall-needs-a-latency-budget",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["retrieval-rag"],
+      "prepTracks": ["embeddings-search"],
+      "practice": {
+        "zh-HK": { "scenario": "團隊把 ANN search parameter 調高，少量 demo query 的 top result 變好。", "trap": "把一條好看的 top result 當成 config 可用的證據。", "mechanism": "exact baseline、ANN recall@k、query slice、tail latency、filter selectivity 和 route budget。", "tradeoff": "更多 candidate 可提高 recall，亦會增加 memory 或 tail latency。", "failure": "平均結果好咗，卻在罕見 query 或 filter route 漏掉唯一有用 evidence。", "evidence": "每個 config 的 exact／ANN comparison、coverage、p95/p99 和 fallback rule。" },
+        "zh-TW": { "scenario": "團隊把 ANN search parameter 調高，少量 demo query 的 top result 變好。", "trap": "把一條好看的 top result 當成 config 可用的證據。", "mechanism": "exact baseline、ANN recall@k、query slice、tail latency、filter selectivity 與 route budget。", "tradeoff": "更多 candidate 可提高 recall，也會增加 memory 或 tail latency。", "failure": "平均結果變好，卻在罕見 query 或 filter route 漏掉唯一有用 evidence。", "evidence": "每個 config 的 exact／ANN comparison、coverage、p95/p99 與 fallback rule。" },
+        "zh-Hans": { "scenario": "团队把 ANN search parameter 调高，少量 demo query 的 top result 变好。", "trap": "把一条好看的 top result 当成 config 可用的证据。", "mechanism": "exact baseline、ANN recall@k、query slice、tail latency、filter selectivity 与 route budget。", "tradeoff": "更多 candidate 可提高 recall，也会增加 memory 或 tail latency。", "failure": "平均结果变好，却在罕见 query 或 filter route 漏掉唯一有用 evidence。", "evidence": "每个 config 的 exact／ANN comparison、coverage、p95/p99 与 fallback rule。" },
+        "en": { "scenario": "A team raises an ANN search parameter and a few demo queries get a better top result.", "trap": "Using one attractive top result as evidence that a configuration is safe to keep.", "mechanism": "Exact baseline, ANN recall@k, query slices, tail latency, filter selectivity, and route budget.", "tradeoff": "More candidates may raise recall while adding memory use or tail latency.", "failure": "The average improves while a rare query or filtered route misses the only useful evidence.", "evidence": "Exact/ANN comparison, coverage, p95/p99, and fallback rule for every configuration." }
+      }
+    },
+    {
+      "slug": "metadata-needs-a-backfill-contract",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["retrieval-rag"],
+      "prepTracks": ["embeddings-search"],
+      "practice": {
+        "zh-HK": { "scenario": "政策更新後，系統靠 `current: true` filter 排除舊 chunk。", "trap": "把一個 label 當成完整 freshness 和 applicability contract。", "mechanism": "source version、effective date、schema version、backfill、filter placement 和 independent authorisation。", "tradeoff": "完整 metadata migration 會增加工作，換取不把 unknown chunk 默認為可用。", "failure": "child chunk 缺 tag 或 schema 不同，filter 自信地返回過期內容。", "evidence": "一份 schema、backfill preview、filter case matrix 和 unknown handoff rule。" },
+        "zh-TW": { "scenario": "政策更新後，系統靠 `current: true` filter 排除舊 chunk。", "trap": "把一個 label 當成完整 freshness 與 applicability contract。", "mechanism": "source version、effective date、schema version、backfill、filter placement 與 independent authorisation。", "tradeoff": "完整 metadata migration 會增加工作，換取不把 unknown chunk 預設為可用。", "failure": "child chunk 缺 tag 或 schema 不同，filter 自信地回傳過期內容。", "evidence": "一份 schema、backfill preview、filter case matrix 與 unknown handoff rule。" },
+        "zh-Hans": { "scenario": "政策更新后，系统靠 `current: true` filter 排除旧 chunk。", "trap": "把一个 label 当成完整 freshness 与 applicability contract。", "mechanism": "source version、effective date、schema version、backfill、filter placement 与 independent authorisation。", "tradeoff": "完整 metadata migration 会增加工作，换取不把 unknown chunk 默认成可用。", "failure": "child chunk 缺 tag 或 schema 不同，filter 自信地返回过期内容。", "evidence": "一份 schema、backfill preview、filter case matrix 与 unknown handoff rule。" },
+        "en": { "scenario": "After a policy update, the system uses a `current: true` filter to remove old chunks.", "trap": "Treating one label as a complete freshness and applicability contract.", "mechanism": "Source version, effective date, schema version, backfill, filter placement, and independent authorisation.", "tradeoff": "A complete metadata migration adds work but avoids defaulting an unknown chunk to usable.", "failure": "A child chunk lacks a tag or uses another schema, so a filter confidently returns stale content.", "evidence": "A schema, backfill preview, filter-case matrix, and unknown-state handoff rule." }
+      }
+    },
+    {
+      "slug": "a-document-deletion-needs-a-retrieval-receipt",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["retrieval-rag"],
+      "prepTracks": ["embeddings-search"],
+      "practice": {
+        "zh-HK": { "scenario": "一份政策被撤回，工程師刪除原始檔並標記 archived。", "trap": "假定刪除 source file 代表所有 query path 都不會再引用它。", "mechanism": "derived record、chunk、vector、index、cache、revoke event、receipt 和 query proof。", "tradeoff": "撤回未完成時少答或 handoff，換取不引用已撤回內容。", "failure": "原檔已刪，cache 或 child chunk 仍然令系統生成過期 citation。", "evidence": "一張 derived-record map、idempotent revoke receipt 和 post-revocation query cases。" },
+        "zh-TW": { "scenario": "一份政策被撤回，工程師刪除原始檔並標記 archived。", "trap": "假定刪除 source file 代表所有 query path 都不會再引用它。", "mechanism": "derived record、chunk、vector、index、cache、revoke event、receipt 與 query proof。", "tradeoff": "撤回未完成時少答或 handoff，換取不引用已撤回內容。", "failure": "原檔已刪，cache 或 child chunk 仍讓系統生成過期 citation。", "evidence": "一張 derived-record map、idempotent revoke receipt 與 post-revocation query cases。" },
+        "zh-Hans": { "scenario": "一份政策被撤回，工程师删除原始档并标记 archived。", "trap": "假定删除 source file 代表所有 query path 都不会再引用它。", "mechanism": "derived record、chunk、vector、index、cache、revoke event、receipt 与 query proof。", "tradeoff": "撤回未完成时少答或 handoff，换取不引用已撤回内容。", "failure": "原档已删，cache 或 child chunk 仍让系统生成过期 citation。", "evidence": "一张 derived-record map、idempotent revoke receipt 与 post-revocation query cases。" },
+        "en": { "scenario": "A policy is withdrawn, and an engineer deletes the source file and marks it archived.", "trap": "Assuming source-file deletion means every query path can no longer cite it.", "mechanism": "Derived records, chunks, vectors, indexes, caches, revoke events, receipts, and query proof.", "tradeoff": "Answering less or handing off while withdrawal is incomplete avoids citing withdrawn content.", "failure": "The file is gone while a cache or child chunk still produces a stale citation.", "evidence": "A derived-record map, idempotent revoke receipt, and post-revocation query cases." }
+      }
+    },
+    {
+      "slug": "a-visual-claim-needs-a-region-and-an-abstention",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["multimodal"],
+      "prepTracks": ["multimodal"],
+      "practice": {
+        "zh-HK": { "scenario": "由虛構 poster 草擬一個日期，畀 reviewer 睇。", "trap": "將 caption 或高 confidence 當作 visual evidence。", "mechanism": "field contract、evidence region、raw asset、transform receipt、abstention 同 review route。", "tradeoff": "多一個 review packet 會慢少少，但唔會用睇唔清的字硬填 value。", "failure": "Model 指住裝飾位置，卻自信填咗錯日期。", "evidence": "一張 raw/transformed image、region、proposal 同 reviewer disposition 的 packet。" },
+        "zh-TW": { "scenario": "從虛構 poster 草擬一個日期，交給 reviewer 看。", "trap": "把 caption 或高 confidence 當作 visual evidence。", "mechanism": "field contract、evidence region、raw asset、transform receipt、abstention 與 review route。", "tradeoff": "多一個 review packet 會慢一些，但不會用看不清的字硬填 value。", "failure": "Model 指向裝飾位置，卻自信填了錯日期。", "evidence": "一張 raw/transformed image、region、proposal 與 reviewer disposition 的 packet。" },
+        "zh-Hans": { "scenario": "从虚构 poster 草拟一个日期，交给 reviewer 看。", "trap": "把 caption 或高 confidence 当作 visual evidence。", "mechanism": "field contract、evidence region、raw asset、transform receipt、abstention 与 review route。", "tradeoff": "多一个 review packet 会慢一些，但不会用看不清的字硬填 value。", "failure": "Model 指向装饰位置，却自信填了错日期。", "evidence": "一张 raw/transformed image、region、proposal 与 reviewer disposition 的 packet。" },
+        "en": { "scenario": "Draft one date from an invented poster for a reviewer.", "trap": "Treating a caption or high confidence as visual evidence.", "mechanism": "Field contract, evidence region, raw asset, transform receipt, abstention, and review route.", "tradeoff": "A review packet adds a little time but avoids forcing a value from unreadable text.", "failure": "The model points at decoration and confidently fills the wrong date.", "evidence": "A packet with raw/transformed image, region, proposal, and reviewer disposition." }
+      }
+    },
+    {
+      "slug": "image-preprocessing-needs-a-task-contract",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["multimodal"],
+      "prepTracks": ["multimodal"],
+      "practice": {
+        "zh-HK": { "scenario": "Team 想對所有虛構 image 自動 crop、denoise、upscale。", "trap": "見到張圖清楚咗，就當 transform 改善可靠性。", "mechanism": "raw receipt、transform parameter、coordinate mapping、policy version、baseline 同 handoff。", "tradeoff": "更多 transform 可能減少 review，但也可加 latency、artifact 同 context loss。", "failure": "Tight crop 提高 score，卻剪走決定日期屬於邊件事的字。", "evidence": "一份 fixed fixture comparison，連 raw/derived map、slice result 同 policy receipt。" },
+        "zh-TW": { "scenario": "Team 想對所有虛構 image 自動 crop、denoise、upscale。", "trap": "看到圖片變清楚，就當 transform 改善可靠性。", "mechanism": "raw receipt、transform parameter、coordinate mapping、policy version、baseline 與 handoff。", "tradeoff": "更多 transform 可能減少 review，但也會加 latency、artifact 與 context loss。", "failure": "Tight crop 提高 score，卻剪掉決定日期屬於哪件事的字。", "evidence": "一份 fixed fixture comparison，包含 raw/derived map、slice result 與 policy receipt。" },
+        "zh-Hans": { "scenario": "Team 想对所有虚构 image 自动 crop、denoise、upscale。", "trap": "看到图片变清楚，就当 transform 改善可靠性。", "mechanism": "raw receipt、transform parameter、coordinate mapping、policy version、baseline 与 handoff。", "tradeoff": "更多 transform 可能减少 review，但也会加 latency、artifact 与 context loss。", "failure": "Tight crop 提高 score，却剪掉决定日期属于哪件事的字。", "evidence": "一份 fixed fixture comparison，包含 raw/derived map、slice result 与 policy receipt。" },
+        "en": { "scenario": "A team wants to crop, denoise, and upscale every invented image automatically.", "trap": "Calling a clearer-looking image a reliability improvement.", "mechanism": "Raw receipt, transform parameters, coordinate mapping, policy version, baseline, and handoff.", "tradeoff": "More transforms may reduce review but add latency, artifacts, and lost context.", "failure": "A tight crop raises score but removes the words that qualify the date.", "evidence": "A fixed-fixture comparison with a raw/derived map, slice results, and policy receipt." }
+      }
+    },
+    {
+      "slug": "multimodal-evals-need-a-modality-slice",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["multimodal"],
+      "prepTracks": ["multimodal"],
+      "practice": {
+        "zh-HK": { "scenario": "新 model 令 image/audio assistant 的 aggregate score 升咗。", "trap": "只因 overall score 上升就當所有 route 可 release。", "mechanism": "fixture slice、hard gate、baseline、evidence route、abstention、review packet 同 rollback。", "tradeoff": "保留 critical slice gate 會慢啲，但唔會用平均數遮住已知 regression。", "failure": "Clean image 進步，glare 或 no-evidence route 卻開始亂填。", "evidence": "一張 versioned by-slice table，加 hard failure trace 同 release decision record。" },
+        "zh-TW": { "scenario": "新 model 讓 image/audio assistant 的 aggregate score 升了。", "trap": "只因 overall score 上升就當所有 route 可 release。", "mechanism": "fixture slice、hard gate、baseline、evidence route、abstention、review packet 與 rollback。", "tradeoff": "保留 critical slice gate 會慢一些，但不會用平均數遮住已知 regression。", "failure": "Clean image 進步，glare 或 no-evidence route 卻開始亂填。", "evidence": "一張 versioned by-slice table，加 hard failure trace 與 release decision record。" },
+        "zh-Hans": { "scenario": "新 model 让 image/audio assistant 的 aggregate score 升了。", "trap": "只因 overall score 上升就当所有 route 可 release。", "mechanism": "fixture slice、hard gate、baseline、evidence route、abstention、review packet 与 rollback。", "tradeoff": "保留 critical slice gate 会慢一些，但不会用平均数遮住已知 regression。", "failure": "Clean image 进步，glare 或 no-evidence route 却开始乱填。", "evidence": "一张 versioned by-slice table，加 hard failure trace 与 release decision record。" },
+        "en": { "scenario": "A new model raises the aggregate score of an image/audio assistant.", "trap": "Releasing every route because one overall score rose.", "mechanism": "Fixture slices, hard gates, baseline, evidence route, abstention, review packet, and rollback.", "tradeoff": "A critical-slice gate takes longer but keeps an average from hiding a known regression.", "failure": "Clean images improve while glare or no-evidence routes start inventing values.", "evidence": "A versioned by-slice table with a hard-failure trace and release decision record." }
+      }
+    },
+    {
+      "slug": "a-priority-queue-needs-a-staleness-rule",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["system-delivery"],
+      "prepTracks": ["implementation"],
+      "practice": {
+        "zh-HK": { "scenario": "Review queue 會按嚴重程度同到期時間排 case，但 case 隨時可更新或完成。", "trap": "以為直接改 heap node 就解決咗過期工作。", "mechanism": "權威 case state、versioned heap entry、lazy invalidation、lease 同優先度政策。", "tradeoff": "舊 entry 暫時留喺 heap 較簡單，但要量度 stale pop 同適時 rebuild。", "failure": "已完成或已 blocked case 仍被舊 entry 再次處理。", "evidence": "一組 stale-entry fixtures、priority policy 同 queue report。" },
+        "zh-TW": { "scenario": "Review queue 會依嚴重程度與到期時間排 case，但 case 隨時可更新或完成。", "trap": "以為直接改 heap node 就解決了過期工作。", "mechanism": "權威 case state、versioned heap entry、lazy invalidation、lease 與優先度政策。", "tradeoff": "舊 entry 暫時留在 heap 較簡單，但要量測 stale pop 並適時 rebuild。", "failure": "已完成或已 blocked case 仍被舊 entry 再次處理。", "evidence": "一組 stale-entry fixtures、priority policy 與 queue report。" },
+        "zh-Hans": { "scenario": "Review queue 会按严重程度和到期时间排 case，但 case 随时可更新或完成。", "trap": "以为直接改 heap node 就解决了过期工作。", "mechanism": "权威 case state、versioned heap entry、lazy invalidation、lease 与优先度政策。", "tradeoff": "旧 entry 暂时留在 heap 较简单，但要量测 stale pop 并适时 rebuild。", "failure": "已完成或已 blocked case 仍被旧 entry 再次处理。", "evidence": "一组 stale-entry fixtures、priority policy 与 queue report。" },
+        "en": { "scenario": "A review queue ranks cases by severity and due time, but cases can change or finish after they enter it.", "trap": "Assuming an in-place heap update solves stale work.", "mechanism": "Authoritative case state, versioned heap entries, lazy invalidation, leases, and priority policy.", "tradeoff": "Keeping old entries temporarily is simpler, but needs stale-pop measurement and a controlled rebuild.", "failure": "An old entry processes a case that is already completed or blocked.", "evidence": "Stale-entry fixtures, a priority policy, and a queue report." }
+      }
+    },
+    {
+      "slug": "a-cursor-is-not-a-stable-order",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["system-delivery"],
+      "prepTracks": ["implementation"],
+      "practice": {
+        "zh-HK": { "scenario": "三個會更新的 source feed 要合成一百條 review queue，record 會遲到或重送。", "trap": "只儲 page number 或最後一個 timestamp。", "mechanism": "composite ordering key、opaque cursor receipt、bounded k-way merge、checkpoint、deduplication 同 watermark。", "tradeoff": "重播小 window 會多做少量工作，但可避免 crash 後漏資料或重複交人。", "failure": "更新或遲到 record 令 page 變動，造成漏項或重複項。", "evidence": "ordering contract、cursor receipt、merge-recovery fixtures 同 checkpoint 範例。" },
+        "zh-TW": { "scenario": "三個會更新的 source feed 要合成一百條 review queue，record 會延遲到達或重送。", "trap": "只儲 page number 或最後一個 timestamp。", "mechanism": "composite ordering key、opaque cursor receipt、bounded k-way merge、checkpoint、deduplication 與 watermark。", "tradeoff": "重播小 window 會多做少量工作，但可避免 crash 後漏資料或重複交人。", "failure": "更新或延遲 record 讓 page 變動，造成漏項或重複項。", "evidence": "ordering contract、cursor receipt、merge-recovery fixtures 與 checkpoint 範例。" },
+        "zh-Hans": { "scenario": "三个会更新的 source feed 要合成一百条 review queue，record 会延迟到达或重送。", "trap": "只存 page number 或最后一个 timestamp。", "mechanism": "composite ordering key、opaque cursor receipt、bounded k-way merge、checkpoint、deduplication 与 watermark。", "tradeoff": "重播小 window 会多做少量工作，但可避免 crash 后漏数据或重复交人。", "failure": "更新或延迟 record 让 page 变动，造成漏项或重复项。", "evidence": "ordering contract、cursor receipt、merge-recovery fixtures 与 checkpoint 示例。" },
+        "en": { "scenario": "Three changing source feeds must become a hundred-item review queue, while records arrive late or are resent.", "trap": "Persisting only a page number or last timestamp.", "mechanism": "Composite ordering key, opaque cursor receipt, bounded k-way merge, checkpoint, deduplication, and watermark.", "tradeoff": "Replaying a small window repeats some work but avoids gaps or duplicate handoffs after a crash.", "failure": "An update or late record shifts pages and causes a missed or duplicate item.", "evidence": "Ordering contract, cursor receipt, merge-recovery fixtures, and a checkpoint example." }
+      }
+    },
+    {
+      "slug": "softmax-is-not-a-stability-plan",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["shared-language", "transformer-mental-model"],
+      "prepTracks": ["shared-language"],
+      "practice": {
+        "zh-HK": { "scenario": "一個有好多 padding 嘅長 request 令其中一行 attention 變成 `NaN`。", "trap": "以為 softmax 把分數變成機率，就會自動保證穩定。", "mechanism": "縮放後的 score、逐行 maximum、有限數值同 mask 的可見位置。", "tradeoff": "多做 row assertion 會加少量檢查，但可在輸出前捉到空白或非法行。", "failure": "全 mask row 或 overflow 產生 `NaN`，事後歸零只會遮住錯誤。", "evidence": "固定 score/mask rows、有限權重 assertion，同埋全 mask input 的預期 route。" },
+        "zh-TW": { "scenario": "一個有很多 padding 的長 request 讓其中一行 attention 變成 `NaN`。", "trap": "以為 softmax 把分數變成機率，就會自動保證穩定。", "mechanism": "縮放後的 score、逐行 maximum、有限數值與 mask 的可見位置。", "tradeoff": "多做 row assertion 會增加少量檢查，但能在輸出前抓到空白或非法行。", "failure": "全 mask row 或 overflow 產生 `NaN`，事後歸零只會遮住錯誤。", "evidence": "固定 score/mask rows、有限權重 assertion，以及全 mask input 的預期 route。" },
+        "zh-Hans": { "scenario": "一个有很多 padding 的长 request 让其中一行 attention 变成 `NaN`。", "trap": "以为 softmax 把分数变成概率，就会自动保证稳定。", "mechanism": "缩放后的 score、逐行 maximum、有限数值与 mask 的可见位置。", "tradeoff": "多做 row assertion 会增加少量检查，但能在输出前抓到空白或非法行。", "failure": "全 mask row 或 overflow 产生 `NaN`，事后归零只会遮住错误。", "evidence": "固定 score/mask rows、有限权重 assertion，以及全 mask input 的预期 route。" },
+        "en": { "scenario": "A long, heavily padded request turns one attention row into `NaN`.", "trap": "Assuming softmax makes attention stable merely by turning scores into probabilities.", "mechanism": "Scaled scores, a row maximum, finite values, and positions the mask permits.", "tradeoff": "Row assertions add small checks but catch empty or illegal rows before output.", "failure": "A fully masked row or overflow yields `NaN`; zeroing it afterwards hides the fault.", "evidence": "Fixed score/mask rows, finite-weight assertions, and an expected route for a fully masked input." }
+      }
+    },
+    {
+      "slug": "temperature-is-not-a-reproducibility-contract",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["generation-control"],
+      "prepTracks": ["shared-language"],
+      "practice": {
+        "zh-HK": { "scenario": "兩次草稿寫咗同一句，團隊想因為 `temperature: 0` 而移除固定 case 同 reviewer。", "trap": "把穩定 wording 當成正確、獲授權同可 release 的證明。", "mechanism": "greedy 同 sampling 點樣揀 token；以及點樣記低 model、設定、context、retrieval、tool 同 fallback。", "tradeoff": "固定更多 input 會令實驗較慢，但先分得清差異來自 decoder、資料還是 route。", "failure": "句子重覆，但 source snapshot、tool result 或權限路徑已經變咗。", "evidence": "synthetic fixtures、run/config receipt、evaluation record，同埋有 owner 的 release／rollback boundary。" },
+        "zh-TW": { "scenario": "兩次草稿寫了同一句，團隊想因為 `temperature: 0` 而移除固定 case 與 reviewer。", "trap": "把穩定 wording 當成正確、獲授權與可 release 的證明。", "mechanism": "greedy 與 sampling 如何選 token，以及怎麼記下 model、設定、context、retrieval、tool 與 fallback。", "tradeoff": "固定更多 input 會讓實驗較慢，但才能分清差異來自 decoder、資料還是 route。", "failure": "句子重複，但 source snapshot、tool result 或權限路徑已經改變。", "evidence": "synthetic fixtures、run/config receipt、evaluation record，以及有 owner 的 release／rollback boundary。" },
+        "zh-Hans": { "scenario": "两次草稿写了同一句，团队想因为 `temperature: 0` 而移除固定 case 和 reviewer。", "trap": "把稳定 wording 当成正确、获授权和可 release 的证明。", "mechanism": "greedy 与 sampling 如何选 token，以及怎样记下 model、设置、context、retrieval、tool 与 fallback。", "tradeoff": "固定更多 input 会让实验较慢，但才能分清差异来自 decoder、资料还是 route。", "failure": "句子重复，但 source snapshot、tool result 或权限路径已经改变。", "evidence": "synthetic fixtures、run/config receipt、evaluation record，以及有 owner 的 release／rollback boundary。" },
+        "en": { "scenario": "Two draft runs use the same sentence, and a team wants to remove fixed cases and a reviewer because `temperature: 0` was used.", "trap": "Treating stable wording as proof of correctness, authorisation, and release readiness.", "mechanism": "How greedy decoding and sampling select a token, and how to record the model, configuration, context, retrieval, tools, and fallback.", "tradeoff": "Fixing more inputs makes an experiment slower, but separates decoder, data, and route differences.", "failure": "The wording repeats while the source snapshot, tool result, or authority path has changed.", "evidence": "Synthetic fixtures, a run/config receipt, an evaluation record, and a release/rollback boundary with an owner." }
+      }
+    },
+    {
+      "slug": "an-adversarial-matrix-needs-a-regression-contract",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["evaluation-observability", "safety-security"],
+      "prepTracks": ["evaluation"],
+      "practice": {
+        "zh-HK": { "scenario": "改咗虛構 FAQ 草擬 workflow 的 retrieval rule，要決定本機 candidate 可唔可以交畀 reviewer 睇。", "trap": "收集好多 hostile prompt，再用一個平均分決定改動。", "mechanism": "synthetic fixture、受控條件、expected route、baseline／candidate、regression gate 同 handoff record。", "tradeoff": "case 多啲會加 review 成本；只保護會改變決定的 route，先唔會變成無邊界的測試清單。", "failure": "candidate 令順利 case 好睇咗，卻將 source conflict 或嵌入 instruction 變成自信 draft。", "evidence": "一張 versioned matrix、frozen fixture、baseline/candidate route trace，同埋 reviewer decision record。" },
+        "zh-TW": { "scenario": "改了虛構 FAQ 草擬 workflow 的 retrieval rule，要決定本機 candidate 能不能交給 reviewer 看。", "trap": "收集很多 hostile prompt，再用一個平均分決定改動。", "mechanism": "synthetic fixture、受控條件、expected route、baseline／candidate、regression gate 與 handoff record。", "tradeoff": "case 多一點會增加 review 成本；只保護會改變決策的 route，才不會變成無邊界的測試清單。", "failure": "candidate 讓順利 case 變好看，卻把 source conflict 或嵌入 instruction 變成自信 draft。", "evidence": "一張 versioned matrix、frozen fixture、baseline/candidate route trace，以及 reviewer decision record。" },
+        "zh-Hans": { "scenario": "改了虚构 FAQ 起草 workflow 的 retrieval rule，要决定本机 candidate 能不能交给 reviewer 看。", "trap": "收集很多 hostile prompt，再用一个平均分决定改动。", "mechanism": "synthetic fixture、受控条件、expected route、baseline／candidate、regression gate 与 handoff record。", "tradeoff": "case 多一点会增加 review 成本；只保护会改变决策的 route，才不会变成无边界的测试清单。", "failure": "candidate 让顺利 case 变好看，却把 source conflict 或嵌入 instruction 变成自信 draft。", "evidence": "一张 versioned matrix、frozen fixture、baseline/candidate route trace，以及 reviewer decision record。" },
+        "en": { "scenario": "A retrieval-rule change in a fictional FAQ drafting workflow needs a decision about whether its local candidate may go to a reviewer.", "trap": "Collecting many hostile prompts, then deciding from one average score.", "mechanism": "Synthetic fixtures, controlled conditions, expected routes, a baseline/candidate comparison, regression gates, and handoff records.", "tradeoff": "More cases add review cost; protect routes that can change the decision rather than building an unbounded test list.", "failure": "The candidate improves pleasant cases but turns a source conflict or embedded instruction into a confident draft.", "evidence": "A versioned matrix, frozen fixtures, baseline/candidate route traces, and a reviewer decision record." }
+      }
+    },
+    {
+      "slug": "an-agent-eval-needs-a-route-verdict",
+      "companyAttribution": "not-asserted",
+      "roadmapStages": ["agents-tools", "evaluation-observability", "safety-security"],
+      "prepTracks": ["agent-systems", "evaluation"],
+      "practice": {
+        "zh-HK": { "scenario": "三份合格草稿背後，出現被拒 scope 重試、假裝完成和無 owner handoff。", "trap": "Final draft 啱又冇 write action，就當整條 agent run pass。", "mechanism": "run contract、output／route／handoff verdict、最小 event receipt、hard-fail route rule。", "tradeoff": "多寫 case-level assertion 同 review record 會較慢，但唔會讓流暢草稿遮住越界路徑。", "failure": "被擋住的 state 被改名做 complete，或者個案落入冇人負責的 queue。", "evidence": "versioned run contract、三欄 verdict table、redacted trace receipt 同 exception decision record。" },
+        "zh-TW": { "scenario": "三份合格草稿背後，出現被拒 scope 重試、假裝完成和無 owner handoff。", "trap": "Final draft 正確又沒有 write action，就把整條 agent run 當成 pass。", "mechanism": "run contract、output／route／handoff verdict、最小 event receipt、hard-fail route rule。", "tradeoff": "多寫 case-level assertion 與 review record 會較慢，但不會讓流暢草稿遮住越界路徑。", "failure": "被擋住的 state 被改名為 complete，或個案落入沒人負責的 queue。", "evidence": "versioned run contract、三欄 verdict table、redacted trace receipt 與 exception decision record。" },
+        "zh-Hans": { "scenario": "三份合格草稿背后，出现被拒 scope 重试、假装完成和无 owner handoff。", "trap": "Final draft 正确又没有 write action，就把整条 agent run 当成 pass。", "mechanism": "run contract、output／route／handoff verdict、最小 event receipt、hard-fail route rule。", "tradeoff": "多写 case-level assertion 与 review record 会较慢，但不会让流畅草稿遮住越界路径。", "failure": "被挡住的 state 被改名为 complete，或个案落入没人负责的 queue。", "evidence": "versioned run contract、三栏 verdict table、redacted trace receipt 与 exception decision record。" },
+        "en": { "scenario": "Three acceptable drafts conceal a denied-scope retry, a false completion, and an ownerless handoff.", "trap": "Counting a full agent run as a pass because the final draft is right and no write occurred.", "mechanism": "A run contract, output/route/handoff verdicts, minimal event receipts, and a hard-fail route rule.", "tradeoff": "Case-level assertions and review records take longer, but prevent fluent drafts from hiding a boundary breach.", "failure": "A blocked state is relabelled complete, or a case lands in a queue nobody owns.", "evidence": "A versioned run contract, three-verdict table, redacted trace receipt, and exception decision record." }
+      }
+    }
+  ]
+}

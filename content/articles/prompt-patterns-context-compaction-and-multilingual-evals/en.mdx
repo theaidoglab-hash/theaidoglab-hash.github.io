@@ -1,0 +1,45 @@
+A prompt is not a spell that becomes better when it becomes longer. It is a versioned instruction interface between a user need, supplied evidence, and a bounded output. Treating it that way makes prompt work visible in a portfolio.
+
+## The bilingual intake problem
+
+Imagine a fictional project-intake desk. A coordinator submits a short request in English, Cantonese, or a mixture of both. The desk must produce a structured draft with a goal, missing fields, allowed next step, and either an evidence note or **HANDOFF**. It cannot promise delivery dates, open external systems, or turn a rough request into an approved scope.
+
+The first prompt works for polished English examples. It fails when a Cantonese request contains an English product name, when a thread is long, or when the user says “same as last time” but the earlier request had a crucial restriction. That is not one generic prompting problem. It is a context-assembly and evaluation problem.
+
+## Build prompts as small, inspectable parts
+
+Separate the material that changes at different speeds:
+
+- **Task contract:** the required fields, allowed outputs, refusal conditions, and decision owner.
+- **Evidence block:** approved source excerpts with identifiers and versions.
+- **Examples:** a small set that teaches a format or a difficult distinction.
+- **User input:** the current request, kept distinct from instructions.
+- **Output check:** a schema validator and rules for citations, uncertainty, and handoff.
+
+This is more dependable than pasting a long conversation into a single message. An example is not evidence. A retrieved note is data, not a new instruction. A schema does not prove usefulness, but it can prevent a fluent paragraph from hiding a missing route or unsupported claim.
+
+## Context compaction should preserve decisions, not merely shorten text
+
+**Context compaction** turns an old, long interaction into a smaller representation for the next turn. A safe compact record contains stable facts, open questions, source IDs and versions, prior decisions, rejected options, and expiry rules. It must say what was discarded.
+
+For the intake desk, a useful capsule could retain: “Request is draft-only; budget owner has not approved scope; product code RQ-17 is required; previous exception expired on 2026-09-01; source P-4 conflicts with P-9.” It should not silently rewrite uncertainty as a fact or preserve private raw text just because it is convenient.
+
+Test compression with paired cases. Give one system the full history and another the capsule. Assert that both reach the same allowed route on the facts that must survive. Add a deliberately dangerous case in which the only important detail appears early in the conversation. If the capsule loses it, the correct result is a repair to the compaction contract, not a more persuasive final prompt.
+
+## Multilingual quality cannot be inferred from one translation
+
+Make an evaluation set from equivalent intents, not mechanically translated sentences. Include Cantonese wording with English product terms, Traditional and Simplified Chinese variants where they matter, abbreviations, ambiguous dates, and a request that should hand off. For each case, specify the expected fields, source use, language of the response, and forbidden assumptions.
+
+Score output validity and route correctness separately from naturalness. A response can sound locally fluent while changing a product code, dropping a limitation, or guessing a date format. Ask a bilingual reviewer to inspect a small slice of hard cases; use deterministic checks for fields that must remain exact. Do not use a model’s own confident translation as the sole judge of its multilingual performance.
+
+## The evidence packet to keep
+
+Save the prompt contract, prompt versions, context-capsule schema, fixed evaluation cases, output validator, a prompt diff, and a short error review. State who owns the scope decision, which information must expire, when a language uncertainty goes to a person, and why the desk cannot act externally.
+
+That is a better story than “I found the perfect prompt.” It shows an engineering loop: define behaviour, change one component, compare named cases, inspect regressions, and keep the smaller safe baseline.
+
+Next, read [how a prompt becomes professional evidence](/en/articles/prompt-play-to-professional-evidence), [how to turn an AI request into an accepted change](/en/articles/turn-an-ai-request-into-an-accepted-change), and [why workflow evaluation needs more than the final answer](/en/articles/evaluate-an-ai-agent-workflow-not-just-the-final-answer).
+
+## Boundary
+
+The intake desk and all examples are fictional. This lesson does not claim a universal multilingual benchmark, a production-quality summariser, or an approved handling path for personal or commercial data. Validate language, retention, and legal requirements for the real context before use.
