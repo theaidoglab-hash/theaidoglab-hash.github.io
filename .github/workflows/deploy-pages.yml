@@ -4,7 +4,17 @@ on:
   push:
     branches: [main]
     paths:
-      - 'github-pages-current-site-20260928.zip.part-*'
+      - 'app/**'
+      - 'components/**'
+      - 'content/**'
+      - 'lib/**'
+      - 'public/**'
+      - 'scripts/**'
+      - 'templates/**'
+      - 'next.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
 permissions:
@@ -21,15 +31,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Reconstruct static site
-        run: |
-          cat github-pages-current-site-20260928.zip.part-* > site.zip
-          unzip -q site.zip -d _site
-          touch _site/.nojekyll
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build static GitHub Pages site
+        run: npm run build:github-pages:release
+        env:
+          GITHUB_PAGES_SITE_ORIGIN: https://theaidoglab-hash.github.io
+          GITHUB_PAGES_RELEASE_APPROVED: 'true'
+          OWNER_PUBLICATION_APPROVED: 'true'
+          PRIVACY_EMAIL: ${{ secrets.PRIVACY_EMAIL }}
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: dist/github-pages-release
   deploy:
     environment:
       name: github-pages
