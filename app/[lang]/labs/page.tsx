@@ -92,6 +92,7 @@ export default async function Labs({
   return <div className="shell page">
     <FragmentAnchorScroll />
     <header className="page-header"><p className="eyebrow">{t.eyebrow}</p><h1>{t.title}</h1><p>{t.intro}</p></header>
+    <aside className="lab-note skills-hub-entry"><p className="eyebrow">Skills Hub</p><p>{lang === 'zh-Hant' ? '搵 skill 同觀察 Agent skill 趨勢嘅外部入口。' : lang === 'en' ? 'An external hub for finding skills and watching Agent-skill trends.' : '搜尋 skill 與觀察 Agent skill 趨勢的外部入口。'}</p><Link className="button secondary" href={`/${lang}/labs/skills-hub`}>{lang === 'zh-Hant' ? '睇 Skills Hub' : lang === 'en' ? 'View Skills Hub' : '查看 Skills Hub'}</Link></aside>
     {availableCaseIds.length ? <BuildLabCaseSelector locale={lang} copy={buildLabCaseSelectorCopy[lang]} metaCopy={buildLabCaseSelectorMetaCopy[lang]} codingStarterNextStep={codingStarterNextStepCopy[lang]} availableCaseIds={availableCaseIds} initialCaseId={initialCaseId} canPlanPortfolio={isRouteSurfaceEnabledInCurrentBuild('portfolio-evidence-planner')} /> : null}
     {(visibleWorkflowSteps.length || visibleKits.length) ? <details className="portfolio-reference-disclosure build-lab-directory">
       <summary><strong>{directoryCopy.title}</strong><span>{directoryCopy.text}</span></summary>
